@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>StaphBook</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		  <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="#">StaphBook</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent" style ="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
+		  	<form class="form-inline from-center my-2 my-lg-0">
+			  <select class="form-control" style ="margin-right: 5px">
+				<option>All</option>
+				<option>Gene</option>
+				<option>Genome</option>
+				<option>Keywords</option>
+				<option>Protien</option>
+			  </select>
+			  <input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
+			  <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+			</form>
+			<ul class="navbar-nav" style="margin-left: 30px">
+			  <li class="nav-item">
+				<a class="nav-link" href="#"><u>Advanced Search</u></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#"><u>Help/Tutorial</u></a>
+			  </li>
+			</ul>
+		  </div>
+		  	<div class="dropdown" style="margin-left: auto; margin-right: 30px">
+			  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Username
+			  </button>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="#">Profile</a>
+				<a class="dropdown-item" href="#">Favorites</a>
+				<a class="dropdown-item" href="#">Settings</a>
+				<a class="dropdown-item" href="#">Logout</a>
+			  </div>
+			</div>
+		</nav>
+  </body>
+</html>
