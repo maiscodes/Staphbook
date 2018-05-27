@@ -20,26 +20,38 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-	<script src="jquery.js"></script> 
-	<script> 
-    $(function(){
-      $("#includedContent").load("CytoscapeTest.html"); 
-    });
-    </script> 
-	
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+	<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src='cytoscape.js'></script>
+	<script src="https://unpkg.com/webcola/WebCola/cola.min.js"></script>
+	<script src="cytoscape-cola.js"></script>
+
 			
 	<style>
+	
+	#cy {
+        width: 40%;
+        height: 50%;
+		padding-left: 6px;
+		position: absolute;
+		padding-bottom: -10px;
+    }
+	
 	.resultsPageTopComponent {
 		float: top;
 	}
 
 	.resultsPageBottomComponent {
 		clear: both;
+		padding-top:10px;
+
 	}
 
 	.resultsPageLeftComponent {
 		float: left;
 		width: 40%;
+		padding-bottom: 2px;
+		padding-left: 2px;
 	}
 	
 	.resultsPageRightComponent {
@@ -54,6 +66,7 @@
 		width:90%;
 	}
 	
+	
 	#displayDescription {
 		text-align: center; 
 		padding-top: 10px; 
@@ -61,7 +74,7 @@
 		border-top: 0.5px solid lightgrey;  
 		border-bottom: 0.5px solid lightgrey;
 	}
-
+	
 	.summaryInfo {
 		width:65%;
 		text-align:center;
@@ -207,14 +220,53 @@
 		<hr>
 		<h4 style="text-align: center"> Genomic Neighbourhood </h4>
 	  </div>
-
 	 <div class="resultsPageLeftComponent">
 		<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-		<div id="includedContent"></div>
-		
 		<!-- add cytoscape module here-->
+		    <div id="cy">
+			
+				<script>
+					var cy = cytoscape({
+					  container: document.getElementById('cy'),
+						elements: [
+						  // nodes
+						  { data: { id: 'Genome' } }
+						],
+						
+						style: [
+							{
+								selector: 'node',
+								style: {
+									shape: 'circle',
+									'background-color': 'blue',
+									label: 'data(id)'
+								}
+							}],			
+					});
+					for (var i = 0; i < 10; i++) {
+					cy.add({
+							data: { id: 'Neighbour' + i }
+							}
+						);
+						var source = 'Neighbour' + i;
+						cy.add({
+							data: {
+								id: 'edge' + i,
+								source: source,
+								target: ('Genome')
+							}
+						});
+					}
+					cy.layout({
+						name: 'cola'
+					}).run();	
+				</script>
+			</div>
+			
+			<!-- end of adding cytoscape -->
 		
-		</div>
+		   </div>
+	
 	  </div>
 
 	  <div class="resultsPageRightComponent">
