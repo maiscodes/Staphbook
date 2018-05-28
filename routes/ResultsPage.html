@@ -31,11 +31,17 @@
 	
 	#cy {
         width: 40%;
-        height: 50%;
+        height: 45%;
 		padding-left: 6px;
-		position: absolute;
 		padding-bottom: -10px;
+		position: absolute;
+		float: left;
     }
+	
+	#cytoscapeContainer {
+		position: absolute;
+	}
+
 	
 	.resultsPageTopComponent {
 		float: top;
@@ -47,18 +53,38 @@
 
 	}
 
-	.resultsPageLeftComponent {
+	.resultsPageLeftComponent1 {
 		float: left;
 		width: 40%;
 		padding-bottom: 2px;
 		padding-left: 2px;
 	}
 	
+	
+	.resultsPageLeftComponent2 {
+		float: left;
+		width: 40%;
+		padding-bottom: 2px;
+		padding-left: 2px;
+	}
+	
+		
+	.resultsPageLeftComponent3 {
+		float: left;
+		width: 40%;
+		padding-top: 24%;
+		padding-bottom: 2px;
+		padding-left: 2px;
+	}
+	
+	
 	.resultsPageRightComponent {
 		float: right;
 		width: 60%;
+		height: auto;
 		padding-left: 10px;
 		padding-bottom: 20px;
+		padding-top: 0px;
 		
 	}
 	
@@ -137,7 +163,7 @@
 		
 	</style>
 </head>
-<body>
+<body style="width: 100%; height: 100%;">
 <div id="navbar"></div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="#">StaphBook</a>
@@ -208,7 +234,7 @@
 </nav>
 
 <div id="page-container">
-	<div>
+
 	  <div class="resultsPageTopComponent">
 		<h2 style="text-align: center"> Staphlyococcus Aureus. <br> subsp. aureus NCTC 8325</h2>
 		<hr>
@@ -219,55 +245,9 @@
 		<br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated <p>
 		<hr>
 		<h4 style="text-align: center"> Genomic Neighbourhood </h4>
-	  </div>
-	 <div class="resultsPageLeftComponent">
-		<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-		<!-- add cytoscape module here-->
-		    <div id="cy">
-			
-				<script>
-					var cy = cytoscape({
-					  container: document.getElementById('cy'),
-						elements: [
-						  // nodes
-						  { data: { id: 'Genome' } }
-						],
-						
-						style: [
-							{
-								selector: 'node',
-								style: {
-									shape: 'circle',
-									'background-color': 'blue',
-									label: 'data(id)'
-								}
-							}],			
-					});
-					for (var i = 0; i < 10; i++) {
-					cy.add({
-							data: { id: 'Neighbour' + i }
-							}
-						);
-						var source = 'Neighbour' + i;
-						cy.add({
-							data: {
-								id: 'edge' + i,
-								source: source,
-								target: ('Genome')
-							}
-						});
-					}
-					cy.layout({
-						name: 'cola'
-					}).run();	
-				</script>
-			</div>
-			
-			<!-- end of adding cytoscape -->
-		
-		   </div>
+	</div>
 	
-	  </div>
+	
 
 	  <div class="resultsPageRightComponent">
 	  
@@ -294,6 +274,34 @@
 			<td >SAOUHSC_03037a</td>
 		  </tr>
 		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
 			<td >16830703</td>
 			<td >SAOUHSC_02512a</td>
 		  </tr>
@@ -333,18 +341,83 @@
 		}
 		</script>
 	  </div>
-	</div>
-</div>
 
+	  
+	<div class="resultsPageLeftComponent1">
+		<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
+		<i class="fa fa-download" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-star" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-plus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-minus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-arrows-alt" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+	</div> <!-- close resultsPageLeftComponent1 -->
+	
+	<div class="cytoscapeFunctionality">
+	
+	</div> <!-- end cytoscapeFunctionality -->
+	
+	<div class="resultsPageLeftComponent2">
+		<div id="cy">
+				
+					<script>
+						var cy = cytoscape({
+						  container: document.getElementById('cy'),
+							elements: [
+							  // nodes
+							  { data: { id: 'Genome' } }
+							],
+							
+							style: [
+								{
+									selector: 'node',
+									style: {
+										shape: 'circle',
+										'background-color': 'blue',
+										label: 'data(id)'
+									}
+								}],			
+						});
+						for (var i = 0; i < 10; i++) {
+						cy.add({
+								data: { id: 'Neighbour' + i }
+								}
+							);
+							var source = 'Neighbour' + i;
+							cy.add({
+								data: {
+									id: 'edge' + i,
+									source: source,
+									target: ('Genome')
+								}
+							});
+						}
+						cy.layout({
+							name: 'cola'
+						}).run();	
+					</script>
+				</div>
+	
+	</div> <!-- close resultsPageLeftComponent2 -->
+	
+	
+
+		<div class="resultsPageLeftComponent3" style="text-align: center;">
+			<p>Weighted distance 1</p>
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
+			
+			<p>Weighted distance 2</p>
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
+		</div> <!-- close resultsPageLeftComponent3 -->
+	
 
 	<div class="resultsPageBottomComponent">
 
 		<div id="footer" style="margin-top: 100px; margin-bottom: 0px; height: 100px; background-color: lightgrey">
 			<div id="legal" style="color: #303030; height: 100px; text-align: center; margin: auto;">
-				<p style="margin-top: 30px">Legal information and copyright here.</p>
+				<p style="margin-top: 30px">Copyright Emory University</p>
 			</div>
 		</div>
 	</div>
-	
+	</div>
 </body>
 </html>
