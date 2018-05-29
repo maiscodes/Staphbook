@@ -29,6 +29,12 @@
 			
 	<style>
 	
+	#geneSearchContainer {
+
+		margin-right: auto;
+		margin-left: auto;
+	}
+	
 	#cy {
         width: 40%;
         height: 45%;
@@ -260,10 +266,17 @@
 		</div>
 
 		<div class="Genes">
-		  <table style="width: 100%;">
+		<br>
+		<div id="geneSearchContainer">
+		<p style="margin-bottom:-1px;">Looking for a particular gene?</p>
+		<input class="form-control mr-sm-2" size="20" type="search" placeholder="Search for a gene from the selected node" aria-label="GeneSearch" style="float: left; width: 45%">
+		<button type="submit" class="btn btn-dark" style="width:20%; float: left; margin-bottom:20px; margin-left: -8px; ">Search</button>
+		 </div> <!-- close geneSearchContainer--> 
+		  
+		  <table style="width: 100%; padding-top: 20px;">
 		  <tr>
-			<th id="geneID">Gene ID#</th>
-			<th id="geneName">Name</th>
+			<th id="geneID" style="background-color: whitesmoke">Gene ID#</th>
+			<th id="geneName" style="background-color: whitesmoke">Name</th>
 		  </tr>
 		  <tr>
 			<td >16830705</td>
@@ -403,10 +416,10 @@
 
 		<div class="resultsPageLeftComponent3" style="text-align: center;">
 			<p>Weighted distance 1</p>
-			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 50%; ">
 			
 			<p>Weighted distance 2</p>
-			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 50%; ">
 		</div> <!-- close resultsPageLeftComponent3 -->
 	
 
