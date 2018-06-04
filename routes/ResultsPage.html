@@ -29,14 +29,8 @@
 			
 	<style>
 	
-	#geneSearchContainer {
-
-		margin-right: auto;
-		margin-left: auto;
-	}
-	
 	#cy {
-        width: 39%;
+        width: 40%;
         height: 45%;
 		padding-left: 6px;
 		padding-bottom: -10px;
@@ -164,87 +158,112 @@
 	#geneName {
 		width: 70%;
 	}
-	
-	#leftComponentAll {
-		border-left: 0.5px solid lightgrey; 
-		border-right: 0.5px solid lightgrey; 
-		border-top: 0.5px solid lightgrey; 
-		border-bottom: 0.5px solid lightgrey;
-
-	}
 
 
 		
 	</style>
 </head>
 <body style="width: 100%; height: 100%;">
+
+<!--Navigation Bar-->
 <div id="navbar"></div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="#">StaphBook</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent"
-         style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
-        <form class="form-inline from-center my-2 my-lg-0">
-            <select class="form-control" style="margin-right: 5px">
-                <option>All</option>
-                <option>Gene</option>
-                <option>Genome</option>
-                <option>Keywords</option>
-                <option>Protein</option>
-            </select>
-            <input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        <ul class="navbar-nav" style="margin-left: 30px">
-            <li class="nav-item">
-                <a class="nav-link" href="#"><u>Advanced Search</u></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><u>Help/Tutorial</u></a>
-            </li>
-        </ul>
-    </div>
-    <div class="navbar-nav navbar-dark" style="margin-left: auto; margin-right: 30px" style="overflow: hidden">
-        <!-- Button trigger modal -->
-        <a class="nav-link" style="color: lightgrey" href="#" data-toggle="modal" data-target="#loginModal"><u>Log in / Register</u></a>
 
-        <!-- Modal -->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true" style="overflow: hidden">
-            <div class="modal-dialog" role="document" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalTitle">Log in to StaphBook</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="inputEmailLogin">Email address</label>
-                                <input type="email" class="form-control" id="inputEmailLogin" aria-describedby="emailHelp" placeholder="Enter email">
-                            </div>
-                            <div class="form-group">
-                                <label for="inputPasswordLogin">Password</label>
-                                <input type="password" class="form-control" id="inputPasswordLogin" placeholder="Password">
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="RememberMeCheck">
-                                <label class="form-check-label" for="RememberMeCheck">Remember me</label>
-                            </div>
-                            <button type="submit" class="btn btn-dark" style="margin-top: 10px">Log in</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <p>If you don't already have a StaphBook account you can <a style="color: #303030" href="#"><u>Register here</u></a>.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!--Homepage Link-->
+	<a class="navbar-brand" style="font-size: 200%; padding:0px;" href="HomePage.html">StaphBook</a>
+
+	<!--Make navigation bar collapsible-->
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<!--Navigation Search Bar-->
+	<div class="collapse navbar-collapse" id="navbarSupportedContent"
+		 style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
+
+		<!--Search form-->
+		<form class="form-inline from-center my-2 my-lg-0">
+			<!--Search form dropdown-->
+			<select class="form-control" style="margin-right: 5px">
+				<option>All</option>
+				<option>Gene</option>
+				<option>Genome</option>
+				<option>Keywords</option>
+			</select>
+			<!--Search form text input-->
+			<input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
+			<!--Search form submission-->
+			<button class="btn btn-outline-light my-2 my-sm-0" formaction="QueryResultsPage.html" type="submit">Search</button>
+		</form>
+
+		<ul class="navbar-nav" style="margin-left: 30px">
+			<!--Link to advanced search page-->
+			<li class="nav-item">
+				<a class="nav-link" href="AdvancedSearch.html"><u>Advanced Search</u></a>
+			</li>
+			<!--Link to help/tutorial page-->
+			<li class="nav-item">
+				<a class="nav-link" href="#"><u>Help/Tutorial</u></a>
+			</li>
+		</ul>
+	</div>
+
+	<!--Login / Register model-->
+	<div class="navbar-nav navbar-dark" style="margin-left: auto; margin-right: 30px" style="overflow: hidden">
+
+		<!--Button to rigger modal-->
+		<a class="nav-link" style="color: lightgrey" href="#" data-toggle="modal" data-target="#loginModal"><u>Log in /
+			Register</u></a>
+
+		<!--Login Modal-->
+		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
+			 aria-hidden="true" style="overflow: hidden">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="loginModalTitle">Log in to StaphBook</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<!--Login from-->
+					<div class="modal-body">
+						<form>
+							<!--Email Adress input (email)-->
+							<div class="form-group">
+								<label for="exampleInputEmail1">Email address</label>
+								<input type="email" class="form-control" id="exampleInputEmail1"
+									   aria-describedby="emailHelp" placeholder="Enter email">
+							</div>
+							<!--Password input (password)-->
+							<div class="form-group">
+								<label for="exampleInputPassword1">Password</label>
+								<input type="password" class="form-control" id="exampleInputPassword1"
+									   placeholder="Password">
+							</div>
+							<!--Remember Me input (checkbox)-->
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" id="exampleCheck1">
+								<label class="form-check-label" for="exampleCheck1">Remember me</label>
+							</div>
+							<!--Login form submission-->
+							<button type="submit" class="btn btn-dark" formaction="HomePage(LoggedIn).html" style="margin-top: 10px">Log in</button>
+						</form>
+					</div>
+
+					<!--Link to Sign Up Page page-->
+					<div class="modal-footer">
+						<p>If you don't already have a StaphBook account you can <a style="color: #303030"
+																					href="SignUpPage.html"><u>Register
+							here</u></a>.</p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
 </nav>
 
 <div id="page-container">
@@ -265,223 +284,175 @@
 
 	  <div class="resultsPageRightComponent">
 	  
-	    <div id="genomicNeighbourhood-container" style="margin-left: auto; margin-right: auto; margin-bottom: 0px; min-height: 500px; padding-left: 9px; border-left: 0.5px solid lightgrey; border-right:  0.5px solid lightgrey;">
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style=" border-top: 0.5px solid lightgrey;  border-bottom: 0.5px solid lightgrey;">
-                <li class="nav-item" style="width: 20%; text-align: center">
-                    <a class="nav-link active btn-outline-dark" id="pills-genes-tab"  style="border-style: hidden" data-toggle="pill" href="#pills-genes" role="tab" aria-controls="pills-home" aria-selected="true">Genes</a>
-                </li>
-                <li class="nav-item" style="width: 20%; text-align: center">
-                    <a class="nav-link btn-outline-dark" id="pills-recommended-tab" data-toggle="pill" href="#pills-analysis" role="tab" aria-controls="pills-analysis" aria-selected="false">Analysis</a>
-                </li>
-                <li class="nav-item" style="width: 20%; text-align: center">
-                    <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-filters" role="tab" aria-controls="pills-filters" aria-selected="false">Filters</a>
-                </li>
-				<li class="nav-item" style="width: 20%; text-align: center">
-                    <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-legend" role="tab" aria-controls="pills-legend" aria-selected="false">Legend</a>
-                </li>
-				<li class="nav-item" style="width: 20%; text-align: center">
-                    <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-export" role="tab" aria-controls="pills-export" aria-selected="false">Export</a>
-                </li>
-            </ul>
-			
-            <div class="tab-content" id="pills-tabContent" style="margin-top: -15px" style="width: 80%" >
-                <div class="tab-pane fade show active" id="pills-genes" role="tabpanel" aria-labelledby="pills-genes-tab">
-				
-					<div class="Genes">
-						<br>
-						<div id="geneSearchContainer">
-						<p style="margin-bottom:-1px;">Looking for a particular gene?</p>
-						<input class="form-control mr-sm-2" size="20" type="search" placeholder="Search for a gene from the selected node" aria-label="GeneSearch" style="float: left; width: 45%">
-						<button type="submit" class="btn btn-dark" style="width:20%; float: left; margin-bottom:20px; margin-left: -8px; ">Search</button>
-						 </div> <!-- close geneSearchContainer--> 
-						  
-						  <table style="width: 99%; padding-top: 20px;">
-						  <tr>
-							<th id="geneID" style="background-color: whitesmoke">Gene ID#</th>
-							<th id="geneName" style="background-color: whitesmoke">Name</th>
-						  </tr>
-						  <tr>
-							<td >16830705</td>
-							<td >SAOUHSC_03042a</td>
-						  </tr>
-						  <tr>
-							<td >16830704</td>
-							<td >SAOUHSC_03037a</td>
-						  </tr>
-						  <tr>
-							<td >16830703</td>
-							<td >SAOUHSC_02512a</td>
-						  </tr>
-						  <tr>
-							<td >16830703</td>
-							<td >SAOUHSC_02512a</td>
-						  </tr>
-						  <tr>
-							<td >16830703</td>
-							<td >SAOUHSC_02512a</td>
-						  </tr>
-								  <tr>
-							<td >16830703</td>
-							<td >SAOUHSC_02512a</td>
-						  </tr>
-						</table>
-					</div>
-                </div>
-				
-				
-                <div class="tab-pane fade" id="pills-analysis" role="tabpanel" aria-labelledby="pills-analysis-tab">
-					<br>
-					<p> Information about the calculations of the data presented in the genomic neighbour hood </p>
-				</div>
-				
-                <div class="tab-pane fade" id="pills-legend" role="tabpanel" aria-labelledby="pills-legend-tab">
-                    <br>
-					<p> Information about the thickness of the edges and node colours/shades of the neighbourhood node model </p>
-					
-                </div>
-				
-				<div class="tab-pane fade" id="pills-filters" role="tabpanel" aria-labelledby="pills-filters-tab" style="width: 80%; margin-left: auto; margin-right: auto;">
-					<br>
-					<form>
-						<div class="form-group">
-							<label for="inputSequence">Sequence Type</label>
-							<input type="text" class="form-control" id="inputSequence" placeholder="Sequence Type">
-						</div>
-						<div class="form-group">
-							<label>Date Isolated</label>
-						</div>
-						<div class="form-group row" style="margin-top: -20px; margin-left: 0px">
-							<label for="inputDateStart" class="col-form-label" style="margin-right: 10px">From:</label>
-							<div>
-								<input type="date" class="form-control" id="inputDateStart" placeholder="DD/MM/YYYY">
-							</div>
-							<label for="inputDateEnd" class="col-form-label" style="margin-left: 30px; margin-right: 10px">To:</label>
-							<div>
-								<input type="date" class="form-control" id="inputDateEnd" placeholder="DD/MM/YYYY">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="inputPlace">Place (Within 100 Miles of)</label>
-							<input type="text" class="form-control" id="inputPlace" placeholder="Place">
-						</div>
-						<div class="row">
-							<div class="col">
-								<label for="inputGenePresent">Gene Present</label>
-								<input type="text" class="form-control" id="inputGenePresent" placeholder="Gene Present">
-							</div>
-							<div class="col">
-								<label for="inputGeneAbsent">Gene Absent</label>
-								<input type="text" class="form-control" id="inputGeneAbsent" placeholder="Gene Absent">
-							</div>
-						</div>
-						<div class="form-group" style="margin-top: 15px">
-							<label for="inputMLSTAlleles">Number of Shared MLST Alleles</label>
-							<select id="inputMLSTAlleles" class="form-control" style="width: 15%">
-								<option selected>Choose...</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
+		<div class="tab">
+			<button class="active" title="This displays a table of genes in your selected genome">Genes</button>
+			<button class="tablinks" onclick="openCity(event, 'Analysis')" title="This displays how the results were chosen">Analysis</button>
+			<button class="tablinks" onclick="openCity(event, 'Legend')" title="This displays what the colours and thickness of the edges mean">Legend</button>
+			<button class="tablinks" onclick="openCity(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+			<button class="tablinks" onclick="openCity(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
+		</div>
 
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="inputSharedPhenotype">Percentage of Shared Predicted Antibiotic Resistance Phenotypes</label>
-							<input type="number" class="form-control" id="inputSharedPhenotype" placeholder="%" style="width: 15%">
-						</div>
-						<button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Search</button>
-					</form>
-                </div>
-				
-				<div class="tab-pane fade" id="pills-export" role="tabpanel" aria-labelledby="pills-export-tab">
-                    
-					<br>
-					<p> A place for users to download an excel spreadsheet of the data presented in the node graph </p>
-					
-                </div>
-				
-            </div>
-        </div>
-	 </div>
+		<div class="Genes">
+		  <table style="width: 100%;">
+		  <tr>
+			<th id="geneID">Gene ID#</th>
+			<th id="geneName">Name</th>
+		  </tr>
+		  <tr>
+			<td >16830705</td>
+			<td >SAOUHSC_03042a</td>
+		  </tr>
+		  <tr>
+			<td >16830704</td>
+			<td >SAOUHSC_03037a</td>
+		  </tr>
+		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		  		  <tr>
+			<td >16830703</td>
+			<td >SAOUHSC_02512a</td>
+		  </tr>
+		</table>
+		</div>
 
-		 
-		<div class="resultsPageLeftComponent1">
-			<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-			<i class="fa fa-download" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-			<i class="fa fa-star" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-			<i class="fa fa-search-plus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-			<i class="fa fa-search-minus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-			<i class="fa fa-arrows-alt" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-		</div> <!-- close resultsPageLeftComponent1 -->
+		<div id="Analysis" class="tabcontent">
+		  <h3>link to analysis doc</h3>
+		</div>
+
+		<div id="Legend" class="tabcontent">
+		  <h3>link to legend doc</h3>
+		</div>
+
+		<div id="Settings" class="tabcontent">
+		  <h3>link to settings doc</h3>
+		</div>
+
+		<div id="Export" class="tabcontent">
+		  <h3>link to export doc</h3>
+		</div>
+
+		<script>
+		function openCity(evt, cityName) {
 		
-		<div class="cytoscapeFunctionality">
-		
-		</div> <!-- end cytoscapeFunctionality -->
-		
-		<div class="resultsPageLeftComponent2">
-			<div id="cy">
-					
-						<script>
-							var cy = cytoscape({
-							  container: document.getElementById('cy'),
-								elements: [
-								  // nodes
-								  { data: { id: 'Genome' } }
-								],
-								
-								style: [
-									{
-										selector: 'node',
-										style: {
-											shape: 'circle',
-											'background-color': 'blue',
-											label: 'data(id)'
-										}
-									}],			
-							});
-							for (var i = 0; i < 10; i++) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+		</script>
+	  </div>
+
+	  
+	<div class="resultsPageLeftComponent1">
+		<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
+		<i class="fa fa-download" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-star" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-plus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-minus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-arrows-alt" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+	</div> <!-- close resultsPageLeftComponent1 -->
+	
+	<div class="cytoscapeFunctionality">
+	
+	</div> <!-- end cytoscapeFunctionality -->
+	
+	<div class="resultsPageLeftComponent2">
+		<div id="cy">
+				
+					<script>
+						var cy = cytoscape({
+						  container: document.getElementById('cy'),
+							elements: [
+							  // nodes
+							  { data: { id: 'Genome' } }
+							],
+							
+							style: [
+								{
+									selector: 'node',
+									style: {
+										shape: 'circle',
+										'background-color': 'blue',
+										label: 'data(id)'
+									}
+								}],			
+						});
+						for (var i = 0; i < 10; i++) {
+						cy.add({
+								data: { id: 'Neighbour' + i }
+								}
+							);
+							var source = 'Neighbour' + i;
 							cy.add({
-									data: { id: 'Neighbour' + i }
-									}
-								);
-								var source = 'Neighbour' + i;
-								cy.add({
-									data: {
-										id: 'edge' + i,
-										source: source,
-										target: ('Genome')
-									}
-								});
-							}
-							cy.layout({
-								name: 'cola'
-							}).run();	
-						</script>
-					</div>
-		
-		</div> <!-- close resultsPageLeftComponent2 -->
-		
-		
+								data: {
+									id: 'edge' + i,
+									source: source,
+									target: ('Genome')
+								}
+							});
+						}
+						cy.layout({
+							name: 'cola'
+						}).run();	
+					</script>
+				</div>
+	
+	</div> <!-- close resultsPageLeftComponent2 -->
+	
+	
 
 		<div class="resultsPageLeftComponent3" style="text-align: center;">
 			<p>Weighted distance 1</p>
-			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 50%; ">
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
 			
 			<p>Weighted distance 2</p>
-			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 50%; ">
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
 		</div> <!-- close resultsPageLeftComponent3 -->
 	
 
 	<div class="resultsPageBottomComponent">
 
+		<!--The footer-->
 		<div id="footer" style="margin-top: 100px; margin-bottom: 0px; height: 100px; background-color: lightgrey">
 			<div id="legal" style="color: #303030; height: 100px; text-align: center; margin: auto;">
-				<p style="margin-top: 30px">Copyright Emory University</p>
+				<!--Legal information regarding StaphBook and its data-->
+				<p style="margin-top: 30px">Legal information and copyright here.</p>
 			</div>
 		</div>
+
 	</div>
 	</div>
 </body>
