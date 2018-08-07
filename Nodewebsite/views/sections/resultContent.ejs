@@ -1,0 +1,175 @@
+<div id="page-container">
+
+    <div class="resultsPageTopComponent">
+        <h2 style="text-align: center"> Staphlyococcus Aureus. <br> subsp. aureus NCTC 8325</h2>
+        <hr>
+        <h4 style="text-align: center"> Summary </h4>
+        <p class="summaryInfo" style="text-align: left; margin-left: 20%"> <b>Assembly Level:</b> Complete Genome
+            <br> <b>HUMAN PATHOGEN</b>
+            <br><b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
+            <br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated <p>
+        <hr>
+        <h4 style="text-align: center"> Genomic Neighbourhood </h4>
+    </div>
+
+
+
+    <div class="resultsPageRightComponent">
+
+        <div class="tab">
+            <button class="active" title="This displays a table of genes in your selected genome">Genes</button>
+            <button class="tablinks" onclick="openCity(event, 'Analysis')" title="This displays how the results were chosen">Analysis</button>
+            <button class="tablinks" onclick="openCity(event, 'Legend')" title="This displays what the colours and thickness of the edges mean">Legend</button>
+            <button class="tablinks" onclick="openCity(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+            <button class="tablinks" onclick="openCity(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
+        </div>
+
+        <div class="Genes">
+            <table style="width: 100%;">
+                <tr>
+                    <th id="geneID">Gene ID#</th>
+                    <th id="geneName">Name</th>
+                </tr>
+                <tr>
+                    <td >16830705</td>
+                    <td >SAOUHSC_03042a</td>
+                </tr>
+                <tr>
+                    <td >16830704</td>
+                    <td >SAOUHSC_03037a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+                <tr>
+                    <td >16830703</td>
+                    <td >SAOUHSC_02512a</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="Analysis" class="tabcontent">
+            <h3>link to analysis doc</h3>
+        </div>
+
+        <div id="Legend" class="tabcontent">
+            <h3>link to legend doc</h3>
+        </div>
+
+        <div id="Settings" class="tabcontent">
+            <h3>link to settings doc</h3>
+        </div>
+
+        <div id="Export" class="tabcontent">
+            <h3>link to export doc</h3>
+        </div>
+
+        <script>
+            function openCity(evt, cityName) {
+
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        </script>
+    </div>
+
+
+    <div class="resultsPageLeftComponent1">
+        <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
+        <i class="fa fa-download" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+        <i class="fa fa-star" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+        <i class="fa fa-search-plus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+        <i class="fa fa-search-minus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+        <i class="fa fa-arrows-alt" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+    </div> <!-- close resultsPageLeftComponent1 -->
+
+    <div class="cytoscapeFunctionality">
+
+    </div> <!-- end cytoscapeFunctionality -->
+
+    <div class="resultsPageLeftComponent2">
+        <div id="cy">
+            <script>
+                var cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    elements: [
+                        // nodes
+                        { data: { id: 'Genome' } }
+                    ],
+
+                    style: [
+                        {
+                            selector: 'node',
+                            style: {
+                                shape: 'circle',
+                                'background-color': 'blue',
+                                label: 'data(id)'
+                            }
+                        }],
+                });
+                for (var i = 0; i < 10; i++) {
+                    cy.add({
+                            data: { id: 'Neighbour' + i }
+                        }
+                    );
+                    var source = 'Neighbour' + i;
+                    cy.add({
+                        data: {
+                            id: 'edge' + i,
+                            source: source,
+                            target: ('Genome')
+                        }
+                    });
+                }
+                cy.layout({
+                    name: 'cola'
+                }).run();
+            </script>
+        </div>
+
+    </div> <!-- close resultsPageLeftComponent2 -->
+
+
+
+    <div class="resultsPageLeftComponent3" style="text-align: center;">
+        <p>Weighted distance 1</p>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
+
+        <p>Weighted distance 2</p>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
+    </div> <!-- close resultsPageLeftComponent3 -->
+</div>

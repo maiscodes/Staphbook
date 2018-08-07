@@ -1,0 +1,91 @@
+<div id="page-conatiner">
+    <div id="accountCreationInfo">
+        <h1 class="text-center" style="margin-top: 20px">Create an account</h1>
+        <p class="text-center" style="margin-top: 20px; margin-left: 10%; margin-right: 10%">To create a StaphBook account, enter your details in the fields below and click submit.</p>
+    </div>
+    <div id="signUp-container" style="margin-top: 50px">
+        <div id="signUpForm-conatiner" style="margin: auto; width: 60%">
+            <form class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3" style="margin: auto">
+                        <label for="validationUsername">Username</label>
+                        <input type="text" class="form-control" id="validationUsername" placeholder="Username"  required>
+                        <div class="invalid-feedback">
+                            Please enter a username.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3" style="margin: auto">
+                        <label for="validationEmail">Email</label>
+                        <input type="text" class="form-control" id="validationEmail" placeholder="example@example.com" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3" style="margin: auto">
+                        <label for="validationPassword">Password</label>
+                        <input type="password" class="form-control" id="validationPassword" placeholder="Password" required>
+                        <div class="invalid-feedback">
+                            Please enter a password.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3" style="margin: auto">
+                        <label for="validationConfirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="validationConfirmPassword" placeholder="Confirm Password" required>
+                        <div class="invalid-feedback">
+                            Please confirm your password by entering it again.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-5 mb-3" style="margin: auto">
+                        <label for="validationOrganistation">Organisation</label>
+                        <input type="text" class="form-control" id="validationOrganistation" placeholder="Organisation (Optional)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="margin-left: auto; margin-right: auto">
+                        <div class="form-check" style="margin: auto">
+                            <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                            <label class="form-check-label" for="invalidCheck">
+                                I agree to the<a href="#"><u>Terms and conditions</u></a>
+                            </label>
+                            <div class="invalid-feedback">
+                                You must agree before submitting.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button class="btn btn-dark" type="submit" style="margin: auto">Register</button>
+                </div>
+            </form>
+
+            <script>
+                //JavaScript for disabling form submissions if there are invalid fields
+                (function() {
+                    'use strict';
+                    window.addEventListener('load', function() {
+                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        var forms = document.getElementsByClassName('needs-validation');
+                        // Loop over them and prevent submission
+                        var validation = Array.prototype.filter.call(forms, function(form) {
+                            form.addEventListener('submit', function(event) {
+                                if (form.checkValidity() === false) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }
+                                form.classList.add('was-validated');
+                            }, false);
+                        });
+                    }, false);
+                })();
+            </script>
+        </div>
+    </div>
+</div>

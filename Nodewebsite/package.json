@@ -1,0 +1,21 @@
+{
+  "name": "staphbook",
+  "dependencies": {
+    "client-sessions": "^0.8.0",
+    "cytoscape": "^3.2.15",
+    "cytoscape-cola": "^2.2.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "include-html": "^1.2.1",
+    "npm": "^6.3.0"
+  },
+  "version": "1.0.0",
+  "description": "node website",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew",
+  "license": "ISC"
+}

@@ -3,12 +3,25 @@
   "version": "0.0.0",
   "description": "StaphBook for Staphopia - Emory University",
   "main": "server.js",
-  "author": {
-    "name": "SKAR Tech"
-  },
+  "author": "SKAR Tech",
   "dependencies": {
+    "create-react-app": "^1.5.2",
     "express": "^4.16.3",
+    "express-react-views": "^0.10.5",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewgrant14029/Staphbook.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewgrant14029/Staphbook/issues"
+  },
+  "homepage": "https://github.com/andrewgrant14029/Staphbook#readme"
 }

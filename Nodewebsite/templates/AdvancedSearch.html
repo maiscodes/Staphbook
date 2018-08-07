@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>StaphBook</title>
+    <!--Links to external libraries (libraries wont be external in final release)-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<!--Navigation Bar-->
+<div id="navbar"></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <!--Homepage Link-->
+    <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="HomePage.html">StaphBook</a>
+
+    <!--Make navigation bar collapsible-->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!--Navigation Search Bar-->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"
+         style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
+
+        <!--Search form-->
+        <form class="form-inline from-center my-2 my-lg-0">
+            <!--Search form dropdown-->
+            <select class="form-control" style="margin-right: 5px">
+                <option>All</option>
+                <option>Gene</option>
+                <option>Genome</option>
+                <option>Keywords</option>
+            </select>
+            <!--Search form text input-->
+            <input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
+            <!--Search form submission-->
+            <button class="btn btn-outline-light my-2 my-sm-0" formaction="QueryResultsPage.html" type="submit">Search</button>
+        </form>
+
+        <ul class="navbar-nav" style="margin-left: 30px">
+            <!--Link to advanced search page-->
+            <li class="nav-item">
+                <a class="nav-link" href="AdvancedSearch.html"><u>Advanced Search</u></a>
+            </li>
+            <!--Link to help/tutorial page-->
+            <li class="nav-item">
+                <a class="nav-link" href="#"><u>Help/Tutorial</u></a>
+            </li>
+        </ul>
+    </div>
+
+    <!--Login / Register model-->
+    <div class="navbar-nav navbar-dark" style="margin-left: auto; margin-right: 30px" style="overflow: hidden">
+
+        <!--Button to rigger modal-->
+        <a class="nav-link" style="color: lightgrey" href="#" data-toggle="modal" data-target="#loginModal"><u>Log in /
+            Register</u></a>
+
+        <!--Login Modal-->
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
+             aria-hidden="true" style="overflow: hidden">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalTitle">Log in to StaphBook</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <!--Login from-->
+                    <div class="modal-body">
+                        <form>
+                            <!--Email Adress input (email)-->
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                       aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                            <!--Password input (password)-->
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                       placeholder="Password">
+                            </div>
+                            <!--Remember Me input (checkbox)-->
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                            </div>
+                            <!--Login form submission-->
+                            <button type="submit" class="btn btn-dark" formaction="HomePage(LoggedIn).html" style="margin-top: 10px">Log in</button>
+                        </form>
+                    </div>
+
+                    <!--Link to Sign Up Page page-->
+                    <div class="modal-footer">
+                        <p>If you don't already have a StaphBook account you can <a style="color: #303030"
+                                                                                    href="SignUpPage.html"><u>Register
+                            here</u></a>.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--Main content of the advanced search page-->
+<div id="page-conatiner">
+
+    <!--Information on the advanced search page-->
+    <div id="informarion" style="margin: auto">
+        <h1 class="text-center" style="margin-top: 20px">Advanced Search</h1>
+        <p class="text-center" style="margin-top: 20px">Fill in the fields you wish to use to refine the search. Fields
+            left unchanged will not be included in the search.</p>
+    </div>
+
+    <!--Advanced Search form-->
+    <div id="advancedSearch" style="margin-left: auto; margin-right: auto; width: 60%">
+        <form>
+            <!--Name input (text)-->
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Name">
+            </div>
+
+            <!--Sequence Type input (text)-->
+            <div class="form-group">
+                <label for="inputSequence">Sequence Type</label>
+                <input type="text" class="form-control" id="inputSequence" placeholder="Sequence Type">
+            </div>
+
+            <!--Date Isolated Range-->
+            <div class="form-group">
+                <label>Date Isolated</label>
+            </div>
+            <div class="form-group row" style="margin-top: -20px; margin-left: 0px">
+                <!--Start date (Date)-->
+                <label for="inputDateStart" class="col-form-label" style="margin-right: 10px">From:</label>
+                <div>
+                    <input type="date" class="form-control" id="inputDateStart" placeholder="DD/MM/YYYY">
+                </div>
+                <!--End date (Date)-->
+                <label for="inputDateEnd" class="col-form-label"
+                       style="margin-left: 30px; margin-right: 10px">To:</label>
+                <div>
+                    <input type="date" class="form-control" id="inputDateEnd" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+
+            <!--Place input (text)-->
+            <div class="form-group">
+                <label for="inputPlace">Place (Within 100 Miles of)</label>
+                <input type="text" class="form-control" id="inputPlace" placeholder="Place">
+            </div>
+
+            <div class="row">
+                <!--Gene Present input (text)-->
+                <div class="col">
+                    <label for="inputGenePresent">Gene Present</label>
+                    <input type="text" class="form-control" id="inputGenePresent" placeholder="Gene Present">
+                </div>
+                <!--Gene Absent input (text)-->
+                <div class="col">
+                    <label for="inputGeneAbsent">Gene Absent</label>
+                    <input type="text" class="form-control" id="inputGeneAbsent" placeholder="Gene Absent">
+                </div>
+            </div>
+
+            <!--Number of Shared MLST Alleles input (number from dropdown)-->
+            <div class="form-group" style="margin-top: 15px">
+                <label for="inputMLSTAlleles">Number of Shared MLST Alleles</label>
+                <!--Dropdown number selection-->
+                <select id="inputMLSTAlleles" class="form-control" style="width: 15%">
+                    <option selected>Choose...</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                </select>
+            </div>
+
+            <!--Percentage of shared Predicted Antibiotic Resistance Phenotypes input (number)-->
+            <div class="form-group">
+                <label for="inputSharedPhenotype">Percentage of Shared Predicted Antibiotic Resistance
+                    Phenotypes</label>
+                <input type="number" class="form-control" id="inputSharedPhenotype" placeholder="%" style="width: 15%">
+            </div>
+
+            <!--Form submission button-->
+            <button type="submit" class="btn btn-dark" formaction="QueryResultsPage.html" style="margin-top: 20px; width: 100px">Search</button>
+        </form>
+    </div>
+</div>
+
+<!--The footer-->
+<div id="footer" style="margin-top: 100px; margin-bottom: 0px; height: 100px; background-color: lightgrey">
+    <div id="legal" style="color: #303030; height: 100px; text-align: center; margin: auto;">
+        <!--Legal information regarding StaphBook and its data-->
+        <p style="margin-top: 30px">Legal information and copyright here.</p>
+    </div>
+</div>
+
+</body>
+</html>
