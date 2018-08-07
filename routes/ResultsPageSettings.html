@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 
@@ -430,4 +431,438 @@
 	</div>
 	</div>
 </body>
+=======
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="UTF-8"/>
+
+	<link rel="import" href="CytoscapeTest.html">
+
+    <title>StaphBook</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+	<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src='cytoscape.js'></script>
+	<script src="https://unpkg.com/webcola/WebCola/cola.min.js"></script>
+	<script src="cytoscape-cola.js"></script>
+
+			
+	<style>
+	
+	#cy {
+        width: 40%;
+        height: 45%;
+		padding-left: 6px;
+		padding-bottom: -10px;
+		position: absolute;
+		float: left;
+    }
+	
+	#cytoscapeContainer {
+		position: absolute;
+	}
+
+	
+	.resultsPageTopComponent {
+		float: top;
+	}
+
+	.resultsPageBottomComponent {
+		clear: both;
+		padding-top:10px;
+
+	}
+
+	.resultsPageLeftComponent1 {
+		float: left;
+		width: 40%;
+		padding-bottom: 2px;
+		padding-left: 2px;
+	}
+	
+	
+	.resultsPageLeftComponent2 {
+		float: left;
+		width: 40%;
+		padding-bottom: 2px;
+		padding-left: 2px;
+	}
+	
+		
+	.resultsPageLeftComponent3 {
+		float: left;
+		width: 40%;
+		padding-top: 24%;
+		padding-bottom: 2px;
+		padding-left: 2px;
+	}
+	
+	
+	.resultsPageRightComponent {
+		float: right;
+		width: 60%;
+		height: auto;
+		padding-left: 10px;
+		padding-bottom: 20px;
+		padding-top: 0px;
+		
+	}
+	
+	.interactiveGenomeDisplay {
+		width:90%;
+	}
+	
+	
+	#displayDescription {
+		text-align: center; 
+		padding-top: 10px; 
+		padding-bottom: 10px; 
+		border-top: 0.5px solid lightgrey;  
+		border-bottom: 0.5px solid lightgrey;
+	}
+	
+	.summaryInfo {
+		width:65%;
+		text-align:center;
+	}
+	.Genes {
+		width: 100%;
+	}
+
+	/* Style the tab */
+	.tab {
+		overflow: hidden;
+		border: 1px solid #ccc;
+		background-color: #f1f1f1;
+	}
+
+	/* Style the buttons that are used to open the tab content */
+	.tab button {
+		background-color: inherit;
+		float: left;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 14px 16px;
+		transition: 0.3s;
+	}
+
+	/* Change background color of buttons on hover */
+	.tab button:hover {
+		background-color: #ddd;
+	}
+
+	/* Create an active/current tablink class */
+	.tab button.active {
+		background-color: #ccc;
+	}
+
+	/* Style the tab content */
+	.tabcontent {
+		display: none;
+		padding: 6px 12px;
+		border: 1px solid #ccc;
+		border-top: none;
+	}
+
+	td, th {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 8px;
+	}
+
+	#geneID {
+        width: 30%;
+	}
+
+	#geneName {
+		width: 70%;
+	}
+
+
+		
+	</style>
+</head>
+<body style="width: 100%; height: 100%;">
+<div id="navbar"></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="#">StaphBook</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"
+         style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
+        <form class="form-inline from-center my-2 my-lg-0">
+            <select class="form-control" style="margin-right: 5px">
+                <option>All</option>
+                <option>Gene</option>
+                <option>Genome</option>
+                <option>Keywords</option>
+                <option>Protein</option>
+            </select>
+            <input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav" style="margin-left: 30px">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><u>Advanced Search</u></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><u>Help/Tutorial</u></a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-nav navbar-dark" style="margin-left: auto; margin-right: 30px" style="overflow: hidden">
+        <!-- Button trigger modal -->
+        <a class="nav-link" style="color: lightgrey" href="#" data-toggle="modal" data-target="#loginModal"><u>Log in / Register</u></a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true" style="overflow: hidden">
+            <div class="modal-dialog" role="document" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalTitle">Log in to StaphBook</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="inputEmailLogin">Email address</label>
+                                <input type="email" class="form-control" id="inputEmailLogin" aria-describedby="emailHelp" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPasswordLogin">Password</label>
+                                <input type="password" class="form-control" id="inputPasswordLogin" placeholder="Password">
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="RememberMeCheck">
+                                <label class="form-check-label" for="RememberMeCheck">Remember me</label>
+                            </div>
+                            <button type="submit" class="btn btn-dark" style="margin-top: 10px">Log in</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <p>If you don't already have a StaphBook account you can <a style="color: #303030" href="#"><u>Register here</u></a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div id="page-container">
+
+	  <div class="resultsPageTopComponent">
+		<h2 style="text-align: center"> Staphlyococcus Aureus. <br> subsp. aureus NCTC 8325</h2>
+		<hr>
+		<h4 style="text-align: center"> Summary </h4>
+		<p class="summaryInfo" style="text-align: left; margin-left: 20%"> <b>Assembly Level:</b> Complete Genome 
+		<br> <b>HUMAN PATHOGEN</b>
+		<br><b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No 
+		<br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated <p>
+		<hr>
+		<h4 style="text-align: center"> Genomic Neighbourhood </h4>
+	</div>
+	
+	
+
+	  <div class="resultsPageRightComponent">
+	  
+		<div class="tab">
+			<button class="tabLinks" title="This displays a table of genes in your selected genome">Genes</button>
+			<button class="tablinks"  title="This displays how the results were chosen">Analysis</button>
+			<button class="tablinks" title="This displays what the colours and thickness of the edges mean">Legend</button>
+			<button class="active" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+			<button class="tablinks" title="This provides users with a way to save the data locally">Export</button>
+		</div>
+
+		<div class="settings">
+        <p  class="text-center" style="margin-top: 20px">Fill in the fields you wish to use to refine the node graph. Fields left unchanged will not be included.</p>
+    </div>
+    <div id="advancedSearch" style="margin-left: auto; margin-right: auto; width: 80%">
+        <form>
+            <div class="form-group">
+                <label for="inputSequence">Sequence Type</label>
+                <input type="text" class="form-control" id="inputSequence" placeholder="Sequence Type">
+            </div>
+            <div class="form-group">
+                <label>Date Isolated</label>
+            </div>
+            <div class="form-group row" style="margin-top: -20px; margin-left: 0px">
+                <label for="inputDateStart" class="col-form-label" style="margin-right: 10px">From:</label>
+                <div>
+                    <input type="date" class="form-control" id="inputDateStart" placeholder="DD/MM/YYYY">
+                </div>
+                <label for="inputDateEnd" class="col-form-label" style="margin-left: 30px; margin-right: 10px">To:</label>
+                <div>
+                    <input type="date" class="form-control" id="inputDateEnd" placeholder="DD/MM/YYYY">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPlace">Place (Within 100 Miles of)</label>
+                <input type="text" class="form-control" id="inputPlace" placeholder="Place">
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="inputGenePresent">Gene Present</label>
+                    <input type="text" class="form-control" id="inputGenePresent" placeholder="Gene Present">
+                </div>
+                <div class="col">
+                    <label for="inputGeneAbsent">Gene Absent</label>
+                    <input type="text" class="form-control" id="inputGeneAbsent" placeholder="Gene Absent">
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 15px">
+                <label for="inputMLSTAlleles">Number of Shared MLST Alleles</label>
+                <select id="inputMLSTAlleles" class="form-control" style="width: 20%">
+                    <option selected>Choose...</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inputSharedPhenotype">Percentage of Shared Predicted Antibiotic Resistance Phenotypes</label>
+                <input type="number" class="form-control" id="inputSharedPhenotype" placeholder="%" style="width: 15%">
+            </div>
+            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 60%;">Search</button>
+        </form>
+    </div>
+		</div>
+
+		<div id="Analysis" class="tabcontent">
+		  <h3>link to analysis doc</h3>
+		</div>
+
+		<div id="Legend" class="tabcontent">
+		  <h3>link to legend doc</h3>
+		</div>
+
+		<div id="Settings" class="tabcontent">
+		  <h3>link to settings doc</h3>
+		</div>
+
+		<div id="Export" class="tabcontent">
+		  <h3>link to export doc</h3>
+		</div>
+
+		<script>
+		function openCity(evt, cityName) {
+		
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+			document.getElementById(cityName).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+		</script>
+	  </div>
+
+	  
+	<div class="resultsPageLeftComponent1">
+		<h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
+		<i class="fa fa-download" title="Download the node graph" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-star" title="Favourite this genome" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-plus" title="Zoom in on the node graph" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-search-minus" title="Zoom out of the node graph" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+		<i class="fa fa-arrows-alt" title="Full screen the node graph" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+	</div> <!-- close resultsPageLeftComponent1 -->
+	
+	<div class="cytoscapeFunctionality">
+	
+	</div> <!-- end cytoscapeFunctionality -->
+	
+	<div class="resultsPageLeftComponent2">
+		<div id="cy">
+				
+					<script>
+						var cy = cytoscape({
+						  container: document.getElementById('cy'),
+							elements: [
+							  // nodes
+							  { data: { id: 'Genome' } }
+							],
+							
+							style: [
+								{
+									selector: 'node',
+									style: {
+										shape: 'circle',
+										'background-color': 'blue',
+										label: 'data(id)'
+									}
+								}],			
+						});
+						for (var i = 0; i < 10; i++) {
+						cy.add({
+								data: { id: 'Neighbour' + i }
+								}
+							);
+							var source = 'Neighbour' + i;
+							cy.add({
+								data: {
+									id: 'edge' + i,
+									source: source,
+									target: ('Genome')
+								}
+							});
+						}
+						cy.layout({
+							name: 'cola'
+						}).run();	
+					</script>
+				</div>
+	
+	</div> <!-- close resultsPageLeftComponent2 -->
+	
+	
+
+		<div class="resultsPageLeftComponent3" style="text-align: center;">
+			<p>Weighted distance 1</p>
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
+			
+			<p>Weighted distance 2</p>
+			<input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
+		</div> <!-- close resultsPageLeftComponent3 -->
+	
+
+	<div class="resultsPageBottomComponent">
+
+		<div id="footer" style="margin-top: 100px; margin-bottom: 0px; height: 100px; background-color: lightgrey">
+			<div id="legal" style="color: #303030; height: 100px; text-align: center; margin: auto;">
+				<p style="margin-top: 30px">Copyright Emory University</p>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+>>>>>>> 04071d3534a8ba6e2e85c82f68f5d3ca733ecd4c
 </html>

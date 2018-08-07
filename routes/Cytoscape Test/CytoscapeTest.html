@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,4 +60,67 @@
 </body>
 </html>
 
+=======
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cytoscape Test</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+	<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src='cytoscape.js'></script>
+	<script src="https://unpkg.com/webcola/WebCola/cola.min.js"></script>
+	<script src="cytoscape-cola.js"></script>
+	<style>
+    #cy {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+</style>
+</head>
+<body>
+    <div id="cy">
+	<script>
+		var cy = cytoscape({
+		  container: document.getElementById('cy'),
+			elements: [
+			  // nodes
+			  { data: { id: 'Genome' } }
+			],
+			
+			style: [
+				{
+					selector: 'node',
+					style: {
+						shape: 'circle',
+						'background-color': 'blue',
+						label: 'data(id)'
+					}
+				}],			
+		});
+		for (var i = 0; i < 10; i++) {
+		cy.add({
+				data: { id: 'Neighbour' + i }
+				}
+			);
+			var source = 'Neighbour' + i;
+			cy.add({
+				data: {
+					id: 'edge' + i,
+					source: source,
+					target: ('Genome')
+				}
+			});
+		}
+		cy.layout({
+			name: 'cola'
+		}).run();	
+    </script>
+	</div>
+</body>
+</html>
+
+>>>>>>> 04071d3534a8ba6e2e85c82f68f5d3ca733ecd4c
 </html>
