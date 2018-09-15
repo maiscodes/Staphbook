@@ -5,8 +5,12 @@
 
 <div id="queryListContainer">
     <div class="list-group">
-        <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">Staphylococcus Aureus subsp. aureus NCTC 8325</button>
+        <% sccmec_primers.forEach(function (result) { %>
+        <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+            Staphylococcus Aureus subsp. Sample <%= result.sample_id %>,
+            Q-sequence '<%= result.qseq %>'</button>
+        <% }) %>
         <br>
-        <p style="text-align: center"> Displaying result(s) 1 of 1</p>
+        <p style="text-align: center"> Displaying result(s) n of n</p>
     </div>
 </div>

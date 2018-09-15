@@ -17,19 +17,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="86" selection-start-line="5" selection-start-column="86" selection-end-line="5" selection-end-column="86" />
+            <state relative-caret-position="498">
+              <caret line="66" column="37" lean-forward="true" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resultContent.ejs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="searchResultsList.ejs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="42" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="resultContent.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2176">
+            <state relative-caret-position="527">
               <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
             </state>
           </provider>
@@ -56,8 +65,8 @@
       <file leaf-file-name="header.ejs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="33" column="47" selection-start-line="33" selection-start-column="47" selection-end-line="33" selection-end-column="47" />
+            <state relative-caret-position="340">
+              <caret line="20" column="89" selection-start-line="20" selection-start-column="89" selection-end-line="20" selection-end-column="89" />
             </state>
           </provider>
         </entry>
@@ -84,7 +93,6 @@
         <option value="$PROJECT_DIR$/templates/sections/header.ejs" />
         <option value="$PROJECT_DIR$/templates/sections/footer.ejs" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/views/pages/index.ejs" />
         <option value="$PROJECT_DIR$/views/sections/advancedSearchContent.ejs" />
         <option value="$PROJECT_DIR$/views/sections/advancedSearchForm.ejs" />
         <option value="$PROJECT_DIR$/views/pages/advancedSearch.ejs" />
@@ -92,14 +100,15 @@
         <option value="$PROJECT_DIR$/views/pages/searchResults.ejs" />
         <option value="$PROJECT_DIR$/views/sections/createAccountForm.ejs" />
         <option value="$PROJECT_DIR$/templates/ResultsPage.html" />
-        <option value="$PROJECT_DIR$/views/sections/header.ejs" />
-        <option value="$PROJECT_DIR$/views/sections/searchResultsList.ejs" />
         <option value="$PROJECT_DIR$/views/sections/resultContent.ejs" />
         <option value="$PROJECT_DIR$/views/sections/homePageContent.ejs" />
         <option value="$PROJECT_DIR$/node_modules/cytoscape-cola/src/cola.min.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/views/sections/head.ejs" />
         <option value="$PROJECT_DIR$/views/pages/result.ejs" />
+        <option value="$PROJECT_DIR$/views/pages/index.ejs" />
+        <option value="$PROJECT_DIR$/views/sections/searchResultsList.ejs" />
+        <option value="$PROJECT_DIR$/views/sections/header.ejs" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -205,22 +214,25 @@
       <workItem from="1533622460985" duration="3836000" />
       <workItem from="1533626392720" duration="2762000" />
       <workItem from="1534743785351" duration="5220000" />
+      <workItem from="1536641232753" duration="12927000" />
+      <workItem from="1536660033190" duration="1187000" />
+      <workItem from="1536719697345" duration="5268000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15700000" />
+    <option name="totallyTimeSpent" value="35082000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.155625" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.155625" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3298292" />
       <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
-      <window_info id="npm" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="3" />
+      <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -234,27 +246,6 @@
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="2" />
     </layout>
-    <layout-to-restore>
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info id="npm" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="3" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.155625" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" />
-      <window_info anchor="bottom" id="Inspection Results" order="0" weight="0.3298292" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="Debug" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3298292" />
-      <window_info anchor="bottom" id="Find" order="2" />
-      <window_info anchor="bottom" id="Version Control" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info id="Favorites" order="3" side_tool="true" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -262,7 +253,19 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2176">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -291,13 +294,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/cytoscape.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506753">
-          <caret line="29809" column="26" selection-start-line="29809" selection-start-column="26" selection-end-line="29809" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/cytoscape.js" />
     <entry file="file://$PROJECT_DIR$/views/sections/head.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2057">
@@ -446,13 +443,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/QueryResultsPage.html" />
-    <entry file="file://$PROJECT_DIR$/views/pages/searchResults.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/sections/createAccountForm.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
@@ -467,27 +457,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="6" lean-forward="true" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="47" selection-start-line="33" selection-start-column="47" selection-end-line="33" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/pages/index.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/sections/cytoscape.min.js" />
     <entry file="file://$PROJECT_DIR$/templates/ResultsPage.html" />
     <entry file="file://$PROJECT_DIR$/templates/SignUpPage.html" />
@@ -498,13 +467,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/cytoscape.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="29809" column="26" selection-start-line="29809" selection-start-column="26" selection-end-line="29809" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/cytoscape.js" />
     <entry file="file://$PROJECT_DIR$/node_modules/cytoscape-cola/src/cola.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -516,13 +479,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="66" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="86" selection-start-line="5" selection-start-column="86" selection-end-line="5" selection-end-column="86" />
         </state>
       </provider>
     </entry>
@@ -540,10 +496,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="89" selection-start-line="20" selection-start-column="89" selection-end-line="20" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/pages/searchResults.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/pages/index.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2176">
+        <state relative-caret-position="527">
           <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="42" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="66" column="37" lean-forward="true" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
         </state>
       </provider>
     </entry>

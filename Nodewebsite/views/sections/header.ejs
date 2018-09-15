@@ -16,18 +16,18 @@
          style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
 
         <!--Search form-->
-        <form class="form-inline from-center my-2 my-lg-0">
+        <form action='/searchResults' method="post" class="form-inline from-center my-2 my-lg-0">
             <!--Search form dropdown-->
-            <select class="form-control" style="margin-right: 5px">
+            <select name="search[option]" class="form-control" style="margin-right: 5px">
                 <option>All</option>
                 <option>Gene</option>
                 <option>Genome</option>
                 <option>Keywords</option>
             </select>
             <!--Search form text input-->
-            <input class="form-control mr-sm-2" size="40" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" size="40" type="text" name="search[input]" type="search" placeholder="Search" aria-label="Search">
             <!--Search form submission-->
-            <button class="btn btn-outline-light my-2 my-sm-0" formaction="/searchResults" type="submit">Search</button>
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
 
         <ul class="navbar-nav" style="margin-left: 30px">
