@@ -52,8 +52,31 @@ app.get('/createAccount', function(req, res) {
 });
 
 // result page
-app.get('/result', function(req, res) {
-    res.render('pages/result');
+app.post('/result', function(req, res) {
+    console.log(req.body.searchResult.selection);
+    let sampleID = req.body.searchResult.selection;
+
+    // Tags
+    client.query('SELECT tag_id FROM tag_tosample WHERE sample_id='+ sampleID + '', (err, result_tag_tosample) => {
+        console.log(err, result_tag_tosample);
+        let tagID = result_tag_tosample.rows[0].tag_id;
+        client.query('SELECT * FROM tag_tag WHERE id='+ tagID + '', (err, result_tag_tag) => {
+            console.log(err, result_tag_tag);
+
+            // Metadata
+            client.query('SELECT * FROM sample_metadata WHERE sample_id='+ sampleID + '', (err, result_sample_metadata) => {
+                console.log(err, result_sample_metadata);
+
+                // MLST
+                client.query('SELECT * FROM mlst_mlst WHERE sample_id='+ sampleID + '', (err, result_mlst_mlst) => {
+                    console.log(err, result_mlst_mlst);
+                    res.render('pages/result', {tag_tag: result_tag_tag.rows, sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows});
+                });
+            });
+
+
+        });
+    });
 });
 
 // search results page

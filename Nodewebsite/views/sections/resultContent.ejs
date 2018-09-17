@@ -1,7 +1,9 @@
 <div id="page-container">
 
     <div class="resultsPageTopComponent">
-        <h2 style="text-align: center"> Staphlyococcus Aureus. <br> subsp. aureus NCTC 8325</h2>
+        <h2 style="text-align: center"> Staphlyococcus Aureus <br> Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
+            <%= result_sample_metadata.sample_id %>
+            <% }) %></h2>
         <hr>
         <h4 style="text-align: center"> Summary </h4>
         <p class="summaryInfo" style="text-align: left; margin-left: 20%"> <b>Assembly Level:</b> Complete Genome
@@ -9,7 +11,7 @@
             <br><b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
             <br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated <p>
         <hr>
-        <h4 style="text-align: center"> Genomic Neighbourhood </h4>
+        <h4 style="text-align: center"> Sample Information </h4>
     </div>
 
 
@@ -17,68 +19,53 @@
     <div class="resultsPageRightComponent">
 
         <div class="tab">
-            <button class="active" title="This displays a table of genes in your selected genome">Genes</button>
-            <button class="tablinks" onclick="openCity(event, 'Analysis')" title="This displays how the results were chosen">Analysis</button>
-            <button class="tablinks" onclick="openCity(event, 'Legend')" title="This displays what the colours and thickness of the edges mean">Legend</button>
+            <button class="tablinks, active" onclick="openCity(event, 'Tags')" title="This displays a table of genes in your selected genome">Tags</button>
+            <button class="tablinks" onclick="openCity(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
+            <button class="tablinks" onclick="openCity(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
             <button class="tablinks" onclick="openCity(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
             <button class="tablinks" onclick="openCity(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
         </div>
 
-        <div class="Genes">
+        <div class="Tags" class="tabcontent">
             <table style="width: 100%;">
+                <% tag_tag.forEach(function (result_tag_tag) { %>
                 <tr>
-                    <th id="geneID">Gene ID#</th>
-                    <th id="geneName">Name</th>
+                    <td >Tag:</td>
+                    <td > <%= result_tag_tag.tag %></td>
                 </tr>
                 <tr>
-                    <td >16830705</td>
-                    <td >SAOUHSC_03042a</td>
+                    <td >Comment:</td>
+                    <td > <%= result_tag_tag.comment %></td>
                 </tr>
-                <tr>
-                    <td >16830704</td>
-                    <td >SAOUHSC_03037a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
-                <tr>
-                    <td >16830703</td>
-                    <td >SAOUHSC_02512a</td>
-                </tr>
+                <% }) %>
             </table>
         </div>
 
-        <div id="Analysis" class="tabcontent">
-            <h3>link to analysis doc</h3>
+        <div id="Metadata" class="tabcontent">
+            <% include ../snippets/resultMetadata %>
         </div>
 
-        <div id="Legend" class="tabcontent">
-            <h3>link to legend doc</h3>
+        <div id="MLST" class="tabcontent">
+            <table style="width: 100%;">
+                <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
+                <tr>
+                    <td >st:</td>
+                    <td > <%= result_mlst_mlst.st %></td>
+                </tr>
+                <tr>
+                    <td >ariba:</td>
+                    <td > <%= result_mlst_mlst.ariba %></td>
+                </tr>
+                <tr>
+                    <td >mentalist:</td>
+                    <td > <%= result_mlst_mlst.mentalist %></td>
+                </tr>
+                <tr>
+                    <td >BLAST:</td>
+                    <td > <%= result_mlst_mlst.blast %></td>
+                </tr>
+                <% }) %>
+            </table>
         </div>
 
         <div id="Settings" class="tabcontent">

@@ -1,0 +1,220 @@
+<table style="width: 100%;">
+    <% sample_metadata.forEach(function (result_sample_metadata) { %>
+    <tr>
+        <td >Sample ID:</td>
+        <td > <%= result_sample_metadata.sample_id %> </td>
+    </tr>
+    <tr>
+        <td >Study Accession:</td>
+        <td > <%= result_sample_metadata.metadata.study_accession %></td>
+    </tr>
+    <tr>
+        <td >Study Title:</td>
+        <td > <%= result_sample_metadata.metadata.study_title %></td>
+    </tr>
+    <tr>
+        <td >Study Alias:</td>
+        <td > <%= result_sample_metadata.metadata.study_alias %></td>
+    </tr>
+    <tr>
+        <td >Secondary Study Accession:</td>
+        <td > <%= result_sample_metadata.metadata.secondary_study_accession %></td>
+    </tr>
+    <tr>
+        <td >Sample Accession:</td>
+        <td > <%= result_sample_metadata.metadata.sample_accession %></td>
+    </tr>
+    <tr>
+        <td >Secondary Sample Accession:</td>
+        <td > <%= result_sample_metadata.metadata.secondary_sample_accession %></td>
+    </tr>
+    <tr>
+        <td >Submission Accession:</td>
+        <td > <%= result_sample_metadata.metadata.submission_accession %></td>
+    </tr>
+    <tr>
+        <td >Experiment Title:</td>
+        <td > <%= result_sample_metadata.metadata.experiment_title %></td>
+    </tr>
+    <tr>
+        <td >Experiment Alias:</td>
+        <td > <%= result_sample_metadata.metadata.experiment_alias %></td>
+    </tr>
+    <tr>
+        <td >Tax ID:</td>
+        <td > <%= result_sample_metadata.metadata.tax_id %></td>
+    </tr>
+    <tr>
+        <td >Scientific Name:</td>
+        <td > <%= result_sample_metadata.metadata.scientific_name %></td>
+    </tr>
+    <tr>
+        <td >Instrument Platform:</td>
+        <td > <%= result_sample_metadata.metadata.instrument_platform %></td>
+    </tr>
+    <tr>
+        <td >Instrument Model:</td>
+        <td > <%= result_sample_metadata.metadata.instrument_model %></td>
+    </tr>
+    <tr>
+        <td >Library Layout:</td>
+        <td > <%= result_sample_metadata.metadata.library_layout %></td>
+    </tr>
+    <tr>
+        <td >Library Strategy:</td>
+        <td > <%= result_sample_metadata.metadata.library_strategy %></td>
+    </tr>
+    <tr>
+        <td >Library Selection:</td>
+        <td > <%= result_sample_metadata.metadata.library_selection %></td>
+    </tr>
+    <tr>
+        <td >Center Name:</td>
+        <td > <%= result_sample_metadata.metadata.center_name %></td>
+    </tr>
+    <tr>
+        <td >Center Link:</td>
+        <td > <a href="<%= result_sample_metadata.metadata.center_link %>"><%= result_sample_metadata.metadata.center_link %></a></td>
+    </tr>
+    <tr>
+        <td >First Public:</td>
+        <td > <%= result_sample_metadata.metadata.first_public %></td>
+    </tr>
+    <tr>
+        <td >Cell Line:</td>
+        <td > <%= result_sample_metadata.metadata.cell_line %></td>
+    </tr>
+    <tr>
+        <td >Collected By:</td>
+        <td > <%= result_sample_metadata.metadata.collected_by %></td>
+    </tr>
+    <tr>
+        <td >Collection Date:</td>
+        <td > <%= result_sample_metadata.metadata.collection_date %></td>
+    </tr>
+    <tr>
+        <td >Country:</td>
+        <td > <%= result_sample_metadata.metadata.country %></td>
+    </tr>
+    <tr>
+        <td >Description:</td>
+        <td > <%= result_sample_metadata.metadata.description %></td>
+    </tr>
+    <tr>
+        <td >Environmental Sample:</td>
+        <td > <%= result_sample_metadata.metadata.environmental_sample %></td>
+    </tr>
+    <tr>
+        <td >Germline:</td>
+        <td > <%= result_sample_metadata.metadata.germline %></td>
+    </tr>
+    <tr>
+        <td >Isolate:</td>
+        <td > <%= result_sample_metadata.metadata.isolate %></td>
+    </tr>
+    <tr>
+        <td >Isolation Source:</td>
+        <td > <%= result_sample_metadata.metadata.isolation_source %></td>
+    </tr>
+    <tr>
+        <td >Serotype:</td>
+        <td > <%= result_sample_metadata.metadata.serotype %></td>
+    </tr>
+    <tr>
+        <td >Serovar:</td>
+        <td > <%= result_sample_metadata.metadata.serovar %></td>
+    </tr>
+    <tr>
+        <td >Sex:</td>
+        <td > <%= result_sample_metadata.metadata.sex %></td>
+    </tr>
+    <tr>
+        <td >Submitted Sex:</td>
+        <td > <%= result_sample_metadata.metadata.submitted_sex %></td>
+    </tr>
+    <tr>
+        <td >Strain:</td>
+        <td > <%= result_sample_metadata.metadata.strain %></td>
+    </tr>
+    <tr>
+        <td >Subspecies:</td>
+        <td > <%= result_sample_metadata.metadata.sub_species %></td>
+    </tr>
+    <tr>
+        <td >Tissue Type:</td>
+        <td > <%= result_sample_metadata.metadata.tissue_type %></td>
+    </tr>
+    <tr>
+        <td >Biosample Tax ID:</td>
+        <td > <%= result_sample_metadata.metadata.biosample_tax_id %></td>
+    </tr>
+    <tr>
+        <td >Biosample Scientific Name:</td>
+        <td > <%= result_sample_metadata.metadata.biosample_scientific_name %></td>
+    </tr>
+    <tr>
+        <td >Sample Alias:</td>
+        <td > <%= result_sample_metadata.metadata.sample_alias %></td>
+    </tr>
+    <tr>
+        <td >Checklist:</td>
+        <td > <%= result_sample_metadata.metadata.checklist %></td>
+    </tr>
+    <tr>
+        <td >Bisoample Center Name:</td>
+        <td > <%= result_sample_metadata.metadata.biosample_center_name %></td>
+    </tr>
+    <tr>
+        <td >Environment Biome:</td>
+        <td > <%= result_sample_metadata.metadata.environment_biome %></td>
+    </tr>
+    <tr>
+        <td >Environment Feature:</td>
+        <td > <%= result_sample_metadata.metadata.environment_feature %></td>
+    </tr>
+    <tr>
+        <td >Environment Material:</td>
+        <td > <%= result_sample_metadata.metadata.environment_material %></td>
+    </tr>
+    <tr>
+        <td >Project Name:</td>
+        <td > <%= result_sample_metadata.metadata.project_name %></td>
+    </tr>
+    <tr>
+        <td >Host:</td>
+        <td > <%= result_sample_metadata.metadata.host %></td>
+    </tr>
+    <tr>
+        <td >Host Tax ID:</td>
+        <td > <%= result_sample_metadata.metadata.host_tax_id %></td>
+    </tr>
+    <tr>
+        <td >Host Status:</td>
+        <td > <%= result_sample_metadata.metadata.host_status %></td>
+    </tr>
+    <tr>
+        <td >Host Sex:</td>
+        <td > <%= result_sample_metadata.metadata.host_sex %></td>
+    </tr>
+    <tr>
+        <td >Submitted Host Sex:</td>
+        <td > <%= result_sample_metadata.metadata.submitted_host_sex %></td>
+    </tr>
+    <tr>
+        <td >Host Body Site:</td>
+        <td > <%= result_sample_metadata.metadata.host_body_site %></td>
+    </tr>
+    <tr>
+        <td >Investigation Type:</td>
+        <td > <%= result_sample_metadata.metadata.investigation_type %></td>
+    </tr>
+    <tr>
+        <td >Sequencing Method:</td>
+        <td > <%= result_sample_metadata.metadata.sequencing_method %></td>
+    </tr>
+    <tr>
+        <td >Broker Name:</td>
+        <td > <%= result_sample_metadata.metadata.broker_name %></td>
+    </tr>
+    <% }) %>
+</table>
