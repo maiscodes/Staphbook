@@ -1,9 +1,8 @@
 <!--Navigation Bar-->
-<div id="navbar"></div>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dbdbdb ; height: 45px; border-bottom: 0.5px solid gray">
 
     <!--Homepage Link-->
-    <a class="navbar-brand" style="font-size: 200%; padding:0px;" href="/">StaphBook</a>
+  <a class="navbar-brand" style="font-size: 180%; margin-left: 30px;" href="/"><b>STAPHBOOK</b></a>
 
     <!--Make navigation bar collapsible-->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -18,36 +17,51 @@
         <!--Search form-->
         <form action='/searchResults' method="post" class="form-inline from-center my-2 my-lg-0">
             <!--Search form dropdown-->
-            <select name="search[option]" class="form-control" style="margin-right: 5px">
+            <select name="search[option]" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
                 <option>All</option>
                 <option>Gene</option>
                 <option>Genome</option>
                 <option>Keywords</option>
             </select>
             <!--Search form text input-->
-            <input class="form-control mr-sm-2" size="40" type="text" name="search[input]" type="search" placeholder="Search" aria-label="Search">
-            <!--Search form submission-->
-            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-        </form>
 
-        <ul class="navbar-nav" style="margin-left: 30px">
+
+          <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 400px;">
+            <input type="text" name="search[input]" style="border: 0.5px solid gray" class="form-control form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
+              <div class="input-group-append">
+                <button class="btn btn-dark" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+              </div>
+          </div>
+        </form>
+          <!-- 
+          <input class="form-control form-control-sm" size="40" style="width: 350px; margin-right: 2px;" name="search[input]" placeholder="Type your search here. For example: 'ccrA1'.">
+            
+          </input>
+          -->
+
+        <ul class="navbar-nav" >
             <!--Link to advanced search page-->
-            <li class="nav-item">
-                <a class="nav-link" href="/advancedSearch"><u>Advanced Search</u></a>
-            </li>
+          <li class="nav-item" style="margin-left: 10px;">
+            <a class="btn btn-sm btn-outline-dark" href="/advancedSearch">Advanced Search</a>
+          </li>
+            
+          
+          
             <!--Link to help/tutorial page-->
             <li class="nav-item">
-                <a class="nav-link" href="#"><u>Help/Tutorial</u></a>
+                <a class="btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#">Help/Tutorial</a>
             </li>
         </ul>
     </div>
 
     <!--Login / Register model-->
-    <div class="navbar-nav navbar-dark" style="margin-left: auto; margin-right: 30px" style="overflow: hidden">
+    <div style="margin-left: auto; margin-right: 20px; overflow: hidden">
 
         <!--Button to rigger modal-->
-        <a class="nav-link" style="color: lightgrey" href="#" data-toggle="modal" data-target="#loginModal"><u>Log in /
-                Register</u></a>
+        <a class="btn btn-sm btn-outline-dark" href="#" data-toggle="modal" data-target="#loginModal">
+          <b>Log in / Register </b></a>
 
         <!--Login Modal-->
         <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
@@ -67,18 +81,18 @@
                             <!--Email Adress input (email)-->
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                       aria-describedby="emailHelp" placeholder="Enter email">
+                              <input type="email" class="form-control" id="exampleInputEmail1"
+                                     aria-describedby="emailHelp" placeholder="Enter email"></input>
                             </div>
                             <!--Password input (password)-->
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" class="form-control" id="exampleInputPassword1"
-                                       placeholder="Password">
+                                       placeholder="Password"></input>
                             </div>
                             <!--Remember Me input (checkbox)-->
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                              <input type="checkbox" class="form-check-input" id="exampleCheck1"></input>
                                 <label class="form-check-label" for="exampleCheck1">Remember me</label>
                             </div>
                             <!--Login form submission-->
@@ -88,11 +102,8 @@
 
                     <!--Link to Sign Up Page page-->
                     <div class="modal-footer">
-                        <p>If you don't already have a StaphBook account you can <a style="color: #303030"
-                                                                                    href="/createAccount"><u>Register
-                                    here</u></a>.</p>
+                        <p>If you don't already have a StaphBook account you can <a style="color: #303030" href="/createAccount"><u>Register here</u></a>.</p>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -1,17 +1,23 @@
 <div id="page-container">
 
     <div class="resultsPageTopComponent">
-        <h2 style="text-align: center"> Staphlyococcus Aureus <br> Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
-            <%= result_sample_metadata.sample_id %>
-            <% }) %></h2>
-        <hr>
+      <h5 style="text-align: center; margin-top: 5px;">
+        Staphlyococcus Aureus <br>
+      </h5>
+
+      <h1 style="text-align: center; margin-top: -10px;">Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
+         <%= result_sample_metadata.sample_id %> <% }) %></h1>
+          <hr style="width: 65%; margin-top: -2px"></hr>
         <h4 style="text-align: center"> Summary </h4>
         <p class="summaryInfo" style="text-align: left; margin-left: 20%"> <b>Assembly Level:</b> Complete Genome
             <br> <b>HUMAN PATHOGEN</b>
             <br><b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
-            <br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated <p>
-        <hr>
-        <h4 style="text-align: center"> Sample Information </h4>
+            <br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated
+        </p>
+              <hr style="width: 65%">
+                
+              </hr>
+           <h3 style="text-align: center"> Sample Information </h3>
     </div>
 
 
@@ -19,14 +25,15 @@
     <div class="resultsPageRightComponent">
 
         <div class="tab">
-            <button class="tablinks, active" onclick="openCity(event, 'Tags')" title="This displays a table of genes in your selected genome">Tags</button>
+          <!--need to change the titles for these once finalised-->
+            <button class="tablinks" onclick="openCity(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
             <button class="tablinks" onclick="openCity(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
             <button class="tablinks" onclick="openCity(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
             <button class="tablinks" onclick="openCity(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
             <button class="tablinks" onclick="openCity(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
         </div>
 
-        <div class="Tags" class="tabcontent">
+        <div id="Tags" class="tabcontent">
             <table style="width: 100%;">
                 <% tag_tag.forEach(function (result_tag_tag) { %>
                 <tr>
@@ -94,19 +101,18 @@
         </script>
     </div>
 
-
+  <div class="resultsPageLeftComponents">
     <div class="resultsPageLeftComponent1">
         <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-        <i class="fa fa-download" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-        <i class="fa fa-star" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-        <i class="fa fa-search-plus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-        <i class="fa fa-search-minus" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
-        <i class="fa fa-arrows-alt" style="font-size:30px; padding-left: 20px; padding-right: 20px;"></i>
+        <div style="text-align: center; margin-top: 17px;">
+          <i class="fa fa-download" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="fa fa-star" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="fa fa-search-plus" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="fa fa-search-minus" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="fa fa-arrows-alt" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+        </div>
     </div> <!-- close resultsPageLeftComponent1 -->
 
-    <div class="cytoscapeFunctionality">
-
-    </div> <!-- end cytoscapeFunctionality -->
 
     <div class="resultsPageLeftComponent2">
         <div id="cy">
@@ -154,9 +160,10 @@
 
     <div class="resultsPageLeftComponent3" style="text-align: center;">
         <p>Weighted distance 1</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 80%; ">
+      <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
 
         <p>Weighted distance 2</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 80%; ">
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 40%; "></input>
     </div> <!-- close resultsPageLeftComponent3 -->
+  </div> <!-- close resultsPageResultComponents -->
 </div>
