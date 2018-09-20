@@ -24,9 +24,9 @@
     float: left;
     width: 54%;
     height: 315px;
-    padding-left: 6px;
-    padding-bottom: -10px;
-    margin-top: 40px;
+    padding-left: 4px;
+    padding-bottom: -5px;
+    margin-top: 50px;
     position: absolute;
 }
 
@@ -41,7 +41,9 @@
 .resultsPageLeftComponent1 {
     padding-bottom: 2px;
     border-bottom: 0.5px solid silver;
+    border-right: 0.5px solid silver;
     height: 53px;
+    background-color: #f1f1f1;
 }
 
 
@@ -70,7 +72,7 @@
     text-align: center;
     padding-top: 17px;
     padding-bottom: 10px;
-    border-top: 0.5px solid lightgrey;
+    border-top: 0.5px solid silver;
 }
 
 
@@ -86,7 +88,7 @@
 /* Style the tab */
 .tab {
     overflow: hidden;
-    border: 1px solid #ccc;
+    border: 0.5px solid silver;
     background-color: #f1f1f1;
 }
 

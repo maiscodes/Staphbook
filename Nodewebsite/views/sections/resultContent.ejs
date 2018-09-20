@@ -98,6 +98,8 @@
                 document.getElementById(cityName).style.display = "block";
                 evt.currentTarget.className += " active";
             }
+
+          
         </script>
     </div>
 
@@ -105,11 +107,11 @@
     <div class="resultsPageLeftComponent1">
         <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
         <div style="text-align: center; margin-top: 17px;">
-          <i class="fa fa-download" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
-          <i class="fa fa-star" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
-          <i class="fa fa-search-plus" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
-          <i class="fa fa-search-minus" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
-          <i class="fa fa-arrows-alt" style="font-size:25px; padding-left: 20px; padding-right: 20px;"></i>
+          <button type="button" id="downloadData" onclick="downloadData()" title="Download graph" class="btn btn-outline-dark btn-sm"> <i class="fa fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i></button>
+          <button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm"><i class="fa fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i></button>
+          <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm"><i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
+          <button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph" class="btn btn-outline-dark btn-sm"><i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
+          <button type="button" id="expandGraph" onclick="expandGraph()" title="Make graph full screen on new window" class="btn btn-outline-dark btn-sm"><i class="fas fa-expand-arrows-alt" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
         </div>
     </div> <!-- close resultsPageLeftComponent1 -->
 
@@ -129,7 +131,7 @@
                             selector: 'node',
                             style: {
                                 shape: 'circle',
-                                'background-color': 'blue',
+                                'background-color': '#468e94',
                                 label: 'data(id)'
                             }
                         }],
@@ -148,16 +150,54 @@
                         }
                     });
                 }
+                
                 cy.layout({
                     name: 'cola'
                 }).run();
+                
+          <!-- scripts for cytoscape graph buttons -->          
+          var zoomAmount = 0.25;  
+  
+          function zoomInGraph() {
+            console.log("zoom");
+            var xhttp = new XMLHttpRequest();
+            xhttp.open(this.method, this.url, true);
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 || this.readState == NULL && this.status == 200) {
+              zoomAmount = zoomAmount + 0.25;
+              cy.zoom({
+                level: zoomAmount,
+                
+              });
+      
+              }
+            };
+            xhttp.send();
+          }
+            
+          function zoomOutGraph() {
+            console.log("zoom");
+            var xhttp = new XMLHttpRequest();
+            xhttp.open(this.method, this.url, true);
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 || this.readState == NULL && this.status == 200) {
+              zoomAmount = zoomAmount - 0.25;
+              cy.zoom({
+                level: zoomAmount,
+                
+              });
+      
+              }
+            };
+            xhttp.send();
+          }
             </script>
         </div>
 
     </div> <!-- close resultsPageLeftComponent2 -->
 
 
-
+    <hr style="margin-left: 10%; margin-right: 10%"></hr>
     <div class="resultsPageLeftComponent3" style="text-align: center;">
         <p>Weighted distance 1</p>
       <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
