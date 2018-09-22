@@ -1,209 +1,293 @@
 <div id="page-container">
 
-    <div class="resultsPageTopComponent">
-      <h5 style="text-align: center; margin-top: 5px;">
-        Staphlyococcus Aureus <br>
+  <div class="resultsPageTopComponent">
+    <h5 style="text-align: center; margin-top: 5px;">
+      Staphlyococcus Aureus <br>
       </h5>
 
-      <h1 style="text-align: center; margin-top: -10px;">Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
+    <h1 style="text-align: center; margin-top: -10px;">
+      Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
          <%= result_sample_metadata.sample_id %> <% }) %></h1>
-          <hr style="width: 65%; margin-top: -2px"></hr>
-        <h4 style="text-align: center"> Summary </h4>
-        <p class="summaryInfo" style="text-align: left; margin-left: 20%"> <b>Assembly Level:</b> Complete Genome
-            <br> <b>HUMAN PATHOGEN</b>
-            <br><b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
-            <br><b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated
-        </p>
-              <hr style="width: 65%">
-                
-              </hr>
-           <h3 style="text-align: center"> Sample Information </h3>
+    <hr style="width: 65%; margin-top: -2px"></hr>
+    <h4 style="text-align: center"> Summary </h4>
+    <p class="summaryInfo" style="text-align: left; margin-left: 20%">
+      <b>Assembly Level:</b> Complete Genome
+      <br>
+        <b>HUMAN PATHOGEN</b>
+        <br>
+          <b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
+          <br>
+            <b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated
+          </p>
+    <hr style="width: 65%">
+
+    </hr>
+    <h3 style="text-align: center"> Sample Information </h3>
+  </div>
+
+  <div id="resultsPageRightComponent">
+
+    <div class="tab">
+      <!--need to change the titles for these once finalised-->
+      <button class="tablinks" onclick="sampleTabs(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
+      <button class="tablinks" onclick="sampleTabs(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
+      <button class="tablinks" onclick="sampleTabs(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
+      <button class="tablinks" onclick="sampleTabs(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+      <button class="tablinks" onclick="sampleTabs(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
     </div>
 
-
-
-    <div class="resultsPageRightComponent">
-
-        <div class="tab">
-          <!--need to change the titles for these once finalised-->
-            <button class="tablinks" onclick="openCity(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
-            <button class="tablinks" onclick="openCity(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
-            <button class="tablinks" onclick="openCity(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
-            <button class="tablinks" onclick="openCity(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
-            <button class="tablinks" onclick="openCity(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
-        </div>
-
-        <div id="Tags" class="tabcontent">
-            <table style="width: 100%;">
-                <% tag_tag.forEach(function (result_tag_tag) { %>
-                <tr>
-                    <td >Tag:</td>
-                    <td > <%= result_tag_tag.tag %></td>
-                </tr>
-                <tr>
-                    <td >Comment:</td>
-                    <td > <%= result_tag_tag.comment %></td>
-                </tr>
-                <% }) %>
-            </table>
-        </div>
-
-        <div id="Metadata" class="tabcontent">
-            <% include ../snippets/resultMetadata %>
-        </div>
-
-        <div id="MLST" class="tabcontent">
-            <table style="width: 100%;">
-                <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
-                <tr>
-                    <td >st:</td>
-                    <td > <%= result_mlst_mlst.st %></td>
-                </tr>
-                <tr>
-                    <td >ariba:</td>
-                    <td > <%= result_mlst_mlst.ariba %></td>
-                </tr>
-                <tr>
-                    <td >mentalist:</td>
-                    <td > <%= result_mlst_mlst.mentalist %></td>
-                </tr>
-                <tr>
-                    <td >BLAST:</td>
-                    <td > <%= result_mlst_mlst.blast %></td>
-                </tr>
-                <% }) %>
-            </table>
-        </div>
-
-        <div id="Settings" class="tabcontent">
-            <h3>link to settings doc</h3>
-        </div>
-
-        <div id="Export" class="tabcontent">
-            <h3>link to export doc</h3>
-        </div>
-
-        <script>
-            function openCity(evt, cityName) {
-
-                var i, tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-                document.getElementById(cityName).style.display = "block";
-                evt.currentTarget.className += " active";
-            }
-
-          
-        </script>
+    <div id="Tags" class="tabcontent">
+      <table style="width: 100%;">
+        <% tag_tag.forEach(function (result_tag_tag) { %>
+        <tr>
+          <td >Tag:</td>
+          <td >
+            <%= result_tag_tag.tag %>
+          </td>
+        </tr>
+        <tr>
+          <td >Comment:</td>
+          <td >
+            <%= result_tag_tag.comment %>
+          </td>
+        </tr>
+        <% }) %>
+      </table>
     </div>
 
-  <div class="resultsPageLeftComponents">
-    <div class="resultsPageLeftComponent1">
-        <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-        <div style="text-align: center; margin-top: 17px;">
-          <button type="button" id="downloadData" onclick="downloadData()" title="Download graph" class="btn btn-outline-dark btn-sm"> <i class="fa fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i></button>
-          <button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm"><i class="fa fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i></button>
-          <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm"><i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
-          <button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph" class="btn btn-outline-dark btn-sm"><i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
-          <button type="button" id="expandGraph" onclick="expandGraph()" title="Make graph full screen on new window" class="btn btn-outline-dark btn-sm"><i class="fas fa-expand-arrows-alt" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i> </button>
-        </div>
-    </div> <!-- close resultsPageLeftComponent1 -->
+    <div id="Metadata" class="tabcontent">
+      <% include ../snippets/resultMetadata %>
+    </div>
+
+    <div id="MLST" class="tabcontent">
+      <table style="width: 100%;">
+        <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
+        <tr>
+          <td >st:</td>
+          <td >
+            <%= result_mlst_mlst.st %>
+          </td>
+        </tr>
+        <tr>
+          <td >ariba:</td>
+          <td >
+            <%= result_mlst_mlst.ariba %>
+          </td>
+        </tr>
+        <tr>
+          <td >mentalist:</td>
+          <td >
+            <%= result_mlst_mlst.mentalist %>
+          </td>
+        </tr>
+        <tr>
+          <td >BLAST:</td>
+          <td >
+            <%= result_mlst_mlst.blast %>
+          </td>
+        </tr>
+        <% }) %>
+      </table>
+    </div>
+
+    <div id="Settings" class="tabcontent">
+      <h3>link to settings doc</h3>
+    </div>
+
+    <div id="Export" class="tabcontent">
+      <h3>link to export doc</h3>
+    </div>
+  </div>
+
+  <div id="resultsPageLeftComponents">
+    <div id="resultsPageLeftComponent1">
+      <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
+    </div>
+    <!-- close resultsPageLeftComponent1 -->
+
+    <div id="resultsPageLeftComponent2">
+      <div id="interactiveGraph">
+        <a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()" title="Download graph as a .png file" class="btn btn-outline-dark btn-sm">
+          <i class="fa fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </a>
+        <button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm">
+          <i class="fa fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </button>
+        <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm">
+          <i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </button>
+        <button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph" class="btn btn-outline-dark btn-sm">
+          <i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </button>
+        <a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen" class="btn btn-outline-dark btn-sm">
+          <i class="fas fa-expand-arrows-alt" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </a>
+        <hr class="divider" style="border-color: white"></hr>
+        <hr class="divider" style="border-color: white"></hr>
+
+        <hr class="divider"></hr>
+
+      </div>
+      <div id="cy"></div>
+      <hr class="divider" style="border-color: white"></hr>
+      <hr class="divider"></hr>
+
+    </div>
+    <!-- close resultsPageLeftComponent2 -->
 
 
-    <div class="resultsPageLeftComponent2">
-        <div id="cy">
-            <script>
-                var cy = cytoscape({
-                    container: document.getElementById('cy'),
-                    elements: [
-                        // nodes
-                        { data: { id: 'Genome' } }
-                    ],
-
-                    style: [
-                        {
-                            selector: 'node',
-                            style: {
-                                shape: 'circle',
-                                'background-color': '#468e94',
-                                label: 'data(id)'
-                            }
-                        }],
-                });
-                for (var i = 0; i < 10; i++) {
-                    cy.add({
-                            data: { id: 'Neighbour' + i }
-                        }
-                    );
-                    var source = 'Neighbour' + i;
-                    cy.add({
-                        data: {
-                            id: 'edge' + i,
-                            source: source,
-                            target: ('Genome')
-                        }
-                    });
-                }
-                
-                cy.layout({
-                    name: 'cola'
-                }).run();
-                
-          <!-- scripts for cytoscape graph buttons -->          
-          var zoomAmount = 1;  
-  
-          function zoomInGraph() {
-            console.log("zoom");
-            var xhttp = new XMLHttpRequest();
-            xhttp.open(this.method, this.url, true);
-            xhttp.onreadystatechange = function() {
-              if (this.readyState == 4 || this.readState == NULL && this.status == 200) {
-              zoomAmount = zoomAmount + 0.25;
-              cy.zoom({
-                level: zoomAmount,
-                
-              });
-      
-              }
-            };
-            xhttp.send();
-          }
-            
-          function zoomOutGraph() {
-            console.log("zoom");
-            var xhttp = new XMLHttpRequest();
-            xhttp.open(this.method, this.url, true);
-            xhttp.onreadystatechange = function() {
-              if (this.readyState == 4 || this.readState == NULL && this.status == 200) {
-              zoomAmount = zoomAmount - 0.25;
-              cy.zoom({
-                level: zoomAmount,
-                
-              });
-      
-              }
-            };
-            xhttp.send();
-          }
-            </script>
-        </div>
-
-    </div> <!-- close resultsPageLeftComponent2 -->
-
-
-    <hr style="margin-left: 10%; margin-right: 10%"></hr>
-    <div class="resultsPageLeftComponent3" style="text-align: center;">
+    <div id="resultsPageLeftComponent3" style="text-align: center;">
+      <div class="weightedDistanceSliders" style="padding-top:15px; float: left; border-left: 0.5px solid silver;">
         <p>Weighted distance 1</p>
-      <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 70%; "></input>
 
-        <p>Weighted distance 2</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange2" style="width: 40%; "></input>
-    </div> <!-- close resultsPageLeftComponent3 -->
-  </div> <!-- close resultsPageResultComponents -->
-</div>
+      </div>
+
+      <div class="weightedDistanceSliders" style="padding-top:15px; float: left; border-right: 0.5px solid silver;">
+
+        <p >Weighted distance 2</p>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 70%; "></input>
+
+      </div>
+
+    </div>
+    <!-- close resultsPageLeftComponent3 -->
+  </div>
+  <!-- close resultsPageResultComponents -->
+
+  <img id="saveableGraphImage" style="border: 1px solid #ddd; min-width: 3em; min-height: 3em; float: left;" download="nodeGraph"></img>
+
+  <script>
+    <!-- sampleTab buttons functionality -->
+    function sampleTabs(evt, tabName) {
+
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(tabName).style.display = "block";
+          evt.currentTarget.className += " active";
+      }
+
+        <!-- cytoscape div -->
+    var cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements: [
+    // nodes
+    { data: { id: 'Genome' }
+    }],
+
+    style: [{
+    selector: 'node',
+    style: {
+    shape: 'circle',
+    'background-color': '#468e94',
+    label: 'data(id)'
+    }
+    }],
+    });
+
+    for (var i = 0; i < 10; i++) {
+           cy.add({
+              data: { id: 'Neighbour' + i }
+           });
+         
+          var source = 'Neighbour' + i;
+          cy.add({
+            data: {
+              id: 'edge' + i,
+              source: source,
+              target: ('Genome')
+            }
+          });
+        }
+      
+        cy.layout({
+          name: 'cola'
+          }).run();
+
+    <!-- /// -->
+    <!-- scripts for cytoscape graph buttons -->
+    <!-- /// -->
+
+    <!-- Global variables for cytoscape graph buttons -->
+    var zoomAmount = 1;
+    var newZoom;
+
+
+    <!-- zoomInGraph functionality-->
+      function zoomInGraph() {
+      console.log("ZOOM IN - "+zoomAmount);
+      zoomAmount = zoomAmount + 0.25;
+      newZoom = zoomAmount;
+      console.log("IN - "+newZoom);
+
+      cy.zoom({level: newZoom});
+
+      }
+
+      <!-- zoomOutGraph functionality-->
+      function zoomOutGraph() {
+      console.log("ZOOM OUT - "+zoomAmount);
+
+      zoomAmount = zoomAmount - 0.25;
+      newZoom = zoomAmount;
+      console.log("OUT - "+newZoom);
+
+      cy.zoom({level: newZoom});
+
+      }
+
+      <!-- downloadGraph functionality-->
+      function downloadGraph() {
+      console.log("download graph");
+
+      var png64 = cy.png();
+
+      document.getElementById("saveableGraphImage").src="" + png64;
+      
+
+      }
+
+      <!-- expandGraph functionality-->
+      function expandGraph() {
+      var windowHeight = window.innerHeight;
+
+
+      document.getElementById("resultsPageRightComponent").style.float= "left";
+      document.getElementById("resultsPageRightComponent").style.width= "100%";
+      document.getElementById("resultsPageRightComponent").style.padding= "0px 0px 10px 0px";
+
+
+      document.getElementById("resultsPageLeftComponents").style.width= "100%";
+      document.getElementById("resultsPageLeftComponents").style.height= windowHeight + "px";
+
+      document.getElementById("resultsPageLeftComponents").style.clear= "both";
+      document.getElementById("resultsPageLeftComponents").style.padding= "0px";
+
+      document.getElementById("resultsPageLeftComponent2").style.height= windowHeight + "px";
+
+      document.getElementById("resultsPageLeftComponent2").style.padding= "0 0 10px 0";
+
+      document.getElementById("resultsPageLeftComponent3").style.clear="both";
+
+
+
+      document.getElementById("cy").width= "100%";
+
+      document.getElementById("cy").height= windowHeight + "px";
+      document.getElementById("cy").style.zoom= "1.0";
+
+
+
+      }
+
+
+    </script>
+
+

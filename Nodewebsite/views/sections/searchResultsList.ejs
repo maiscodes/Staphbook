@@ -5,9 +5,9 @@
 
 <div id="queryListContainer">
     <div class="list-group">
-        <form action='/result' method="post">
+        <form action='/result' method="get">
         <% sccmec_primers.forEach(function (result) { %>
-        <button type="submit" name="searchResult[selection]" value="<%= result.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        <button type="submit" name="sampleSelection" value="<%= result.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
             Staphylococcus Aureus subsp. Sample <%= result.sample_id %>,
             Q-sequence '<%= result.qseq %>'</button>
         <% }) %>

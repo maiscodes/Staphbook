@@ -15,9 +15,9 @@
          style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
 
         <!--Search form-->
-        <form action='/searchResults' method="post" class="form-inline from-center my-2 my-lg-0">
+        <form action='/searchResults' method="get" class="form-inline from-center my-2 my-lg-0">
             <!--Search form dropdown-->
-            <select name="search[option]" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
+            <select name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
                 <option>All</option>
                 <option>Gene</option>
                 <option>Genome</option>
@@ -27,7 +27,7 @@
 
 
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 400px;">
-            <input type="text" name="search[input]" style="border: 0.5px solid gray" class="form-control form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
+            <input type="text" name="searchInput" style="border: 0.5px solid gray" class="form-control form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
               <div class="input-group-append">
                 <button class="btn btn-dark" type="submit">
                     <i class="fa fa-search"></i>
@@ -51,7 +51,7 @@
           
             <!--Link to help/tutorial page-->
             <li class="nav-item">
-                <a class="btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#">Help/Tutorial</a>
+                <a class="btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#tutorial-container">Help/Tutorial</a>
             </li>
         </ul>
     </div>
