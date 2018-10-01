@@ -20,10 +20,11 @@
         <form action='/searchResults' method="get" class="form-inline my-2 my-lg-0">
           <!--Search form dropdown-->
           <select name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
-            <option>All</option>
-            <option>Gene</option>
-            <option>Genome</option>
-            <option>Keywords</option>
+            <option value="Sequence">Sequence Type</option>
+            <option value="Location">Location</option>
+            <option value="Strain Name">Strain Name</option>
+            <option value="Host">Host</option>
+            <option value="Source">Isolation Source</option>
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
