@@ -1,9 +1,9 @@
 <!--Navigation Bar-->
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dbdbdb ; height: 45px; border-bottom: 0.5px solid gray">
+<nav class="navbar navbar-expand-lg navbar-light" style="border-bottom: 0.5px solid gray">
 
   <!--Homepage Link-->
-  <a class="navbar-brand" style="font-size: 180%; margin-right: 60px; color: #2f2f2f" href="/">
-    <i class="fas fa-atom"></i> <b>Staph</b>Book
+  <a class="navbar-brand" style="font-size: 180%; margin-right: 80px; color: #2f2f2f" href="/">
+    <i class="fas fa-atom" style="color: #468e94;"></i> <b>Staph</b>Book
   </a>
 
   <!--Make navigation bar collapsible-->
@@ -25,9 +25,8 @@
             <option>Genome</option>
             <option>Keywords</option>
           </select>
-
           <!--Search form text input-->
-          <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 400px;">
+          <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
             <input type="text" name="searchInput" style="border: 0.5px solid gray" class="form-control form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
             <div class="input-group-append">
               <button class="btn btn-dark" type="submit">
@@ -37,23 +36,23 @@
           </div>
         </form>
       </li>
+      <div id="makingSpace" style="margin-left: 50px; width: 1px;"></div>
+        <!--Link to advanced search page-->
+        <li class="nav-item">
+          <a class="nav-link btn btn-sm btn-outline-dark" style="margin-top: 12px; margin-left: 2px; margin-right 2px; color: #468e94;" href="/advancedSearch">Advanced Search</a>
+        </li>
 
-      <!--Link to advanced search page-->
-      <li class="nav-item" style="margin-left: 10px;">
-        <a class="nav-link btn btn-sm btn-outline-dark" href="/advancedSearch">Advanced Search</a>
-      </li>
+        <!--Link to help/tutorial page-->
+        <li class="nav-item">
+          <a class="nav-link btn btn-sm btn-outline-dark" style="margin-top: 12px; margin-left: 2px; margin-right 2px; color: #468e94;" href="#tutorial-container">Help/Tutorial</a>
+        </li>
 
-      <!--Link to help/tutorial page-->
-      <li class="nav-item">
-        <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#tutorial-container">Help/Tutorial</a>
-      </li>
-
-      <li class="nav-item">
-        <!--Login button-->
-        <a class="btn btn-sm btn-dark nav-link" href="/login">
-          Log in / Register
-        </a>
-      </li>
+        <li class="nav-item">
+          <!--Login button-->
+          <a class="btn btn-sm btn-dark nav-link" style="margin-top: 12px; margin-left: 2px; margin-right 2px; color: white;" href="/login">
+            Log in / Register
+          </a>
+        </li>
 
     </ul>
   </div>
