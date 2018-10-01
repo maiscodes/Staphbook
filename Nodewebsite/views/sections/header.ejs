@@ -1,111 +1,62 @@
 <!--Navigation Bar-->
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dbdbdb ; height: 45px; border-bottom: 0.5px solid gray">
 
-    <!--Homepage Link-->
-  <a class="navbar-brand" style="font-size: 180%; margin-left: 30px; color: #2f2f2f" href="/"><i class="fas fa-atom"></i> <b>Staph</b>Book</a>
+  <!--Homepage Link-->
+  <a class="navbar-brand" style="font-size: 180%; margin-right: 60px; color: #2f2f2f" href="/">
+    <i class="fas fa-atom"></i> <b>Staph</b>Book
+  </a>
 
-    <!--Make navigation bar collapsible-->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+  <!--Make navigation bar collapsible-->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <!--Navigation Search Bar-->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent"
-         style="margin: 0; position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%)">
-
+  <!--Navigation Search Bar-->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
         <!--Search form-->
-        <form action='/searchResults' method="get" class="form-inline from-center my-2 my-lg-0">
-            <!--Search form dropdown-->
-            <select name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
-                <option>All</option>
-                <option>Gene</option>
-                <option>Genome</option>
-                <option>Keywords</option>
-            </select>
-            <!--Search form text input-->
+        <form action='/searchResults' method="get" class="form-inline my-2 my-lg-0">
+          <!--Search form dropdown-->
+          <select name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
+            <option>All</option>
+            <option>Gene</option>
+            <option>Genome</option>
+            <option>Keywords</option>
+          </select>
 
-
+          <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 400px;">
             <input type="text" name="searchInput" style="border: 0.5px solid gray" class="form-control form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
-              <div class="input-group-append">
-                <button class="btn btn-dark" type="submit">
-                    <i class="fa fa-search"></i>
-                </button>
-              </div>
+            <div class="input-group-append">
+              <button class="btn btn-dark" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
           </div>
         </form>
-          <!-- 
-          <input class="form-control form-control-sm" size="40" style="width: 350px; margin-right: 2px;" name="search[input]" placeholder="Type your search here. For example: 'ccrA1'.">
-            
-          </input>
-          -->
+      </li>
 
-        <ul class="navbar-nav" >
-            <!--Link to advanced search page-->
-          <li class="nav-item" style="margin-left: 10px;">
-            <a class="btn btn-sm btn-outline-dark" href="/advancedSearch">Advanced Search</a>
-          </li>
-            
-          
-          
-            <!--Link to help/tutorial page-->
-            <li class="nav-item">
-                <a class="btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#tutorial-container">Help/Tutorial</a>
-            </li>
-        </ul>
-    </div>
+      <!--Link to advanced search page-->
+      <li class="nav-item" style="margin-left: 10px;">
+        <a class="nav-link btn btn-sm btn-outline-dark" href="/advancedSearch">Advanced Search</a>
+      </li>
 
-    <!--Login / Register model-->
-    <div style="margin-left: auto; margin-right: 20px; overflow: hidden">
+      <!--Link to help/tutorial page-->
+      <li class="nav-item">
+        <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 3px;" href="#tutorial-container">Help/Tutorial</a>
+      </li>
 
-        <!--Button to rigger modal-->
-        <a class="btn btn-sm btn-outline-dark" href="#" data-toggle="modal" data-target="#loginModal">
-          <b>Log in / Register </b></a>
+      <li class="nav-item">
+        <!--Login button-->
+        <a class="btn btn-sm btn-dark nav-link" href="/login">
+          Log in / Register
+        </a>
+      </li>
 
-        <!--Login Modal-->
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
-             aria-hidden="true" style="overflow: hidden">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalTitle">Log in to StaphBook</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+    </ul>
+  </div>
 
-                    <!--Login from-->
-                    <div class="modal-body">
-                        <form>
-                            <!--Email Adress input (email)-->
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                              <input type="email" class="form-control" id="exampleInputEmail1"
-                                     aria-describedby="emailHelp" placeholder="Enter email"></input>
-                            </div>
-                            <!--Password input (password)-->
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                       placeholder="Password"></input>
-                            </div>
-                            <!--Remember Me input (checkbox)-->
-                            <div class="form-check">
-                              <input type="checkbox" class="form-check-input" id="exampleCheck1"></input>
-                                <label class="form-check-label" for="exampleCheck1">Remember me</label>
-                            </div>
-                            <!--Login form submission-->
-                            <button type="submit" class="btn btn-dark" formaction="HomePage(LoggedIn).html" style="margin-top: 10px">Log in</button>
-                        </form>
-                    </div>
 
-                    <!--Link to Sign Up Page page-->
-                    <div class="modal-footer">
-                        <p>If you don't already have a StaphBook account you can <a style="color: #303030" href="/createAccount"><u>Register here</u></a>.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </nav>

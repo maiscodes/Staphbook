@@ -29,11 +29,11 @@
 
     <div class="tab">
       <!--need to change the titles for these once finalised-->
-      <button class="tablinks" onclick="sampleTabs(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
-      <button class="tablinks" onclick="sampleTabs(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
-      <button class="tablinks" onclick="sampleTabs(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
-      <button class="tablinks" onclick="sampleTabs(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
-      <button class="tablinks" onclick="sampleTabs(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
     </div>
 
     <div id="Tags" class="tabcontent">
@@ -107,11 +107,14 @@
 
     <div id="resultsPageLeftComponent2">
       <div id="interactiveGraph">
-        <a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()" title="Download graph as a .png file" class="btn btn-outline-dark btn-sm">
-          <i class="fa fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        <button type="button" id="centerGraph" onclick="centerGraph()" title="Center graph" class="btn btn-outline-dark btn-sm">
+          <i class="fas fa-expand" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </button>
+        <a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()" title="Create .png file of current graph" class="btn btn-outline-dark btn-sm">
+          <i class="far fa-file-image" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
         </a>
         <button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm">
-          <i class="fa fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="far fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
         </button>
         <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm">
           <i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
@@ -120,8 +123,9 @@
           <i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
         </button>
         <a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen" class="btn btn-outline-dark btn-sm">
-          <i class="fas fa-expand-arrows-alt" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+          <i class="fas fa-long-arrow-alt-up" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
         </a>
+
         <hr class="divider" style="border-color: white"></hr>
         <hr class="divider" style="border-color: white"></hr>
 
@@ -155,11 +159,11 @@
   </div>
   <!-- close resultsPageResultComponents -->
 
-  <img id="saveableGraphImage" style="border: 1px solid #ddd; min-width: 3em; min-height: 3em; float: left;" download="nodeGraph"></img>
+  <img id="saveableGraphImage" style="border: 1px solid #ddd; min-width: 3em; min-height: 3em; float: left; visibility: hidden;"></img>
 
   <script>
     <!-- sampleTab buttons functionality -->
-    function sampleTabs(evt, tabName) {
+    function results(evt, tabName) {
 
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -175,52 +179,54 @@
       }
 
         <!-- cytoscape div -->
-    var cy = cytoscape({
-    container: document.getElementById('cy'),
-    elements: [
-    // nodes
-    { data: { id: 'Genome' }
-    }],
 
-    style: [{
-    selector: 'node',
-    style: {
-    shape: 'circle',
-    'background-color': '#468e94',
-    label: 'data(id)'
-    }
-    }],
-    });
-
-    for (var i = 0; i < 10; i++) {
-           cy.add({
-              data: { id: 'Neighbour' + i }
-           });
-         
-          var source = 'Neighbour' + i;
-          cy.add({
-            data: {
-              id: 'edge' + i,
-              source: source,
-              target: ('Genome')
-            }
-          });
-        }
-      
-        cy.layout({
-          name: 'cola'
-          }).run();
-
-    <!-- /// -->
-    <!-- scripts for cytoscape graph buttons -->
-    <!-- /// -->
-
-    <!-- Global variables for cytoscape graph buttons -->
-    var zoomAmount = 1;
-    var newZoom;
+    var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
+    console.log(sampleIdentity);
+      var cy = cytoscape({
+      container: document.getElementById('cy'),
+      elements: [
+      // nodes
+      { data: { id: sampleIdentity } }
+      ],
+      style: [
+      {
+      selector: 'node',
+      style: {
+      'background-color': '#468e94',
+      label: 'data(id)'
+      }
+      }],
+      });
+      for (var i = 0; i < 10; i++) {
+                            cy.add({
+                            data: { id: 'Neighbour' + i }
+                        }
+                    );
+                    var source = 'Neighbour' + i;
+                    cy.add({
+                        data: {
+                            id: 'edge' + i,
+                            source: source,
+                            target: (sampleIdentity)
+                        }
+                    });
+                }
+                cy.layout({
+                    name: 'cola'
+                }).run();
+            
 
 
-    <!-- zoomInGraph functionality-->
+      <!-- /// -->
+      <!-- SCRIPTS FOR CYTOSCAPE GRAPH BUTTONS -->
+      <!-- /// -->
+
+      <!-- Global variables for cytoscape graph buttons -->
+      var zoomAmount = 1;
+      var newZoom;
+
+
+      <!-- zoomInGraph functionality-->
       function zoomInGraph() {
       console.log("ZOOM IN - "+zoomAmount);
       zoomAmount = zoomAmount + 0.25;
@@ -247,43 +253,62 @@
       function downloadGraph() {
       console.log("download graph");
 
+      document.getElementById("saveableGraphImage").style.visibility="visible";
       var png64 = cy.png();
 
       document.getElementById("saveableGraphImage").src="" + png64;
-      
 
       }
 
       <!-- expandGraph functionality-->
       function expandGraph() {
       var windowHeight = window.innerHeight;
+      var screenHeight = windowHeight + 30;
+      var graphHeight = windowHeight - 60;
 
-
+      <!-- make right (tabular) components move above genome graph components-->
       document.getElementById("resultsPageRightComponent").style.float= "left";
       document.getElementById("resultsPageRightComponent").style.width= "100%";
       document.getElementById("resultsPageRightComponent").style.padding= "0px 0px 10px 0px";
 
+      <!-- make genome graph div container component full width and height of screen -->
+        document.getElementById("resultsPageLeftComponents").style.width= "100%";
+        document.getElementById("resultsPageLeftComponents").style.height= screenHeight + "px";
+        document.getElementById("resultsPageLeftComponents").style.clear= "both";
+        document.getElementById("resultsPageLeftComponents").style.padding= "0px";
 
-      document.getElementById("resultsPageLeftComponents").style.width= "100%";
-      document.getElementById("resultsPageLeftComponents").style.height= windowHeight + "px";
-
-      document.getElementById("resultsPageLeftComponents").style.clear= "both";
-      document.getElementById("resultsPageLeftComponents").style.padding= "0px";
-
-      document.getElementById("resultsPageLeftComponent2").style.height= windowHeight + "px";
-
-      document.getElementById("resultsPageLeftComponent2").style.padding= "0 0 10px 0";
-
-      document.getElementById("resultsPageLeftComponent3").style.clear="both";
+        <!-- specifically make genome graph component full width and height of screen -->
+        document.getElementById("resultsPageLeftComponent2").style.height= screenHeight + "px";
+        document.getElementById("resultsPageLeftComponent2").style.padding= "0 0 10px 0";
+        document.getElementById("resultsPageLeftComponent2").style.width= "80%";
 
 
+        <!-- make genome sliders to right of graph -->
+        document.getElementById("resultsPageLeftComponent3").style.width= "20%";
+        document.getElementById("resultsPageLeftComponent3").style.margin="70px 0 0 0";
 
-      document.getElementById("cy").width= "100%";
+        <!-- specifically modify cytoscape graph -->
+        document.getElementById("cy").style.width= "100%";
+        document.getElementById("cy").style.height= graphHeight + "px";
 
-      document.getElementById("cy").height= windowHeight + "px";
-      document.getElementById("cy").style.zoom= "1.0";
+        <!-- specifically make sliders stack under each other on RHS of graph -->
+        var elements = document.getElementsByClassName("weightedDistanceSliders");
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].style.width="90%";
+        }
 
+        centerGraph();
 
+        }
+
+        <!-- center graph functionality-->
+
+      function centerGraph() {
+      zoomAmount = 1;
+      newZoom = 1;
+
+      cy.center();
+      cy.reset();
 
       }
 
