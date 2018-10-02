@@ -49,12 +49,36 @@
         <li class="nav-item">
           <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="#tutorial-container">Help/Tutorial</a>
         </li>
+
+        <% if (userLoggedIn) { %>
+        <li class="nav-item">
+
+          <!--User menu-->
+          <div class="dropdown" style="margin-left: auto; margin-right: 30px">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            Username
+          </button>
+          <!--Links to user functionality-->
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Profile</a>
+            <a class="dropdown-item" href="#">Favorites</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="/logout">Logout</a>
+          </div>
+        </div>
+        </li>
+
+        <% } else { %>
+
         <!--Login button-->
         <li class="nav-item">
           <a class="btn btn-sm btn-dark nav-link" style="margin-left: 2px; margin-right: 2px; color: white;" href="/login">
             Log in / Register
           </a>
         </li>
+      <% } %>
+	  
     </ul>
   </div>
 

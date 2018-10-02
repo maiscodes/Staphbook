@@ -44,6 +44,9 @@ app.use(express.static(__dirname + '/views/'));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
+// global variable
+var userLoggedIn;
+
 
 /*
 ** GET routes
@@ -51,21 +54,51 @@ app.set('view engine', 'ejs');
 
 // index page
 app.get('/', function (req, res) {
-    res.render('pages/index');
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+    res.render('pages/index', { userLoggedIn: userLoggedIn });
 });
 
 // advanced search page
 app.get('/advancedSearch', function (req, res) {
-    res.render('pages/advancedSearch');
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+    res.render('pages/advancedSearch', { userLoggedIn: userLoggedIn });
 });
 
 // account creation page page
 app.get('/createAccount', function (req, res) {
-    res.render('pages/createAccount');
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+	
+    res.render('pages/createAccount', { userLoggedIn: userLoggedIn });
 });
 
 // result page
 app.get('/result', function (req, res) {
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+	
     let sampleID = req.query.sampleSelection;
 
     // Tags
@@ -90,7 +123,7 @@ app.get('/result', function (req, res) {
                         will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows 
                         **/
                     console.log(sampleID);
-                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows });
+                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn });
                 });
             });
 
@@ -101,6 +134,13 @@ app.get('/result', function (req, res) {
 
 // search results page
 app.get('/searchResults', function (req, res) {
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
 
     let input = req.query.searchInput;
     let option = req.query.searchOption;
@@ -115,7 +155,7 @@ app.get('/searchResults', function (req, res) {
 				"WHERE st = '" + input + "')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number });
+				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
 			});
 		} else if(option == "Location"){
 			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
@@ -126,7 +166,7 @@ app.get('/searchResults', function (req, res) {
 				"WHERE metadata->>'country' LIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number });
+				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
 			});
 		} else if(option == "Strain Name"){
 			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
@@ -137,7 +177,7 @@ app.get('/searchResults', function (req, res) {
 				"WHERE metadata->>'strain' LIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number });
+				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
 			});
 		} else if(option == "Host"){
 			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
@@ -148,7 +188,7 @@ app.get('/searchResults', function (req, res) {
 				"WHERE metadata->>'host' LIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number });
+				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
 			});
 		} else if(option == "Source"){
 			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
@@ -159,17 +199,30 @@ app.get('/searchResults', function (req, res) {
 				"WHERE metadata->>'isolation_source' LIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number });
+				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
 			});
 		}
 	} else {
-		res.redirect('/');
+		res.render('pages/index', { userLoggedIn: userLoggedIn });
 	}
 });
 
 app.get('/login', function (req, res) {
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
     console.log('rendered');
-    res.render('pages/login');
+    res.render('pages/login', { userLoggedIn: userLoggedIn } );
+});
+
+app.get('/logout', function (req, res) {
+    res.clearCookie('setCookie');
+	userLoggedIn = false;
+    res.redirect('/', { userLoggedIn: userLoggedIn });
 });
 
 
@@ -179,6 +232,14 @@ app.get('/login', function (req, res) {
 
 // account creation page page
 app.post('/createAccount', function (req, res) {
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+	
     console.log("Create account - post method");
 
     var email = req.body.email;
@@ -199,11 +260,18 @@ app.post('/createAccount', function (req, res) {
             });
 
     });
-    res.render('/login');
+    res.render('/login', { userLoggedIn: userLoggedIn });
 });
 
  // login page
 app.post('/login', function (req, res) {
+	if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
 
     console.log('post login');
 
@@ -227,16 +295,11 @@ app.post('/login', function (req, res) {
                 res.cookie('setCookie', req.body.email, {
                     httpOnly: true
                 });
-                var cookies = cookie.parse(req.headers.cookie || '');
+				
+				userLoggedIn = true;
 
-                console.log('req.cookies =  ')
-                console.log(req.cookies);
-                console.log("req.cookies.setCookie =  ")
-                console.log(req.cookies.setCookie);
-                console.log('req.headers.cookie')
-                console.log(req.headers.cookie);
 
-                res.redirect('/');
+                res.render('pages/index', { userLoggedIn: userLoggedIn });
             } else {
                 res.send("Invalid password!")
             }
