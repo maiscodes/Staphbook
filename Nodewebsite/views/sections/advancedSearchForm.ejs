@@ -9,18 +9,18 @@
     </div>
 
     <!--Advanced Search form-->
-    <div id="advancedSearch" style="margin-left: auto; margin-right: auto; width: 60%">
-        <form>
+    <div id="advancedSearch"  style="margin-left: auto; margin-right: auto; width: 60%">
+        <form action='/advSearchResults' method="get">
             <!--Name input (text)-->
             <div class="form-group">
-                <label for="inputName">Name</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Name">
+                <label for="sequenceInput">Sequence Type</label>
+                <input type="number" class="form-control" name="sequenceInput" id="sequenceInput" placeholder="Sequence Type">
             </div>
 
             <!--Sequence Type input (text)-->
             <div class="form-group">
-                <label for="inputSequence">Sequence Type</label>
-                <input type="text" class="form-control" id="inputSequence" placeholder="Sequence Type">
+                <label for="locationInput">Location</label>
+                <input type="text" class="form-control" name="locationInput" id="locationInput" placeholder="Location">
             </div>
 
             <!--Date Isolated Range-->
@@ -43,48 +43,25 @@
 
             <!--Place input (text)-->
             <div class="form-group">
-                <label for="inputPlace">Place (Within 100 Miles of)</label>
-                <input type="text" class="form-control" id="inputPlace" placeholder="Place">
+                <label for="hostInput">Host</label>
+                <input type="text" class="form-control" name="hostInput" id="hostInput" placeholder="Host">
             </div>
 
             <div class="row">
                 <!--Gene Present input (text)-->
                 <div class="col">
-                    <label for="inputGenePresent">Gene Present</label>
-                    <input type="text" class="form-control" id="inputGenePresent" placeholder="Gene Present">
+                    <label for="strainInput">Strain Name</label>
+                    <input type="text" class="form-control" name="strainInput" id="strainInput" placeholder="Strain Name">
                 </div>
                 <!--Gene Absent input (text)-->
                 <div class="col">
-                    <label for="inputGeneAbsent">Gene Absent</label>
-                    <input type="text" class="form-control" id="inputGeneAbsent" placeholder="Gene Absent">
+                    <label for="sourceInput">Isolation Source</label>
+                    <input type="text" class="form-control" name="sourceInput" id="sourceInput" placeholder="Isolation Source">
                 </div>
             </div>
 
-            <!--Number of Shared MLST Alleles input (number from dropdown)-->
-            <div class="form-group" style="margin-top: 15px">
-                <label for="inputMLSTAlleles">Number of Shared MLST Alleles</label>
-                <!--Dropdown number selection-->
-                <select id="inputMLSTAlleles" class="form-control" style="width: 15%">
-                    <option selected>Choose...</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                </select>
-            </div>
-
-            <!--Percentage of shared Predicted Antibiotic Resistance Phenotypes input (number)-->
-            <div class="form-group">
-                <label for="inputSharedPhenotype">Percentage of Shared Predicted Antibiotic Resistance
-                    Phenotypes</label>
-                <input type="number" class="form-control" id="inputSharedPhenotype" placeholder="%" style="width: 15%">
-            </div>
-
             <!--Form submission button-->
-            <button type="submit" class="btn btn-dark" formaction="QueryResultsPage.html" style="margin-top: 20px; width: 100px">Search</button>
+            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Search</button>
         </form>
     </div>
 </div>

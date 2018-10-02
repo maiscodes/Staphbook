@@ -13,20 +13,22 @@
         <div id="searchBar-container align-items-center"
              style="height: 100px; margin-bottom: -55px; margin-top: 100px; margin-left: auto; margin-right: auto; width: 60%">
             <!--Search form-->
-            <form class="form-inline  my-2 my-lg-0" style="top: 30%">
+            <form class="form-inline  my-2 my-lg-0" style="top: 30%" action='/searchResults' method="get">
                 <!--Search form dropdown-->
-                <select class="form-control" style="margin-right: 5px; width: 10%">
-                    <option>All</option>
-                    <option>Gene</option>
-                    <option>Genome</option>
-                    <option>Keywords</option>
+                <select class="form-control" name="searchOption" style="margin-right: 5px; width: 18%">
+                    <option value="Sequence">Sequence Type</option>
+                    <option value="Location">Location</option>
+                    <option value="Strain Name">Strain Name</option>
+                    <option value="Host">Host</option>
+                    <option value="Source">Isolation Source</option>
+                    <option value="Sample">Sample ID</option>
                 </select>
                 <!--Search form text input-->
-                <input class="form-control form-outline-dark mr-sm-2" style="width: 78%"
-                       style="margin-left: -2px; margin-left: -2px" type="search" placeholder="Search"
+                <input class="form-control form-outline-dark mr-sm-2" style="width: 70%"
+                       style="margin-left: -2px; margin-left: -2px" type="text" name="searchInput" placeholder="Search"
                        aria-label="Search">
                 <!--Search form submission-->
-                <button class="btn btn-dark my-2 my-sm-0" formaction="QueryResultsPage.html" style=" width: 10%;" type="submit">
+                <button class="btn btn-dark my-2 my-sm-0" style=" width: 10%;" type="submit">
                   <i class="fa fa-search"></i>  </button>
             </form>
         </div>
