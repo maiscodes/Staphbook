@@ -261,7 +261,7 @@ app.get('/advSearchResults', function (req, res) {
         }
     }
     if (hostInput != ""){
-        selectSQL += "metadata->>'host' LIKE '%" + hostInput + "%' AND";
+        selectSQL += "metadata->>'host' LIKE '%" + hostInput + "%'";
         if (sourceInput != ""){
             selectSQL += " AND ";
         }
