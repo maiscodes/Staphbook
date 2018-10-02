@@ -203,7 +203,7 @@ app.get('/searchResults', function (req, res) {
 			});
 		}
 	} else {
-		res.render('pages/index', { userLoggedIn: userLoggedIn });
+		res.redirect('/');
 	}
 });
 
@@ -222,7 +222,7 @@ app.get('/login', function (req, res) {
 app.get('/logout', function (req, res) {
     res.clearCookie('setCookie');
 	userLoggedIn = false;
-    res.redirect('/', { userLoggedIn: userLoggedIn });
+    res.render('pages/index', { userLoggedIn: userLoggedIn });
 });
 
 
