@@ -3,6 +3,12 @@
     <h1 class="text-center" style="margin-top: 20px">Create an account</h1>
     <p class="text-center" style="margin-top: 20px; margin-left: 10%; margin-right: 10%">To create a StaphBook account, enter your details in the fields below and click submit.</p>
   </div>
+
+  <% if (userAlreadyExists) { %>
+  <script>alert("User email already registered.");</script>
+  <% } %> 
+    
+    
   <div id="signUp-container" style="margin-top: 20px">
     <div id="signUpForm-conatiner">
       <form class="needs-validation" method="POST" novalidate="">
