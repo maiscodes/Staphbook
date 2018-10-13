@@ -59,8 +59,6 @@ var userAlreadyExists = true;
 app.get('/', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -71,8 +69,6 @@ app.get('/', function (req, res) {
 app.get('/advancedSearch', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -83,8 +79,6 @@ app.get('/advancedSearch', function (req, res) {
 app.get('/createAccount', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -98,8 +92,6 @@ app.get('/createAccount', function (req, res) {
 app.get('/result', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -141,8 +133,6 @@ app.get('/result', function (req, res) {
 app.get('/searchResults', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -227,8 +217,6 @@ app.get('/searchResults', function (req, res) {
 app.get('/advSearchResults', function (req, res) {
     if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -292,12 +280,9 @@ app.get('/login', function (req, res) {
     var userNotRegistered = false;
     passwordIncorrect = false;
     req.creationSuccess = false;
-    console.log("[ - ] Creation success", creationSuccess);
 
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -319,8 +304,6 @@ app.get('/logout', function (req, res) {
 app.post('/createAccount', function (req, res) {
 	if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -347,14 +330,11 @@ app.post('/createAccount', function (req, res) {
                             throw error;
                             res.redirect('/');
                         } else {
-                            console.log("User inserted to db successfully");
                             creationSuccess = true;
-                            console.log("[ + ] Creation success", creationSuccess);
-
                             res.redirect('/login');
-
                         }
-                    });
+                    }
+                );
             }
         });
     });
@@ -364,8 +344,6 @@ app.post('/createAccount', function (req, res) {
 app.post('/login', function (req, res) {
     if (req.headers.cookie) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
@@ -378,7 +356,6 @@ app.post('/login', function (req, res) {
         console.log(err, result_registered_users);
 
         if (result_registered_users.rows.length != 1) {
-            console.log('user not registered');
             var userNotRegistered = true;
             res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
         } else {
