@@ -98,7 +98,7 @@ app.get('/result', function (req, res) {
     } else {
         userLoggedIn = false;
     }
-	
+    let number = 0;
     let sampleID = req.query.sampleSelection;
 
     // Tags
@@ -116,18 +116,66 @@ app.get('/result', function (req, res) {
                 client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
                     console.log(err, result_mlst_mlst);
 
-                    /**
-                    //favourites
-                    client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
-                        console.log(err, result_registered_users);
-                        will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows 
-                        **/
-                    console.log(sampleID);
-                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn });
+                    // Samples with the same Sequence Type
+                    let st = result_mlst_mlst.rows[0].st;
+                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                        "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                        "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                        "WHERE st = '" + st + "')", (err, same_sequence) => {
+                        console.log(err, same_sequence);
+                        number = number + same_sequence.rows.length;
+
+                        // Samples with the same Location
+                        let location = result_sample_metadata.rows[0].metadata.country;
+                        client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                            "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                            "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                            "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                            "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                            "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
+                            console.log(err, same_location);
+                            number = number + same_location.rows.length;
+
+                            // Samples with the same Host
+                            let host = result_sample_metadata.rows[0].metadata.host;
+                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
+                                console.log(err, same_host);
+                                number = number + same_host.rows.length;
+
+                                // Samples with the same Isolation Source
+                                let iso = result_sample_metadata.rows[0].metadata.isolation_source;
+                                client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                    "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                    "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                    "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                    "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
+                                    console.log(err, same_isolation);
+                                    number = number + same_isolation.rows.length;
+
+                                    /**
+                                    //favourites
+                                    client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
+                                        console.log(err, result_registered_users);
+                                        will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
+                                        **/
+                                    console.log(sampleID);
+                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows,
+                                        sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
+                                        same_locations: same_location.rows, same_sequences: same_sequence.rows, same_isolations: same_isolation.rows});
+                                });
+                            });
+                        });
+                    });
                 });
             });
-
-
         });
     });
 });
@@ -163,7 +211,7 @@ app.get('/searchResults', function (req, res) {
 				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
 				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
 				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'country' LIKE '%" + input + "%')", (err, result_samples) => {
+				"WHERE metadata->>'country' ILIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
 				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
@@ -174,7 +222,7 @@ app.get('/searchResults', function (req, res) {
 				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
 				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
 				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'strain' LIKE '%" + input + "%')", (err, result_samples) => {
+				"WHERE metadata->>'strain' ILIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
 				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
@@ -185,7 +233,7 @@ app.get('/searchResults', function (req, res) {
 				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
 				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
 				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'host' LIKE '%" + input + "%')", (err, result_samples) => {
+				"WHERE metadata->>'host' ILIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
 				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
@@ -196,7 +244,7 @@ app.get('/searchResults', function (req, res) {
 				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
 				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
 				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'isolation_source' LIKE '%" + input + "%')", (err, result_samples) => {
+				"WHERE metadata->>'isolation_source' ILIKE '%" + input + "%')", (err, result_samples) => {
 				console.log(err, result_samples);
 				number = result_samples.rows.length;
 				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
@@ -249,25 +297,25 @@ app.get('/advSearchResults', function (req, res) {
         }
     }
     if (locationInput != ""){
-        selectSQL += "metadata->>'country' LIKE '%" + locationInput + "%'";
+        selectSQL += "metadata->>'country' ILIKE '%" + locationInput + "%'";
         if (strainInput != "" || hostInput != "" || sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (strainInput != ""){
-        selectSQL += "metadata->>'country' LIKE '%" + strainInput + "%'";
+        selectSQL += "metadata->>'strain' ILIKE '%" + strainInput + "%'";
         if (hostInput != "" || sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (hostInput != ""){
-        selectSQL += "metadata->>'host' LIKE '%" + hostInput + "%'";
+        selectSQL += "metadata->>'host' ILIKE '%" + hostInput + "%'";
         if (sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (sourceInput != ""){
-        selectSQL += "metadata->>'isolation_source' LIKE '%" + sourceInput + "%' ";
+        selectSQL += "metadata->>'isolation_source' ILIKE '%" + sourceInput + "%' ";
     }
     console.log(selectSQL);
 

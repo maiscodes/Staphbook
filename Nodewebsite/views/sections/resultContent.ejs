@@ -188,32 +188,113 @@
       // nodes
       { data: { id: sampleIdentity } }
       ],
-      style: [
-      {
-      selector: 'node',
-      style: {
-      'background-color': '#468e94',
-      label: 'data(id)'
-      }
-      }],
+      style: [{
+        selector: 'node', style: {'background-color': '#468e94', label: 'data(id)'},
+      }, {
+         selector: 'edge', style: {'curve-style': 'bezier', 'control-point-step-size': 10}
+          }
+      ],
       });
-      for (var i = 0; i < 10; i++) {
-                            cy.add({
-                            data: { id: 'Neighbour' + i }
-                        }
-                    );
-                    var source = 'Neighbour' + i;
-                    cy.add({
-                        data: {
-                            id: 'edge' + i,
-                            source: source,
-                            target: (sampleIdentity)
-                        }
-                    });
-                }
-                cy.layout({
-                    name: 'cola'
-                }).run();
+      let collection = cy.collection();
+      let same_sq = <%- JSON.stringify(same_sequences) %>;
+      let same_loc = <%- JSON.stringify(same_locations) %>;
+      let same_ho = <%- JSON.stringify(same_hosts) %>;
+      let same_iso = <%- JSON.stringify(same_isolations) %>;
+      same_sq.forEach(function(same_sequence) {
+          let same_sequence_sample_id = same_sequence.sample_id;
+          if (same_sequence_sample_id != sampleIdentity){
+              cy.add({
+                  data: {id: same_sequence_sample_id}
+              });
+              collection = collection.add(cy.$id(same_sequence_sample_id));
+              var source = same_sequence_sample_id;
+              cy.add({
+                  data: {
+                      id: 'edge' + source,
+                      source: source,
+                      target: (sampleIdentity),
+                  },
+                  style: {'line-color': 'green'}
+              });
+              collection = collection.add(cy.$id('edge' + same_sequence_sample_id));
+          }
+      });
+      same_loc.forEach(function(same_location) {
+          let same_location_sample_id = same_location.sample_id;
+          if (same_location_sample_id != sampleIdentity){
+              if(cy.$id(same_location_sample_id).empty()){
+                  cy.add({
+                      data: {id: same_location_sample_id}
+                  });
+                  collection = collection.add(cy.$id(same_location_sample_id));
+              }
+              var source = same_location_sample_id;
+              cy.add({
+                  data: {
+                      id: 'edge2' + source,
+                      source: source,
+                      target: (sampleIdentity),
+                  },
+                  style: {'line-color': 'red'}
+              });
+              collection = collection.add(cy.$id('edge2' + same_location_sample_id));
+          }
+      });
+      same_ho.forEach(function(same_host) {
+        let same_host_sample_id = same_host.sample_id;
+        if (same_host_sample_id != sampleIdentity){
+            if(cy.$id(same_host_sample_id).empty()){
+                cy.add({
+                    data: {id: same_host_sample_id}
+                });
+                collection = collection.add(cy.$id(same_host_sample_id));
+            }
+            var source = same_host_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge3' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'blue'}
+            });
+            collection = collection.add(cy.$id('edge3' + same_host_sample_id));
+        }
+    });
+    same_iso.forEach(function(same_isolation) {
+        let same_iso_sample_id = same_isolation.sample_id;
+        if (same_iso_sample_id != sampleIdentity){
+            if(cy.$id(same_iso_sample_id).empty()){
+                cy.add({
+                    data: {id: same_iso_sample_id}
+                });
+                collection = collection.add(cy.$id(same_iso_sample_id));
+            }
+            var source = same_iso_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge4' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'orange'}
+            });
+            collection = collection.add(cy.$id('edge4' + same_iso_sample_id));
+        }
+    });
+    collection.forEach(function(ele, i ,eles) {
+        if(ele.isNode()){
+            let e = ele.connectedEdges();
+            if(e.length < 2){
+                ele.remove();
+            }
+
+        }
+    });
+
+      cy.layout({
+          name: 'cola'
+      }).run()
             
 
 

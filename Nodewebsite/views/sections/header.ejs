@@ -20,7 +20,7 @@
         <!--Search form-->
         <form class="form-inline" action='/searchResults' method="get" >
           <!--Search form dropdown-->
-          <select name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
+          <select id="options" name="searchOption" onchange="changeInput()" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
             <option value="Sequence">Sequence Type</option>
             <option value="Location">Location</option>
             <option value="Strain Name">Strain Name</option>
@@ -30,7 +30,7 @@
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
-            <input type="text" name="searchInput" style="border: 0.5px solid gray" class="form-control form-inline form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
+            <input id="input" type="number" name="searchInput" style="border: 0.5px solid gray" class="form-control form-inline form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
             <div class="input-group-append">
               <button class="btn btn-dark" type="submit">
                 <i class="fa fa-search"></i>
@@ -39,6 +39,17 @@
           </div>
         </form>
       </li>
+      <script>
+        function changeInput(){
+            let option = document.getElementById("options").value;
+            if(option == "Sequence" || option == "Sample"){
+                document.getElementById("input").type = 'number';
+            } else {
+                document.getElementById("input").type = 'text';
+            }
+
+        }
+      </script>
     </ul>
 
     <!--Link to advanced search page-->

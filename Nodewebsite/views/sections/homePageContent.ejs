@@ -15,7 +15,7 @@
             <!--Search form-->
             <form class="form-inline  my-2 my-lg-0" style="top: 30%" action='/searchResults' method="get">
                 <!--Search form dropdown-->
-                <select class="form-control" name="searchOption" style="margin-right: 5px; width: 18%">
+                <select id="index_options" class="form-control" onchange="changeIndexInput()" name="searchOption" style="margin-right: 5px; width: 18%">
                     <option value="Sequence">Sequence Type</option>
                     <option value="Location">Location</option>
                     <option value="Strain Name">Strain Name</option>
@@ -24,13 +24,24 @@
                     <option value="Sample">Sample ID</option>
                 </select>
                 <!--Search form text input-->
-                <input class="form-control form-outline-dark mr-sm-2" style="width: 70%"
-                       style="margin-left: -2px; margin-left: -2px" type="text" name="searchInput" placeholder="Search"
+                <input id="index_input" class="form-control form-outline-dark mr-sm-2" style="width: 70%"
+                       style="margin-left: -2px; margin-left: -2px" type="number" name="searchInput" placeholder="Search"
                        aria-label="Search">
                 <!--Search form submission-->
                 <button class="btn btn-dark my-2 my-sm-0" style=" width: 10%;" type="submit">
                   <i class="fa fa-search"></i>  </button>
             </form>
+            <script>
+                function changeIndexInput(){
+                    let option = document.getElementById("index_options").value;
+                    if(option == "Sequence" || option == "Sample"){
+                        document.getElementById("index_input").type = 'number';
+                    } else {
+                        document.getElementById("index_input").type = 'text';
+                    }
+
+                }
+            </script>
         </div>
 
         <!--List of popular searches by users of StaphBook-->
@@ -39,18 +50,44 @@
                 <button type="button" class="list-group-item list-group-item-action active list-group-item-dark">
                     Popular search results based on other users
                 </button>
-                <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                        style="color: #0a0a0a">Streptomyces pactum strain ACT12 chromosome
-                </button>
-                <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                        style="color: #0a0a0a">Myxococus macrosporus DSM 14679 chromosome
-                </button>
-                <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                        style="color: #0a0a0a">Streptomyces gilvosporeus strain F607
-                </button>
-                <button type="button" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                        style="color: #0a0a0a">Nocardia brasilliensis strain FDAARGOS_352 chromosome
-                </button>
+                <form action='/result' method="get">
+                    <button type="submit" name="sampleSelection" value="44140" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 44140,
+                        Sequence Type: 105,
+                        Location: United States of America (USA),
+                        Strain: DAR1956,
+                        Host: Homo sapiens,
+                        Isolation Source: Respiratory
+                    </button>
+                    <button type="submit" name="sampleSelection" value="40447" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 40447,
+                        Sequence Type: 225,
+                        Location: United States of America (USA),
+                        Strain: ,
+                        Host: Homo sapiens,
+                        Isolation Source: nares or umbillicus
+                    </button>
+                    <button type="submit" name="sampleSelection" value="43922" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 43922,
+                        Sequence Type: 5,
+                        Location: United States of America (USA),
+                        Strain: H47183,
+                        Host: Homo sapiens,
+                        Isolation Source:
+                    </button>
+                    <button type="submit" name="sampleSelection" value="44216" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 44216,
+                        Sequence Type: 5,
+                        Location: United States of America (USA),
+                        Strain: DAR1158,
+                        Host: Homo sapiens,
+                        Isolation Source: Respiratory
+                    </button>
+                </form>
             </div>
         </div>
     </div>
