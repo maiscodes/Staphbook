@@ -1,11 +1,11 @@
 // load the things we need
 const express = require('express');
 const app = express();
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 //cookie parser
-const cookieParser = require('cookie-parser');
-app.use(cookieParser('xoxoGossipGirl'));
+//const cookieParser = require('cookie-parser');
+//app.use(cookieParser('xoxoGossipGirl'));
 
 //postgreSQL
 const { Pool, Client } = require('pg');

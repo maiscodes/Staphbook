@@ -11,14 +11,26 @@
     <hr style="width: 65%; margin-top: -2px"></hr>
     <h4 style="text-align: center"> Summary </h4>
     <p class="summaryInfo" style="text-align: left; margin-left: 20%">
-      <b>Assembly Level:</b> Complete Genome
+      <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
+      <b>Sequence Type:</b> <%= result_mlst_mlst.st %>
+      <% }) %>
       <br>
-        <b>HUMAN PATHOGEN</b>
-        <br>
-          <b>Morphology:</b> Gram: Positive, Shape: Cocci, Motility: No
-          <br>
-            <b>Environment:</b>	OxygenReq: Facultative, Optimum Temperature: 30-37, Temperature Range: Mesophilic, Habitat: HostAssociated
-          </p>
+      <% sample_metadata.forEach(function (result_sample_metadata) { %>
+      <b>Location:</b> <%= result_sample_metadata.metadata.country %>
+      <br>
+      <b>Strain:</b> <%= result_sample_metadata.metadata.strain %>
+      <br>
+      <b>Host:</b> <%= result_sample_metadata.metadata.host %>
+      <br>
+      <b>Isolation Source:</b> <%= result_sample_metadata.metadata.isolation_source %>
+      <br>
+      <b>Scientific Name:</b> <%= result_sample_metadata.metadata.scientific_name %>
+      <br>
+      <% }) %>
+      <% tag_tag.forEach(function (result_tag_tag) { %>
+      <b>Comment:</b> <%= result_tag_tag.comment %>
+      <% }) %>
+    </p>
     <hr style="width: 65%">
 
     </hr>
@@ -288,6 +300,21 @@
             if(e.length < 2){
                 ele.remove();
             }
+            ele.on('click', function(evt){
+                let id = this.id();
+                function get_sample(){
+                    let form = document.createElement("form");
+                    let element = document.createElement("input");
+                    form.action = '/result';
+                    form.method = "get";
+                    element.name ="sampleSelection";
+                    element.value= id;
+                    form.appendChild(element);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                get_sample();
+            });
 
         }
     });
