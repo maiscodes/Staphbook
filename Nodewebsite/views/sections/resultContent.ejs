@@ -41,13 +41,14 @@
 
     <div class="tab">
       <!--need to change the titles for these once finalised-->
-      <button class="tablinks" onclick="resultsTabs(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Sequencing')" title="This displays what the colours and thickness of the edges mean">Sequencing Metrics</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Assembly')" title="This displays what the colours and thickness of the edges mean">Assembly Metrics</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Primers')" title="This provides users with different options to filter their genomic neighbourhood">SCCmec Primer Hits</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Tags')" title="">Tags</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="">Metadata</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sequencing')" title="">Sequencing Metrics</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Assembly')" title="">Assembly Metrics</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'MLST')" title="">MLST</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Primers')" title="">SCCmec Primer Hits</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Subtypes')" title="">SCCmec Subtype Hits</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Proteins')" title="">SCCmec Protein Hits</button>
     </div>
 
     <div id="Tags" class="tabcontent">
@@ -116,8 +117,12 @@
       <% include ../snippets/resultSccmecPrimers %>
     </div>
 
-    <div id="Export" class="tabcontent">
-      <h3>link to export doc</h3>
+    <div id="Sccmec_Subtypes" class="tabcontent">
+      <% include ../snippets/resultSccmecSubtypes %>
+    </div>
+
+    <div id="Sccmec_Proteins" class="tabcontent">
+      <% include ../snippets/resultSccmecProteins.ejs %>
     </div>
   </div>
 

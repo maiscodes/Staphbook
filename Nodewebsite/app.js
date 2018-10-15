@@ -127,6 +127,12 @@ app.get('/result', function (req, res) {
                         // SCCmec Primer Hits
                         client.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
 
+                            // SCCmec Subtype Hits
+                            client.query('SELECT * FROM sccmec_subtypes WHERE sample_id=' + sampleID + '', (err, result_sccmec_subtypes) => {
+
+                                // SCCmec Protien Hits
+                                client.query('SELECT * FROM sccmec_proteins WHERE sample_id=' + sampleID + '', (err, result_sccmec_proteins) => {
+
                         // Samples with the same Sequence Type
                         let st = result_mlst_mlst.rows[0].st;
                         client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
@@ -176,11 +182,14 @@ app.get('/result', function (req, res) {
                                         res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows,
                                             sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
                                             same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
-                                            same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows});
+                                            same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
+                                            sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows});
                                     });
                                 });
                             });
                         });
+                                });
+                            });
                                 });
                             });
                         });
