@@ -1,0 +1,106 @@
+<!--List of quick search options for logged in users-->
+<div id="quickSearches-container" style="margin-left: auto; margin-right: auto; width: 60%; margin-bottom: 0px">
+  <!--Options for different pill lists-->
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+    <!--Option for recent searches pill list-->
+    <li class="nav-item" style="width: 33.5%; text-align: center">
+      <a class="nav-link active btn-outline-dark" id="pills-recent-tab"  style="border-style: hidden" data-toggle="pill" href="#pills-recent" role="tab" aria-controls="pills-home" aria-selected="true">Recent Searches</a>
+    </li>
+
+    <!--Option for recommended genomes pill list-->
+    <li class="nav-item" style="width: 33.5%; text-align: center">
+      <a class="nav-link btn-outline-dark" id="pills-recommended-tab" data-toggle="pill" href="#pills-recommended" role="tab" aria-controls="pills-recommended" aria-selected="false">Recommendations</a>
+    </li>
+
+    <!--Option for favorites pill list-->
+    <li class="nav-item" style="width: 33%; text-align: center">
+      <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-favorites" role="tab" aria-controls="pills-favorites" aria-selected="false">Favorites</a>
+    </li>
+  </ul>
+
+  <!--Pill lists-->
+  <div class="tab-content" id="pills-tabContent" style="margin-top: -15px">
+
+    <!--Recent searches pill list-->
+    <div class="tab-pane fade show active" id="pills-recent" role="tabpanel" aria-labelledby="pills-recent-tab">
+      <div class="homeResultItem">
+
+        <button type="button" onclick="window.location.href='/result?sampleSelection=42006'" class="homeResultItemText">
+          Sample: 42006
+        </button>
+        <button type="button" class="homeResultItemIcon" onclick="favourite()">
+          <i class="fa fa-heart "></i>
+        </button>
+
+        <button type="button" class="homeResultItemIcon" onclick="remove()">
+          <i class="fa fa-times "></i>
+        </button>
+
+      </div>
+
+      <div class="homeResultItem">
+
+        <button type="button" onclick="window.location.href='ResultsPage.html'" class="homeResultItemText">
+          Streptomyces pactum strain ACT12 chromosome
+        </button>
+        <button type="button" class="homeResultItemIcon" onclick="favourite()">
+          <i class="fa fa-heart "></i>
+        </button>
+
+        <button type="button" class="homeResultItemIcon" onclick="remove()">
+          <i class="fa fa-times "></i>
+        </button>
+
+      </div>
+
+      <div class="homeResultItem">
+
+        <button type="button" onclick="window.location.href='ResultsPage.html'" class="homeResultItemText">
+          Streptomyces pactum strain ACT12 chromosome
+        </button>
+        <button type="button" class="homeResultItemIcon" onclick="favourite()">
+          <i class="fa fa-heart "></i>
+        </button>
+
+        <button type="button" class="homeResultItemIcon" onclick="remove()">
+          <i class="fa fa-times "></i>
+        </button>
+      </div>
+    </div>
+
+    <!--Recommended genomes pill list-->
+    <div class="tab-pane fade" id="pills-recommended" role="tabpanel" aria-labelledby="pills-recommended-tab">
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Streptomyces pactum strain ACT12 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: lightgrey">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Myxococus macrosporus DSM 14679 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Streptomyces gilvosporeus strain F607<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Nocardia brasilliensis strain FDAARGOS_352 chromosome<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: lightgrey">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+    </div>
+
+    <!--Favorites pill list-->
+    <div class="tab-pane fade" id="pills-favorites" role="tabpanel" aria-labelledby="pills-favorites-tab">
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Myxococus macrosporus DSM 14679 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Streptomyces gilvosporeus strain F607<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
+      </button>
+    </div>
+
+  </div>
+  <script>
+    
+    function favourite {
+
+    }
+    
+  </script>
+</div>
