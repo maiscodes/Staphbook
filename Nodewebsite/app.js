@@ -106,70 +106,81 @@ app.get('/result', function (req, res) {
         console.log(err, result_tag_tosample);
         let tagID = result_tag_tosample.rows[0].tag_id;
         client.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
-            console.log(err, result_tag_tag);
 
             // Metadata
             client.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
-                console.log(err, result_sample_metadata);
 
-                // MLST
-                client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
-                    console.log(err, result_mlst_mlst);
+                // BLASTquery
+                client.query('SELECT * FROM staphopia_blastquery', (err, result_blastquery) => {
 
-                    // Samples with the same Sequence Type
-                    let st = result_mlst_mlst.rows[0].st;
-                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                        "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                        "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                        "WHERE st = '" + st + "')", (err, same_sequence) => {
-                        console.log(err, same_sequence);
-                        number = number + same_sequence.rows.length;
+                    // Sequencing Metrics
+                    client.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
+                        console.log(err, result_sequence_summary);
 
-                        // Samples with the same Location
-                        let location = result_sample_metadata.rows[0].metadata.country;
+                        // Assembly Metrics
+                        client.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
+                            //console.log(err, result_assembly_summary);
+
+                    // MLST
+                    client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
+
+                        // SCCmec Primer Hits
+                        client.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
+
+                        // Samples with the same Sequence Type
+                        let st = result_mlst_mlst.rows[0].st;
                         client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
                             "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
                             "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                            "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                            "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                            "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
-                            console.log(err, same_location);
-                            number = number + same_location.rows.length;
+                            "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                            "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                            "WHERE st = '" + st + "')", (err, same_sequence) => {
+                            number = number + same_sequence.rows.length;
 
-                            // Samples with the same Host
-                            let host = result_sample_metadata.rows[0].metadata.host;
+                            // Samples with the same Location
+                            let location = result_sample_metadata.rows[0].metadata.country;
                             client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
                                 "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
                                 "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
                                 "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
                                 "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
-                                console.log(err, same_host);
-                                number = number + same_host.rows.length;
+                                "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
+                                number = number + same_location.rows.length;
 
-                                // Samples with the same Isolation Source
-                                let iso = result_sample_metadata.rows[0].metadata.isolation_source;
+                                // Samples with the same Host
+                                let host = result_sample_metadata.rows[0].metadata.host;
                                 client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
                                     "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
                                     "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
                                     "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
                                     "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                    "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
-                                    console.log(err, same_isolation);
-                                    number = number + same_isolation.rows.length;
+                                    "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
+                                    number = number + same_host.rows.length;
 
-                                    /**
-                                    //favourites
-                                    client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
-                                        console.log(err, result_registered_users);
-                                        will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
-                                        **/
-                                    console.log(sampleID);
-                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows,
-                                        sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
-                                        same_locations: same_location.rows, same_sequences: same_sequence.rows, same_isolations: same_isolation.rows});
+                                    // Samples with the same Isolation Source
+                                    let iso = result_sample_metadata.rows[0].metadata.isolation_source;
+                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                        "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
+                                        number = number + same_isolation.rows.length;
+
+                                        /**
+                                        //favourites
+                                        client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
+                                            console.log(err, result_registered_users);
+                                            will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
+                                            **/
+                                        res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows,
+                                            sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
+                                            same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
+                                            same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows});
+                                    });
+                                });
+                            });
+                        });
                                 });
                             });
                         });

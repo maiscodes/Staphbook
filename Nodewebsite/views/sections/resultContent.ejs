@@ -43,8 +43,10 @@
       <!--need to change the titles for these once finalised-->
       <button class="tablinks" onclick="resultsTabs(event, 'Tags')" title="This displays a table of tags in your selected genome">Tags</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="This displays how the results were chosen">Metadata</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sequencing')" title="This displays what the colours and thickness of the edges mean">Sequencing Metrics</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Assembly')" title="This displays what the colours and thickness of the edges mean">Assembly Metrics</button>
       <button class="tablinks" onclick="resultsTabs(event, 'MLST')" title="This displays what the colours and thickness of the edges mean">MLST</button>
-      <button class="tablinks" onclick="resultsTabs(event, 'Settings')" title="This provides users with different options to filter their genomic neighbourhood">Settings</button>
+      <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Primers')" title="This provides users with different options to filter their genomic neighbourhood">SCCmec Primer Hits</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Export')" title="This provides users with a way to save the data locally">Export</button>
     </div>
 
@@ -69,6 +71,14 @@
 
     <div id="Metadata" class="tabcontent">
       <% include ../snippets/resultMetadata %>
+    </div>
+
+    <div id="Sequencing" class="tabcontent">
+      <% include ../snippets/resultSequence %>
+    </div>
+
+    <div id="Assembly" class="tabcontent">
+      <% include ../snippets/resultAssembly %>
     </div>
 
     <div id="MLST" class="tabcontent">
@@ -102,8 +112,8 @@
       </table>
     </div>
 
-    <div id="Settings" class="tabcontent">
-      <h3>link to settings doc</h3>
+    <div id="Sccmec_Primers" class="tabcontent">
+      <% include ../snippets/resultSccmecPrimers %>
     </div>
 
     <div id="Export" class="tabcontent">
