@@ -10,91 +10,29 @@
       An interactive website for a database focusing on the genomes of the bacterial pathogen Staphylococcus aureus.
     </p>
   </div>
-    <!--Search bar and surrounding options-->
-    <div id="search-containers" style="margin-top: 10px;">
-        <div id="searchBar-container align-items-center"
-             style="height: 100px; margin-bottom: -55px; margin-top: 100px; margin-left: auto; margin-right: auto; width: 60%">
-            <!--Search form-->
-            <form class="form-inline  my-2 my-lg-0" style="top: 30%" action='/searchResults' method="get">
-                <!--Search form dropdown-->
-                <select id="index_options" class="form-control" onchange="changeIndexInput()" name="searchOption" style="margin-right: 5px; width: 18%">
-                    <option value="Sequence">Sequence Type</option>
-                    <option value="Location">Location</option>
-                    <option value="Strain Name">Strain Name</option>
-                    <option value="Host">Host</option>
-                    <option value="Source">Isolation Source</option>
-                    <option value="Sample">Sample ID</option>
-                </select>
-                <!--Search form text input-->
-                <input id="index_input" class="form-control form-outline-dark mr-sm-2" style="width: 70%"
-                       style="margin-left: -2px; margin-left: -2px" type="number" name="searchInput" placeholder="Search"
-                       aria-label="Search">
-                <!--Search form submission-->
-                <button class="btn btn-dark my-2 my-sm-0" style=" width: 10%;" type="submit">
-                  <i class="fa fa-search"></i>  </button>
-            </form>
-            <script>
-                function changeIndexInput(){
-                    let option = document.getElementById("index_options").value;
-                    if(option == "Sequence" || option == "Sample"){
-                        document.getElementById("index_input").type = 'number';
-                    } else {
-                        document.getElementById("index_input").type = 'text';
-                    }
-                 }
-            </script>
-        </div>
-    <% if (userLoggedIn) { %>
-     <% include ../sections/homePageLoggedIn %>
-     <% } else { %>
-     <% include ../sections/homePageNotLoggedIn %>
-     <% } %>
-         <!--List of popular searches by users of StaphBook-->
-        <div id="popularSearches-container" style="margin-left: auto; margin-right: auto; width: 60%">
-            <div class="list-group">
-                <button type="button" class="list-group-item list-group-item-action active list-group-item-dark">
-                    Popular search results based on other users
-                </button>
-                <form action='/result' method="get">
-                    <button type="submit" name="sampleSelection" value="44140" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                            style="color: #0a0a0a">
-                        Sample: 44140,
-                        Sequence Type: 105,
-                        Location: United States of America (USA),
-                        Strain: DAR1956,
-                        Host: Homo sapiens,
-                        Isolation Source: Respiratory
-                    </button>
-                    <button type="submit" name="sampleSelection" value="40447" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                            style="color: #0a0a0a">
-                        Sample: 40447,
-                        Sequence Type: 225,
-                        Location: United States of America (USA),
-                        Strain: ,
-                        Host: Homo sapiens,
-                        Isolation Source: nares or umbillicus
-                    </button>
-                    <button type="submit" name="sampleSelection" value="43922" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                            style="color: #0a0a0a">
-                        Sample: 43922,
-                        Sequence Type: 5,
-                        Location: United States of America (USA),
-                        Strain: H47183,
-                        Host: Homo sapiens,
-                        Isolation Source:
-                    </button>
-                    <button type="submit" name="sampleSelection" value="44216" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
-                            style="color: #0a0a0a">
-                        Sample: 44216,
-                        Sequence Type: 5,
-                        Location: United States of America (USA),
-                        Strain: DAR1158,
-                        Host: Homo sapiens,
-                        Isolation Source: Respiratory
-                    </button>
-                </form>
-            </div>
-        </div>
+
+  <!--Search bar and surrounding options-->
+  <div id="search-containers" style="margin-top: 10px;">
+    <div id="searchBar-container align-items-center"
+         style="height: 100px; margin-bottom: -55px; margin-top: 100px; margin-left: auto; margin-right: auto; width: 60%">
+      <!--Search form-->
+      <form class="form-inline my-2 my-lg-0" style="top: 30%">
+        <!--Search form dropdown-->
+        <select class="form-control" style="margin-right: 5px; width: 10%">
+          <option>All</option>
+          <option>Gene</option>
+          <option>Genome</option>
+          <option>Keywords</option>
+        </select>
+        <!--Search form text input-->
+        <input class="form-control form-outline-dark mr-sm-2" style="width: 78%; margin-left: -2px; margin-left: -2px"
+               type="search" placeholder="Search"
+               aria-label="Search">
+          <!--Search form submission-->
+          <button class="btn btn-dark my-2 my-sm-0" formaction="QueryResultsPage.html" style=" width: 10%;" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </form>
     </div>
 
 
