@@ -1,120 +1,147 @@
 <!--Main content of the home page-->
-<div id="page-container">
+<div id="page-conatiner">
 
-  <!--Information section of the home page-->
-  <div id="information-container">
-    <h1 class="text-center" style="margin-top: 20px">
-      Welcome to <b>Staph</b>Book
-    </h1>
-    <p class="text-center" style="margin-top: 20px; margin-left: 10%; margin-right: 10%">
-      An interactive website for a database focusing on the genomes of the bacterial pathogen Staphylococcus aureus.
-    </p>
-  </div>
-
-  <!--Search bar and surrounding options-->
-  <div id="search-containers" style="margin-top: 10px;">
-    <div id="searchBar-container align-items-center"
-         style="height: 100px; margin-bottom: -55px; margin-top: 100px; margin-left: auto; margin-right: auto; width: 60%">
-      <!--Search form-->
-      <form class="form-inline my-2 my-lg-0" style="top: 30%">
-        <!--Search form dropdown-->
-        <select class="form-control" style="margin-right: 5px; width: 10%">
-          <option>All</option>
-          <option>Gene</option>
-          <option>Genome</option>
-          <option>Keywords</option>
-        </select>
-        <!--Search form text input-->
-        <input class="form-control form-outline-dark mr-sm-2" style="width: 78%; margin-left: -2px; margin-left: -2px"
-               type="search" placeholder="Search"
-               aria-label="Search">
-          <!--Search form submission-->
-          <button class="btn btn-dark my-2 my-sm-0" formaction="QueryResultsPage.html" style=" width: 10%;" type="submit">
-            <i class="fa fa-search"></i>
-          </button>
-        </form>
+    <!--Information section of the home page-->
+    <div id="information-container">
+        <h1 class="text-center" style="margin-top: 20px">Welcome to <b>Staph</b>Book</h1>
+        <p class="text-center" style="margin-top: 20px; margin-left: 10%; margin-right: 10%">
+          An interactive website for a database focusing on the genomes of the bacterial pathogen Staphylococcus aureus.</p>
     </div>
 
+    <!--Search bar and surrounding options-->
+    <div id="search-containers" style="margin-top: 10px;">
+        <div id="searchBar-container align-items-center"
+             style="height: 100px; margin-bottom: -55px; margin-top: 100px; margin-left: auto; margin-right: auto; width: 60%">
+            <!--Search form-->
+            <form class="form-inline  my-2 my-lg-0" style="top: 30%" action='/searchResults' method="get">
+                <!--Search form dropdown-->
+                <select id="index_options" class="form-control" onchange="changeIndexInput()" name="searchOption" style="margin-right: 5px; width: 18%">
+                    <option value="Sequence">Sequence Type</option>
+                    <option value="Location">Location</option>
+                    <option value="Strain Name">Strain Name</option>
+                    <option value="Host">Host</option>
+                    <option value="Source">Isolation Source</option>
+                    <option value="Sample">Sample ID</option>
+                </select>
+                <!--Search form text input-->
+                <input id="index_input" class="form-control form-outline-dark mr-sm-2" style="width: 70%"
+                       style="margin-left: -2px; margin-left: -2px" type="number" name="searchInput" placeholder="Search"
+                       aria-label="Search">
+                <!--Search form submission-->
+                <button class="btn btn-dark my-2 my-sm-0" style=" width: 10%;" type="submit">
+                  <i class="fa fa-search"></i>  </button>
+            </form>
+            <script>
+                function changeIndexInput(){
+                    let option = document.getElementById("index_options").value;
+                    if(option == "Sequence" || option == "Sample"){
+                        document.getElementById("index_input").type = 'number';
+                    } else {
+                        document.getElementById("index_input").type = 'text';
+                    }
 
-    <% if (userLoggedIn) { %>
+                }
+            </script>
+        </div>
 
-    <% include ../sections/homePageLoggedIn %>
-
-
-    <% } else { %>
-
-    <% include ../sections/homePageNotLoggedIn %>
-
-    <% } %>
-
+        <!--List of popular searches by users of StaphBook-->
+        <div id="popularSearches-container" style="margin-left: auto; margin-right: auto; width: 60%">
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action active list-group-item-dark">
+                    Popular search results based on other users
+                </button>
+                <form action='/result' method="get">
+                    <button type="submit" name="sampleSelection" value="44140" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 44140,
+                        Sequence Type: 105,
+                        Location: United States of America (USA),
+                        Strain: DAR1956,
+                        Host: Homo sapiens,
+                        Isolation Source: Respiratory
+                    </button>
+                    <button type="submit" name="sampleSelection" value="40447" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 40447,
+                        Sequence Type: 225,
+                        Location: United States of America (USA),
+                        Strain: ,
+                        Host: Homo sapiens,
+                        Isolation Source: nares or umbillicus
+                    </button>
+                    <button type="submit" name="sampleSelection" value="43922" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 43922,
+                        Sequence Type: 5,
+                        Location: United States of America (USA),
+                        Strain: H47183,
+                        Host: Homo sapiens,
+                        Isolation Source:
+                    </button>
+                    <button type="submit" name="sampleSelection" value="44216" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light"
+                            style="color: #0a0a0a">
+                        Sample: 44216,
+                        Sequence Type: 5,
+                        Location: United States of America (USA),
+                        Strain: DAR1158,
+                        Host: Homo sapiens,
+                        Isolation Source: Respiratory
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!--Tutorial boxes containing a brief description of the tutorial and link to that tutorial-->
     <div id="tutorial-container" style="width: 80%; margin-right: auto; margin-left: auto; margin-top: 120px">
-      <h3 class="text-center" style="margin-top: 20px">
-        New to <b>Staph</b>Book?
-      </h3>
+        <h3 class="text-center" style="margin-top: 20px">New to <b>Staph</b>Book?</h3>
 
-      <!--Box for the first tutorial-->
-      <div id="tutorial1-container" style="float: left; overflow: hidden; width: 325px">
-        <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
-          <div class="card-body">
-            <h5 class="card-title">
-              <i class="far fa-flag"></i>
-              <br></br>
-              Getting Started
-            </h5>
-            <p class="card-text">
-              All information you need to know to begin using <b>Staph</b>Book.
-            </p>
-            <center>
-              <a href="#" class="btn btn-outline-dark">Find out more</a>
-            </center>
-          </div>
+        <!--Box for the first tutorial-->
+        <div id="tutorial1-container" style="float: left; overflow: hidden; width: 325px">
+            <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
+                <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="far fa-flag"></i>
+                      <br></br>
+                      Getting Started</h5>
+                    <p class="card-text">All information you need to know to begin using <b>Staph</b>Book.</p>
+                  <center><a href="#" class="btn btn-outline-dark">Find out more</a></center>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!--Box for the second tutorial-->
-      <div id="tutorial2-container"
-           style="float: left; overflow: hidden; width: 325px">
-        <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
-
-          <div class="card-body">
-            <h5 class="card-title">
-              <i class="fas fa-search"></i>
-              <br></br>
-              How to find the genome you are looking for
-            </h5>
-            <p class="card-text">
-              A step-by-step tutorial on how to use all the search functions of <b>Staph</b>Book to
-              find exactly what you are looking for.
-            </p>
-            <center>
-              <a href="#" class="btn btn-outline-dark">Find out more</a>
-            </center>
-          </div>
+        <!--Box for the second tutorial-->
+        <div id="tutorial2-container"
+             style="float: left; overflow: hidden; width: 325px">
+            <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
+                
+                <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="fas fa-search"></i> 
+                        <br></br>
+                      How to find the genome you are looking for</h5>
+                    <p class="card-text">A step-by-step tutorial on how to use all the search functions of <b>Staph</b>Book to
+                    find exactly what you are looking for.</p>
+                  <center><a href="#" class="btn btn-outline-dark">Find out more</a></center>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!--Box for the third tutorial-->
-      <div id="tutorial3-container" style="float: left; overflow: hidden; width: 325px">
-        <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
-          <div class="card-body">
-            <h5 class="card-title">
-              <i class="far fa-question-circle"></i>
-              <br></br>
-              How to interpret and save the data you've found
-            </h5>
-            <p class="card-text">
-              A look at the data available on <b>Staph</b>Book, what that data means, how you can
-              manipulate the data to help refine what you are looking for,
-              and how to save that data for use elsewhere.
-            </p>
-            <center>
-              <a href="#" class="btn btn-outline-dark">Find out more</a>
-            </center>
-          </div>
+        <!--Box for the third tutorial-->
+        <div id="tutorial3-container" style="float: left; overflow: hidden; width: 325px">
+            <div class="card" style="height: 325px; background-color: #f9f9f9; border-color: #686868">
+                <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="far fa-question-circle"></i>
+                      <br></br>
+                      How to interpret and save the data you've found</h5>
+                    <p class="card-text">A look at the data available on <b>Staph</b>Book, what that data means, how you can
+                        manipulate the data to help refine what you are looking for,
+                        and how to save that data for use elsewhere.</p>
+                  <center><a href="#" class="btn btn-outline-dark">Find out more</a></center>
+                </div>
+            </div>
         </div>
-      </div>
+
     </div>
-  </div>
 </div>

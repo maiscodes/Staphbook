@@ -197,45 +197,8 @@ a {
 
 
 
-.homeResultItem {
-    border: 0.5px solid silver;
-    border-radius: 5px;
-    height: 50px;
+@media screen and (max-width: 800px) {
+
+
 }
-
-.homeResultItemText {
-    background: white;
-    border: 0px;
-    border-radius: 5px;
-    height: 48px;
-    text-align: left;
-    padding-left: 20px;
-    float: left;
-    width: 90%;
-    color: #0a0a0a;
-}
-
-.homeResultItem:hover {
-    border: 0.5px solid black;
-}
-
-.homeResultItemText:hover {
-    font-weight: 700;
-}
-
-.homeResultItemIcon {
-    float: left;
-    width: 5%;
-    color: #aeaeae;
-    background: white;
-    border: 0px;
-    border-radius: 5px;
-    height: 48px;
-}
-
-.homeResultItemIcon:hover {
-    background-color: #f1f1f1;
-}
-
-
 
