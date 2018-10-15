@@ -8,40 +8,40 @@
     <h1 style="text-align: center; margin-top: -10px;">
       Sample: <% sample_metadata.forEach(function (result_sample_metadata) { %>
          <%= result_sample_metadata.sample_id %> <% }) %></h1>
-    <hr style="width: 65%; margin-top: -2px"></hr>
+    <hr style="width: 55%; margin-top: -2px"></hr>
     <h4 style="text-align: center"> Summary </h4>
-    <p class="summaryInfo" style="text-align: left; margin-left: 20%">
-      <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
-      <b>Sequence Type:</b> <%= result_mlst_mlst.st %>
-      <% }) %>
-      <br>
-      <% sample_metadata.forEach(function (result_sample_metadata) { %>
-      <b>Location:</b> <%= result_sample_metadata.metadata.country %>
-      <br>
-      <b>Strain:</b> <%= result_sample_metadata.metadata.strain %>
-      <br>
-      <b>Host:</b> <%= result_sample_metadata.metadata.host %>
-      <br>
-      <b>Isolation Source:</b> <%= result_sample_metadata.metadata.isolation_source %>
-      <br>
-      <b>Scientific Name:</b> <%= result_sample_metadata.metadata.scientific_name %>
-      <br>
-      <% }) %>
-      <% tag_tag.forEach(function (result_tag_tag) { %>
-      <b>Comment:</b> <%= result_tag_tag.comment %>
-      <% }) %>
-    </p>
-    <hr style="width: 65%">
+		<p class="summaryInfo" style="text-align: left; margin-left: 37%;">
+		  <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
+		  <b>Sequence Type:</b> <%= result_mlst_mlst.st %>
+		  <% }) %>
+		  <br>
+		  <% sample_metadata.forEach(function (result_sample_metadata) { %>
+		  <b>Location:</b> <%= result_sample_metadata.metadata.country %>
+		  <br>
+		  <b>Strain:</b> <%= result_sample_metadata.metadata.strain %>
+		  <br>
+		  <b>Host:</b> <%= result_sample_metadata.metadata.host %>
+		  <br>
+		  <b>Isolation Source:</b> <%= result_sample_metadata.metadata.isolation_source %>
+		  <br>
+		  <b>Scientific Name:</b> <%= result_sample_metadata.metadata.scientific_name %>
+		  <br>
+		  <% }) %>
+		  <% tag_tag.forEach(function (result_tag_tag) { %>
+		  <b>Comment:</b> <%= result_tag_tag.comment %>
+		  <% }) %>
+		</p>
+    <hr style="width: 55%">
 
     </hr>
     <h3 style="text-align: center"> Sample Information </h3>
   </div>
 
-  <div id="resultsPageRightComponent">
+  <div id="resultsPageTableComponent">
 
     <div class="tab">
       <!--need to change the titles for these once finalised-->
-      <button class="tablinks" onclick="resultsTabs(event, 'Tags')" title="">Tags</button>
+      <button class="tablinks active" onclick="resultsTabs(event, 'Tags')" title="">Tags</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="">Metadata</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Sequencing')" title="">Sequencing Metrics</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Assembly')" title="">Assembly Metrics</button>
@@ -50,9 +50,9 @@
       <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Subtypes')" title="">SCCmec Subtype Hits</button>
       <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Proteins')" title="">SCCmec Protein Hits</button>
     </div>
-
-    <div id="Tags" class="tabcontent">
-      <table style="width: 100%;">
+	
+    <div id="Tags" class="tabcontent" style="display: block;">
+      <table class="adjustedTable">
         <% tag_tag.forEach(function (result_tag_tag) { %>
         <tr>
           <td >Tag:</td>
@@ -126,63 +126,54 @@
     </div>
   </div>
 
-  <div id="resultsPageLeftComponents">
-    <div id="resultsPageLeftComponent1">
+  <div id="resultsPageGraphComponents">
+    <div id="resultsPageGraphComponent1">
       <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
     </div>
-    <!-- close resultsPageLeftComponent1 -->
+    <!-- close resultsPageGraphComponent1 -->
 
-    <div id="resultsPageLeftComponent2">
-      <div id="interactiveGraph">
-        <button type="button" id="centerGraph" onclick="centerGraph()" title="Center graph" class="btn btn-outline-dark btn-sm">
-          <i class="fas fa-expand" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </button>
-        <a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()" title="Create .png file of current graph" class="btn btn-outline-dark btn-sm">
-          <i class="far fa-file-image" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </a>
-        <button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm">
-          <i class="far fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </button>
-        <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm">
-          <i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </button>
-        <button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph" class="btn btn-outline-dark btn-sm">
-          <i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </button>
-        <a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen" class="btn btn-outline-dark btn-sm">
-          <i class="fas fa-long-arrow-alt-up" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-        </a>
-
-        <hr class="divider" style="border-color: white"></hr>
-        <hr class="divider" style="border-color: white"></hr>
-
-        <hr class="divider"></hr>
-
-      </div>
-      <div id="cy"></div>
-      <hr class="divider" style="border-color: white"></hr>
-      <hr class="divider"></hr>
-
+    <div id="resultsPageGraphComponent2">
+		<div id="interactiveGraph">
+			<button type="button" id="centerGraph" onclick="centerGraph()" title="Center graph" class="btn btn-outline-dark btn-sm">
+			  <i class="fas fa-expand" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</button>
+			<a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()" title="Create .png file of current graph" class="btn btn-outline-dark btn-sm">
+			  <i class="far fa-file-image" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</a>
+			<button type="button" id="favouriteSample" onclick="favouriteSample()"  title="Favourite sample" class="btn btn-outline-dark btn-sm">
+			  <i class="far fa-star" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</button>
+			<button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph" class="btn btn-outline-dark btn-sm">
+			  <i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</button>
+			<button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph" class="btn btn-outline-dark btn-sm">
+			  <i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</button>
+			<a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen" class="btn btn-outline-dark btn-sm">
+			  <i class="fas fa-long-arrow-alt-up" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</a>
+		</div>
+		<div id="cy"></div>
     </div>
-    <!-- close resultsPageLeftComponent2 -->
+    <!-- close resultsPageGraphComponent2 -->
 
 
-    <div id="resultsPageLeftComponent3" style="text-align: center;">
-      <div class="weightedDistanceSliders" style="padding-top:15px; float: left; border-left: 0.5px solid silver;">
+    <div id="resultsPageGraphComponent3" style="text-align: center;">
+      <div class="weightedDistanceSliders">
         <p>Weighted distance 1</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 70%; "></input>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
 
       </div>
 
-      <div class="weightedDistanceSliders" style="padding-top:15px; float: left; border-right: 0.5px solid silver;">
+      <div class="weightedDistanceSliders">
 
-        <p >Weighted distance 2</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 70%; "></input>
+        <p>Weighted distance 2</p>
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
 
       </div>
 
     </div>
-    <!-- close resultsPageLeftComponent3 -->
+    <!-- close resultsPageGraphComponent3 -->
   </div>
   <!-- close resultsPageResultComponents -->
 
@@ -194,6 +185,8 @@
 
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
+	
+	
     for (i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
           }

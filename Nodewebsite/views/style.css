@@ -21,85 +21,89 @@
 }
 
 #cy {
-    width: inherit;
+	width: 95%;
     height: 90%;
-    padding-left: 4px;
-    padding-top: 4px;
-    background-color: lavender;
+	margin: 0 auto;
+	border: 0.5px solid silver;
+	font-size: 10px;
 }
 
 hr.divider {
     margin-top: 4px;
     margin-bottom: 4px;
-    margin-left: 10%; 
-    margin-right: 10%; 
+    margin-left: 5%; 
+    margin-right: 5%; 
 }
 
-#resultsPageLeftComponents {
-    width: 55%;
-    height: auto;
-    padding-left: 2px;
-    border-left: 0.5px solid silver;
-    border-right: 0.5px solid silver;
-    border-top: 0.5px solid silver;
-    background-color: peru;
+
+#resultsPageGraphComponents {
+    width: 97%;
+    height: 400px;
+	margin: 0 auto;
 }
 
-#resultsPageLeftComponent1 {
+
+#resultsPageGraphComponent1 {
     float: left;
     width: 100%;
-    border-bottom: 0.5px solid silver;
-    border-left: 0.5px solid silver;
+    border-top: 0.5px solid silver;
+	border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
+	border-bottom: 0.5px solid silver;
     height: 53px;
     background-color: #f1f1f1;
 }
 
 
-#resultsPageLeftComponent2 {
+#resultsPageGraphComponent2 {
     float: left;
     width: 100%;
     height: 380px;
-    border-left: 0.5px solid silver;
-    background-color: lightpink;
+	border-left: 0.5px solid silver;
+    border-right: 0.5px solid silver;
 }
 
 
-#resultsPageLeftComponent3 {
-    float: left;
+#resultsPageGraphComponent3 {
+	float: left;
     width: 100%;
     padding-bottom: 2px;
-    padding-top: 15px;
-    background-color: lightgreen;
+    padding-top: 20px;
+	margin: auto;
+	border-left: 0.5px solid silver;
+    border-right: 0.5px solid silver;
+	border-bottom: 0.5px solid silver;
 }
 
 .weightedDistanceSliders {
-    padding-top: 30%;
     padding-left: 4px;
     padding-right: 4px;
     width: 50%;
-    float: left;
-    border-bottom: 0.5px solid silver;
+	margin: auto;
+	padding-top:15px; 
+	float: left; 
 }
 
 
-#resultsPageRightComponent {
-    float: right;
-    width: 45%;
+#resultsPageTableComponent {
+    width: 97%;
     height: auto;
-    padding-left: 10px;
-    padding-bottom: 20px;
+	margin: 0 auto;
+	padding-bottom: 20px;
+	border: 0;
 }
 
 #displayDescription {
     text-align: center;
     padding-top: 17px;
     padding-bottom: 10px;
+	border-bottom: 0.5 solid silver;
 }
 
 #interactiveGraph {
     text-align: center;
     margin-top: 17px;
+	padding-bottom: 15px;
 }
 
 .summaryInfo {
@@ -114,13 +118,18 @@ hr.divider {
 /* Style the tab */
 .tab {
     overflow: hidden;
-    border: 0.5px solid silver;
-    background-color: #f1f1f1;
+	background-color: #f1f1f1;    
+	border: 0.5px solid silver;
+	padding-top: 0.5px;
+	padding-bottom: 0.5px;
+	padding-left: 0.5px;
+	padding-right: 0.5px;
+	height: 53px;
 }
 
     /* Style the buttons that are used to open the tab content */
     .tab button {
-        background-color: inherit;
+        background-color: #f1f1f1;
         float: left;
         border: none;
         outline: none;
@@ -142,19 +151,27 @@ hr.divider {
 /* Style the tab content */
 .tabcontent {
     display: none;
-    padding: 6px 12px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-top: none;
 }
 
+
 button.tablinks {
     border-bottom: 0.5px solid #f1f1f1;
+}
+
+.adjustedTable {
+	width: 100%;
 }
 
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
+	max-width: 150px;
+	white-space: normal;
+	word-wrap: break-word;
 }
 
 #geneID {
