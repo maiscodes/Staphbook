@@ -317,37 +317,36 @@ app.get('/advSearchResults', function (req, res) {
         }
     }
     if (locationInput != ""){
-        selectSQL += "metadata->>'country' ILIKE '%" + locationInput + "%'";
+        selectSQL += " metadata->>'country' ILIKE '%" + locationInput + "%'";
         if (strainInput != "" || hostInput != "" || sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (strainInput != ""){
-        selectSQL += "metadata->>'strain' ILIKE '%" + strainInput + "%'";
+        selectSQL += " metadata->>'strain' ILIKE '%" + strainInput + "%'";
         if (hostInput != "" || sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (hostInput != ""){
-        selectSQL += "metadata->>'host' ILIKE '%" + hostInput + "%'";
+        selectSQL += " metadata->>'host' ILIKE '%" + hostInput + "%'";
         if (sourceInput != ""){
             selectSQL += " AND ";
         }
     }
     if (sourceInput != ""){
-        selectSQL += "metadata->>'isolation_source' ILIKE '%" + sourceInput + "%' ";
+        selectSQL += " metadata->>'isolation_source' ILIKE '%" + sourceInput + "%' ";
     }
     console.log(selectSQL);
 
-    if (req.query.sequenceInput) {
-        client.query(selectSQL + ";", (err, result_samples) => {
-            console.log(err, result_samples);
-            number = result_samples.rows.length;
-            res.render('pages/advSearchResults', { samples: result_samples.rows, number: number, userLoggedIn: userLoggedIn });
-        });
+    client.query(selectSQL + ";", (err, result_samples) => {
+        console.log(err, result_samples);
+        number = result_samples.rows.length;
+        res.render('pages/advSearchResults', { samples: result_samples.rows, number: number, userLoggedIn: userLoggedIn });
+    });
     //} else {
         //res.redirect('/advancedSearch');
-    }
+
 });
 
 
