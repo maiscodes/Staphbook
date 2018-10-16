@@ -177,7 +177,8 @@
   </div>
   <!-- close resultsPageResultComponents -->
 
-  <img id="saveableGraphImage" style="border: 1px solid #ddd; min-width: 3em; min-height: 3em; float: left; visibility: hidden;"></img>
+  <div id="imageTitleDiv" style="width: 100%; font-size: 20px; text-align: center; margin-bottom: 20px; margin-top: 20px;"></div>
+  <img id="saveableGraphImage"></img>
 
   <script>
     <!-- sampleTab buttons functionality -->
@@ -369,7 +370,15 @@
       function downloadGraph() {
       console.log("download graph");
 
+	  var title = document.createElement("P");
+      var t = document.createTextNode("Save image (right click to save)");
+      title.appendChild(t);
+      document.getElementById("imageTitleDiv").appendChild(title);
+	  
+	
       document.getElementById("saveableGraphImage").style.visibility="visible";
+	  document.getElementById("saveableGraphImage").style.width="100%";
+
       var png64 = cy.png();
 
       document.getElementById("saveableGraphImage").src="" + png64;

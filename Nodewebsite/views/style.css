@@ -67,12 +67,13 @@ hr.divider {
 #resultsPageGraphComponent3 {
 	float: left;
     width: 100%;
-    padding-bottom: 2px;
+    padding-bottom: 20px;
     padding-top: 20px;
 	margin: auto;
 	border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
 	border-bottom: 0.5px solid silver;
+	
 }
 
 .weightedDistanceSliders {
@@ -156,6 +157,33 @@ hr.divider {
     border-top: none;
 }
 
+#Metadata {
+	overflow: scroll;	
+	height: 400px;
+}
+
+#Assembly {
+	overflow: scroll;	
+	height: 400px;
+
+}
+
+#Sccmec_Primers {
+	overflow: scroll;	
+	height: 400px;
+}
+
+#Sccmec_Subtypes {
+	overflow: scroll;	
+	height: 400px;
+}
+
+
+#Sccmec_Proteins {
+	overflow: scroll;	
+	height: 400px;
+}
+
 
 button.tablinks {
     border-bottom: 0.5px solid #f1f1f1;
@@ -169,10 +197,19 @@ td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-	max-width: 150px;
 	white-space: normal;
 	word-wrap: break-word;
+	max-width: 160px;
+	font-size: 14px;
 }
+
+#saveableGraphImage {
+	border: 0.5px solid silver; 
+	min-width: 3em; 
+	min-height: 3em; 
+	visibility: hidden;
+}
+
 
 #geneID {
     width: 30%;
