@@ -55,13 +55,13 @@
       <table class="adjustedTable">
         <% tag_tag.forEach(function (result_tag_tag) { %>
         <tr>
-          <td >Tag:</td>
+            <td ><b>Tag:</b></td>
           <td >
             <%= result_tag_tag.tag %>
           </td>
         </tr>
         <tr>
-          <td >Comment:</td>
+            <td ><b>Comment:</b></td>
           <td >
             <%= result_tag_tag.comment %>
           </td>
@@ -86,25 +86,25 @@
       <table style="width: 100%;">
         <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
         <tr>
-          <td >st:</td>
+            <td ><b>st:</b></td>
           <td >
             <%= result_mlst_mlst.st %>
           </td>
         </tr>
         <tr>
-          <td >ariba:</td>
+            <td ><b>ariba:</b></td>
           <td >
             <%= result_mlst_mlst.ariba %>
           </td>
         </tr>
         <tr>
-          <td >mentalist:</td>
+            <td ><b>mentalist:</b></td>
           <td >
             <%= result_mlst_mlst.mentalist %>
           </td>
         </tr>
         <tr>
-          <td >BLAST:</td>
+            <td ><b>BLAST:</b></td>
           <td >
             <%= result_mlst_mlst.blast %>
           </td>
@@ -187,7 +187,7 @@
 
     <div id="resultsPageGraphComponent4" style="text-align: center;">
       <div class="weightedDistanceSliders">
-        <p id="weighteddistnum">Weighted distance = 2</p>
+        <p id="weighteddistnum">Minimum Weighted distance = 2</p>
         <input type="range" min="1" max="4" value="2" class="slider" id="myRange1" oninput="changeNodes()" style="width: 40%; "></input>
       </div>
 
@@ -398,7 +398,7 @@
             });
         }
         oldnum = num;
-          document.getElementById("weighteddistnum").innerHTML = "Weighted Distance = "+ num;
+          document.getElementById("weighteddistnum").innerHTML = "Minimum Weighted Distance = "+ num;
 
         cy.layout({
             name: 'cola'
