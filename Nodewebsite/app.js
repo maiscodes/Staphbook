@@ -10,8 +10,8 @@ const cookie = require('cookie');
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -37,6 +37,7 @@ app.use(bodyParser.json());
 //Cytoscape.js
 app.use('/cytoscape_scripts', express.static(__dirname + '/node_modules/cytoscape/dist/'));
 app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola/'));
+app.use('/popupS_scripts', express.static(__dirname + '/node_modules/popupS/'));
 
 //directories
 app.use(express.static(__dirname + '/views/'));

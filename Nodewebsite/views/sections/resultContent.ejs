@@ -225,7 +225,8 @@
           let same_sequence_sample_id = same_sequence.sample_id;
           if (same_sequence_sample_id != sampleIdentity){
               cy.add({
-                  data: {id: same_sequence_sample_id}
+                  data: {id: same_sequence_sample_id, seq: same_sequence.st, loc: same_sequence.country, strain: same_sequence.strain,
+                      host: same_sequence.host, iso: same_sequence.isolation_source}
               });
               collection = collection.add(cy.$id(same_sequence_sample_id));
               var source = same_sequence_sample_id;
@@ -245,7 +246,8 @@
           if (same_location_sample_id != sampleIdentity){
               if(cy.$id(same_location_sample_id).empty()){
                   cy.add({
-                      data: {id: same_location_sample_id}
+                      data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
+                          host: same_location.host, iso: same_location.isolation_source}
                   });
                   collection = collection.add(cy.$id(same_location_sample_id));
               }
@@ -266,7 +268,8 @@
         if (same_host_sample_id != sampleIdentity){
             if(cy.$id(same_host_sample_id).empty()){
                 cy.add({
-                    data: {id: same_host_sample_id}
+                    data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
+                        host: same_host.host, iso: same_host.isolation_source}
                 });
                 collection = collection.add(cy.$id(same_host_sample_id));
             }
@@ -287,7 +290,8 @@
         if (same_iso_sample_id != sampleIdentity){
             if(cy.$id(same_iso_sample_id).empty()){
                 cy.add({
-                    data: {id: same_iso_sample_id}
+                    data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
+                        host: same_isolation.host, iso: same_isolation.isolation_source}
                 });
                 collection = collection.add(cy.$id(same_iso_sample_id));
             }
@@ -322,7 +326,17 @@
                     document.body.appendChild(form);
                     form.submit();
                 }
-                get_sample();
+                popupS.confirm({
+                    content: '<b>Sample: </b>' + id +'<br><b>Sequence Type: </b>' + ele.data('seq') +'<br><b>Location: </b>' + ele.data('loc') +
+                        '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso'),
+                    labelOk: 'View Sample',
+                    labelCancel: 'Cancel',
+                    //additionalButtonCancelClass: 'btn-outline-dark',
+                    //additionalButtonOkClass: 'btn-outline-dark',
+                    onSubmit: function() {
+                        get_sample();
+                    }
+                });
             });
 
         }
