@@ -350,4 +350,22 @@ a {
 	width: 10px;
 }
 
+.popupS-button-ok.popUpButtonCSS {
+    border: 0.5px solid silver;
+    border-radius: 5px;
+    height: 30px;
+	background-color: #f1f1f1;
+	width:50%;
+	margin-top: 5px;
+}
+
+.popupS-button-cancel.popUpButtonCSS {
+    border: 0.5px solid silver;
+    border-radius: 5px;
+    height: 30px;
+	background-color: #f1f1f1;
+	width:50%;
+	margin-top: 5px;
+}
+
 
