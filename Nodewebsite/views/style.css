@@ -17,7 +17,27 @@
 
 .resultsPageBottomComponent {
     clear: both;
-    padding-top: 10px;
+}
+#footer {
+	height: 65px; 
+	background-color: lightgrey; 
+	border-top: 0.5px solid silver;
+	width: 100%;
+	left: 0px;
+	bottom: 0px;
+}
+
+#footerTextDiv {
+	color: #303030; 
+	height: 60px; 
+	text-align: center;
+	vertical-align: middle;
+	line-height: 60px;
+}
+
+#footerText {
+	height: 55px;
+	margin: 0;
 }
 
 #cy {
@@ -37,7 +57,7 @@ hr.divider {
 
 
 #resultsPageGraphComponents {
-    width: 97%;
+    width: 90%;
     height: 400px;
 	margin: 0 auto;
 }
@@ -87,7 +107,7 @@ hr.divider {
 
 
 #resultsPageTableComponent {
-    width: 97%;
+    width: 90%;
     height: auto;
 	margin: 0 auto;
 	padding-bottom: 20px;
@@ -109,7 +129,10 @@ hr.divider {
 
 .summaryInfo {
     width: 65%;
-    text-align: center;
+	text-align: left; 
+	margin-left: 35%;
+	max-width: 30%;
+	word-wrap: break-word;
 }
 
 .Genes {
