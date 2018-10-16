@@ -1,7 +1,7 @@
 // load the things we need
 const express = require('express');
 const app = express();
-//const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 //cookie parser
 //const cookieParser = require('cookie-parser');
@@ -10,8 +10,8 @@ const cookie = require('cookie');
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -46,7 +46,9 @@ app.set('view engine', 'ejs');
 
 // global variable
 var userLoggedIn;
-
+var creationSuccess = false;
+var passwordIncorrect = false;
+var userAlreadyExists = true;
 
 /*
 ** GET routes
@@ -85,8 +87,9 @@ app.get('/createAccount', function (req, res) {
     } else {
         userLoggedIn = false;
     }
+    userAlreadyExists = false;
 	
-    res.render('pages/createAccount', { userLoggedIn: userLoggedIn });
+    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
 });
 
 // result page
@@ -351,6 +354,11 @@ app.get('/advSearchResults', function (req, res) {
 
 
 app.get('/login', function (req, res) {
+    var userNotRegistered = false;
+    passwordIncorrect = false;
+    req.creationSuccess = false;
+    console.log("[ - ] Creation success", creationSuccess);
+
 	if (req.headers.cookie) {
         userLoggedIn = true;
         console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
@@ -359,7 +367,12 @@ app.get('/login', function (req, res) {
         userLoggedIn = false;
     }
     console.log('rendered');
-    res.render('pages/login', { userLoggedIn: userLoggedIn } );
+    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+});
+
+app.get('/logout', function (req, res) {
+    res.clearCookie('setCookie');
+    res.redirect('/');
 });
 
 app.get('/logout', function (req, res) {
@@ -382,32 +395,41 @@ app.post('/createAccount', function (req, res) {
         userLoggedIn = false;
     }
 	
-    console.log("Create account - post method");
 
-    var email = req.body.email;
-    var organisation = req.body.organisation;
-    var occupation = req.body.occupation;
+			
+		bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
 
+			client.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
+				console.log(err, result_registered_users);
 
-    bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
-
-        client.query('INSERT INTO registered_users (email, password, organisation, occupation) VALUES (\''
-            + email + '\',\'' + hashedPassword + '\',\'' + organisation + '\',\'' + occupation + '\')',
-            function (error, results, fields) {
-                if (error) {
-                    throw error;
-                } else {
-                    console.log("User inserted to db successfully");
-                }
-            });
-
-    });
-    res.render('/login', { userLoggedIn: userLoggedIn });
+				if (result_registered_users.rows.length != 0) {
+					userAlreadyExists = true;
+					console.log('User already entered into database');
+					res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
+					return;
+				} else {
+					client.query('INSERT INTO registered_users (email, password, organisation, occupation) VALUES (\''
+						+ email + '\',\'' + hashedPassword + '\',\'' + organisation + '\',\'' + occupation + '\')',
+						function (error, results, fields) {
+							if (error) {
+								throw error;
+								res.redirect('/');
+							} else {
+								console.log("User inserted to db successfully");
+								creationSuccess = true;
+								console.log("[ + ] Creation success", creationSuccess);
+								res.redirect('/login');
+							}
+						});
+				}
+			});
+		});
+	
 });
 
  // login page
 app.post('/login', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.headers.cookie) {
         userLoggedIn = true;
         console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
@@ -416,38 +438,37 @@ app.post('/login', function (req, res) {
     }
 
     console.log('post login');
+    console.log("email, ", req.body.email);
+    console.log("password, ", req.body.password);
 
     client.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
         console.log(err, result_registered_users);
 
-        if (err) {
-            throw err;
-        };
+        if (result_registered_users.rows.length != 1) {
+            console.log('user not registered');
+            var userNotRegistered = true;
+            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+        } else {
+            bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
+                //if password matched DB password
+                if (result) {
+                    //setting the 'set-cookie' header
 
-        if (result_registered_users.rows.length > 0 && result_registered_users.rows.length != 1) {
-            throw err;
-            console.log('Failed to find exactly one user');
-        };
+                    res.cookie('setCookie', req.body.email, {
+                        httpOnly: true
+                    });
 
-        bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
-            //if password matched DB password
-            if (result) {
-                //setting the 'set-cookie' header
+                    userLoggedIn = true;
 
-                res.cookie('setCookie', req.body.email, {
-                    httpOnly: true
-                });
-				
-				userLoggedIn = true;
-
-
-                res.render('pages/index', { userLoggedIn: userLoggedIn });
-            } else {
-                res.send("Invalid password!")
-            }
-        });
+                    res.render('pages/index', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+                } else {
+                    passwordIncorrect = true;
+                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+                }
+            });
+        }
     });
-});
+});  
 
 
 app.listen(8000);
