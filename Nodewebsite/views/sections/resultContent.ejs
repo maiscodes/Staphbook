@@ -187,7 +187,7 @@
 
     <div id="resultsPageGraphComponent4" style="text-align: center;">
       <div class="weightedDistanceSliders">
-        <p id="weighteddistnum">Minimum Weighted distance = 2</p>
+        <p id="weighteddistnum">Minimum Connections = 2</p>
         <input type="range" min="1" max="4" value="2" class="slider" id="myRange1" oninput="changeNodes()" style="width: 40%; "></input>
       </div>
 
@@ -398,7 +398,7 @@
             });
         }
         oldnum = num;
-          document.getElementById("weighteddistnum").innerHTML = "Minimum Weighted Distance = "+ num;
+          document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = "+ num;
 
         cy.layout({
             name: 'cola'
