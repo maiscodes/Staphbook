@@ -152,6 +152,9 @@
 			<a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen" class="btn btn-outline-dark btn-sm">
 			  <i class="fas fa-long-arrow-alt-up" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
 			</a>
+			<button type="button" id="minimizeGraph" onclick="minimizeGraph()" title="Minimize graph to original size" class="btn btn-outline-dark btn-sm">
+			  <i class="fas fa-long-arrow-alt-down" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+			</button>
 		</div>
 		<div id="cyLegend"> 
 			<p id="cyLegendTitle"><b> Legend</b> </p>
@@ -426,46 +429,18 @@
       <!-- expandGraph functionality-->
       function expandGraph() {
       var windowHeight = window.innerHeight;
-      var screenHeight = windowHeight + 30;
-      var graphHeight = windowHeight - 60;
+      var graphHeight = windowHeight - 175;
 
-      <!-- make right (tabular) components move above genome graph components-->
-      document.getElementById("resultsPageRightComponent").style.float= "left";
-      document.getElementById("resultsPageRightComponent").style.width= "100%";
-      document.getElementById("resultsPageRightComponent").style.padding= "0px 0px 10px 0px";
+      document.getElementById("resultsPageGraphComponent3").style.height= graphHeight + "px";
 
-      <!-- make genome graph div container component full width and height of screen -->
-        document.getElementById("resultsPageLeftComponents").style.width= "100%";
-        document.getElementById("resultsPageLeftComponents").style.height= screenHeight + "px";
-        document.getElementById("resultsPageLeftComponents").style.clear= "both";
-        document.getElementById("resultsPageLeftComponents").style.padding= "0px";
+      <!-- specifically modify cytoscape graph -->
+      document.getElementById("cy").style.height= graphHeight + "px";
 
-        <!-- specifically make genome graph component full width and height of screen -->
-        document.getElementById("resultsPageLeftComponent2").style.height= screenHeight + "px";
-        document.getElementById("resultsPageLeftComponent2").style.padding= "0 0 10px 0";
-        document.getElementById("resultsPageLeftComponent2").style.width= "80%";
+      centerGraph();
 
+      }
 
-        <!-- make genome sliders to right of graph -->
-        document.getElementById("resultsPageLeftComponent3").style.width= "20%";
-        document.getElementById("resultsPageLeftComponent3").style.margin="70px 0 0 0";
-
-        <!-- specifically modify cytoscape graph -->
-        document.getElementById("cy").style.width= "100%";
-        document.getElementById("cy").style.height= graphHeight + "px";
-
-        <!-- specifically make sliders stack under each other on RHS of graph -->
-        var elements = document.getElementsByClassName("weightedDistanceSliders");
-        for (var i = 0; i < elements.length; i++) {
-          elements[i].style.width="90%";
-        }
-
-        centerGraph();
-
-        }
-
-        <!-- center graph functionality-->
-
+      <!-- center graph functionality-->
       function centerGraph() {
       zoomAmount = 1;
       newZoom = 1;
@@ -474,8 +449,16 @@
       cy.reset();
 
       }
+	  <!-- minimize graph functionality -->
+	  function minimizeGraph() {
+		  document.getElementById("resultsPageGraphComponent3").style.height= 400 + "px";
 
-
+		  <!-- specifically modify cytoscape graph -->
+		  document.getElementById("cy").style.height= 400 + "px";
+			
+		  cy.center();
+		  cy.reset(); 
+	  }
     </script>
 
 
