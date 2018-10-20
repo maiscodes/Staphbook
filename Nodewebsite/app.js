@@ -38,6 +38,7 @@ app.use(bodyParser.json());
 app.use('/cytoscape_scripts', express.static(__dirname + '/node_modules/cytoscape/dist/'));
 app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola/'));
 app.use('/popupS_scripts', express.static(__dirname + '/node_modules/popupS/'));
+app.use('/typehead_scripts', express.static(__dirname + '/node_modules/typehead/'));
 
 //directories
 app.use(express.static(__dirname + '/views/'));
@@ -469,7 +470,91 @@ app.post('/login', function (req, res) {
             });
         }
     });
-});  
+});
+
+app.get('/predictSeq',function(req,res){
+    let sequence = req.query.key;
+    client.query("SELECT DISTINCT st FROM mlst_mlst WHERE CAST(st AS CHAR(10)) LIKE '" + sequence + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].st.toString());
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
+app.get('/predictSam',function(req,res){
+    let sample = req.query.key;
+    client.query("SELECT DISTINCT sample_id FROM mlst_mlst WHERE CAST(sample_id AS CHAR(10)) LIKE '" + sample + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].sample_id.toString());
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
+app.get('/predictLoc',function(req,res){
+    let location = req.query.key;
+    client.query("SELECT DISTINCT metadata->>'country' AS country FROM sample_metadata WHERE metadata->>'country' ILIKE '%" + location + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].country);
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
+app.get('/predictStr',function(req,res){
+    let strain = req.query.key;
+    client.query("SELECT DISTINCT metadata->>'strain' AS strain FROM sample_metadata WHERE metadata->>'strain' ILIKE '%" + strain + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].strain);
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
+app.get('/predictHost',function(req,res){
+    let host = req.query.key;
+    client.query("SELECT DISTINCT metadata->>'host' AS host FROM sample_metadata WHERE metadata->>'host' ILIKE '%" + host + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].host);
+        }
+        res.end(JSON.stringify(data));
+    });
+});
+
+app.get('/predictIso',function(req,res){
+    let source = req.query.key;
+    client.query("SELECT DISTINCT metadata->>'isolation_source' AS isolation_source FROM sample_metadata WHERE metadata->>'isolation_source' ILIKE '%" + source + "%'", function(err, result, fields) {
+        if (err) throw err;
+        let i;
+        let data=[];
+        for(i=0;i<result.rows.length;i++)
+        {
+            data.push(result.rows[i].isolation_source);
+        }
+        res.end(JSON.stringify(data));
+    });
+});
 
 
 app.listen(8000);

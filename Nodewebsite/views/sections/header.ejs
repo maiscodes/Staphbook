@@ -30,7 +30,8 @@
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
-            <input id="input" type="number" name="searchInput" style="border: 0.5px solid gray" class="form-control form-inline form-control-sm" placeholder="Type your search here, for example, ccrA1" aria-label="Search" aria-describedby="basic-addon2"></input>
+            <input id="input" type="number" name="searchInput"  style="border: 0.5px solid gray" class="form-inline form-control-sm typeahead tt-query "
+                   autocomplete="off" spellcheck="false" placeholder="Type your search here" aria-label="Search" aria-describedby="basic-addon2">
             <div class="input-group-append">
               <button class="btn btn-dark" type="submit">
                 <i class="fa fa-search"></i>
@@ -41,11 +42,62 @@
       </li>
       <script>
         function changeInput(){
+            $('input.typeahead').typeahead('destroy');
             let option = document.getElementById("options").value;
-            if(option == "Sequence" || option == "Sample"){
+            if(option == "Sequence"){
                 document.getElementById("input").type = 'number';
-            } else {
+                $('input.typeahead').typeahead({
+                    name: 'Sequence',
+                    remote: {
+                        url: 'http://127.0.0.1:8000/predictSeq?key=%QUERY'
+                    },
+                    limit: 10
+                });
+            } else if(option == "Sample"){
+                document.getElementById("input").type = 'number';
+                $('input.typeahead').typeahead({
+                    name: 'Sample',
+                    remote: {
+                        url: 'http://127.0.0.1:8000/predictSam?key=%QUERY'
+                    },
+                    limit: 10
+                });
+            } else if(option == "Location"){
                 document.getElementById("input").type = 'text';
+                $('input.typeahead').typeahead({
+                    name: 'Location',
+                    remote: {
+                        url: 'http://127.0.0.1:8000/predictLoc?key=%QUERY'
+                    },
+                    limit: 10
+                });
+            } else if(option == "Strain Name"){
+                document.getElementById("input").type = 'text';
+                    $('input.typeahead').typeahead({
+                        name: 'Strain',
+                        remote: {
+                            url: 'http://127.0.0.1:8000/predictStr?key=%QUERY'
+                        },
+                        limit: 10
+                    });
+            } else if(option == "Host"){
+                document.getElementById("input").type = 'text';
+                $('input.typeahead').typeahead({
+                    name: 'Host',
+                    remote: {
+                        url: 'http://127.0.0.1:8000/predictHost?key=%QUERY'
+                    },
+                    limit: 10
+                });
+            } else if(option == "Source"){
+                document.getElementById("input").type = 'text';
+                $('input.typeahead').typeahead({
+                    name: 'Source',
+                    remote: {
+                        url: 'http://127.0.0.1:8000/predictIso?key=%QUERY'
+                    },
+                    limit: 10
+                });
             }
 
         }
@@ -93,6 +145,16 @@
 	  
     </ul>
   </div>
-
+  <script>
+      $(document).ready(function(){
+          $('input.typeahead').typeahead({
+              name: 'Sequence',
+              remote: {
+                  url: 'http://127.0.0.1:8000/predictSeq?key=%QUERY'
+              },
+              limit: 10
+          });
+      });
+  </script>
 
 </nav>
