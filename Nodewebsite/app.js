@@ -302,6 +302,8 @@ app.get('/advSearchResults', function (req, res) {
     }
 
     let sequenceInput = req.query.sequenceInput;
+    let startDate = req.query.inputDateStart;
+    let endDate = req.query.inputDateEnd;
     let locationInput = req.query.locationInput;
     let strainInput = req.query.strainInput;
     let hostInput = req.query.hostInput;
@@ -312,12 +314,24 @@ app.get('/advSearchResults', function (req, res) {
     let selectSQL = "";
     selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
         "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+        "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
         "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
         "WHERE";
     if (sequenceInput != ""){
         selectSQL += " mlst_mlst.st = '" + sequenceInput + "'";
-        if (locationInput != "" || strainInput != "" || hostInput != "" || sourceInput != ""){
+        if (locationInput != "" || strainInput != "" || hostInput != "" || sourceInput != "" || startDate != "" || endDate != ""){
+            selectSQL += " AND ";
+        }
+    }
+    if (startDate != "" || endDate != ""){
+        if(endDate == ""){
+            selectSQL += " CAST(metadata->>'collection_date' AS DATE) >= '" + startDate + "'";
+        } else if (startDate == ""){
+            selectSQL += " CAST(metadata->>'collection_date' AS DATE) <= '" + endDate + "'";
+        } else{
+            selectSQL += " CAST(metadata->>'collection_date' AS DATE) >= '" + startDate + "' AND  CAST(metadata->>'collection_date' AS DATE) <= '" + endDate + "'";
+        }
+        if (strainInput != "" || hostInput != "" || sourceInput != ""){
             selectSQL += " AND ";
         }
     }
