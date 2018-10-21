@@ -488,7 +488,7 @@ app.post('/login', function (req, res) {
 
 app.get('/predictSeq',function(req,res){
     let sequence = req.query.key;
-    client.query("SELECT DISTINCT st FROM mlst_mlst WHERE CAST(st AS CHAR(10)) LIKE '" + sequence + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT st FROM mlst_mlst WHERE CAST(st AS CHAR(10)) LIKE '" + sequence + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -502,7 +502,7 @@ app.get('/predictSeq',function(req,res){
 
 app.get('/predictSam',function(req,res){
     let sample = req.query.key;
-    client.query("SELECT DISTINCT sample_id FROM mlst_mlst WHERE CAST(sample_id AS CHAR(10)) LIKE '" + sample + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT sample_id FROM mlst_mlst WHERE CAST(sample_id AS CHAR(10)) LIKE '" + sample + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -516,7 +516,7 @@ app.get('/predictSam',function(req,res){
 
 app.get('/predictLoc',function(req,res){
     let location = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'country' AS country FROM sample_metadata WHERE metadata->>'country' ILIKE '%" + location + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT metadata->>'country' AS country FROM sample_metadata WHERE metadata->>'country' ILIKE '%" + location + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -530,7 +530,7 @@ app.get('/predictLoc',function(req,res){
 
 app.get('/predictStr',function(req,res){
     let strain = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'strain' AS strain FROM sample_metadata WHERE metadata->>'strain' ILIKE '%" + strain + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT metadata->>'strain' AS strain FROM sample_metadata WHERE metadata->>'strain' ILIKE '%" + strain + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -544,7 +544,7 @@ app.get('/predictStr',function(req,res){
 
 app.get('/predictHost',function(req,res){
     let host = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'host' AS host FROM sample_metadata WHERE metadata->>'host' ILIKE '%" + host + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT metadata->>'host' AS host FROM sample_metadata WHERE metadata->>'host' ILIKE '%" + host + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -558,7 +558,7 @@ app.get('/predictHost',function(req,res){
 
 app.get('/predictIso',function(req,res){
     let source = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'isolation_source' AS isolation_source FROM sample_metadata WHERE metadata->>'isolation_source' ILIKE '%" + source + "%'", function(err, result, fields) {
+    client.query("SELECT DISTINCT metadata->>'isolation_source' AS isolation_source FROM sample_metadata WHERE metadata->>'isolation_source' ILIKE '%" + source + "%' LIMIT 10", function(err, result, fields) {
         if (err) throw err;
         let i;
         let data=[];
@@ -570,6 +570,16 @@ app.get('/predictIso',function(req,res){
     });
 });
 
+app.get('/tutorials', function(req,res){
+    if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+    res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
+});
 
 app.listen(8000);
 console.log('8000 is the magic port');
