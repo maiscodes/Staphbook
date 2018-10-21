@@ -3,75 +3,28 @@
   <!--Options for different pill lists-->
   <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
-    <!--Option for recent searches pill list-->
-    <li class="nav-item" style="width: 25%; text-align: center">
-      <a class="nav-link active btn-outline-dark" id="pills-recent-tab"  style="border-style: hidden" data-toggle="pill" href="#pills-recent" role="tab" aria-controls="pills-home" aria-selected="true">Recent Searches</a>
+    <!--Option for popular pill list-->
+    <li class="nav-item" style="width: 33%; text-align: center">
+      <a class="nav-link active btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-popular" role="tab" aria-controls="pills-popular" aria-selected="false">Popular Genomes</a>
     </li>
 
+
     <!--Option for recommended genomes pill list-->
-    <li class="nav-item" style="width: 25%; text-align: center">
+    <li class="nav-item" style="width: 33%; text-align: center">
       <a class="nav-link btn-outline-dark" id="pills-recommended-tab" data-toggle="pill" href="#pills-recommended" role="tab" aria-controls="pills-recommended" aria-selected="false">Recommendations</a>
     </li>
 
     <!--Option for favorites pill list-->
-    <li class="nav-item" style="width: 25%; text-align: center">
+    <li class="nav-item" style="width: 33%; text-align: center">
       <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-favorites" role="tab" aria-controls="pills-favorites" aria-selected="false">Favorites</a>
-    </li>
-	
-	<!--Option for popular pill list-->
-	<li class="nav-item" style="width: 25%; text-align: center">
-      <a class="nav-link btn-outline-dark" id="pills-favorites-tab" data-toggle="pill" href="#pills-popular" role="tab" aria-controls="pills-popular" aria-selected="false">Popular Genomes</a>
     </li>
   </ul>
 
   <!--Pill lists-->
   <div class="tab-content" id="pills-tabContent" style="margin-top: -15px">
-
-    <!--Recent searches pill list-->
-    <div class="tab-pane fade show active" id="pills-recent" role="tabpanel" aria-labelledby="pills-recent-tab">
-      <div class="homeResultItem">
-
-        <button type="button" onclick="window.location.href='ResultsPage.html'" class="homeResultItemText">
-          Streptomyces pactum strain ACT12 chromosome
-        </button>
-        <button type="button" class="homeResultItemIcon" onclick="favourite()">
-          <i class="fa fa-heart "></i>
-        </button>
-
-        <button type="button" class="homeResultItemIcon" onclick="remove()">
-          <i class="fa fa-times "></i>
-        </button>
-
-      </div>
-
-      <div class="homeResultItem">
-
-        <button type="button" onclick="window.location.href='ResultsPage.html'" class="homeResultItemText">
-          Streptomyces pactum strain ACT12 chromosome
-        </button>
-        <button type="button" class="homeResultItemIcon" onclick="favourite()">
-          <i class="fa fa-heart "></i>
-        </button>
-
-        <button type="button" class="homeResultItemIcon" onclick="remove()">
-          <i class="fa fa-times "></i>
-        </button>
-
-      </div>
-
-      <div class="homeResultItem">
-
-        <button type="button" onclick="window.location.href='ResultsPage.html'" class="homeResultItemText">
-          Streptomyces pactum strain ACT12 chromosome
-        </button>
-        <button type="button" class="homeResultItemIcon" onclick="favourite()">
-          <i class="fa fa-heart "></i>
-        </button>
-
-        <button type="button" class="homeResultItemIcon" onclick="remove()">
-          <i class="fa fa-times "></i>
-        </button>
-      </div>
+    <!--Popular genomes pill list-->
+    <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+      <% include ../snippets/popularGenomes %>
     </div>
 
     <!--Recommended genomes pill list-->
@@ -100,10 +53,7 @@
       </button>
     </div>
 	
-	<!--Recommended genomes pill list-->
-	    <div class="tab-pane fade" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
-    	<% include ../snippets/popularGenomes %>
-		</div>
+
 
   </div>
   <script>
