@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -119,7 +119,26 @@ app.get('/result', function (req, res) {
     req.session.prevSample = sampleID;
 
     // set session to 'false'
-    req.session.favourited = 0; //initially before SQL checks below 
+    req.session.favourited = 0; //initially before SQL checks below
+    if (userLoggedIn){
+        let value = req.headers.cookie;
+        let parts = value.split("=");
+        let partEmail = parts[1].split(";");
+        let encodedEmail = partEmail[0];
+        let email = decodeURIComponent(encodedEmail);
+        console.log(email);
+        client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
+            console.log(err, fav_results);
+            if (fav_results.rows.length > 0) {
+                isFavourited = 1;
+            } else {
+                isFavourited = 0;
+            }
+        });
+    } else {
+        isFavourited = 0;
+    }
+    req.session.favourited = isFavourited;
 
     // Tags
     client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
@@ -600,25 +619,65 @@ app.post('/result', function (req, res) {
     } else {
         userLoggedIn = false;
     }
+    let email = "NA";
     let number = 0;
     let sampleID = req.session.prevSample;
+
 
     let isFavourited = req.session.favourited;
 
     // if isFavourited is 'false', set it to 'true'
     if (isFavourited == 0) {
+        if (userLoggedIn){
+            let value = req.headers.cookie;
+            let parts = value.split("=");
+            let partEmail = parts[1].split(";");
+            let encodedEmail = partEmail[0];
+            let email = decodeURIComponent(encodedEmail);
+            client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
+                console.log(err, fav_results);
+                if(fav_results.rows.length < 1){
+                    client.query('INSERT INTO user_favorites (email, sample_id) VALUES (\''
+                        + email + '\',\'' + sampleID + '\')',
+                        function (error, results, fields) {
+                            if (error) {
+                                throw error;
+                            }
+                        });
+                }
+            });
+        }
 
         isFavourited = 1;
     } else { // isFavourited is set to 'true', so set it to 'false'
+        if (userLoggedIn){
+            let value = req.headers.cookie;
+            let parts = value.split("=");
+            let partEmail = parts[1].split(";");
+            let encodedEmail = partEmail[0];
+            let email = decodeURIComponent(encodedEmail);
+            console.log("=============================================================");
+            client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
+                console.log(err, fav_results);
+                if(fav_results.rows.length > 0){
+                    client.query("DELETE FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "",
+                        function (error, results, fields) {
+                            if (error) {
+                                throw error;
+                            }
+                        });
+                }
+            });
+        }
         isFavourited = 0;
     }
-
     // update session to reflect new value
     req.session.favourited = isFavourited;
 
+
     // Tags
     client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
-        console.log(err, result_tag_tosample);
+        //console.log(err, result_tag_tosample);
         let tagID = result_tag_tosample.rows[0].tag_id;
         client.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
 
@@ -630,7 +689,7 @@ app.post('/result', function (req, res) {
 
                     // Sequencing Metrics
                     client.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
-                        console.log(err, result_sequence_summary);
+                        //console.log(err, result_sequence_summary);
 
                         // Assembly Metrics
                         client.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
