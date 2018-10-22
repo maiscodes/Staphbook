@@ -10,8 +10,8 @@ const cookie = require('cookie');
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -39,6 +39,7 @@ app.use('/cytoscape_scripts', express.static(__dirname + '/node_modules/cytoscap
 app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola/'));
 app.use('/popupS_scripts', express.static(__dirname + '/node_modules/popupS/'));
 app.use('/typehead_scripts', express.static(__dirname + '/node_modules/typehead/'));
+app.use('/filesaver_scripts', express.static(__dirname + '/node_modules/filesaver/'));
 
 //directories
 app.use(express.static(__dirname + '/views/'));
@@ -394,11 +395,6 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-app.get('/logout', function (req, res) {
-    res.clearCookie('setCookie');
-    res.redirect('/');
-});
-
 
 
 // favourite sample page
@@ -744,7 +740,9 @@ app.post('/createAccount', function (req, res) {
         userLoggedIn = false;
     }
 	
-
+    var email = req.body.email;
+	var organisation = req.body.organisation;
+	var occupation = req.body.occupation;
 			
 		bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
 

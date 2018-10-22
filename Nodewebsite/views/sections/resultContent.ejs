@@ -464,18 +464,19 @@
       function downloadGraph() {
       console.log("download graph");
 
-	  var title = document.createElement("P");
-      var t = document.createTextNode("Save image (right click to save)");
-      title.appendChild(t);
-      document.getElementById("imageTitleDiv").appendChild(title);
+	 // var title = document.createElement("P");
+     // var t = document.createTextNode("Save image (right click to save)");
+      //title.appendChild(t);
+      //document.getElementById("imageTitleDiv").appendChild(title);
 	  
 	
-      document.getElementById("saveableGraphImage").style.visibility="visible";
-	  document.getElementById("saveableGraphImage").style.width="100%";
+      //document.getElementById("saveableGraphImage").style.visibility="visible";
+	  //document.getElementById("saveableGraphImage").style.width="100%";
 
       var png64 = cy.png();
+      saveAs(png64, "StaphBook-Graph.png");
 
-      document.getElementById("saveableGraphImage").src="" + png64;
+      //document.getElementById("saveableGraphImage").src="" + png64;
 
       }
 
