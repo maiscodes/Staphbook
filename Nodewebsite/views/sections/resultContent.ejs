@@ -6,19 +6,19 @@
       </h5>
 
     <h1 style="text-align: center; margin-top: -10px;">
-      Sample: <% sampleID %></h1>
+      Sample: <%- sample_ID %></h1>
 
     <% if (userLoggedIn) { %>
 
     <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
       <% if (isFavourited) { %>
-      <form method="GET" action="/unfavouriteSample">
+      <form method="POST">
         <button type="submit" class="btn btn-outline-dark btn-sm" title="Unfavorite Sample" id="unfavouriteSample" style="margin-left: 2px; margin-right: 2px; color: #468e94;">
           <i class="fas fa-heart" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
         </button>
       </form>
       <% } else { %>
-      <form method="GET" action="/favouriteSample">
+      <form method="POST">
 
         <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Sample" id="favouriteSample" style="margin-left: 2px; margin-right: 2px; color: #468e94;">
           <i class="far fa-heart" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>

@@ -10,6 +10,7 @@
     "cytoscape-cola": "^2.2.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "include-html": "^1.2.1",
     "npm": "^6.4.1",
     "parser": "^0.1.4",

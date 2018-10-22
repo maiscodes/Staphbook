@@ -3,15 +3,19 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const cookie = require('cookie');
+const session = require('express-session');
 //cookie parser
 //const cookieParser = require('cookie-parser');
 //app.use(cookieParser('xoxoGossipGirl'));
 
+app.use(session({ secret: "Shh, its a secret!" }));
+
+
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -47,7 +51,7 @@ app.use(express.static(__dirname + '/views/'));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// global variable
+// global variable, will need to pop into get and post routes later
 var userLoggedIn;
 var creationSuccess = false;
 var passwordIncorrect = false;
@@ -68,6 +72,7 @@ app.get('/', function (req, res) {
     } else {
         userLoggedIn = false;
     }
+
     res.render('pages/index', { userLoggedIn: userLoggedIn });
 });
 
@@ -80,6 +85,9 @@ app.get('/advancedSearch', function (req, res) {
     } else {
         userLoggedIn = false;
     }
+
+    console.log(req.session.prevURL);
+
     res.render('pages/advancedSearch', { userLoggedIn: userLoggedIn });
 });
 
@@ -108,7 +116,10 @@ app.get('/result', function (req, res) {
     }
     let number = 0;
     let sampleID = req.query.sampleSelection;
-    favSampleID = req.query.sampleSelection;
+    req.session.prevSample = sampleID;
+
+    // set session to 'false'
+    req.session.favourited = 0; //initially before SQL checks below 
 
     // Tags
     client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
@@ -188,7 +199,7 @@ app.get('/result', function (req, res) {
                                             console.log(err, result_registered_users);
                                             will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
                                             **/
-                                        res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows,  sampleID: sampleID, isFavourited: isFavourited,
+                                        res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited,
                                             sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
                                             same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
                                             same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
@@ -395,245 +406,6 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-
-
-// favourite sample page
-app.get('/favouriteSample', function (req, res) {
-    if (req.headers.cookie) {
-        userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    } else {
-        userLoggedIn = false;
-    }
-    isFavourited = true;
-
-    let number = 0;
-
-    let sampleID = favSampleID;
-
-    console.log(req.body.sampleID);
-
-    // Tags
-    client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
-        console.log(err, result_tag_tosample);
-        let tagID = result_tag_tosample.rows[0].tag_id;
-        client.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
-
-            // Metadata
-            client.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
-
-                // BLASTquery
-                client.query('SELECT * FROM staphopia_blastquery', (err, result_blastquery) => {
-
-                    // Sequencing Metrics
-                    client.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
-                        console.log(err, result_sequence_summary);
-
-                        // Assembly Metrics
-                        client.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
-                            //console.log(err, result_assembly_summary);
-
-                            // MLST
-                            client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
-
-                                // SCCmec Primer Hits
-                                client.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
-
-                                    // SCCmec Subtype Hits
-                                    client.query('SELECT * FROM sccmec_subtypes WHERE sample_id=' + sampleID + '', (err, result_sccmec_subtypes) => {
-
-                                        // SCCmec Protien Hits
-                                        client.query('SELECT * FROM sccmec_proteins WHERE sample_id=' + sampleID + '', (err, result_sccmec_proteins) => {
-
-                                            // Samples with the same Sequence Type
-                                            let st = result_mlst_mlst.rows[0].st;
-                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                                                "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                "WHERE st = '" + st + "')", (err, same_sequence) => {
-                                                    number = number + same_sequence.rows.length;
-
-                                                    // Samples with the same Location
-                                                    let location = result_sample_metadata.rows[0].metadata.country;
-                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                        "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
-                                                            number = number + same_location.rows.length;
-
-                                                            // Samples with the same Host
-                                                            let host = result_sample_metadata.rows[0].metadata.host;
-                                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                                "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
-                                                                    number = number + same_host.rows.length;
-
-                                                                    // Samples with the same Isolation Source
-                                                                    let iso = result_sample_metadata.rows[0].metadata.isolation_source;
-                                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                        "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
-                                                                            number = number + same_isolation.rows.length;
-
-                                                                            /**
-                                                                            //favourites
-                                                                            client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
-                                                                                console.log(err, result_registered_users);
-                                                                                will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
-                                                                                **/
-                                                                            res.render('pages/result', {
-                                                                                sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited, sampleID: sampleID,
-                                                                                sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
-                                                                                same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
-                                                                                same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
-                                                                                sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows
-                                                                            });
-                                                                        });
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
-
-
-
-// unfavourite sample page
-app.get('/unfavouriteSample', function (req, res) {
-    if (req.headers.cookie) {
-        userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    } else {
-        userLoggedIn = false;
-    }
-    isFavourited = false;
-
-    let number = 0;
-
-    let sampleID = favSampleID;
-
-    console.log(req.body.sampleID);
-
-    // Tags
-    client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
-        console.log(err, result_tag_tosample);
-        let tagID = result_tag_tosample.rows[0].tag_id;
-        client.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
-
-            // Metadata
-            client.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
-
-                // BLASTquery
-                client.query('SELECT * FROM staphopia_blastquery', (err, result_blastquery) => {
-
-                    // Sequencing Metrics
-                    client.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
-                        console.log(err, result_sequence_summary);
-
-                        // Assembly Metrics
-                        client.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
-                            //console.log(err, result_assembly_summary);
-
-                            // MLST
-                            client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
-
-                                // SCCmec Primer Hits
-                                client.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
-
-                                    // SCCmec Subtype Hits
-                                    client.query('SELECT * FROM sccmec_subtypes WHERE sample_id=' + sampleID + '', (err, result_sccmec_subtypes) => {
-
-                                        // SCCmec Protien Hits
-                                        client.query('SELECT * FROM sccmec_proteins WHERE sample_id=' + sampleID + '', (err, result_sccmec_proteins) => {
-
-                                            // Samples with the same Sequence Type
-                                            let st = result_mlst_mlst.rows[0].st;
-                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                                                "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                "WHERE st = '" + st + "')", (err, same_sequence) => {
-                                                    number = number + same_sequence.rows.length;
-
-                                                    // Samples with the same Location
-                                                    let location = result_sample_metadata.rows[0].metadata.country;
-                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                        "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
-                                                            number = number + same_location.rows.length;
-
-                                                            // Samples with the same Host
-                                                            let host = result_sample_metadata.rows[0].metadata.host;
-                                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                                "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
-                                                                    number = number + same_host.rows.length;
-
-                                                                    // Samples with the same Isolation Source
-                                                                    let iso = result_sample_metadata.rows[0].metadata.isolation_source;
-                                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                        "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
-                                                                            number = number + same_isolation.rows.length;
-
-                                                                            /**
-                                                                            //favourites
-                                                                            client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
-                                                                                console.log(err, result_registered_users);
-                                                                                will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
-                                                                                **/
-                                                                            res.render('pages/result', {
-                                                                                sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited, sampleID: sampleID,
-                                                                                sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
-                                                                                same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
-                                                                                same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
-                                                                                sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows
-                                                                            });
-                                                                        });
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
-
-
 app.get('/predictSeq', function (req, res) {
     let sequence = req.query.key;
     client.query("SELECT DISTINCT st FROM mlst_mlst WHERE CAST(st AS CHAR(10)) LIKE '" + sequence + "%' LIMIT 10", function (err, result, fields) {
@@ -816,6 +588,135 @@ app.post('/login', function (req, res) {
         }
     });
 });
+
+
+
+// result page
+app.post('/result', function (req, res) {
+    if (req.headers.cookie) {
+        userLoggedIn = true;
+        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    } else {
+        userLoggedIn = false;
+    }
+    let number = 0;
+    let sampleID = req.session.prevSample;
+
+    let isFavourited = req.session.favourited;
+
+    // if isFavourited is 'false', set it to 'true'
+    if (isFavourited == 0) {
+
+        isFavourited = 1;
+    } else { // isFavourited is set to 'true', so set it to 'false'
+        isFavourited = 0;
+    }
+
+    // update session to reflect new value
+    req.session.favourited = isFavourited;
+
+    // Tags
+    client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
+        console.log(err, result_tag_tosample);
+        let tagID = result_tag_tosample.rows[0].tag_id;
+        client.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
+
+            // Metadata
+            client.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
+
+                // BLASTquery
+                client.query('SELECT * FROM staphopia_blastquery', (err, result_blastquery) => {
+
+                    // Sequencing Metrics
+                    client.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
+                        console.log(err, result_sequence_summary);
+
+                        // Assembly Metrics
+                        client.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
+                            //console.log(err, result_assembly_summary);
+
+                            // MLST
+                            client.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
+
+                                // SCCmec Primer Hits
+                                client.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
+
+                                    // SCCmec Subtype Hits
+                                    client.query('SELECT * FROM sccmec_subtypes WHERE sample_id=' + sampleID + '', (err, result_sccmec_subtypes) => {
+
+                                        // SCCmec Protien Hits
+                                        client.query('SELECT * FROM sccmec_proteins WHERE sample_id=' + sampleID + '', (err, result_sccmec_proteins) => {
+
+                                            // Samples with the same Sequence Type
+                                            let st = result_mlst_mlst.rows[0].st;
+                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                                "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                                                "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                                "WHERE st = '" + st + "')", (err, same_sequence) => {
+                                                    number = number + same_sequence.rows.length;
+
+                                                    // Samples with the same Location
+                                                    let location = result_sample_metadata.rows[0].metadata.country;
+                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                                        "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
+                                                            number = number + same_location.rows.length;
+
+                                                            // Samples with the same Host
+                                                            let host = result_sample_metadata.rows[0].metadata.host;
+                                                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                                                "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                                                "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                                                "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
+                                                                    number = number + same_host.rows.length;
+
+                                                                    // Samples with the same Isolation Source
+                                                                    let iso = result_sample_metadata.rows[0].metadata.isolation_source;
+                                                                    client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
+                                                                        "FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
+                                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                                                        "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
+                                                                            number = number + same_isolation.rows.length;
+
+                                                                            /**
+                                                                            //favourites
+                                                                            client.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
+                                                                                console.log(err, result_registered_users);
+                                                                                will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
+                                                                                **/
+                                                                            res.render('pages/result', {
+                                                                                sample_ID: sampleID, tag_tag: result_tag_tag.rows, sampleID: sampleID, isFavourited: isFavourited,
+                                                                                sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
+                                                                                same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
+                                                                                same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
+                                                                                sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows
+                                                                            });
+                                                                        });
+                                                                });
+                                                        });
+                                                });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
 
 app.listen(8000);
 console.log('8000 is the magic port');
