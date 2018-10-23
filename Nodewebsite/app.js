@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -54,7 +54,6 @@ app.set('view engine', 'ejs');
 // global variable, will need to pop into get and post routes later
 var userLoggedIn;
 var creationSuccess = false;
-var passwordIncorrect = false;
 var userAlreadyExists = true;
 var isFavourited = false;
 var favSampleID;
@@ -65,9 +64,8 @@ var favSampleID;
 
 // index page
 app.get('/', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -78,24 +76,20 @@ app.get('/', function (req, res) {
 
 // advanced search page
 app.get('/advancedSearch', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
     }
-
-    console.log(req.session.prevURL);
 
     res.render('pages/advancedSearch', { userLoggedIn: userLoggedIn });
 });
 
 // account creation page page
 app.get('/createAccount', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -107,9 +101,8 @@ app.get('/createAccount', function (req, res) {
 
 // result page
 app.get('/result', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -241,9 +234,8 @@ app.get('/result', function (req, res) {
 
 // search results page
 app.get('/searchResults', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -327,9 +319,8 @@ app.get('/searchResults', function (req, res) {
 
 // Advanced search results page
 app.get('/advSearchResults', function (req, res) {
-    if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -405,23 +396,20 @@ app.get('/advSearchResults', function (req, res) {
 
 app.get('/login', function (req, res) {
     var userNotRegistered = false;
-    passwordIncorrect = false;
-    req.creationSuccess = false;
-    console.log("[ - ] Creation success", creationSuccess);
-
-	if (req.headers.cookie) {
+    creationSuccess = false;
+   
+	if (req.session.userStatus == true) {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     } else {
         userLoggedIn = false;
     }
-    console.log('rendered');
-    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered });
 });
 
 app.get('/logout', function (req, res) {
-    res.clearCookie('setCookie');
+    req.session.userStatus = "loggedOut";
+    res.clearCookie("setCookie");
+    console.log("logout user");
     res.redirect('/');
 });
 
@@ -504,9 +492,8 @@ app.get('/predictIso', function (req, res) {
 });
 
 app.get('/tutorials', function (req, res) {
-    if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -523,9 +510,8 @@ app.get('/tutorials', function (req, res) {
 
 // account creation page page
 app.post('/createAccount', function (req, res) {
-	if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -533,43 +519,46 @@ app.post('/createAccount', function (req, res) {
 	
     var email = req.body.email;
 	var organisation = req.body.organisation;
-	var occupation = req.body.occupation;
-			
-		bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
+    var occupation = req.body.occupation;
 
-			client.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
-				console.log(err, result_registered_users);
+    if (email != "") {
 
-				if (result_registered_users.rows.length != 0) {
-					userAlreadyExists = true;
-					console.log('User already entered into database');
-					res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
-					return;
-				} else {
-					client.query('INSERT INTO registered_users (email, password, organisation, occupation) VALUES (\''
-						+ email + '\',\'' + hashedPassword + '\',\'' + organisation + '\',\'' + occupation + '\')',
-						function (error, results, fields) {
-							if (error) {
-								throw error;
-								res.redirect('/');
-							} else {
-								console.log("User inserted to db successfully");
-								creationSuccess = true;
-								console.log("[ + ] Creation success", creationSuccess);
-								res.redirect('/login');
-							}
-						});
-				}
-			});
-		});
-	
+        bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
+
+            client.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
+                console.log(err, result_registered_users);
+
+                if (result_registered_users.rows.length != 0) {
+                    userAlreadyExists = true;
+                    console.log('User already entered into database');
+                    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
+                    return;
+                } else {
+                    client.query('INSERT INTO registered_users (email, password, organisation, occupation) VALUES (\''
+                        + email + '\',\'' + hashedPassword + '\',\'' + organisation + '\',\'' + occupation + '\')',
+                        function (error, results, fields) {
+                            if (error) {
+                                throw error;
+                                res.redirect('/');
+                            } else {
+                                creationSuccess = true;
+                                res.redirect('/login');
+                            }
+                        });
+                }
+            });
+        });
+    } else {
+        userAlreadyExists = false;
+        res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
+
+    }
 });
 
  // login page
 app.post('/login', function (req, res) {
-    if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;
@@ -585,7 +574,7 @@ app.post('/login', function (req, res) {
         if (result_registered_users.rows.length != 1) {
             console.log('user not registered');
             var userNotRegistered = true;
-            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered});
         } else {
             bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
                 //if password matched DB password
@@ -596,12 +585,13 @@ app.post('/login', function (req, res) {
                         httpOnly: true
                     });
 
+                    req.session.userStatus = "loggedIn";
+
                     userLoggedIn = true;
 
-                    res.render('pages/index', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+                    res.render('pages/index', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered });
                 } else {
-                    passwordIncorrect = true;
-                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered, passwordIncorrect: passwordIncorrect });
+                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered });
                 }
             });
         }
@@ -612,9 +602,8 @@ app.post('/login', function (req, res) {
 
 // result page
 app.post('/result', function (req, res) {
-    if (req.headers.cookie) {
+    if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
-        console.log('req headers cookie if statement cookie test @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
     } else {
         userLoggedIn = false;

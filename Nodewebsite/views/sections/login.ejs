@@ -9,12 +9,9 @@
   <% } %> 
     
   <% if (userNotRegistered) { %>
-    <script>alert("User email not registered.");</script>
+    <script>alert("User login unsuccessful, please try again.");</script>
   <% } %> 
     
-  <% if (passwordIncorrect) { %>
-    <script>alert("Password incorrect");</script>
-  <% } %> 
     
   <form class="needs-validation" method="POST" novalidate="">
     <!--Email Adress input (email)-->
