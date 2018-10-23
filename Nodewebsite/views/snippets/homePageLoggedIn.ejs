@@ -49,12 +49,30 @@
 
     <!--Favorites pill list-->
     <div class="tab-pane fade" id="pills-favorites" role="tabpanel" aria-labelledby="pills-favorites-tab">
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Myxococus macrosporus DSM 14679 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
+      <% if (haveFavs) { %>
+
+      <form action='/result' method="get">
+        <% favorites.forEach(function (result_favs) { %>
+
+        <button type="submit" name="sampleSelection" value="<%= result_favs.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+          Sample: <%= result_favs.sample_id %>,
+          Sequence Type: <%= result_favs.st %>,
+          Location: <%= result_favs.country %>,
+          Strain: <%= result_favs.strain %>,
+          Host: <%= result_favs.host %>,
+          Isolation Source: <%= result_favs.isolation_source %>
+          <% }) %>
+
+        </button>
+      </form>
+
+      <% } else { %>
+
+      <button type="button"  class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a" disabled>
+        No favorites found.
       </button>
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Streptomyces gilvosporeus strain F607<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
-      </button>
+
+      <% } %>
     </div>
   </div>
 </div>

@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -63,14 +63,55 @@ var favSampleID;
 
 // index page
 app.get('/', function (req, res) {
+    let favorites=[];
+    let suggested=[];
+    let haveFavs = false;
+    let haveSugs = false;
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        client.query("SELECT * FROM user_favorites WHERE email='" + email + "' LIMIT 4", (err, fav_results) => {
+            console.log(err, fav_results);
+            if(fav_results.rows.length > 0){
+                haveFavs = true;
+                haveSugs = true;
+                let selectSQL = "";
+                selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                    "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+                    "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                    "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                    "WHERE";
+                if (fav_results.rows.length > 0){
+                    selectSQL += " sample_id = " + fav_results.rows[0].sample_id + "";
+                }
+                if (fav_results.rows.length > 1){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[1].sample_id + "";
+                }
+                if (fav_results.rows.length > 2){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[2].sample_id + "";
+                }
+                if (fav_results.rows.length > 3){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[3].sample_id + "";
+                }
+                console.log(selectSQL);
+
+                client.query(selectSQL + ");", (err, favorites) => {
+                    console.log(err, favorites);
+                    console.log(haveFavs);
+                    res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+                });
+            } else {
+                res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+            }
+        });
 
     } else {
         userLoggedIn = false;
+        console.log(haveFavs);
+        res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
     }
-
-    res.render('pages/index', { userLoggedIn: userLoggedIn });
 });
 
 // advanced search page
@@ -552,6 +593,57 @@ app.post('/createAccount', function (req, res) {
     }
 });
 
+
+app.get('/', function (req, res) {
+    let favorites=[];
+    let suggested=[];
+    let haveFavs = false;
+    let haveSugs = false;
+    if (req.session.userStatus == "loggedIn") {
+        userLoggedIn = true;
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        client.query("SELECT * FROM user_favorites WHERE email='" + email + "' LIMIT 4", (err, fav_results) => {
+            console.log(err, fav_results);
+            if(fav_results.rows.length > 0){
+                haveFavs = true;
+                haveSugs = true;
+                let selectSQL = "";
+                selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                    "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+                    "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                    "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                    "WHERE";
+                if (fav_results.rows.length > 0){
+                    selectSQL += " sample_id = " + fav_results.rows[0].sample_id + "";
+                }
+                if (fav_results.rows.length > 1){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[1].sample_id + "";
+                }
+                if (fav_results.rows.length > 2){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[2].sample_id + "";
+                }
+                if (fav_results.rows.length > 3){
+                    selectSQL += " OR  sample_id = " + fav_results.rows[3].sample_id + "";
+                }
+                console.log(selectSQL);
+
+                client.query(selectSQL + ");", (err, favorites) => {
+                    console.log(err, favorites);
+                    console.log(haveFavs);
+                    res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+                });
+            }
+        });
+
+    } else {
+        userLoggedIn = false;
+        console.log(haveFavs);
+        res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+    }
+});
+
  // login page
 app.post('/login', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
@@ -560,7 +652,10 @@ app.post('/login', function (req, res) {
     } else {
         userLoggedIn = false;
     }
-
+    let favorites=[];
+    let suggested=[];
+    let haveFavs = false;
+    let haveSugs = false;
     console.log('post login');
     console.log("email, ", req.body.email);
     console.log("password, ", req.body.password);
@@ -586,10 +681,55 @@ app.post('/login', function (req, res) {
                     req.session.userEmail =  req.body.email;
 
                     userLoggedIn = true;
+                    let value = req.session.userEmail;
+                    let email = decodeURIComponent(value);
+                    client.query("SELECT * FROM user_favorites WHERE email='" + email + "' LIMIT 4", (err, fav_results) => {
+                        console.log(err, fav_results);
+                        if(fav_results.rows.length > 0) {
+                            haveFavs = true;
+                            haveSugs = true;
+                            let selectSQL = "";
+                            selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+                                "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                                "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                                "WHERE";
+                            if (fav_results.rows.length > 0) {
+                                selectSQL += " sample_id = " + fav_results.rows[0].sample_id + "";
+                            }
+                            if (fav_results.rows.length > 1) {
+                                selectSQL += " OR  sample_id = " + fav_results.rows[1].sample_id + "";
+                            }
+                            if (fav_results.rows.length > 2) {
+                                selectSQL += " OR  sample_id = " + fav_results.rows[2].sample_id + "";
+                            }
+                            if (fav_results.rows.length > 3) {
+                                selectSQL += " OR  sample_id = " + fav_results.rows[3].sample_id + "";
+                            }
+                            console.log(selectSQL);
 
-                    res.render('pages/index', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered });
+                            client.query(selectSQL + ");", (err, favorites) => {
+                                console.log(err, favorites);
+                                console.log(haveFavs);
+                                res.render('pages/index', {
+                                    userLoggedIn: userLoggedIn,
+                                    favorites: favorites.rows,
+                                    suggested: suggested.rows,
+                                    haveFavs: haveFavs,
+                                    haveSugs: haveSugs,
+                                    creationSuccess: creationSuccess,
+                                    userNotRegistered: userNotRegistered
+                                });
+                            });
+                        } else {
+                            res.render('pages/index', {  userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered,
+                                favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+                        }
+                    });
                 } else {
-                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered });
+                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: creationSuccess, userNotRegistered: userNotRegistered,
+                        favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs});
                 }
             });
         }
