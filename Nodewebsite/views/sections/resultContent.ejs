@@ -211,13 +211,13 @@
     <div id="resultsPageGraphComponent4" style="text-align: center;">
       <div class="weightedDistanceSliders">
         <p id="weighteddistnum">Minimum Connections = 2</p>
-        <input type="range" min="1" max="4" value="2" class="slider" id="myRange1" oninput="changeNodes()" style="width: 40%; "></input>
+        <input type="range" min="1" max="4" value="2" class="slider" id="myRange1" oninput="changeDist()" style="width: 40%; "></input>
       </div>
 
       <div class="weightedDistanceSliders">
 
-        <p>Weighted distance 2</p>
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width: 40%; "></input>
+        <p id="weighteddist2num">Maximum Weighted Distance = 0.0150</p>
+        <input type="range" min="0" max="200" value="150" class="slider" id="myRange2" oninput="changeDist()" style="width: 40%; "></input>
 
       </div>
 
@@ -256,7 +256,7 @@
       container: document.getElementById('cy'),
       elements: [
       // nodes
-      { data: { id: sampleIdentity } }
+      { data: { id: sampleIdentity }, style: {'background-color': 'grey'} }
       ],
       style: [{
         selector: 'node', style: {'background-color': '#468e94', label: 'data(id)'},
@@ -270,12 +270,24 @@
       let same_loc = <%- JSON.stringify(same_locations) %>;
       let same_ho = <%- JSON.stringify(same_hosts) %>;
       let same_iso = <%- JSON.stringify(same_isolations) %>;
+      let weighted_dist = <%- JSON.stringify(weighted_distance) %>;
       same_sq.forEach(function(same_sequence) {
           let same_sequence_sample_id = same_sequence.sample_id;
           if (same_sequence_sample_id != sampleIdentity){
-              cy.add({
-                  data: {id: same_sequence_sample_id, seq: same_sequence.st, loc: same_sequence.country, strain: same_sequence.strain,
-                      host: same_sequence.host, iso: same_sequence.isolation_source}
+              weighted_dist.forEach(function (weighted_distance_list) {
+                  if (weighted_distance_list.comparison_sample == same_sequence.name) {
+                      cy.add({
+                          data: {
+                              id: same_sequence_sample_id,
+                              seq: same_sequence.st,
+                              loc: same_sequence.country,
+                              strain: same_sequence.strain,
+                              host: same_sequence.host,
+                              iso: same_sequence.isolation_source,
+                              dist: weighted_distance_list.distance
+                          }
+                      });
+                  }
               });
               collection = collection.add(cy.$id(same_sequence_sample_id));
               var source = same_sequence_sample_id;
@@ -294,11 +306,15 @@
           let same_location_sample_id = same_location.sample_id;
           if (same_location_sample_id != sampleIdentity){
               if(cy.$id(same_location_sample_id).empty()){
-                  cy.add({
-                      data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
-                          host: same_location.host, iso: same_location.isolation_source}
+                  weighted_dist.forEach(function (weighted_distance_list) {
+                      if (weighted_distance_list.comparison_sample == same_location.name) {
+                          cy.add({
+                              data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
+                                  host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance}
+                          });
+                          collection = collection.add(cy.$id(same_location_sample_id));
+                      }
                   });
-                  collection = collection.add(cy.$id(same_location_sample_id));
               }
               var source = same_location_sample_id;
               cy.add({
@@ -316,11 +332,15 @@
         let same_host_sample_id = same_host.sample_id;
         if (same_host_sample_id != sampleIdentity){
             if(cy.$id(same_host_sample_id).empty()){
-                cy.add({
-                    data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
-                        host: same_host.host, iso: same_host.isolation_source}
+                weighted_dist.forEach(function (weighted_distance_list) {
+                    if (weighted_distance_list.comparison_sample == same_host.name) {
+                        cy.add({
+                            data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
+                                host: same_host.host, iso: same_host.isolation_source, dist: weighted_distance_list.distance}
+                        });
+                        collection = collection.add(cy.$id(same_host_sample_id));
+                    }
                 });
-                collection = collection.add(cy.$id(same_host_sample_id));
             }
             var source = same_host_sample_id;
             cy.add({
@@ -338,11 +358,15 @@
         let same_iso_sample_id = same_isolation.sample_id;
         if (same_iso_sample_id != sampleIdentity){
             if(cy.$id(same_iso_sample_id).empty()){
-                cy.add({
-                    data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
-                        host: same_isolation.host, iso: same_isolation.isolation_source}
+                weighted_dist.forEach(function (weighted_distance_list) {
+                    if (weighted_distance_list.comparison_sample == same_isolation.name) {
+                        cy.add({
+                            data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
+                                host: same_isolation.host, iso: same_isolation.isolation_source, dist: weighted_distance_list.distance}
+                        });
+                        collection = collection.add(cy.$id(same_iso_sample_id));
+                    }
                 });
-                collection = collection.add(cy.$id(same_iso_sample_id));
             }
             var source = same_iso_sample_id;
             cy.add({
@@ -362,6 +386,9 @@
             if(e.length < 2){
                 ele.remove();
             }
+            if (ele.data('dist') > 0.015){
+                ele.remove();
+            }
             ele.on('click', function(evt){
                 let id = this.id();
                 function get_sample(){
@@ -377,7 +404,8 @@
                 }
                 popupS.confirm({
                     content: '<b>Sample: </b>' + id +'<br><b>Sequence Type: </b>' + ele.data('seq') +'<br><b>Location: </b>' + ele.data('loc') +
-                        '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso'),
+                        '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso') +
+                        '<br><b>Weighted Distance: </b>' + ele.data('dist'),
                     labelOk: 'View',
                     labelCancel: 'Cancel',
                     additionalButtonCancelClass: 'popUpButtonCSS',
@@ -396,33 +424,26 @@
       }).run()
 
     let oldnum = 2;
-    function changeNodes(){
 
-          let num = document.getElementById("myRange1").value;
-          if (num < oldnum){
-              collection.restore();
-              collection.forEach(function(ele, i ,eles) {
-                  if(ele.isNode()) {
-                      let e = ele.connectedEdges();
-                      if (e.length < num) {
-                          ele.remove();
-                      }
-                  }
-              });
-          }
-        if (num > oldnum){
-            collection.forEach(function(ele, i ,eles) {
-                if(ele.isNode()) {
-                    let e = ele.connectedEdges();
-                    if (e.length < num) {
-                        ele.remove();
-                    }
+    function changeDist(){
+        let num = document.getElementById("myRange1").value;
+        let changed_dist = document.getElementById("myRange2").value;
+        let dist = changed_dist/10000;
+        collection.restore();
+        collection.forEach(function(ele, i ,eles) {
+            if(ele.isNode()) {
+                let e = ele.connectedEdges();
+                if (e.length < num) {
+                    ele.remove();
                 }
-            });
-        }
+                if (ele.data('dist') > dist){
+                    ele.remove();
+                }
+            }
+        });
         oldnum = num;
-          document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = "+ num;
-
+        document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = "+ num;
+        document.getElementById("weighteddist2num").innerHTML = "Maximum Weighted Distance = "+ dist;
         cy.layout({
             name: 'cola'
         }).run()
@@ -515,4 +536,4 @@
 	  }
     </script>
 
-
+</div>
