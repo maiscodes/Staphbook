@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -114,12 +114,8 @@ app.get('/result', function (req, res) {
     // set session to 'false'
     req.session.favourited = 0; //initially before SQL checks below
     if (userLoggedIn){
-        let value = req.headers.cookie;
-        let parts = value.split("=");
-        let partEmail = parts[1].split(";");
-        let encodedEmail = partEmail[0];
-        let email = decodeURIComponent(encodedEmail);
-        console.log(email);
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
         client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
             console.log(err, fav_results);
             if (fav_results.rows.length > 0) {
@@ -586,6 +582,7 @@ app.post('/login', function (req, res) {
                     });
 
                     req.session.userStatus = "loggedIn";
+                    req.session.userEmail =  req.body.email;
 
                     userLoggedIn = true;
 
@@ -618,11 +615,8 @@ app.post('/result', function (req, res) {
     // if isFavourited is 'false', set it to 'true'
     if (isFavourited == 0) {
         if (userLoggedIn){
-            let value = req.headers.cookie;
-            let parts = value.split("=");
-            let partEmail = parts[1].split(";");
-            let encodedEmail = partEmail[0];
-            let email = decodeURIComponent(encodedEmail);
+            let value = req.session.userEmail;
+            let email = decodeURIComponent(value);
             client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
                 console.log(err, fav_results);
                 if(fav_results.rows.length < 1){
@@ -640,11 +634,8 @@ app.post('/result', function (req, res) {
         isFavourited = 1;
     } else { // isFavourited is set to 'true', so set it to 'false'
         if (userLoggedIn){
-            let value = req.headers.cookie;
-            let parts = value.split("=");
-            let partEmail = parts[1].split(";");
-            let encodedEmail = partEmail[0];
-            let email = decodeURIComponent(encodedEmail);
+            let value = req.session.userEmail;
+            let email = decodeURIComponent(value);
             console.log("=============================================================");
             client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
                 console.log(err, fav_results);
