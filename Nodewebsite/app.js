@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -55,7 +55,6 @@ app.set('view engine', 'ejs');
 var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
-var isFavourited = false;
 var favSampleID;
 
 /*
@@ -110,24 +109,26 @@ app.get('/result', function (req, res) {
     let number = 0;
     let sampleID = req.query.sampleSelection;
     req.session.prevSample = sampleID;
+    let isFavourited = 0;
 
     // set session to 'false'
-    req.session.favourited = 0; //initially before SQL checks below
+    req.session.favourited = isFavourited; //initially set to 'false' before SQL checks below
+
+
     if (userLoggedIn){
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
         client.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
             console.log(err, fav_results);
             if (fav_results.rows.length > 0) {
-                isFavourited = 1;
-            } else {
-                isFavourited = 0;
-            }
+                isFavourited = 1; //set to "true"
+
+                req.session.favourited = isFavourited;
+
+            } 
         });
-    } else {
-        isFavourited = 0;
     }
-    req.session.favourited = isFavourited;
+
 
     // Tags
     client.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
@@ -632,7 +633,7 @@ app.post('/result', function (req, res) {
         }
 
         isFavourited = 1;
-    } else { // isFavourited is set to 'true', so set it to 'false'
+    } else if (isFavourited == 1) { // isFavourited is set to 'true', so set it to 'false'
         if (userLoggedIn){
             let value = req.session.userEmail;
             let email = decodeURIComponent(value);
@@ -653,6 +654,7 @@ app.post('/result', function (req, res) {
     }
     // update session to reflect new value
     req.session.favourited = isFavourited;
+
 
 
     // Tags
