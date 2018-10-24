@@ -33,18 +33,30 @@
 	
 	
     <div class="tab-pane fade" id="pills-recommended" role="tabpanel" aria-labelledby="pills-recommended-tab">
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Streptomyces pactum strain ACT12 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: lightgrey">&nbsp; &nbsp; &nbsp;</i>
+      <% if (haveSugs) { %>
+
+      <form action='/result' method="get">
+        <% suggested.forEach(function (result_sugs) { %>
+
+        <button type="submit" name="sampleSelection" value="<%= result_sugs.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+          Sample: <%= result_sugs.sample_id %>,
+          Sequence Type: <%= result_sugs.st %>,
+          Location: <%= result_sugs.country %>,
+          Strain: <%= result_sugs.strain %>,
+          Host: <%= result_sugs.host %>,
+          Isolation Source: <%= result_sugs.isolation_source %>
+          <% }) %>
+
+        </button>
+      </form>
+
+      <% } else { %>
+
+      <button type="button"  class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a" disabled>
+        No recommendations found. Add samples to your favorites to receive recommendations.
       </button>
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Myxococus macrosporus DSM 14679 chromosome <i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
-      </button>
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Streptomyces gilvosporeus strain F607<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: #0a0a0a">&nbsp; &nbsp; &nbsp;</i>
-      </button>
-      <button type="button" onclick="window.location.href='ResultsPage.html'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Nocardia brasilliensis strain FDAARGOS_352 chromosome<i class="fa fa-times" style="float: right; color: lightgrey"></i><i class="fa fa-heart" style="float: right; color: lightgrey">&nbsp; &nbsp; &nbsp;</i>
-      </button>
+
+      <% } %>
     </div>
 
     <!--Favorites pill list-->

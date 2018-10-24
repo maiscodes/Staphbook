@@ -72,7 +72,7 @@ app.get('/', function (req, res) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
         client.query("SELECT * FROM user_favorites WHERE email='" + email + "' LIMIT 4", (err, fav_results) => {
-            console.log(err, fav_results);
+            //console.log(err, fav_results);
             if(fav_results.rows.length > 0){
                 haveFavs = true;
                 haveSugs = true;
@@ -95,12 +95,42 @@ app.get('/', function (req, res) {
                 if (fav_results.rows.length > 3){
                     selectSQL += " OR  sample_id = " + fav_results.rows[3].sample_id + "";
                 }
-                console.log(selectSQL);
+                //console.log(selectSQL);
 
                 client.query(selectSQL + ");", (err, favorites) => {
-                    console.log(err, favorites);
-                    console.log(haveFavs);
-                    res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+                    //console.log(err, favorites);
+
+                    client.query('SELECT name FROM sample_sample WHERE id=' + fav_results.rows[fav_results.rows.length-1].sample_id + '', (err, result_sample_sample) => {
+                        //console.log(err, result_tag_tosample);
+                        let sampleName = result_sample_sample.rows[0].name;
+
+                        // Sample's weighted distances
+                        client.query("SELECT * FROM weighted_distance WHERE selected_sample='" + sampleName + "' ORDER BY distance ASC LIMIT 5", (err, result_weighted_distances) => {
+                            //console.log(err, result_weighted_distances);
+                            console.log(err, result_weighted_distances);
+
+                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_sample.name, sample_sample.id " +
+                                "FROM sample_sample  " +
+                                "INNER JOIN mlst_mlst ON sample_sample.id=mlst_mlst.sample_id " +
+                                "INNER JOIN sample_metadata ON sample_sample.id=sample_metadata.sample_id " +
+                                "WHERE sample_sample.name='" + result_weighted_distances.rows[1].comparison_sample + "' " +
+                                "OR sample_sample.name='" + result_weighted_distances.rows[2].comparison_sample + "' " +
+                                "OR sample_sample.name='" + result_weighted_distances.rows[3].comparison_sample + "' " +
+                                "OR sample_sample.name='" + result_weighted_distances.rows[4].comparison_sample + "'", (err, suggested) => {
+                                console.log(err, suggested);
+
+                                res.render('pages/index', {
+                                    userLoggedIn: userLoggedIn,
+                                    favorites: favorites.rows,
+                                    suggested: suggested.rows,
+                                    haveFavs: haveFavs,
+                                    haveSugs: haveSugs
+                                });
+                            });
+                        });
+                    });
                 });
             } else {
                 res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
@@ -680,16 +710,39 @@ app.post('/login', function (req, res) {
                             console.log(selectSQL);
 
                             client.query(selectSQL + ");", (err, favorites) => {
-                                console.log(err, favorites);
-                                console.log(haveFavs);
-                                res.render('pages/index', {
-                                    userLoggedIn: userLoggedIn,
-                                    favorites: favorites.rows,
-                                    suggested: suggested.rows,
-                                    haveFavs: haveFavs,
-                                    haveSugs: haveSugs,
-                                    creationSuccess: creationSuccess,
-                                    userNotRegistered: userNotRegistered
+
+                                client.query('SELECT name FROM sample_sample WHERE id=' + fav_results.rows[fav_results.rows.length-1].sample_id + '', (err, result_sample_sample) => {
+                                    //console.log(err, result_tag_tosample);
+                                    let sampleName = result_sample_sample.rows[0].name;
+
+                                    // Sample's weighted distances
+                                    client.query("SELECT * FROM weighted_distance WHERE selected_sample='" + sampleName + "' ORDER BY distance ASC LIMIT 5", (err, result_weighted_distances) => {
+                                        //console.log(err, result_weighted_distances);
+                                        console.log(err, result_weighted_distances);
+
+                                        client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                                            "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                                            "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_sample.name, sample_sample.id " +
+                                            "FROM sample_sample  " +
+                                            "INNER JOIN mlst_mlst ON sample_sample.id=mlst_mlst.sample_id " +
+                                            "INNER JOIN sample_metadata ON sample_sample.id=sample_metadata.sample_id " +
+                                            "WHERE sample_sample.name='" + result_weighted_distances.rows[1].comparison_sample + "' " +
+                                            "OR sample_sample.name='" + result_weighted_distances.rows[2].comparison_sample + "' " +
+                                            "OR sample_sample.name='" + result_weighted_distances.rows[3].comparison_sample + "' " +
+                                            "OR sample_sample.name='" + result_weighted_distances.rows[4].comparison_sample + "'", (err, suggested) => {
+                                            console.log(err, suggested);
+                                            console.log(haveFavs);
+                                            res.render('pages/index', {
+                                                userLoggedIn: userLoggedIn,
+                                                favorites: favorites.rows,
+                                                suggested: suggested.rows,
+                                                haveFavs: haveFavs,
+                                                haveSugs: haveSugs,
+                                                creationSuccess: creationSuccess,
+                                                userNotRegistered: userNotRegistered
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         } else {
