@@ -1,0 +1,48 @@
+<div id="favouritesContainer" style="float; left; overflow: auto; padding-bottom: 20px; margin-top:20px; width: 70%; height: auto; margin-left: auto; margin-right: auto; border: 0.5px solid silver; padding-left: 30px; padding-right: 30px; border-radius: 8px;">
+  <div id="TitleContainer" style="margin-top: 20px;">
+    <h1 class="text-center">Favourites</h1>
+    <hr style="height: 0.5px"></hr>
+  </div>
+
+  <% if (haveFavs) { %>
+
+  <div class="favItem" style="display: inline-block;">
+    <form action='/result' method="get">
+      <% favorites.forEach(function (result_favs) { %>
+
+      <button type="submit" name="sampleSelection" class="list-group-item list-group-item-action list-group-item-light"
+        style="color: #0a0a0a; float: left; width 60%;" onclick="window.location.href='/result'" value="<%= result_favs.sample_id %>">
+        Sample: <%= result_favs.sample_id %>,
+        Sequence Type: <%= result_favs.st %>,
+        Location: <%= result_favs.country %>,
+        Strain: <%= result_favs.strain %>,
+        Host: <%= result_favs.host %>,
+        Isolation Source: <%= result_favs.isolation_source %>
+        <% }) %>
+
+      </button>
+    </form>
+  </div>
+    <!-- 
+    <div class="removeSampleBtn" style="display: inline-block;">
+    <% favorites.forEach(function (result_favs) { %>
+
+
+    <form method="POST">
+      
+      <button type="submit" class="btn btn-outline-dark btn-sm" style="margin-left: 2px; margin-right: 2px; color: #468e94;" name="<%= result_favs.sample_id %>">
+        <i class="fas fa-times" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
+       
+      </button>
+      <% }) %>
+    </form>
+    </div>
+    -->
+
+    <% } else { %>
+
+    <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a" disabled="">
+      No favorites found.
+    </button>
+    <% } %>
+</div>

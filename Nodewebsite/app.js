@@ -14,8 +14,8 @@ app.use(session({ secret: "Shh, its a secret!" }));
 //postgreSQL
 const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -589,6 +589,56 @@ app.get('/tutorials', function (req, res) {
 });
 
 
+
+// favourites page
+
+app.get('/favourites', function (req, res) {
+    if (req.session.userStatus == "loggedIn") {
+        userLoggedIn = true;
+
+    } else {
+        userLoggedIn = false;
+    }
+
+    // Initial values
+    let favorites = [];
+    let hasFavs = false;
+
+    if (req.session.userStatus == "loggedIn") {
+        userLoggedIn = true;
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        client.query("SELECT * FROM user_favorites WHERE email='" + email + "'", (err, fav_results) => {
+            console.log(err, fav_results);
+            if (fav_results.rows.length > 0) {
+                haveFavs = true;
+                haveSugs = true;
+                let selectSQL = "";
+                selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                    "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+                    "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                    "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                    "WHERE";
+
+                for (let i = 0; i < fav_results.rows.length; i++) {
+                    if (i == 0) {
+                        selectSQL += " sample_id = " + fav_results.rows[i].sample_id + "";
+                    }
+                    selectSQL += " OR sample_id = " + fav_results.rows[i].sample_id + "";
+                }
+                console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SELECT SQL " + selectSQL + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+                client.query(selectSQL + ");", (err, favorites) => {
+                    console.log(err, favorites);
+                    console.log(haveFavs);
+                    res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites.rows, haveFavs: haveFavs });
+                });
+            }
+        });
+
+    }
+});
 
 
 /*
