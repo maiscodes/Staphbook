@@ -36,6 +36,7 @@
                     let option = document.getElementById("index_options").value;
                     if(option == "Sequence" || option == "Sample"){
                         document.getElementById("index_input").type = 'number';
+                        document.getElementById("index_input").max = '10000';
                     } else {
                         document.getElementById("index_input").type = 'text';
                     }
