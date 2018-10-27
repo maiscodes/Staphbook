@@ -17,74 +17,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="2" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
+            <state relative-caret-position="391">
+              <caret line="299" column="59" selection-start-line="299" selection-start-column="44" selection-end-line="299" selection-end-column="59" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resultContent.ejs" pinned="false" current-in-tab="false">
+      <file leaf-file-name="resultContent.ejs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4726">
-              <caret line="327" column="43" lean-forward="true" selection-start-line="327" selection-start-column="43" selection-end-line="327" selection-end-column="43" />
+            <state relative-caret-position="374">
+              <caret line="61" column="106" lean-forward="true" selection-start-line="61" selection-start-column="106" selection-end-line="61" selection-end-column="106" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="homePageLoggedIn.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/snippets/homePageLoggedIn.ejs">
+      <file leaf-file-name="saveCsvScript.ejs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/snippets/saveCsvScript.ejs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="952">
-              <caret line="56" column="15" selection-start-line="56" selection-start-column="15" selection-end-line="56" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="homePageContent.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/sections/homePageContent.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="71" column="98" lean-forward="true" selection-start-line="71" selection-start-column="98" selection-end-line="71" selection-end-column="98" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="searchResultsList.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" selection-start-line="7" selection-end-line="20" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tutorials.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/pages/tutorials.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="15" selection-start-column="15" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tutorialsContent.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/sections/tutorialsContent.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="47" column="12" selection-start-line="47" selection-start-column="12" selection-end-line="47" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="header.ejs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="17">
+              <caret line="1" column="25" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -130,19 +85,21 @@
         <option value="$PROJECT_DIR$/views/sections/head.ejs" />
         <option value="$PROJECT_DIR$/views/pages/result.ejs" />
         <option value="$PROJECT_DIR$/views/pages/index.ejs" />
-        <option value="$PROJECT_DIR$/views/snippets/resultMetadata.ejs" />
         <option value="$PROJECT_DIR$/views/sections/searchResultsList.ejs" />
         <option value="$PROJECT_DIR$/views/pages/advSearchResults.ejs" />
-        <option value="$PROJECT_DIR$/views/sections/advancedSearchForm.ejs" />
         <option value="$PROJECT_DIR$/views/sections/advSearchResultsList.ejs" />
         <option value="$PROJECT_DIR$/views/snippets/resultSccmecPrimers.ejs" />
         <option value="$PROJECT_DIR$/views/snippets/resultSequence.ejs" />
         <option value="$PROJECT_DIR$/views/snippets/resultAssembly.ejs" />
-        <option value="$PROJECT_DIR$/views/sections/resultContent.ejs" />
         <option value="$PROJECT_DIR$/views/snippets/homePageLoggedIn.ejs" />
         <option value="$PROJECT_DIR$/views/sections/header.ejs" />
         <option value="$PROJECT_DIR$/views/sections/homePageContent.ejs" />
+        <option value="$PROJECT_DIR$/views/sections/advancedSearchForm.ejs" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/views/snippets/resultMetadata.ejs" />
+        <option value="$PROJECT_DIR$/views/snippets/resultSccmecSubtypes.ejs" />
+        <option value="$PROJECT_DIR$/views/snippets/saveCsvScript.ejs" />
+        <option value="$PROJECT_DIR$/views/sections/resultContent.ejs" />
       </list>
     </option>
   </component>
@@ -162,7 +119,7 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="800" />
     <option name="height" value="860" />
   </component>
@@ -182,18 +139,7 @@
             <path>
               <item name="Nodewebsite" type="b2602c69:ProjectViewProjectNode" />
               <item name="Nodewebsite" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Nodewebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Nodewebsite" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Nodewebsite" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Nodewebsite" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Nodewebsite" type="b2602c69:ProjectViewProjectNode" />
@@ -279,13 +225,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="126857000" />
+    <option name="totallyTimeSpent" value="136452000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.159375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.159375" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.3298292" />
@@ -318,29 +264,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="47" selection-start-line="33" selection-start-column="47" selection-end-line="33" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="126" column="28" lean-forward="true" selection-start-line="126" selection-start-column="28" selection-end-line="126" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ResultsPage.html" />
-    <entry file="file://$PROJECT_DIR$/templates/SignUpPage.html" />
     <entry file="file://$PROJECT_DIR$/views/pages/result.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -477,13 +400,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/head.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/pages/result.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -505,13 +421,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/advancedSearchForm.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="54" lean-forward="true" selection-start-line="12" selection-start-column="54" selection-end-line="12" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/pages/advSearchResults.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -523,41 +432,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/snippets/resultMetadata.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="30" lean-forward="true" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/snippets/resultSequence.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="23" lean-forward="true" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/snippets/resultSccmecPrimers.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/snippets/resultAssembly.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="72" column="58" selection-start-line="72" selection-start-column="58" selection-end-line="72" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" selection-start-line="7" selection-end-line="20" selection-end-column="15" />
         </state>
       </provider>
     </entry>
@@ -575,31 +449,116 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
+    <entry file="file://$PROJECT_DIR$/views/sections/advancedSearchForm.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="-239">
+          <caret line="16" column="44" lean-forward="true" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/pages/tutorials.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/pages/downloadSampleData.ejs">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/searchResultsList.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="6" lean-forward="true" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/sections/homePageContent.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="71" column="98" lean-forward="true" selection-start-line="71" selection-start-column="98" selection-end-line="71" selection-end-column="98" />
+        <state relative-caret-position="119">
+          <caret line="7" column="124" selection-start-line="7" selection-start-column="124" selection-end-line="7" selection-end-column="124" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#form#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#1;n#input#0;n#form#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultSequence.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4726">
-          <caret line="327" column="43" lean-forward="true" selection-start-line="327" selection-start-column="43" selection-end-line="327" selection-end-column="43" />
+        <state relative-caret-position="458">
+          <caret line="41" selection-start-line="41" selection-end-line="46" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultMetadata.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="216" column="61" selection-start-line="216" selection-start-column="50" selection-end-line="216" selection-end-column="61" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="299" column="59" selection-start-line="299" selection-start-column="44" selection-end-line="299" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultAssembly.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="58" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultSccmecPrimers.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="25" lean-forward="true" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultSccmecSubtypes.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/resultSccmecProteins.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="22" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/header.ejs">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="17" column="2" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
+          <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/head.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/snippets/saveCsvScript.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="25" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/sections/resultContent.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="61" column="106" lean-forward="true" selection-start-line="61" selection-start-column="106" selection-end-line="61" selection-end-column="106" />
         </state>
       </provider>
     </entry>

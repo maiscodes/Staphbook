@@ -57,7 +57,12 @@
     <hr style="width: 55%">
 
     </hr>
-    <h3 style="text-align: center"> Sample Information </h3>
+    <h3 style="text-align: center"> Sample Information
+        <button type="button" id="downloadSampleInfo" onclick="downloadInfo()" title="Download Sample Information" class="btn btn-outline-dark btn-sm">
+            <i class="fas fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+        </button>
+    </h3>
+
   </div>
 
   <div id="resultsPageTableComponent">
@@ -532,5 +537,6 @@
 		  cy.reset(); 
 	  }
     </script>
+    <% include ../snippets/saveCsvScript %>
 
 </div>
