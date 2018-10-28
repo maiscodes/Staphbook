@@ -1,0 +1,307 @@
+<!-- Result Page Scripts -->
+<script>
+    //sampleTab buttons functionality
+    function resultsTabs(evt, tabName) {
+
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+
+
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    <!-- cytoscape div -->
+
+    var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
+    console.log(sampleIdentity);
+    var cy = cytoscape({
+        container: document.getElementById('cy'),
+        elements: [
+            // nodes
+            { data: { id: sampleIdentity }, style: {'background-color': 'grey'} }
+        ],
+        style: [{
+            selector: 'node', style: {'background-color': '#468e94', label: 'data(id)'},
+        }, {
+            selector: 'edge', style: {'curve-style': 'bezier', 'control-point-step-size': 10}
+        }
+        ],
+    });
+    let collection = cy.collection();
+    let same_sq = <%- JSON.stringify(same_sequences) %>;
+    let same_loc = <%- JSON.stringify(same_locations) %>;
+    let same_ho = <%- JSON.stringify(same_hosts) %>;
+    let same_iso = <%- JSON.stringify(same_isolations) %>;
+    let weighted_dist = <%- JSON.stringify(weighted_distance) %>;
+    same_sq.forEach(function(same_sequence) {
+        let same_sequence_sample_id = same_sequence.sample_id;
+        if (same_sequence_sample_id != sampleIdentity){
+            weighted_dist.forEach(function (weighted_distance_list) {
+                if (weighted_distance_list.comparison_sample == same_sequence.name) {
+                    cy.add({
+                        data: {
+                            id: same_sequence_sample_id,
+                            seq: same_sequence.st,
+                            loc: same_sequence.country,
+                            strain: same_sequence.strain,
+                            host: same_sequence.host,
+                            iso: same_sequence.isolation_source,
+                            dist: weighted_distance_list.distance
+                        }
+                    });
+                }
+            });
+            collection = collection.add(cy.$id(same_sequence_sample_id));
+            var source = same_sequence_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'green'}
+            });
+            collection = collection.add(cy.$id('edge' + same_sequence_sample_id));
+        }
+    });
+    same_loc.forEach(function(same_location) {
+        let same_location_sample_id = same_location.sample_id;
+        if (same_location_sample_id != sampleIdentity){
+            if(cy.$id(same_location_sample_id).empty()){
+                weighted_dist.forEach(function (weighted_distance_list) {
+                    if (weighted_distance_list.comparison_sample == same_location.name) {
+                        cy.add({
+                            data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
+                                host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance}
+                        });
+                        collection = collection.add(cy.$id(same_location_sample_id));
+                    }
+                });
+            }
+            var source = same_location_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge2' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'red'}
+            });
+            collection = collection.add(cy.$id('edge2' + same_location_sample_id));
+        }
+    });
+    same_ho.forEach(function(same_host) {
+        let same_host_sample_id = same_host.sample_id;
+        if (same_host_sample_id != sampleIdentity){
+            if(cy.$id(same_host_sample_id).empty()){
+                weighted_dist.forEach(function (weighted_distance_list) {
+                    if (weighted_distance_list.comparison_sample == same_host.name) {
+                        cy.add({
+                            data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
+                                host: same_host.host, iso: same_host.isolation_source, dist: weighted_distance_list.distance}
+                        });
+                        collection = collection.add(cy.$id(same_host_sample_id));
+                    }
+                });
+            }
+            var source = same_host_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge3' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'blue'}
+            });
+            collection = collection.add(cy.$id('edge3' + same_host_sample_id));
+        }
+    });
+    same_iso.forEach(function(same_isolation) {
+        let same_iso_sample_id = same_isolation.sample_id;
+        if (same_iso_sample_id != sampleIdentity){
+            if(cy.$id(same_iso_sample_id).empty()){
+                weighted_dist.forEach(function (weighted_distance_list) {
+                    if (weighted_distance_list.comparison_sample == same_isolation.name) {
+                        cy.add({
+                            data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
+                                host: same_isolation.host, iso: same_isolation.isolation_source, dist: weighted_distance_list.distance}
+                        });
+                        collection = collection.add(cy.$id(same_iso_sample_id));
+                    }
+                });
+            }
+            var source = same_iso_sample_id;
+            cy.add({
+                data: {
+                    id: 'edge4' + source,
+                    source: source,
+                    target: (sampleIdentity),
+                },
+                style: {'line-color': 'orange'}
+            });
+            collection = collection.add(cy.$id('edge4' + same_iso_sample_id));
+        }
+    });
+    collection.forEach(function(ele, i ,eles) {
+        if(ele.isNode()){
+            let e = ele.connectedEdges();
+            if(e.length < 2){
+                ele.remove();
+            }
+            if (ele.data('dist') > 0.015){
+                ele.remove();
+            }
+            ele.on('click', function(evt){
+                let id = this.id();
+                function get_sample(){
+                    let form = document.createElement("form");
+                    let element = document.createElement("input");
+                    form.action = '/result';
+                    form.method = "get";
+                    element.name ="sampleSelection";
+                    element.value= id;
+                    form.appendChild(element);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                popupS.confirm({
+                    content: '<b>Sample: </b>' + id +'<br><b>Sequence Type: </b>' + ele.data('seq') +'<br><b>Location: </b>' + ele.data('loc') +
+                    '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso') +
+                    '<br><b>Weighted Distance: </b>' + ele.data('dist'),
+                    labelOk: 'View',
+                    labelCancel: 'Cancel',
+                    additionalButtonCancelClass: 'popUpButtonCSS',
+                    additionalButtonOkClass: 'popUpButtonCSS',
+                    onSubmit: function() {
+                        get_sample();
+                    }
+                });
+            });
+
+        }
+    });
+
+    cy.layout({
+        name: 'cola'
+    }).run()
+
+    let oldnum = 2;
+
+    function changeDist(){
+        let num = document.getElementById("myRange1").value;
+        let changed_dist = document.getElementById("myRange2").value;
+        let dist = changed_dist/10000;
+        collection.restore();
+        collection.forEach(function(ele, i ,eles) {
+            if(ele.isNode()) {
+                let e = ele.connectedEdges();
+                if (e.length < num) {
+                    ele.remove();
+                }
+                if (ele.data('dist') > dist){
+                    ele.remove();
+                }
+            }
+        });
+        oldnum = num;
+        document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = "+ num;
+        document.getElementById("weighteddist2num").innerHTML = "Maximum Weighted Distance = "+ dist;
+        cy.layout({
+            name: 'cola'
+        }).run()
+    }
+
+
+    // SCRIPTS FOR CYTOSCAPE GRAPH BUTTONS
+
+
+    <!-- Global variables for cytoscape graph buttons -->
+    var zoomAmount = 1;
+    var newZoom;
+
+
+    <!-- zoomInGraph functionality-->
+    function zoomInGraph() {
+        console.log("ZOOM IN - "+zoomAmount);
+        zoomAmount = zoomAmount + 0.25;
+        newZoom = zoomAmount;
+        console.log("IN - "+newZoom);
+
+        cy.zoom({level: newZoom});
+
+    }
+
+    <!-- zoomOutGraph functionality-->
+    function zoomOutGraph() {
+        console.log("ZOOM OUT - "+zoomAmount);
+
+        zoomAmount = zoomAmount - 0.25;
+        newZoom = zoomAmount;
+        console.log("OUT - "+newZoom);
+
+        cy.zoom({level: newZoom});
+
+    }
+
+    <!-- downloadGraph functionality-->
+    function downloadGraph() {
+        console.log("download graph");
+
+        // var title = document.createElement("P");
+        // var t = document.createTextNode("Save image (right click to save)");
+        //title.appendChild(t);
+        //document.getElementById("imageTitleDiv").appendChild(title);
+
+
+        //document.getElementById("saveableGraphImage").style.visibility="visible";
+        //document.getElementById("saveableGraphImage").style.width="100%";
+
+        var png64 = cy.png();
+        saveAs(png64, "StaphBook-Graph.png");
+
+        //document.getElementById("saveableGraphImage").src="" + png64;
+
+    }
+
+    <!-- expandGraph functionality-->
+    function expandGraph() {
+        var windowHeight = window.innerHeight;
+        var graphHeight = windowHeight - 175;
+
+        document.getElementById("resultsPageGraphComponent3").style.height= graphHeight + "px";
+
+        <!-- specifically modify cytoscape graph -->
+        document.getElementById("cy").style.height= graphHeight + "px";
+
+        centerGraph();
+
+    }
+
+    <!-- center graph functionality-->
+    function centerGraph() {
+        zoomAmount = 1;
+        newZoom = 1;
+
+        cy.center();
+        cy.reset();
+
+    }
+    <!-- minimize graph functionality -->
+    function minimizeGraph() {
+        document.getElementById("resultsPageGraphComponent3").style.height= 400 + "px";
+
+        <!-- specifically modify cytoscape graph -->
+        document.getElementById("cy").style.height= 400 + "px";
+
+        cy.center();
+        cy.reset();
+    }
+</script>
