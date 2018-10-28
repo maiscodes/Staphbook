@@ -18,48 +18,49 @@
 .resultsPageBottomComponent {
     clear: both;
 }
+
 #footer {
-	height: 65px; 
-	background-color: #f1f1f1; 
-	border-top: 0.5px solid silver;
-	width: 100%;
-	left: 0px;
-	bottom: 0px;
+    height: 65px;
+    background-color: #f1f1f1;
+    border-top: 0.5px solid silver;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
 }
 
 #footerTextDiv {
-	color: #303030; 
-	height: 60px; 
-	text-align: center;
-	vertical-align: middle;
-	line-height: 60px;
+    color: #303030;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 60px;
 }
 
 #footerText {
-	height: 55px;
-	margin: 0;
+    height: 55px;
+    margin: 0;
 }
 
 #cy {
-	width: 95%;
+    width: 95%;
     height: 100%;
-	margin: 0 auto;
-	border: 0.5px solid silver;
-	font-size: 10px;
+    margin: 0 auto;
+    border: 0.5px solid silver;
+    font-size: 10px;
 }
 
 hr.divider {
     margin-top: 4px;
     margin-bottom: 4px;
-    margin-left: 5%; 
-    margin-right: 5%; 
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
 
 #resultsPageGraphComponents {
     width: 90%;
     height: 400px;
-	margin: 0 auto;
+    margin: 0 auto;
 }
 
 
@@ -67,9 +68,9 @@ hr.divider {
     float: left;
     width: 100%;
     border-top: 0.5px solid silver;
-	border-left: 0.5px solid silver;
+    border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
-	border-bottom: 0.5px solid silver;
+    border-bottom: 0.5px solid silver;
     height: 53px;
     background-color: #f1f1f1;
 }
@@ -79,7 +80,7 @@ hr.divider {
     float: left;
     width: 100%;
     height: auto;
-	border-left: 0.5px solid silver;
+    border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
 }
 
@@ -87,58 +88,57 @@ hr.divider {
     float: left;
     width: 100%;
     height: 400px;
-	border-left: 0.5px solid silver;
+    border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
 }
 
 #resultsPageGraphComponent4 {
-	float: left;
+    float: left;
     width: 100%;
     padding-bottom: 10px;
     padding-top: 10px;
-	margin: auto;
-	border-left: 0.5px solid silver;
+    margin: auto;
+    border-left: 0.5px solid silver;
     border-right: 0.5px solid silver;
-	border-bottom: 0.5px solid silver;
-	
+    border-bottom: 0.5px solid silver;
 }
 
 .weightedDistanceSliders {
     padding-left: 4px;
     padding-right: 4px;
     width: 50%;
-	margin: auto;
-	float: left; 
+    margin: auto;
+    float: left;
 }
 
 
 #resultsPageTableComponent {
     width: 90%;
     height: auto;
-	margin: 0 auto;
-	padding-bottom: 20px;
-	border: 0;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    border: 0;
 }
 
 #displayDescription {
     text-align: center;
     padding-top: 17px;
     padding-bottom: 10px;
-	border-bottom: 0.5 solid silver;
+    border-bottom: 0.5 solid silver;
 }
 
 #interactiveGraph {
     text-align: center;
     margin-top: 17px;
-	padding-bottom: 15px;
+    padding-bottom: 15px;
 }
 
 .summaryInfo {
     width: 65%;
-	text-align: left; 
-	margin-left: 35%;
-	max-width: 30%;
-	word-wrap: break-word;
+    text-align: left;
+    margin-left: 35%;
+    max-width: 30%;
+    word-wrap: break-word;
 }
 
 .Genes {
@@ -148,13 +148,13 @@ hr.divider {
 /* Style the tab */
 .tab {
     overflow: hidden;
-	background-color: #f1f1f1;    
-	border: 0.5px solid silver;
-	padding-top: 0.5px;
-	padding-bottom: 0.5px;
-	padding-left: 0.5px;
-	padding-right: 0.5px;
-	height: 53px;
+    background-color: #f1f1f1;
+    border: 0.5px solid silver;
+    padding-top: 0.5px;
+    padding-bottom: 0.5px;
+    padding-left: 0.5px;
+    padding-right: 0.5px;
+    height: 53px;
 }
 
     /* Style the buttons that are used to open the tab content */
@@ -187,30 +187,29 @@ hr.divider {
 }
 
 #Metadata {
-	overflow: scroll;	
-	height: 400px;
+    overflow: scroll;
+    height: 400px;
 }
 
 #Assembly {
-	overflow: scroll;	
-	height: 400px;
-
+    overflow: scroll;
+    height: 400px;
 }
 
 #Sccmec_Primers {
-	overflow: scroll;	
-	height: 400px;
+    overflow: scroll;
+    height: 400px;
 }
 
 #Sccmec_Subtypes {
-	overflow: scroll;	
-	height: 400px;
+    overflow: scroll;
+    height: 400px;
 }
 
 
 #Sccmec_Proteins {
-	overflow: scroll;	
-	height: 400px;
+    overflow: scroll;
+    height: 400px;
 }
 
 
@@ -219,24 +218,24 @@ button.tablinks {
 }
 
 .adjustedTable {
-	width: 100%;
+    width: 100%;
 }
 
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-	white-space: normal;
-	word-wrap: break-word;
-	max-width: 250px;
-	font-size: 14px;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 250px;
+    font-size: 14px;
 }
 
 #saveableGraphImage {
-	border: 0.5px solid silver; 
-	min-width: 3em; 
-	min-height: 3em; 
-	visibility: hidden;
+    border: 0.5px solid silver;
+    min-width: 3em;
+    min-height: 3em;
+    visibility: hidden;
 }
 
 #geneID {
@@ -313,34 +312,34 @@ a {
     height: 48px;
 }
 
-.homeResultItemIcon:hover {
-    background-color: #f1f1f1;
-}
+    .homeResultItemIcon:hover {
+        background-color: #f1f1f1;
+    }
 
 #cyLegendText {
-	font-size: 14px; 
-	display: inline-block;
-	margin-left: 3px;
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 3px;
 }
 
-#cyLegendTitle{
-	font-size: 14px; 
-	display: inline-block;
-	margin-right: 10px;
+#cyLegendTitle {
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 #cyLegendDivider {
-	font-size: 14px; 
-	display: inline-block;
-	margin-right: 10px;
+    font-size: 14px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .legendColorSquare {
-	height: 10px; 
-	width: 10px;
-	display: inline-block; 
-	margin-left: auto;
-	margin-right: auto;
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tutorialCard {
@@ -353,32 +352,32 @@ a {
 }
 
 #cyLegend {
-	width: 590px; 
-	margin-left: auto;
-	margin-right: auto;
+    width: 590px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cyLegendSpacer {
-	display: inline-block;
-	width: 10px;
+    display: inline-block;
+    width: 10px;
 }
 
 .popupS-button-ok.popUpButtonCSS {
     border: 0.5px solid silver;
     border-radius: 5px;
     height: 30px;
-	background-color: #f1f1f1;
-	width:50%;
-	margin-top: 5px;
+    background-color: #f1f1f1;
+    width: 50%;
+    margin-top: 5px;
 }
 
 .popupS-button-cancel.popUpButtonCSS {
     border: 0.5px solid silver;
     border-radius: 5px;
     height: 30px;
-	background-color: #f1f1f1;
-	width:50%;
-	margin-top: 5px;
+    background-color: #f1f1f1;
+    width: 50%;
+    margin-top: 5px;
 }
 
 
@@ -392,18 +391,23 @@ a {
     padding: 8px 12px;
     width: 396px;
 }
+
 .typeahead {
     background-color: #FFFFFF;
 }
-.typeahead:focus {
-    border: 2px solid #0097CF;
-}
+
+    .typeahead:focus {
+        border: 2px solid #0097CF;
+    }
+
 .tt-query {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
+
 .tt-hint {
     color: #999999;
 }
+
 .tt-dropdown-menu {
     background-color: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -413,19 +417,22 @@ a {
     padding: 8px 0;
     width: 396px;
 }
+
 .tt-suggestion {
     font-size: 16px;
     line-height: 16px;
     padding: 3px 20px;
 }
-.tt-suggestion.tt-is-under-cursor {
-    background-color: #0097CF;
-    color: #FFFFFF;
-}
-.tt-suggestion p {
-    margin: 0;
-}
- 
+
+    .tt-suggestion.tt-is-under-cursor {
+        background-color: #0097CF;
+        color: #FFFFFF;
+    }
+
+    .tt-suggestion p {
+        margin: 0;
+    }
+
 #favouritesContainer {
     overflow: auto;
     padding-bottom: 20px;
@@ -438,4 +445,9 @@ a {
     padding-left: 30px;
     padding-right: 30px;
     border-radius: 8px;
+}
+
+#favTable {
+    table-layout: auto;
+    width: 100%;
 }
