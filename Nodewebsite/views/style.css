@@ -425,3 +425,17 @@ a {
 .tt-suggestion p {
     margin: 0;
 }
+ 
+#favouritesContainer {
+    overflow: auto;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    width: 70%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.5px solid silver;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 8px;
+}

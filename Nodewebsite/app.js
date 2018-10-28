@@ -1,21 +1,23 @@
-// load the things we need
+// Require modules 
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 const session = require('express-session');
-//cookie parser
-//const cookieParser = require('cookie-parser');
-//app.use(cookieParser('xoxoGossipGirl'));
 
+// Change secret to unique value
 app.use(session({ secret: "Shh, its a secret!" }));
-
 
 //postgreSQL
 const { Pool, Client } = require('pg');
+// Change secret to your login details for postgres
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+
+// Sandra's connection
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+
+// Andrew's connection 
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -51,15 +53,20 @@ app.use(express.static(__dirname + '/views/'));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// global variable, will need to pop into get and post routes later
+// global variable, will need to pop into get and post routes later when published 
 var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
 var favSampleID;
 
-/*
-** GET routes
-*/
+
+
+/* --------------------------------------------------------------------------------
+ *
+ * GET routes 
+ * 
+ */
+
 
 // index page
 app.get('/', function (req, res) {
@@ -156,7 +163,9 @@ app.get('/advancedSearch', function (req, res) {
     res.render('pages/advancedSearch', { userLoggedIn: userLoggedIn });
 });
 
-// account creation page page
+/* 
+ * User account creation page, renders page's html
+ */
 app.get('/createAccount', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
@@ -590,8 +599,10 @@ app.get('/tutorials', function (req, res) {
 
 
 
-// favourites page
-
+/* favourites page 
+ * 
+ * Searches through the db based on user's email and finds associated favourited genome samples
+ */
 app.get('/favourites', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
@@ -641,11 +652,18 @@ app.get('/favourites', function (req, res) {
 });
 
 
-/*
-** POST routes
-*/
+/* --------------------------------------------------------------------------------
+ *
+ * POST routes 
+ * 
+ */
 
-// account creation page page
+
+/* User account creation page
+ * 
+ * Checks if user tries to submit an email already in the database and sends an alert to the HTML scripts if found
+ * Otherwise, adds user account details to db and hashes password 
+ */
 app.post('/createAccount', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
@@ -694,7 +712,16 @@ app.post('/createAccount', function (req, res) {
 
 
 
- // login page
+ /* Login page
+  * 
+  * Check if user exists based on submitted username and email, if found, sets sessions for email and 
+  * logged in status. Also sets cookies which potentially could be removed considering session is set 
+  * for logged in status. Db is then checked against users email for any favourited samples, if found,
+  * four samples are retrieved and recommended samples are then found from the database also, to 
+  * display on the landing/index page.
+  * 
+  * If user not found, alert is sent on HTML
+  */
 app.post('/login', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
@@ -706,9 +733,6 @@ app.post('/login', function (req, res) {
     let suggested=[];
     let haveFavs = false;
     let haveSugs = false;
-    console.log('post login');
-    console.log("email, ", req.body.email);
-    console.log("password, ", req.body.password);
 
     client.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
         console.log(err, result_registered_users);
@@ -722,7 +746,6 @@ app.post('/login', function (req, res) {
                 //if password matched DB password
                 if (result) {
                     //setting the 'set-cookie' header
-
                     res.cookie('setCookie', req.body.email, {
                         httpOnly: true
                     });
@@ -811,7 +834,12 @@ app.post('/login', function (req, res) {
 
 
 
-// result page
+/* Results page
+ * 
+ * Updates the favourites db for the current user based on the user's email and also updates
+ * the isFavourited value (0 = false, 1 = true) which is sent through to the HTML scripts
+ * Then queries the db for the genome sample details to display in results table and cytoscape scripts
+ */
 app.post('/result', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
         userLoggedIn = true;
@@ -986,6 +1014,11 @@ app.post('/result', function (req, res) {
         });
     });
 });
+
+
+/*
+ * --------------------------------------------------------------------------------
+ */
 
 
 app.listen(8000);
