@@ -1,6 +1,8 @@
 <!-- Result Page Scripts -->
 <script>
-    //sampleTab buttons functionality
+
+    // SampleTab buttons functionality
+    // Changes table content based on the user selection
     function resultsTabs(evt, tabName) {
 
         var i, tabcontent, tablinks;
@@ -19,9 +21,9 @@
     }
 
     <!-- cytoscape div -->
-
+    // Set up the cytoscape functionality
     var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
-    console.log(sampleIdentity);
+
     var cy = cytoscape({
         container: document.getElementById('cy'),
         elements: [
@@ -35,17 +37,27 @@
         }
         ],
     });
+
+    // Create an empty collection for all the cytoscape elements to be iterated over
     let collection = cy.collection();
+
+    // Convert data from backend to a form that javascript can use
     let same_sq = <%- JSON.stringify(same_sequences) %>;
     let same_loc = <%- JSON.stringify(same_locations) %>;
     let same_ho = <%- JSON.stringify(same_hosts) %>;
     let same_iso = <%- JSON.stringify(same_isolations) %>;
     let weighted_dist = <%- JSON.stringify(weighted_distance) %>;
+
+    // Add nodes for samples with the same sequence type and connect them
+    // Iterate through the SQL results
     same_sq.forEach(function(same_sequence) {
         let same_sequence_sample_id = same_sequence.sample_id;
         if (same_sequence_sample_id != sampleIdentity){
+
             weighted_dist.forEach(function (weighted_distance_list) {
                 if (weighted_distance_list.comparison_sample == same_sequence.name) {
+
+                    // Create nodes and assign each node summary information
                     cy.add({
                         data: {
                             id: same_sequence_sample_id,
@@ -59,8 +71,12 @@
                     });
                 }
             });
+
+            // Add nodes to the collection
             collection = collection.add(cy.$id(same_sequence_sample_id));
             var source = same_sequence_sample_id;
+
+            // Create edges between nodes
             cy.add({
                 data: {
                     id: 'edge' + source,
@@ -69,24 +85,33 @@
                 },
                 style: {'line-color': 'green'}
             });
+            // Add edges to the connections
             collection = collection.add(cy.$id('edge' + same_sequence_sample_id));
         }
     });
+
+    // Add nodes for samples with the same location and connect them
+    // Iterate through the SQL results
     same_loc.forEach(function(same_location) {
         let same_location_sample_id = same_location.sample_id;
         if (same_location_sample_id != sampleIdentity){
             if(cy.$id(same_location_sample_id).empty()){
                 weighted_dist.forEach(function (weighted_distance_list) {
                     if (weighted_distance_list.comparison_sample == same_location.name) {
+
+                        // Create nodes and assign each node summary information
                         cy.add({
                             data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
                                 host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance}
                         });
+                        // Add nodes to the collection
                         collection = collection.add(cy.$id(same_location_sample_id));
                     }
                 });
             }
             var source = same_location_sample_id;
+
+            // Create edges between nodes
             cy.add({
                 data: {
                     id: 'edge2' + source,
@@ -95,24 +120,33 @@
                 },
                 style: {'line-color': 'red'}
             });
+            // Add edges to the connections
             collection = collection.add(cy.$id('edge2' + same_location_sample_id));
         }
     });
+
+    // Add nodes for samples with the same host and connect them
+    // Iterate through the SQL results
     same_ho.forEach(function(same_host) {
         let same_host_sample_id = same_host.sample_id;
         if (same_host_sample_id != sampleIdentity){
             if(cy.$id(same_host_sample_id).empty()){
                 weighted_dist.forEach(function (weighted_distance_list) {
                     if (weighted_distance_list.comparison_sample == same_host.name) {
+
+                        // Create nodes and assign each node summary information
                         cy.add({
                             data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
                                 host: same_host.host, iso: same_host.isolation_source, dist: weighted_distance_list.distance}
                         });
+                        // Add nodes to the collection
                         collection = collection.add(cy.$id(same_host_sample_id));
                     }
                 });
             }
             var source = same_host_sample_id;
+
+            // Create edges between nodes
             cy.add({
                 data: {
                     id: 'edge3' + source,
@@ -121,24 +155,33 @@
                 },
                 style: {'line-color': 'blue'}
             });
+            // Add edges to the connections
             collection = collection.add(cy.$id('edge3' + same_host_sample_id));
         }
     });
+
+    // Add nodes for samples with the same isolation source and connect them
+    // Iterate through the SQL results
     same_iso.forEach(function(same_isolation) {
         let same_iso_sample_id = same_isolation.sample_id;
         if (same_iso_sample_id != sampleIdentity){
             if(cy.$id(same_iso_sample_id).empty()){
                 weighted_dist.forEach(function (weighted_distance_list) {
                     if (weighted_distance_list.comparison_sample == same_isolation.name) {
+
+                        // Create nodes and assign each node summary information
                         cy.add({
                             data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
                                 host: same_isolation.host, iso: same_isolation.isolation_source, dist: weighted_distance_list.distance}
                         });
+                        // Add nodes to the collection
                         collection = collection.add(cy.$id(same_iso_sample_id));
                     }
                 });
             }
             var source = same_iso_sample_id;
+
+            // Create edges between nodes
             cy.add({
                 data: {
                     id: 'edge4' + source,
@@ -147,18 +190,27 @@
                 },
                 style: {'line-color': 'orange'}
             });
+            // Add edges to the connections
             collection = collection.add(cy.$id('edge4' + same_iso_sample_id));
         }
     });
+
+    // Set up the initial display for the user by limiting the minimum connections to 2 and maximum weighted distance to 0.015
+    // Go through all of the elements in the collection
     collection.forEach(function(ele, i ,eles) {
+        // Check if the element is a node
         if(ele.isNode()){
             let e = ele.connectedEdges();
+            // Check if the node has less than 2 connected edges and remove if true
             if(e.length < 2){
                 ele.remove();
             }
+            // Check if the node's sample has a weighted distance greater than 0.015 and remove if true
             if (ele.data('dist') > 0.015){
                 ele.remove();
             }
+
+            // Set up links for all nodes to their respective sample results page
             ele.on('click', function(evt){
                 let id = this.id();
                 function get_sample(){
@@ -172,6 +224,8 @@
                     document.body.appendChild(form);
                     form.submit();
                 }
+
+                // Set up popup boxes for each node
                 popupS.confirm({
                     content: '<b>Sample: </b>' + id +'<br><b>Sequence Type: </b>' + ele.data('seq') +'<br><b>Location: </b>' + ele.data('loc') +
                     '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso') +
@@ -189,12 +243,12 @@
         }
     });
 
+    // Run cola plugin to display the nodes in an aesthetic way and make it movey and groovy
     cy.layout({
         name: 'cola'
     }).run()
 
-    let oldnum = 2;
-
+    // Change the nodes based on the slider values defined by the user
     function changeDist(){
         let num = document.getElementById("myRange1").value;
         let changed_dist = document.getElementById("myRange2").value;
@@ -211,7 +265,7 @@
                 }
             }
         });
-        oldnum = num;
+        // Change display above sliders to display new value
         document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = "+ num;
         document.getElementById("weighteddist2num").innerHTML = "Maximum Weighted Distance = "+ dist;
         cy.layout({
