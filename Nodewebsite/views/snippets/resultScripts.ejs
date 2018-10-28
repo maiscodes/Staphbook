@@ -1,8 +1,11 @@
 <!-- Result Page Scripts -->
 <script>
 
-    // SampleTab buttons functionality
-    // Changes table content based on the user selection
+    /*
+     * Changes the sample information displayed based on the user selection
+     *
+     */
+
     function resultsTabs(evt, tabName) {
 
         var i, tabcontent, tablinks;
@@ -20,8 +23,16 @@
         evt.currentTarget.className += " active";
     }
 
-    <!-- cytoscape div -->
-    // Set up the cytoscape functionality
+    /*
+     * The cytoscape.js functionality
+     * Sets up the cytoscape element at the bottom of the sample information page
+     * and creates all the nodes and edges for the different related samples.
+     * Adds created nodes into a 'collection' that can be iterated over in future functions
+     * when changing the cytoscape elements displayed.
+     * Filters the nodes that are initially displayed by the default values of the sliders.
+     * Sets up the popups which will appear when the user clicks on one of the nodes.
+     *
+     */
     var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
 
     var cy = cytoscape({
@@ -248,6 +259,14 @@
         name: 'cola'
     }).run()
 
+
+    /*
+     * Updates the cytoscape element based on the values of the sliders when a user moves one.
+     * Iterates through the collection of elements and display the nodes which match the specification defined by the user and
+     * change the number displayed above the slider to accurately represent the nodes being shown.
+     *
+     */
+
     // Change the nodes based on the slider values defined by the user
     function changeDist(){
         let num = document.getElementById("myRange1").value;
@@ -274,8 +293,13 @@
     }
 
 
-    // SCRIPTS FOR CYTOSCAPE GRAPH BUTTONS
-
+    /*
+     * SCRIPTS FOR CYTOSCAPE GRAPH BUTTONS
+     * Functionality for zooming in and out of the cytoscape graph/element,
+     * downloading a picture of the graph, expand and minimise the graph, and
+     * for centering the nodes in the element
+     *
+     */
 
     <!-- Global variables for cytoscape graph buttons -->
     var zoomAmount = 1;
@@ -305,23 +329,16 @@
 
     }
 
-    <!-- downloadGraph functionality-->
+    /*
+     * Downloads an image of the current state of the cytoscape element
+     */
     function downloadGraph() {
         console.log("download graph");
 
-        // var title = document.createElement("P");
-        // var t = document.createTextNode("Save image (right click to save)");
-        //title.appendChild(t);
-        //document.getElementById("imageTitleDiv").appendChild(title);
-
-
-        //document.getElementById("saveableGraphImage").style.visibility="visible";
-        //document.getElementById("saveableGraphImage").style.width="100%";
 
         var png64 = cy.png();
         saveAs(png64, "StaphBook-Graph.png");
 
-        //document.getElementById("saveableGraphImage").src="" + png64;
 
     }
 
