@@ -14,10 +14,10 @@ const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
 
 // Sandra's connection
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
 
 // Andrew's connection 
-const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
+//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
     connectionString: connectionString,
@@ -636,14 +636,16 @@ app.get('/favourites', function (req, res) {
                     }
                     selectSQL += " OR sample_id = " + fav_results.rows[i].sample_id + "";
                 }
-                console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SELECT SQL " + selectSQL + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
                 client.query(selectSQL + ");", (err, favorites) => {
                     console.log(err, favorites);
                     console.log(haveFavs);
                     res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites.rows, haveFavs: haveFavs });
                 });
-            }
+			// no favourites found for current user
+            } else {
+				res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: 0, haveFavs: false });
+			}
         });
 
     }
@@ -1067,20 +1069,25 @@ app.post('/favourites', function (req, res) {
                             for (let i = 0; i < fav_results.rows.length; i++) {
                                 if (i == 0) {
                                     selectSQL += " sample_id = " + fav_results.rows[i].sample_id + "";
-                                }
-                                selectSQL += " OR sample_id = " + fav_results.rows[i].sample_id + "";
+                                } else {
+									selectSQL += " OR sample_id = " + fav_results.rows[i].sample_id + "";
+								}
                             }
-                            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SELECT SQL " + selectSQL + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
                             client.query(selectSQL + ");", (err, favorites) => {
                                 console.log(err, favorites);
                                 console.log(haveFavs);
-                                res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites.rows, haveFavs: haveFavs });
+                                res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites.rows, haveFavs: true });
                             });
-                        }
+						// no favourites found for current user
+                        } else {
+							res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: 0, haveFavs: false });
+						}
                     });
+					
 
                 }
+
             }
         });
 
