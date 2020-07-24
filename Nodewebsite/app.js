@@ -1,4 +1,4 @@
-// Require modules 
+// Require modules
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
@@ -16,10 +16,13 @@ const { Pool, Client } = require('pg');
 // Sandra's connection
 //const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
 
-// Sam's connection
-const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
+// Maisie's connection
+const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
 
-// Andrew's connection 
+// Sam's connection
+//const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
+
+// Andrew's connection
 //const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
 const pool = new Pool({
@@ -56,7 +59,7 @@ app.use(express.static(__dirname + '/views/'));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// global variable, will need to pop into get and post routes later when published 
+// global variable, will need to pop into get and post routes later when published
 var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
@@ -66,8 +69,8 @@ var favSampleID;
 
 /* --------------------------------------------------------------------------------
  *
- * GET routes 
- * 
+ * GET routes
+ *
  */
 
 
@@ -166,7 +169,7 @@ app.get('/advancedSearch', function (req, res) {
     res.render('pages/advancedSearch', { userLoggedIn: userLoggedIn });
 });
 
-/* 
+/*
  * User account creation page, renders page's html
  */
 app.get('/createAccount', function (req, res) {
@@ -177,7 +180,7 @@ app.get('/createAccount', function (req, res) {
         userLoggedIn = false;
     }
     userAlreadyExists = false;
-	
+
     res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
 });
 
@@ -208,7 +211,7 @@ app.get('/result', function (req, res) {
 
                 req.session.favourited = isFavourited;
 
-            } 
+            }
         });
     }
 
@@ -494,7 +497,7 @@ app.get('/advSearchResults', function (req, res) {
 app.get('/login', function (req, res) {
     var userNotRegistered = false;
     creationSuccess = false;
-   
+
 	if (req.session.userStatus == true) {
         userLoggedIn = true;
     } else {
@@ -600,8 +603,8 @@ app.get('/tutorials', function (req, res) {
 
 
 
-/* favourites page 
- * 
+/* favourites page
+ *
  * Searches through the db based on user's email and finds associated favourited genome samples
  */
 app.get('/favourites', function (req, res) {
@@ -657,15 +660,15 @@ app.get('/favourites', function (req, res) {
 
 /* --------------------------------------------------------------------------------
  *
- * POST routes 
- * 
+ * POST routes
+ *
  */
 
 
 /* User account creation page
- * 
+ *
  * Checks if user tries to submit an email already in the database and sends an alert to the HTML scripts if found
- * Otherwise, adds user account details to db and hashes password 
+ * Otherwise, adds user account details to db and hashes password
  */
 app.post('/createAccount', function (req, res) {
     if (req.session.userStatus == "loggedIn") {
@@ -674,7 +677,7 @@ app.post('/createAccount', function (req, res) {
     } else {
         userLoggedIn = false;
     }
-	
+
     var email = req.body.email;
 	var organisation = req.body.organisation;
     var occupation = req.body.occupation;
@@ -716,13 +719,13 @@ app.post('/createAccount', function (req, res) {
 
 
  /* Login page
-  * 
-  * Check if user exists based on submitted username and email, if found, sets sessions for email and 
-  * logged in status. Also sets cookies which potentially could be removed considering session is set 
+  *
+  * Check if user exists based on submitted username and email, if found, sets sessions for email and
+  * logged in status. Also sets cookies which potentially could be removed considering session is set
   * for logged in status. Db is then checked against users email for any favourited samples, if found,
-  * four samples are retrieved and recommended samples are then found from the database also, to 
+  * four samples are retrieved and recommended samples are then found from the database also, to
   * display on the landing/index page.
-  * 
+  *
   * If user not found, alert is sent on HTML
   */
 app.post('/login', function (req, res) {
@@ -838,7 +841,7 @@ app.post('/login', function (req, res) {
 
 
 /* Results page
- * 
+ *
  * Updates the favourites db for the current user based on the user's email and also updates
  * the isFavourited value (0 = false, 1 = true) which is sent through to the HTML scripts
  * Then queries the db for the genome sample details to display in results table and cytoscape scripts
@@ -1020,7 +1023,7 @@ app.post('/result', function (req, res) {
 
 
 /* Favourites page
- * 
+ *
  * Removes favourites from user account and db
  */
 app.post('/favourites', function (req, res) {
@@ -1087,7 +1090,7 @@ app.post('/favourites', function (req, res) {
 							res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: 0, haveFavs: false });
 						}
                     });
-					
+
 
                 }
 
