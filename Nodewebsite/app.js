@@ -14,7 +14,10 @@ const { Pool, Client } = require('pg');
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
 
 // Sandra's connection
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+
+// Sam's connection
+const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
 
 // Andrew's connection 
 //const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
@@ -167,7 +170,7 @@ app.get('/advancedSearch', function (req, res) {
  * User account creation page, renders page's html
  */
 app.get('/createAccount', function (req, res) {
-    if (req.session.userStatus == "loggedIn") {
+    if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
 
     } else {
