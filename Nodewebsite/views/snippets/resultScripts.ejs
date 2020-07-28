@@ -377,4 +377,53 @@
         cy.center();
         cy.reset();
     }
+
+    /*
+     * Script for Find my Friends functionality
+     * Functionality for selecting min and max genetic distance
+     * and displaying genome information on cards
+     */
+
+     // Global variables for slider selection
+     var maxPercentage = 100;
+     var stepValue = 0.00000001;
+
+     // Updates slider and description for selected minimum genetic distance
+     function updateMinSliderSelection() {
+        let minSlider = document.getElementById('minGeneticDistInput');
+        let maxSlider = document.getElementById('maxGeneticDistInput');
+
+        minSlider.value = Math.min(minSlider.value, maxSlider.value - (stepValue));
+        let value = (100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.value)-(100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.min);
+
+        document.getElementById("leftSlider").style.width = value + "%";
+        document.getElementById("selectedSlider").style.left = value + "%";
+        document.getElementById("leftGeneticDistThumb").style.left = value + "%";
+        document.getElementById("minGeneticDist").innerHTML = minSlider.value;
+     }
+
+     // Updates slider and descripton for selected maximum genetic distance
+     function updateMaxSliderSelection() {
+        let minSlider = document.getElementById('minGeneticDistInput');
+        let maxSlider = document.getElementById('maxGeneticDistInput');
+
+        maxSlider.value = Math.max(maxSlider.value, minSlider.value + stepValue);
+        var value = (100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.value)-(100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.min);
+
+        document.getElementById('rightSlider').style.width = (maxPercentage - value) + '%';
+        document.getElementById('selectedSlider').style.right = (maxPercentage - value) + '%';
+        document.getElementById('rightGeneticDistThumb').style.left = value + '%';
+        document.getElementById('maxGeneticDist').innerHTML = maxSlider.value;
+     }
+
+     function clearFindMyFriendsSection() {
+        document.getElementById("findMyFriendsCards").innerHTML = "";
+     }
+
+     function displayFindMyFriendsSection(){
+       // TODO: Read through all genetically related genomes
+       // Filter and add element
+     }
+     
+
 </script>
