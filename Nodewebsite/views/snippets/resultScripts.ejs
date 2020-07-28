@@ -390,8 +390,8 @@
 
      // Updates slider and description for selected minimum genetic distance
      function updateMinSliderSelection() {
-        let minSlider = document.getElementById('minGeneticDistInput');
-        let maxSlider = document.getElementById('maxGeneticDistInput');
+        let minSlider = document.getElementById("minGeneticDistInput");
+        let maxSlider = document.getElementById("maxGeneticDistInput");
 
         minSlider.value = Math.min(minSlider.value, maxSlider.value - (stepValue));
         let value = (100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.value)-(100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.min);
@@ -400,20 +400,26 @@
         document.getElementById("selectedSlider").style.left = value + "%";
         document.getElementById("leftGeneticDistThumb").style.left = value + "%";
         document.getElementById("minGeneticDist").innerHTML = minSlider.value;
+
+        clearFindMyFriendsSection();
+        displayFindMyFriendsSection();
      }
 
      // Updates slider and descripton for selected maximum genetic distance
      function updateMaxSliderSelection() {
-        let minSlider = document.getElementById('minGeneticDistInput');
-        let maxSlider = document.getElementById('maxGeneticDistInput');
+        let minSlider = document.getElementById("minGeneticDistInput");
+        let maxSlider = document.getElementById("maxGeneticDistInput");
 
         maxSlider.value = Math.max(maxSlider.value, minSlider.value + stepValue);
         var value = (100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.value)-(100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.min);
 
-        document.getElementById('rightSlider').style.width = (maxPercentage - value) + '%';
-        document.getElementById('selectedSlider').style.right = (maxPercentage - value) + '%';
-        document.getElementById('rightGeneticDistThumb').style.left = value + '%';
-        document.getElementById('maxGeneticDist').innerHTML = maxSlider.value;
+        document.getElementById("rightSlider").style.width = (maxPercentage - value) + "%";
+        document.getElementById("selectedSlider").style.right = (maxPercentage - value) + "%";
+        document.getElementById("rightGeneticDistThumb").style.left = value + "%";
+        document.getElementById("maxGeneticDist").innerHTML = maxSlider.value;
+
+        clearFindMyFriendsSection();
+        displayFindMyFriendsSection();
      }
 
      function clearFindMyFriendsSection() {
@@ -421,9 +427,46 @@
      }
 
      function displayFindMyFriendsSection(){
-       // TODO: Read through all genetically related genomes
-       // Filter and add element
+       let minValue = document.getElementById("minGeneticDistInput").value;
+       let maxValue = document.getElementById("maxGeneticDistInput").value;
+       let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>;
+       let desiredRelatedSamples = [];
+
+       relatedSamples.forEach(function(sample) {
+         if (sample.distance >= minValue && sample.distance <= maxValue) {
+           desiredRelatedSamples.push(sample);
+         }
+       });
+
+       console.log(desiredRelatedSamples);
+
+       let parentSection = document.getElementById("findMyFriendsCards");
+       desiredRelatedSamples.forEach(function(relatedSample) {
+         //parentSection.innerHTML = parentSection.innerHTML + createGenomeCard(relatedSample).outerHTML;
+         parentSection.appendChild(createGenomeCard(relatedSample));
+       });
+
+
      }
-     
+
+
+     function createGenomeCard(sample){
+       let newCard = document.createElement("div");
+       let info = document.createElement("p");
+
+       let display = `<b>Sample: </b>${sample.id}<br>
+       <b>Sequence Type: </b>${sample.st}<br>
+       <b>Location: </b>${sample.country}<br>
+       <b>Strain: </b>${sample.strain}<br>
+       <b>Host: </b>${sample.host}<br>
+       <b>Isolation Source: </b>${sample.isolation_source}<br>
+       <b>Weighted Distance </b>${sample.distance}<br>`;
+       console.log(display);
+       info.innerHTML = display;
+       newCard.innerHTML = info.outerHTML;
+
+
+       return newCard;
+     }
 
 </script>

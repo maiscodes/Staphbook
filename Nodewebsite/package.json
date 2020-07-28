@@ -12,6 +12,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "include-html": "^1.2.1",
+    "knex": "^0.21.2",
     "npm": "^6.14.7",
     "parser": "^0.1.4",
     "pg": "^7.18.2",

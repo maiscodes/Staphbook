@@ -4,6 +4,8 @@ const app = express();
 const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 const session = require('express-session');
+const options = require('./knexfile.js');
+var knex = require('knex')(options);
 
 // Change secret to unique value
 app.use(session({ secret: "Shh, its a secret!" }));
@@ -311,11 +313,42 @@ app.get('/result', function (req, res) {
                                             console.log(err, result_registered_users);
                                             will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
                                             **/
-                                        res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited,
-                                            sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
-                                            same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
-                                            same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
-                                            sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows, weighted_distance: result_weighted_distances.rows});
+
+                                            // Samples genetically related to current sample
+                                            knex.select('name').from('sample_sample').where('id', '=', sampleID).then((sampleName) => {
+                                              knex.select('sample_sample.id', 'weighted_distance.distance', 'mlst_mlst.st', 'sample_metadata.metadata')
+                                              .from('weighted_distance')
+                                              .innerJoin('sample_sample', 'weighted_distance.comparison_sample', 'sample_sample.name')
+                                              .innerJoin('sample_metadata', 'sample_sample.id', 'sample_metadata.sample_id')
+                                              .innerJoin('mlst_mlst', 'sample_sample.id', 'mlst_mlst.sample_id')
+                                              .where('weighted_distance.selected_sample', '=', sampleName[0].name)
+                                              .orderBy('weighted_distance.distance', 'asc')
+                                              .then((rows) => {
+
+                                                let mainRelatedSampleDetails = []; // We desire only the main attributes
+                                                rows.forEach(function (row) {
+                                                  var detailedRow = {};
+                                                  detailedRow.id = row.id;
+                                                  detailedRow.distance = row.distance;
+                                                  detailedRow.st = row.st;
+                                                  detailedRow.country = row.metadata.country;
+                                                  detailedRow.strain = row.metadata.strain;
+                                                  detailedRow.host = row.metadata.host;
+                                                  detailedRow.isolation_source = row.metadata.isolation_source;
+                                                  mainRelatedSampleDetails.push(detailedRow);
+                                                })
+
+                                                res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited,
+                                                    sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
+                                                    same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
+                                                    same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
+                                                    sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows, weighted_distance: result_weighted_distances.rows,
+                                                    all_weighted_distances: mainRelatedSampleDetails });
+
+                                              })
+                                            })
+
+
                                     });
                                 });
                             });
@@ -915,6 +948,8 @@ app.post('/result', function (req, res) {
                 let sampleName = result_sample_sample.rows[0].name;
 
                 client.query("SELECT * FROM weighted_distance WHERE selected_sample='" + sampleName + "'", (err, result_weighted_distances) => {
+                  console.log('TESTING');
+                  console.log(err, JSON.stringify(result_weighted_distances.rows));
 
             // Metadata
             client.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
