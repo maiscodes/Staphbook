@@ -204,20 +204,21 @@
             <div id="cyLegend">
                 <p id="cyLegendTitle"><b> Legend</b></p>
                 <p id="cyLegendDivider"> | </p>
-                <div class="legendColorSquare" style="background-color: red;"></div>
-                <p id="cyLegendText"> Same Location </p>
+
+                <div class="legendColorSquare" style="background-color: red;" onclick="changeConnection('location')"></div>
+                <p id="cyLegendText" onclick="changeConnection('location')"> Same Location </p>
                 <div class="cyLegendSpacer"></div>
 
-                <div class="legendColorSquare" style="background-color: blue;"></div>
-                <p id="cyLegendText"> Same Host </p>
+                <div class="legendColorSquare" style="background-color: blue;" onclick="changeConnection('host')"></div>
+                <p id="cyLegendText" onclick="changeConnection('host')"> Same Host </p>
                 <div class="cyLegendSpacer"></div>
 
-                <div class="legendColorSquare" style="background-color: green;"></div>
-                <p id="cyLegendText"> Same Sequence Type </p>
+                <div class="legendColorSquare" style="background-color: green;" onclick="changeConnection('sequence')"></div>
+                <p id="cyLegendText" onclick="changeConnection('sequence')"> Same Sequence Type </p>
                 <div class="cyLegendSpacer"></div>
 
-                <div class="legendColorSquare" style="background-color: orange;"></div>
-                <p id="cyLegendText"> Same Isolation Source </p>
+                <div class="legendColorSquare" style="background-color: orange;" onclick="changeConnection('isolation')"></div>
+                <p id="cyLegendText" onclick="changeConnection('isolation')"> Same Isolation Source </p>
 
             </div>
 
@@ -225,7 +226,6 @@
         <!-- close resultsPageGraphComponent2 -->
 
         <div id="resultsPageGraphComponent3">
-
             <div id="cy"></div>
         </div>
         <!-- close resultsPageGraphComponent3 -->

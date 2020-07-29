@@ -115,7 +115,8 @@
                         // Create nodes and assign each node summary information
                         cy.add({
                             data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
-                                host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance}
+                                host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance},
+                            classes: ['loc']
                         });
                         // Add nodes to the collection
                         collection = collection.add(cy.$id(same_location_sample_id));
@@ -269,6 +270,30 @@
      *
      */
 
+    let filters = {
+        'location': false,
+        'sequence': false,
+        'host': false,
+        'isolation': false,
+    }
+
+    function changeConnection(connType){
+        console.log(filters);
+        if(connType === 'location'){
+            filters.location = !filters.location;
+        }
+        else if(connType === 'sequence'){
+            filters.sequence = !filters.sequence;
+        }
+        else if(connType === 'host'){
+            filters.host = !filters.host;
+        }
+        else if(connType === 'isolation'){
+            filters.isolation = !filters.isolation;
+        }
+        console.log(filters);
+    }
+
     // Change the nodes based on the slider values defined by the user
     function changeDist(){
         let num = document.getElementById("myRange1").value;
@@ -278,10 +303,14 @@
         collection.forEach(function(ele, i ,eles) {
             if(ele.isNode()) {
                 let e = ele.connectedEdges();
+                console.log((ele.connectedEdges()));
                 if (e.length < num) {
                     ele.remove();
                 }
                 if (ele.data('dist') > dist){
+                    ele.remove();
+                }
+                if (ele.classes().includes('loc')){
                     ele.remove();
                 }
             }
