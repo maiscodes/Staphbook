@@ -254,6 +254,10 @@ div {
     display: inline;
 }
 
+.legend:hover {
+    cursor: pointer;
+}
+
 a {
     font-family: 'Assistant', sans-serif !important;
 }
