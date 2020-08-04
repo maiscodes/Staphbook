@@ -247,27 +247,22 @@
 
         </div>
         <!-- close resultsPageGraphComponent4 -->
+
+        <!-- close resultsPageResultComponents -->
+        <div id="resultsPageGraphComponent5" style="text-align: center;">
+
+          <h3 style="text-align: center">Find My Friends</h3>
+
+          <p>Finding genetically related genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
+
+          <% include ../snippets/rangedSliderGeneticDistance.ejs %>
+
+          <form action='/result' method="get"><div id="findMyFriendsCards"></div></form>
+
+        </div>
+        <!-- close resultsPageGraphComponent5 -->
     </div>
-    <!-- close resultsPageResultComponents -->
 
-    <div id="resultsPageGraphComponent5" style="text-align: center;">
-
-      <h3 style="text-align: center">Find My Friends</h3>
-
-      <p>Finding genetically related genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
-
-      <% include ../snippets/rangedSliderGeneticDistance.ejs %>
-
-      <form action='/result' method="get"><div id="findMyFriendsCards"></div></form>
-
-      <!-- include ../snippets/resultGeneticDistanceFriends.ejs %>
-
-      <!-- TODO: Run knex on slider -->
-
-      <!-- TODO: include the resultFindMyFriendsCards-->
-
-    </div>
-    <!-- close resultsPageGraphComponent5 -->
 
     <div id="imageTitleDiv"
          style="width: 100%; font-size: 20px; text-align: center; margin-bottom: 20px; margin-top: 20px;"></div>
