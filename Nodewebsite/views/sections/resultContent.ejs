@@ -204,28 +204,35 @@
             <div id="cyLegend">
                 <p id="cyLegendTitle"><b> Legend</b></p>
                 <p id="cyLegendDivider"> | </p>
-                <div class="legendColorSquare" style="background-color: red;"></div>
-                <p id="cyLegendText"> Same Location </p>
-                <div class="cyLegendSpacer"></div>
 
-                <div class="legendColorSquare" style="background-color: blue;"></div>
-                <p id="cyLegendText"> Same Host </p>
-                <div class="cyLegendSpacer"></div>
+                <div class="legend" onclick="changeConnection('location')">
+                    <div class="legendColorSquare" style="background-color: red;"></div>
+                    <p id="locLegend" class="cyLegendText"> Same Location </p>
+                    <div class="cyLegendSpacer"></div>
+                </div>
 
-                <div class="legendColorSquare" style="background-color: green;"></div>
-                <p id="cyLegendText"> Same Sequence Type </p>
-                <div class="cyLegendSpacer"></div>
+                <div class="legend" onclick="changeConnection('host')">
+                    <div class="legendColorSquare" style="background-color: blue;"></div>
+                    <p id="hostLegend" class="cyLegendText"> Same Host </p>
+                    <div class="cyLegendSpacer"></div>
+                </div>
 
-                <div class="legendColorSquare" style="background-color: orange;"></div>
-                <p id="cyLegendText"> Same Isolation Source </p>
+                <div class="legend" onclick="changeConnection('sequence')">
+                    <div class="legendColorSquare" style="background-color: green;"></div>
+                    <p id="seqLegend" class="cyLegendText"> Same Sequence Type </p>
+                    <div class="cyLegendSpacer"></div>
+                </div>
 
+                <div class="legend" onclick="changeConnection('isolation')">
+                    <div class="legendColorSquare" style="background-color: orange;"></div>
+                    <p id="isoLegend" class="cyLegendText"> Same Isolation Source </p>
+                </div>
             </div>
 
         </div>
         <!-- close resultsPageGraphComponent2 -->
 
         <div id="resultsPageGraphComponent3">
-
             <div id="cy"></div>
         </div>
         <!-- close resultsPageGraphComponent3 -->

@@ -255,6 +255,13 @@ div {
     font-family: 'Assistant', sans-serif !important;
 }
 
+.legend {
+    display: inline;
+}
+
+.legend:hover {
+    cursor: pointer;
+}
 
 a {
     font-family: 'Assistant', sans-serif !important;
@@ -321,7 +328,7 @@ a {
         background-color: #f1f1f1;
     }
 
-#cyLegendText {
+.cyLegendText {
     font-size: 14px;
     display: inline-block;
     margin-left: 3px;
@@ -357,7 +364,7 @@ a {
 }
 
 #cyLegend {
-    width: 590px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
 }
