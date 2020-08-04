@@ -441,9 +441,17 @@
        console.log(desiredRelatedSamples);
 
        let parentSection = document.getElementById("findMyFriendsCards");
+       let count = 0
        desiredRelatedSamples.forEach(function(relatedSample) {
          //parentSection.innerHTML = parentSection.innerHTML + createGenomeCard(relatedSample).outerHTML;
-         parentSection.appendChild(createGenomeCard(relatedSample));
+         genomeCard = createGenomeCard(relatedSample);
+         parentSection.appendChild(genomeCard);
+
+         tag = parentSection.getElementsByClassName("geneticDistanceTag")[count];
+         card = parentSection.getElementsByClassName("genomeCard")[count];
+         console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`)
+         tag.setAttribute("style", `top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.6 * card.clientWidth }px;`);
+         count++;
        });
 
 
@@ -452,19 +460,19 @@
 
      function createGenomeCard(sample){
        let newCard = document.createElement("div");
+       newCard.className = "genomeCard";
        let info = document.createElement("p");
 
-       let display = `<b>Sample: </b>${sample.id}<br>
+       let display = `<div class="genomeCardSampleId"><h4>${sample.id}</h4></div>
        <b>Sequence Type: </b>${sample.st}<br>
        <b>Location: </b>${sample.country}<br>
        <b>Strain: </b>${sample.strain}<br>
        <b>Host: </b>${sample.host}<br>
        <b>Isolation Source: </b>${sample.isolation_source}<br>
-       <b>Weighted Distance </b>${sample.distance}<br>`;
-       console.log(display);
+       <div class="geneticDistanceTag">${sample.distance}</div>`;
+
        info.innerHTML = display;
        newCard.innerHTML = info.outerHTML;
-
 
        return newCard;
      }
