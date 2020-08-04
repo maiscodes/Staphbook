@@ -422,42 +422,42 @@
         displayFindMyFriendsSection();
      }
 
+     // Wipe out the section when the filter is updated
      function clearFindMyFriendsSection() {
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
+     // Display genetically related genomes
      function displayFindMyFriendsSection(){
-       let minValue = document.getElementById("minGeneticDistInput").value;
+       let minValue = document.getElementById("minGeneticDistInput").value; // Read chosen min and max values
        let maxValue = document.getElementById("maxGeneticDistInput").value;
        let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>;
        let desiredRelatedSamples = [];
 
-       relatedSamples.forEach(function(sample) {
+       relatedSamples.forEach(function(sample) { // Filter desired genetic distance
          if (sample.distance >= minValue && sample.distance <= maxValue) {
            desiredRelatedSamples.push(sample);
          }
        });
 
-       console.log(desiredRelatedSamples);
+       //console.log(desiredRelatedSamples);
 
-       let parentSection = document.getElementById("findMyFriendsCards");
+       let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
        let count = 0
        desiredRelatedSamples.forEach(function(relatedSample) {
-         //parentSection.innerHTML = parentSection.innerHTML + createGenomeCard(relatedSample).outerHTML;
          genomeCard = createGenomeCard(relatedSample);
          parentSection.appendChild(genomeCard);
 
-         tag = parentSection.getElementsByClassName("geneticDistanceTag")[count];
+         tag = parentSection.getElementsByClassName("geneticDistanceTag")[count]; // Position the tag
          card = parentSection.getElementsByClassName("genomeCard")[count];
-         console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`)
-         tag.setAttribute("style", `top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`);
+         console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`);
+         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
          count++;
        });
 
-
      }
 
-
+     // Returns the html of a genome card
      function createGenomeCard(sample){
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCard");
@@ -481,5 +481,22 @@
 
        return newCard;
      }
+
+    // Display cards when first loaded
+    window.onload = function() {
+      displayFindMyFriendsSection();
+    }
+
+    // Update display when window is rezied, TODO: figure out a way to make this more efficient
+    window.onresize = function() {
+      tags = document.getElementsByClassName("geneticDistanceTag");
+      cards = document.getElementsByClassName("genomeCard");
+
+      for (i = 0; i < tags.length; i++) {
+        tag = tags[i];
+        card = cards[i];
+        tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
+      }
+    }
 
 </script>

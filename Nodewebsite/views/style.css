@@ -1,18 +1,3 @@
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  position: relative;
-  min-height: 100%;
-}
-
-#page-container {
-  position: relative;
-  min-height: 100%;
-}
-
 #queryTitleContainer {
     padding-top: 20px;
     text-align: center;
@@ -656,20 +641,6 @@ div[slider] > input[type=range]::-ms-tooltip {
   margin-top: 2em;
 }
 
-.genomeCard {
-  border-radius: 15px;
-  border: 1px solid #f3f3f3;
-  float: left;
-  width: 22%;
-  padding: .5em;
-  padding-left: .8em;
-  padding-right: .8em;
-  min-height: 100%;
-  -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
-  margin: 1em;
-  background-color: white;
-}
-
 .genomeCard:hover {
   border: 1.5px solid #3399FF;
   transition: 0.3s;
@@ -679,15 +650,13 @@ div[slider] > input[type=range]::-ms-tooltip {
   background-color: #1ABC9C;
   color: white;
   border-radius: 20px;
-  position: relative;
+  position: absolute;
   padding: 0.3em;
-  width: 60%;
 }
 
 .genomeCardSampleId {
   padding-bottom: 0.7em;
 }
-
 
 #errorPage {
   text-align: center;
@@ -695,4 +664,39 @@ div[slider] > input[type=range]::-ms-tooltip {
 
 #errorButton {
   background-color: #1ABC9C;
+}
+
+@media only screen and (min-width: 600px) {
+  .genomeCard {
+    border-radius: 15px;
+    border: 1px solid #f3f3f3;
+    float: left;
+    width: 22%;
+    padding: .5em;
+    padding-left: .8em;
+    padding-right: .8em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
+    margin: 1em;
+    background-color: white;
+    position: relative;
+  }
+}
+
+
+@media only screen and (max-width: 800px) {
+  .genomeCard {
+    border-radius: 15px;
+    border: 1px solid #f3f3f3;
+    float: left;
+    width: 50%;
+    padding: .5em;
+    padding-left: .8em;
+    padding-right: .8em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
+    margin: 1em;
+    background-color: white;
+    position:relative;
+  }
 }
