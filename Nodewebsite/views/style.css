@@ -104,6 +104,7 @@ hr.divider {
 }
 
 #resultsPageGraphComponent5 {
+    margin-top: 2em;
     float: left;
     width: 100%;
     height: 400px;
@@ -650,9 +651,17 @@ div[slider] > input[type=range]::-ms-tooltip {
   float: left;
   width: 22%;
   padding: .5em;
+  padding-left: .8em;
+  padding-right: .8em;
   min-height: 100%;
   -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
   margin: 1em;
+  background-color: white;
+}
+
+.genomeCard:hover {
+  border: 1.5px solid #3399FF;
+  transition: 0.3s;
 }
 
 .geneticDistanceTag {
@@ -666,4 +675,13 @@ div[slider] > input[type=range]::-ms-tooltip {
 
 .genomeCardSampleId {
   padding-bottom: 0.7em;
+}
+
+
+#errorPage {
+  text-align: center;
+}
+
+#errorButton {
+  background-color: #1ABC9C;
 }

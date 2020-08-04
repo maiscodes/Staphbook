@@ -459,8 +459,13 @@
 
 
      function createGenomeCard(sample){
-       let newCard = document.createElement("div");
-       newCard.className = "genomeCard";
+       let newCard = document.createElement("button");
+       newCard.setAttribute("class", "genomeCard");
+       newCard.setAttribute("name", "sampleSelection");
+       newCard.setAttribute("value", `${sample.id}`);
+       newCard.setAttribute("onclick", "window.location.href='/result'");
+       newCard.setAttribute("type", "submit");
+
        let info = document.createElement("p");
 
        let display = `<div class="genomeCardSampleId"><h4>${sample.id}</h4></div>
