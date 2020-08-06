@@ -1,0 +1,22 @@
+<p id="selectionBar">
+
+  Min. <input id="minGeneticDistanceTyped">
+
+  Max. <input id="maxGeneticDistanceTyped">
+
+  Order by
+  <select name="orderBy" id="orderBy">
+  <option value="sequenceType">Sequence Type</option>
+  <option value="location">Location</option>
+  <option value="strain">Strain</option>
+  <option value="host">Host</option>
+  <option value="isolationSource">Isolation Source</option>
+  </select>
+
+  Ascending
+  <label class="switch">
+    <input id="toggleOrder" type="checkbox" checked onchange="updateStatus()">
+    <span class="toggle round"></span>
+  </label>
+
+</p>

@@ -464,6 +464,8 @@ a {
     width: 100%;
 }
 
+
+/* Genetic Distance Slider */
 [slider] {
   position: relative;
   height: 14px;
@@ -639,6 +641,105 @@ div[slider] > input[type=range]::-ms-tooltip {
   opacity: 1;
 }
 
+/* Toggle Button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 4.6em;
+  height: 2.6em;
+  margin-left: 0.8em;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle {
+  position: absolute;
+  cursor: pointer;
+  top: -0.6em;
+  left: 0;
+  right: 0;
+  bottom: 0.6em;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.toggle:before {
+  position: absolute;
+  content: "";
+  top: 0.2em;
+  left: 0.2em;
+  height: 2.2em;
+  width: 2.2em;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .toggle {
+  background-color: #2196F3;
+}
+
+input:focus + .toggle {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .toggle:before {
+  -webkit-transform: translateX(2em);
+  -ms-transform: translateX(2em);
+  transform: translateX(2em);
+}
+
+.toggle.round {
+  border-radius: 2.3em;
+}
+
+.toggle.round:before {
+  border-radius: 50%;
+}
+
+/* Minimum and Maximum Genetic Distance */
+#minGeneticDistanceTyped {
+	padding: 0.5em;
+  border-radius: 0.5em;
+  margin-left: 1em;
+  margin-right: 2em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border: solid 1px;
+}
+
+#maxGeneticDistanceTyped {
+	padding: 0.5em;
+  border-radius: 0.5em;
+  margin-left: 1em;
+  margin-right: 2em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  border: solid 1px;
+}
+
+#orderBy {
+	padding: 0.5em;
+  border-radius: 0.5em;
+  margin-left: 1em;
+  margin-right: 3em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#selectionBar {
+	align-items: center;
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+
+/* Find My Friends Cards */
 #findMyFriendsCards {
   display: -webkit-flex;
   display: flex;
