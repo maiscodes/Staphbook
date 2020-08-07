@@ -506,16 +506,36 @@
         displayFindMyFriendsSection();
      }
 
+     function updateOrderByProperty() {
+       clearFindMyFriendsSection();
+       displayFindMyFriendsSection();
+     }
+
+     function updateOrderByAsc() {
+       clearFindMyFriendsSection();
+       displayFindMyFriendsSection();
+     }
+
      // Wipe out the section when the filter is updated
      function clearFindMyFriendsSection() {
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
      // Display genetically related genomes
-     function displayFindMyFriendsSection(){
+     function displayFindMyFriendsSection(){  // TODO: Cleanup, accept min, max as value
        let minValue = document.getElementById("minGeneticDistInput").value; // Read chosen min and max values
        let maxValue = document.getElementById("maxGeneticDistInput").value;
-       let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>;
+
+       let minInputBox = document.getElementById("minGeneticDistanceTyped");  // Update values in input boxes
+       let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
+       if ( minInputBox.value != minValue ) {
+         minInputBox.value = minValue;
+       }
+       if ( maxInputBox.value != maxValue ) {
+         maxInputBox.value = maxValue;
+       }
+
+       let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
        let desiredRelatedSamples = [];
 
        relatedSamples.forEach(function(sample) { // Filter desired genetic distance
@@ -523,6 +543,55 @@
            desiredRelatedSamples.push(sample);
          }
        });
+
+       relatedSamples.forEach(function(sample) { // Filter desired genetic distance
+         if ( sample.st == undefined ) {
+           sample.st = "Unknown";
+         }
+         if ( sample.country == undefined ) {
+           sample.country = "Unknown";
+         }
+         if ( sample.strain == undefined ) {
+           sample.strain = "Unknown";
+         }
+         if ( sample.host == undefined ) {
+           sample.host = "Unknown";
+         }
+         if ( sample.isolation_source == undefined ) {
+           sample.isolation_source = "Unknown";
+         }
+       });
+
+
+       let orderBy = document.getElementById("orderBy").value; // Edit to handle undefined
+       desiredRelatedSamples.sort(function(a,b) {
+         if (orderBy == "sequenceType") {
+           if (a.st < b.st) {
+             return -1;
+           }
+           if (a.st > b.st) {
+             return 1;
+           }
+           return 0;
+         }
+         if (orderBy == "location") {
+           return a.country.localeCompare(b.country);
+         }
+         if (orderBy == "strain") {
+           return a.strain.localeCompare(b.strain);
+         }
+         if (orderBy == "host") {
+           return a.host.localeCompare(b.host);
+         }
+         if (orderBy == "isolationSource") {
+           return a.isolation_source.localeCompare(b.isolation_source);
+         }
+       });
+
+      orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
+      if (orderByAsc.checked == false) {
+        desiredRelatedSamples.reverse();
+      }
 
        //console.log(desiredRelatedSamples);
 

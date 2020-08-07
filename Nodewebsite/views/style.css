@@ -55,6 +55,9 @@ hr.divider {
     margin-right: 5%;
 }
 
+.resultsPageTopComponent {
+  margin-top: 3em;
+}
 
 #resultsPageGraphComponents {
     width: 90%;
