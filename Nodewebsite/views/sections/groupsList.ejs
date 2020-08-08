@@ -10,24 +10,18 @@
   <table id="favTable">
     <tr>
       <td style="border: 0px;">
-        <form action='/result' method="get">
+        <form action='/viewGroup' method="get">
 
-          <button type="submit" name="sampleSelection" class="list-group-item list-group-item-action list-group-item-light"
+          <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"
             style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">
-            Group Name: <%= result_groups.name %>,
-            Count: <%= result_groups.count %>,
-            Created: <%= result_groups.created %>,
-            Last modified: <%= result_groups.modified %>,
+            Group Name: <%= result_groups.name %> ||
+            Count: <%= result_groups.count %> ||
+            Created: <%= new Date(result_groups.created).toDateString() %> ||
+            Last modified: <%= new Date(result_groups.modified).toDateString() %> ||
           </button>
         </form>
       </td>
-      <td style="width: 55px; border: 0px;">
-        <form method="POST" style="width: 50px;">
-          <button type="submit" name="favouritedSampleID" class="btn btn-outline-dark btn-sm" style="color: #468e94; width: 50px;" value="<%= result_groups.sample_id %>">
-            <i class="fas fa-times" style="font-size:20px; text-align: center; margin-top: auto; margin-bottom: auto; padding-top: 27px; width: 30px; height: 75px;"></i>
-          </button>
-        </form>
-      </td>
+      
     </tr>
   </table>
 
