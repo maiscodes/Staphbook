@@ -702,6 +702,52 @@ app.get('/favourites', function (req, res) {
     }
 });
 
+/* groups page
+ *
+ * Searches through db to find grouped samples based on email
+ 
+app.get('/groups', function (req, res) {
+    if (req.session.userStatus == "loggedIn") {
+        userLoggedIn = true;
+    } else {
+        userLoggedIn = false;
+    }
+    if (req.session.userStatus == "loggedIn") {
+        userLoggedIn = true;
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        client.query("SELECT * FROM group_samples WHERE email='" + email + "'", (err, groupSamp_results) => {
+            console.log(err, groupSamp_results);
+            if (groupSamp_results.rows.length > 0) {
+                haveGroupSamps = true;
+                let selectSQL = "";
+                selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+                    "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+                    "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+                    "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
+                    "WHERE";
+
+                for (let i = 0; i < groupSamp_results.rows.length; i++) {
+                    if (i == 0) {
+                        selectSQL += " sample_id = " + groupSamp_results.rows[i].sample_id + "";
+                    }
+                    selectSQL += " OR sample_id = " + groupSamp_results.rows[i].sample_id + "";
+                }
+
+                client.query(selectSQL + ");", (err, group_samples) => {
+                    console.log(err, group_samples);
+                    console.log(haveGroupSamps);
+                    res.render('pages/groups', { userLoggedIn: userLoggedIn, group_samples: group_samples.rows, haveGroupSamps: haveGroupSamps });
+                });
+            } else {
+                res.render('pages/groups', { userLoggedIn: userLoggedIn, group_samples: 0, haveGroupSamps: false });
+            }
+        });
+
+    }
+});
+*/
 
 /* --------------------------------------------------------------------------------
  *
