@@ -19,26 +19,28 @@ const { Pool, Client } = require('pg');
 //const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
 
 // Maisie's connection
-const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
+// const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
 
 // Sam's connection
-//const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
+// const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
 
 // Andrew's connection
 //const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
 
-const pool = new Pool({
-    connectionString: connectionString,
-});
+// const pool = new Pool({
+//     connectionString: connectionString,
+// });
+const pool = new Pool(options.connection);
 
 pool.query('SELECT NOW()', (err, res) => {
     console.log(err, res);
     pool.end();
 });
 
-const client = new Client({
-    connectionString: connectionString,
-});
+// const client = new Client({
+//     connectionString: connectionString,
+// });
+const client = new Client(options.connection);
 client.connect();
 
 //BodyParser
@@ -641,7 +643,55 @@ app.get('/tutorials', function (req, res) {
     res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
 });
 
+app.get('/groups', function (req, res) {
+    userLoggedIn = req.session.userStatus == "loggedIn";
 
+    let groups = [];
+    let haveGroups = false;
+
+    if(req.session.userStatus == "loggedIn"){
+        //TODO SQL Query to get list of groups
+
+        res.render('pages/groups', {
+            userLoggedIn: userLoggedIn,
+            groups: [
+                {
+                    group_id: "0001",
+                    name: "group 1",
+                    count: "10",
+                    created: "2020-01-15T13:45:30",
+                    modified: "2020-02-15T13:45:30"
+                },
+                {
+                    group_id: "0020",
+                    name: "group 2",
+                    count: "15",
+                    created: "2020-05-15T13:45:30",
+                    modified: "2020-07-15T13:45:30"
+                },
+                {
+                    group_id: "0300",
+                    name: "group 3",
+                    count: "7",
+                    created: "2020-01-15T13:45:30",
+                    modified: "2020-09-15T13:45:30"
+                },
+                {
+                    group_id: "4000",
+                    name: "group 4",
+                    count: "4",
+                    created: "2019-09-15T13:45:30",
+                    modified: "2020-01-02T13:45:30"
+                },
+                ],
+            haveGroups: true
+        });
+    }
+    else{
+        res.status(404);
+        res.send({ error: 'Not found' });
+    }
+})
 
 /* favourites page
  *
