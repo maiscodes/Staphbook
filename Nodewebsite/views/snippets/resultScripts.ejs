@@ -502,11 +502,12 @@
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
+     // Tries to update min tag given potential value
      function updateMinSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
 
-       minSlider.value = Math.min(newValue, maxSlider.value - (stepValue));
+       minSlider.value = Math.min(parseFloat(newValue), parseFloat(maxSlider.value) - (stepValue));
        let value = (100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.value)-(100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.min);
 
        document.getElementById("leftSlider").style.width = value + "%";
@@ -520,10 +521,13 @@
       };
      }
 
+    // Tries to update max tag given potential value
      function updateMaxSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
-       maxSlider.value = Math.max(newValue, (minSlider.value + stepValue));
+
+       let minValue = parseFloat(minSlider.value) + stepValue;
+       maxSlider.value = Math.max(parseFloat(newValue), minValue);
        let value = (100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.value)-(100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.min);
 
        document.getElementById("rightSlider").style.width = (maxPercentage - value) + "%";
@@ -545,7 +549,7 @@
        console.log(minValue);
 
        if (minValue != NaN) {
-         let rangeSelected = updateMinSlider(minInputBox.value);
+         let rangeSelected = updateMinSlider(minValue);
          if (parseFloat(minInputBox.value) != rangeSelected.minValue) {
            minInputBox.value = rangeSelected.minValue;
          }
@@ -565,8 +569,7 @@
        console.log(maxValue);
 
        if (maxValue != NaN) {
-
-         let rangeSelected = updateMaxSlider(maxInputBox.value);
+         let rangeSelected = updateMaxSlider(maxValue);
          if (parseFloat(maxInputBox.value) != rangeSelected.maxValue) {
            maxInputBox.value = rangeSelected.maxValue;
          }
