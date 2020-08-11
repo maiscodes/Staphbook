@@ -14,16 +14,23 @@
 
     <!-- Download button -->
 
-    <h4>Common Statistics and Distributions</h4>
     <!-- Display aggregated data -->
+    <h4>Common Statistics and Distributions</h4>
+    <div id="radarGraphSection">
+      <canvas id="aggregatedRadarGraph"></canvas>
+    </div>
 
-
-    <!-- Display bar graphs -->
+    <div id="barGraphsSection">
+      <canvas id="sequenceTypeBar"></canvas>
+      <canvas id="locationBar"></canvas>
+      <canvas id="strainBar"></canvas>
+      <canvas id="hostBar"></canvas>
+      <canvas id="isolationSourceBar"></canvas>
+    </div>
 
     <!-- Display genome cards -->
     <h4>Genomes</h4>
     <form action='/result' method="get"><div id="groupSamplesCards"></div></form>
-
 
     <% include ../snippets/viewGroupScript.ejs %>
 
