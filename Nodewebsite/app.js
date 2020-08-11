@@ -762,7 +762,7 @@ app.get('/viewGroup', function (req, res) {
         groupInfo = {
           group_id: "4000",
           description: "Really close genomes to sample 44140",
-          name: "group 4",
+          name: "Group 4",
           count: "4",
           created: "2019-09-15T13:45:30",
           modified: "2020-01-02T13:45:30"

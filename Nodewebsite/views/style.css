@@ -811,3 +811,22 @@ input:checked + .toggle:before {
     position:relative;
   }
 }
+
+/* View groups page */
+.groupDescription {
+  text-align: center;
+}
+
+.groupsPage h4 {
+  margin-top: 1.5em;
+  text-align: center;
+}
+
+#groupSamplesCards {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2em;
+}
