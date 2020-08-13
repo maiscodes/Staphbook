@@ -1,0 +1,146 @@
+<!-- Groups Page Scripts -->
+<script>
+  function displayGenomeCards() {
+     let groupSamples =  <%- JSON.stringify(samples) %>;
+
+     let parentSection = document.getElementById("groupSamplesCards");
+
+     groupSamples.forEach(function(groupSample) {
+       let newCard = document.createElement("button");
+       newCard.setAttribute("class", "genomeCard");
+       newCard.setAttribute("name", "sampleSelection");
+       newCard.setAttribute("value", `${groupSample.id}`);
+       newCard.setAttribute("onclick", "window.location.href='/result'");
+       newCard.setAttribute("type", "submit");
+
+       let info = document.createElement("p");
+
+       let display = `<div class="genomeCardSampleId"><h4>${groupSample.id}</h4></div>
+       <b>Sequence Type: </b>${groupSample.st}<br>
+       <b>Location: </b>${groupSample.country}<br>
+       <b>Strain: </b>${groupSample.strain}<br>
+       <b>Host: </b>${groupSample.host}<br>
+       <b>Isolation Source: </b>${groupSample.isolation_source}<br>
+       </div>`
+
+       info.innerHTML = display;
+       newCard.innerHTML = info.outerHTML;
+       parentSection.appendChild(newCard);
+
+     });
+  }
+
+  // Separates the dictionary of names and numbers tp inject into chart
+  function getLabelsData(dictionary) {
+    labels = [];
+    data = [];
+
+    for (const [key, value] of Object.entries(dictionary)) {
+      labels.push(key);
+      data.push(value);
+    }
+
+    return [labels, data];
+  }
+
+  // Increase count
+  function increaseCount(count) {
+    if (count == undefined) {
+      count = 1;
+    }
+    else {
+      count ++;
+    }
+    return count;
+  }
+
+  // Show bar graphs
+  function displayBarGraphs() {
+    let groupSamples =  <%- JSON.stringify(samples) %>;
+
+    let sequenceTypes = {};
+    let locations = {};
+    let strains = {};
+    let hosts = {};
+    let isolationSources = {};
+
+    groupSamples.forEach(function(sample) {
+      sequenceTypes[sample.st] = increaseCount(sequenceTypes[sample.st]);
+      locations[sample.country] = increaseCount( locations[sample.country]);
+      strains[sample.strain] = increaseCount(strains[sample.strain]);
+      hosts[sample.host] = increaseCount(hosts[sample.host]);
+      isolationSources[sample.isolation_source] = increaseCount(isolationSources[sample.isolation_source]);
+    });
+
+    canvases = [["sequenceTypeBar", sequenceTypes, "Sequence Types"], ["locationBar", locations, "Locations"],
+    ["strainBar", strains, "Strains"], ["hostBar", hosts, "Hosts"], ["isolationSourceBar", isolationSources, "Isolation Sources"]];
+
+    canvases.forEach(function(canvas) {
+      console.log(canvas);
+      id = canvas[0];
+      chartInfo = getLabelsData(canvas[1]);
+      title = canvas[2];
+      createBarChart(id, title, chartInfo[0], chartInfo[1]);
+    });
+
+  }
+
+  function createBarChart(id, title, labels, data) {
+    // Same colour is used for consistency
+    backgroundColours = [];
+    for (i = 0; i < labels.length; i ++) {
+      alpha = Math.random()
+      backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
+    }
+
+    var canvas = document.getElementById(id)
+    var myChart = new Chart(canvas, {
+      type: 'horizontalBar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColours,
+        }]
+      },
+      options: {
+        legend: {
+            display: false
+        },
+        responsive: false,
+        scales: {
+          xAxes: [{
+            ticks: {
+              maxRotation: 90,
+              minRotation: 80,
+              display: false
+            },
+            gridLines: {
+              display: false
+            },
+             scaleLabel: {
+              display: true,
+              labelString: title
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+            gridLines: {
+              display: false
+            }
+          }]
+        }
+      }
+    });
+  }
+
+  window.onload = function() {
+    console.log("show cards");
+    displayGenomeCards();
+    displayBarGraphs();
+  }
+
+
+</script>

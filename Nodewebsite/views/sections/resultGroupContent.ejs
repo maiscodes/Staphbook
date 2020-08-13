@@ -21,11 +21,11 @@
     </div>
 
     <div id="barGraphsSection">
-      <canvas id="sequenceTypeBar"></canvas>
-      <canvas id="locationBar"></canvas>
-      <canvas id="strainBar"></canvas>
-      <canvas id="hostBar"></canvas>
-      <canvas id="isolationSourceBar"></canvas>
+      <canvas class="barGraph" id="sequenceTypeBar"></canvas>
+      <canvas class="barGraph" id="locationBar"></canvas>
+      <canvas class="barGraph" id="strainBar"></canvas>
+      <canvas class="barGraph" id="hostBar"></canvas>
+      <canvas class="barGraph" id="isolationSourceBar"></canvas>
     </div>
 
     <!-- Display genome cards -->
@@ -33,5 +33,6 @@
     <form action='/result' method="get"><div id="groupSamplesCards"></div></form>
 
     <% include ../snippets/viewGroupScript.ejs %>
+
 
 </div>

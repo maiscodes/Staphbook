@@ -705,7 +705,9 @@
 
     // Display cards when first loaded
     window.onload = function() {
-      displayFindMyFriendsSection();
+      let minValue = document.getElementById("minGeneticDistInput").value;
+      let maxValue = document.getElementById("maxGeneticDistInput").value;
+      displayFindMyFriendsSection(minValue, maxValue);
     }
 
     // Update display when window is rezied, TODO: figure out a way to make this more efficient
