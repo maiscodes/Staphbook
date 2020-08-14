@@ -827,23 +827,39 @@ input:checked + .toggle:before {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
+  width: 80%;
   margin-top: 2em;
+  margin: auto;
 }
 
-/* View Group Samples */
 #barGraphsSection {
   display: -webkit-flex;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
-  margin-top: 2em;
+  width: 80%;
+  margin: auto;
+  padding-top: 2em;
 }
 
 .barGraph {
-  padding: .5em;
+  padding: .8em;
   min-height: 100%;
-  min-height: 200px;
-  min-width: 200px;
 }
+
+#radarGraphSection {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 65%;
+  margin-top: 2em;
+  margin: auto;
+}
+
+.radarGraph {
+  padding: .8em;
+}
+
+/* min-height: 200px;
+width: 30%; */

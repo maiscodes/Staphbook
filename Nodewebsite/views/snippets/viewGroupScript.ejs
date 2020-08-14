@@ -30,8 +30,43 @@
      });
   }
 
+  // Returns each category's max count and genome information from the given array of dictionaries
+  function getRadarLabelsData(dictionaries, total) {
+    labels = ["", "", "", "", ""];
+    maxes = [0,0,0,0,0];
+
+    for (d = 0; d < dictionaries.length; d++) { // Find most common sample information(s) for each category
+      max = 0;
+      label= "";
+      for (const [key, value] of Object.entries(dictionaries[d])) {
+        if (value == max) { // Add to current most common list
+           label += `, ${key}`;
+        }
+        if (value > max) { // Reset most common value
+          max = value;
+          label = key;
+        }
+      }
+      labels[d] = label;
+      maxes[d] = max;
+    }
+
+    // Calculate percentages
+    for (m = 0; m < maxes.length; m++) {
+      maxes[m] = parseFloat((maxes[m] / total * 100).toFixed(2));
+    }
+
+    // Reformat labels
+    labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
+    for (l=0; l < labels.length; l++) {
+      labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
+    }
+
+    return [labels, maxes];
+  }
+
   // Separates the dictionary of names and numbers tp inject into chart
-  function getLabelsData(dictionary) {
+  function getBarLabelsData(dictionary) {
     labels = [];
     data = [];
 
@@ -54,8 +89,8 @@
     return count;
   }
 
-  // Show bar graphs
-  function displayBarGraphs() {
+  // Show graphs
+  function displayGraphs() {
     let groupSamples =  <%- JSON.stringify(samples) %>;
 
     let sequenceTypes = {};
@@ -78,20 +113,122 @@
     canvases.forEach(function(canvas) {
       console.log(canvas);
       id = canvas[0];
-      chartInfo = getLabelsData(canvas[1]);
+      chartInfo = getBarLabelsData(canvas[1]);
       title = canvas[2];
       createBarChart(id, title, chartInfo[0], chartInfo[1]);
     });
 
+    // Create radar chart
+    chartInfo = getRadarLabelsData([sequenceTypes, locations, strains, hosts, isolationSources], Object.keys(groupSamples).length);
+    createRadarChart("aggregatedRadarGraph", chartInfo[0], chartInfo[1]);
+
+  }
+
+  function createRadarChart(id, labels, data) {
+    options = {
+      legend: {
+        display: false
+      },
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          suggestedMin: 0,
+          stepSize: 20,
+          fontSize: 16,
+          backdropColor: 'white',
+          display: false
+        },
+        angleLines: {
+          display: false,
+        },
+        gridLines: {
+        lineWidth: 1.5,
+        color: '#707070'
+        },
+        pointLabels: {
+            fontSize: 16,
+        }
+      }
+    };
+
+    plugins = [{
+     beforeInit: function(chart) {
+        chart.data.labels.forEach(function(e, i, a) {
+           if (/\n/.test(e)) {
+              a[i] = e.split(/\n/); // Multi-line labels
+           }
+        });
+     }
+   }];
+
+    var canvas = document.getElementById(id);
+    var myChart = new Chart(canvas, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Percentage",
+          data: data,
+         backgroundColor: "rgba(255, 99, 132, 0.2)",
+          pointHitRadius: 10,
+          pointRadius: 0,
+          border: 1,
+          borderColor: "rgba(255, 99, 132, 0.05)"
+      }]},
+      options: options,
+      plugins: plugins
+   });
   }
 
   function createBarChart(id, title, labels, data) {
-    // Same colour is used for consistency
-    backgroundColours = [];
+    backgroundColours = []; // Same colour for consistency
     for (i = 0; i < labels.length; i ++) {
       alpha = Math.random()
+      if (alpha < 0.1) {
+        alpha += 0.1;
+      }
       backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
     }
+
+    options = {
+      legend: {
+          display: false
+      },
+      responsive: false,
+      aspectRatio: 2,
+      maintainAspectRatio: true,
+      scales: {
+        xAxes: [{
+          ticks: {
+            maxRotation: 90,
+            minRotation: 80,
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            lineWidth: 1.5,
+            color: '#707070'
+          },
+           scaleLabel: {
+            display: true,
+            labelString: title
+          }
+
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            lineWidth: 1.5,
+            color: '#707070'
+          }
+        }]
+      }
+    };
 
     var canvas = document.getElementById(id)
     var myChart = new Chart(canvas, {
@@ -101,46 +238,16 @@
         datasets: [{
           data: data,
           backgroundColor: backgroundColours,
+          border: 5
         }]
       },
-      options: {
-        legend: {
-            display: false
-        },
-        responsive: false,
-        scales: {
-          xAxes: [{
-            ticks: {
-              maxRotation: 90,
-              minRotation: 80,
-              display: false
-            },
-            gridLines: {
-              display: false
-            },
-             scaleLabel: {
-              display: true,
-              labelString: title
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-            },
-            gridLines: {
-              display: false
-            }
-          }]
-        }
-      }
+      options: options
     });
   }
 
   window.onload = function() {
-    console.log("show cards");
     displayGenomeCards();
-    displayBarGraphs();
+    displayGraphs();
   }
-
 
 </script>
