@@ -13,7 +13,7 @@
         <% if (userLoggedIn) { %>
 
         <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
-            <% if (isFavourited == 1) { %>
+            <% if (isFavourited === 1) { %>
             <form method="POST">
                 <button type="submit" class="btn btn-outline-dark btn-sm" title="Unfavorite Sample"
                         id="unfavouriteSample" style="margin-left: 2px; margin-right: 2px; color: #468e94;">
@@ -21,9 +21,8 @@
                        style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
             </form>
-            <% } else if (isFavourited == 0) { %>
+            <% } else if (isFavourited === 0) { %>
             <form method="POST">
-
                 <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Sample" id="favouriteSample"
                         style="margin-left: 2px; margin-right: 2px; color: #468e94;">
                     <i class="far fa-heart"
