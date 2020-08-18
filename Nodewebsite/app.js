@@ -72,9 +72,10 @@ var favSampleID;
 /*
 ROUTERS
  */
-var resultRouter = require('./routes/result');
-var advancedSearchRouter = require('./routes/advancedSearch');
-
+let resultRouter = require('./routes/result');
+let advancedSearchRouter = require('./routes/advancedSearch');
+let createAccountRouter = require('./routes/createAccount')
+let searchResultRouter = require('./routes/searchResults')
 
 /* --------------------------------------------------------------------------------
  *
@@ -90,6 +91,8 @@ app.use((req, res, next) => {
 
 app.use('/result', resultRouter);
 app.use('/advancedSearch', advancedSearchRouter);
+app.use('/createAccount', createAccountRouter);
+app.use('/searchResults', searchResultRouter);
 
 // index page
 app.get('/', function (req, res) {
@@ -178,103 +181,9 @@ app.get('/', function (req, res) {
 /*
  * User account creation page, renders page's html
  */
-app.get('/createAccount', function (req, res) {
-    if (req.session.userStatus === "loggedIn") {
-        userLoggedIn = true;
-
-    } else {
-        userLoggedIn = false;
-    }
-    userAlreadyExists = false;
-
-    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: userAlreadyExists });
-});
 
 
 // search results page
-app.get('/searchResults', function (req, res) {
-    if (req.session.userStatus == "loggedIn") {
-        userLoggedIn = true;
-
-    } else {
-        userLoggedIn = false;
-    }
-
-    let input = req.query.searchInput;
-    let option = req.query.searchOption;
-    let number = 0;
-	if (req.query.searchInput) {
-		if(option == "Sequence"){
-			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-				"sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-				"FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-				"WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE st = '" + input + "')", (err, result_samples) => {
-				console.log(err, result_samples);
-				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-			});
-		} else if(option == "Location"){
-			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-				"sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'country' ILIKE '%" + input + "%')", (err, result_samples) => {
-				console.log(err, result_samples);
-				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-			});
-		} else if(option == "Strain Name"){
-			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-				"sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'strain' ILIKE '%" + input + "%')", (err, result_samples) => {
-				console.log(err, result_samples);
-				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-			});
-		} else if(option == "Host"){
-			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-				"sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'host' ILIKE '%" + input + "%')", (err, result_samples) => {
-				console.log(err, result_samples);
-				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-			});
-		} else if(option == "Source"){
-			client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-				"sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-				"sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-				"FROM sample_metadata INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-				"WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-				"WHERE metadata->>'isolation_source' ILIKE '%" + input + "%')", (err, result_samples) => {
-				console.log(err, result_samples);
-				number = result_samples.rows.length;
-				res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-			});
-        } else if(option == "Sample"){
-            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                "sample_metadata.metadata->>'isolation_source' AS isolation_source " +
-                "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                "WHERE sample_id = '" + input + "')", (err, result_samples) => {
-                console.log(err, result_samples);
-                number = result_samples.rows.length;
-                res.render('pages/searchResults', { samples: result_samples.rows, input: input, option: option, number: number, userLoggedIn: userLoggedIn });
-            });
-        }
-	} else {
-		res.redirect('/');
-	}
-});
 
 // Advanced search results page
 app.get('/advSearchResults', function (req, res) {
