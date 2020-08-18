@@ -27,7 +27,7 @@ router.post('/', function (req, res) {
         if (result_registered_users.rows.length != 1) {
             console.log('user not registered');
             var userNotRegistered = true;
-            res.render('pages/login', { userLoggedIn: userLoggedIn, userNotRegistered: userNotRegistered});
+            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered});
         } else {
             bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
                 //if password matched DB password
@@ -98,6 +98,7 @@ router.post('/', function (req, res) {
                                                 suggested: suggested.rows,
                                                 haveFavs: haveFavs,
                                                 haveSugs: haveSugs,
+                                                creationSuccess: false,
                                                 userNotRegistered: userNotRegistered
                                             });
                                         });
@@ -105,12 +106,12 @@ router.post('/', function (req, res) {
                                 });
                             });
                         } else {
-                            res.render('pages/index', {  userLoggedIn: userLoggedIn, userNotRegistered: userNotRegistered,
+                            res.render('pages/index', {  userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered,
                                 favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
                         }
                     });
                 } else {
-                    res.render('pages/login', { userLoggedIn: userLoggedIn, userNotRegistered: userNotRegistered,
+                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered,
                         favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs});
                 }
             });
