@@ -78,7 +78,8 @@ let createAccountRouter = require('./routes/createAccount')
 let searchResultRouter = require('./routes/searchResults')
 let advSearchResultRouter = require('./routes/advSearchResults');
 let loginRouter = require('./routes/login');
-let favouriteRouter = require('./routes/favourites')
+let favouriteRouter = require('./routes/favourites');
+let groupsRouter = require('./routes/groups');
 
 /* --------------------------------------------------------------------------------
  *
@@ -99,6 +100,91 @@ app.use('/searchResults', searchResultRouter);
 app.use('/advSearchResults', advSearchResultRouter);
 app.use('/login', loginRouter);
 app.use('/favourites', favouriteRouter)
+app.use('/groups', groupsRouter)
+
+app.get('/viewGroup', function (req, res) {
+    userLoggedIn = req.session.userStatus == "loggedIn";
+
+    let groupID = req.query.sampleSelection; // groupID instead?
+
+    if(req.session.userStatus == "loggedIn"){
+        // TODO: SQL Query to get of group information and samples belonging to each group
+        // result_samples.rows
+
+        result_samples = [{
+            country: "unknown/missing",
+            host: "undefined",
+            id: "40584",
+            isolation_source: "undefined",
+            st: "72",
+            strain: "undefined"
+        }, {
+            country: "United States of America (USA)",
+            host: "Homo sapiens",
+            id: "43765",
+            isolation_source: "Nares",
+            st: "8",
+            strain: "H51158"
+        }, {
+            country: "United States of America (USA)",
+            host: "Homo sapiens",
+            id: "44028",
+            isolation_source: "Nares",
+            st: "8",
+            strain: "M42212"
+        }, {
+            country: "United States of America (USA)",
+            host: "Human",
+            id: "41697",
+            isolation_source: "Respiratory",
+            st: "8",
+            strain: "2588STDY5627603"
+        }, {
+            country: "United States of America (USA)",
+            host: "Human",
+            id: 41823,
+            isolation_source: "Respiratory",
+            st: 15,
+            strain: "undefined",
+        }, {
+            country: "unknown/missing",
+            host: "undefined",
+            id: "43502",
+            isolation_source: "Sputum",
+            st: "8",
+            strain: "COAS6087"
+        }, {
+            country: "unknown/missing",
+            host: "undefined",
+            id: "43502",
+            isolation_source: "Sputum",
+            st: "8",
+            strain: "COAS6087"
+        }];
+
+        groupInfo = {
+            group_id: "4000",
+            description: "Really close genomes to sample 44140",
+            name: "Group 4",
+            count: "4",
+            created: "2019-09-15T13:45:30",
+            modified: "2020-01-02T13:45:30"
+        };
+
+        res.render('pages/viewGroup', {
+            userLoggedIn: userLoggedIn,
+            samples: result_samples,
+            groupInfo: groupInfo
+        });
+    }
+    else{
+        res.status(404);
+        res.send({ error: 'Not found' });
+        res.render('pages/error');
+    }
+})
+
+
 
 // index page
 app.get('/', function (req, res) {
@@ -277,194 +363,6 @@ app.get('/tutorials', function (req, res) {
     }
     res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
 });
-
-app.get('/groups', function (req, res) {
-    userLoggedIn = req.session.userStatus == "loggedIn";
-
-    let groups = [];
-    let haveGroups = false;
-
-    if(req.session.userStatus == "loggedIn"){
-        //TODO SQL Query to get list of groups
-
-        res.render('pages/groups', {
-            userLoggedIn: userLoggedIn,
-            groups: [
-                {
-                    group_id: "0001",
-                    name: "group 1",
-                    count: "10",
-                    created: "2020-01-15T13:45:30",
-                    modified: "2020-02-15T13:45:30"
-                },
-                {
-                    group_id: "0020",
-                    name: "group 2",
-                    count: "15",
-                    created: "2020-05-15T13:45:30",
-                    modified: "2020-07-15T13:45:30"
-                },
-                {
-                    group_id: "0300",
-                    name: "group 3",
-                    count: "7",
-                    created: "2020-01-15T13:45:30",
-                    modified: "2020-09-15T13:45:30"
-                },
-                {
-                    group_id: "4000",
-                    name: "group 4",
-                    count: "4",
-                    created: "2019-09-15T13:45:30",
-                    modified: "2020-01-02T13:45:30"
-                },
-                ],
-            haveGroups: true
-        });
-    }
-    else{
-        res.status(404);
-        res.send({ error: 'Not found' });
-    }
-})
-
-/* view samples page
-*
-* Searches through the db and retrieves samples belonging to each group
-* displaying aggregated statistics
-*
-*/
-app.get('/viewGroup', function (req, res) {
-    userLoggedIn = req.session.userStatus == "loggedIn";
-
-    let groupID = req.query.sampleSelection; // groupID instead?
-
-    if(req.session.userStatus == "loggedIn"){
-        // TODO: SQL Query to get of group information and samples belonging to each group
-        // result_samples.rows
-
-        result_samples = [{
-          country: "unknown/missing",
-          host: "undefined",
-          id: "40584",
-          isolation_source: "undefined",
-          st: "72",
-          strain: "undefined"
-        }, {
-          country: "United States of America (USA)",
-          host: "Homo sapiens",
-          id: "43765",
-          isolation_source: "Nares",
-          st: "8",
-          strain: "H51158"
-        }, {
-          country: "United States of America (USA)",
-          host: "Homo sapiens",
-          id: "44028",
-          isolation_source: "Nares",
-          st: "8",
-          strain: "M42212"
-        }, {
-          country: "United States of America (USA)",
-          host: "Human",
-          id: "41697",
-          isolation_source: "Respiratory",
-          st: "8",
-          strain: "2588STDY5627603"
-        }, {
-          country: "United States of America (USA)",
-          host: "Human",
-          id: 41823,
-          isolation_source: "Respiratory",
-          st: 15,
-          strain: "undefined",
-        }, {
-          country: "unknown/missing",
-          host: "undefined",
-          id: "43502",
-          isolation_source: "Sputum",
-          st: "8",
-          strain: "COAS6087"
-        }, {
-          country: "unknown/missing",
-          host: "undefined",
-          id: "43502",
-          isolation_source: "Sputum",
-          st: "8",
-          strain: "COAS6087"
-        }];
-
-        groupInfo = {
-          group_id: "4000",
-          description: "Really close genomes to sample 44140",
-          name: "Group 4",
-          count: "4",
-          created: "2019-09-15T13:45:30",
-          modified: "2020-01-02T13:45:30"
-        };
-
-        res.render('pages/viewGroup', {
-            userLoggedIn: userLoggedIn,
-            samples: result_samples,
-            groupInfo: groupInfo
-        });
-    }
-    else{
-        res.status(404);
-        res.send({ error: 'Not found' });
-        res.render('pages/error');
-    }
-})
-
-
-/* favourites page
- *
- * Searches through the db based on user's email and finds associated favourited genome samples
- */
-
-
-/* --------------------------------------------------------------------------------
- *
- * POST routes
- *
- */
-
-
-/* User account creation page
- *
- * Checks if user tries to submit an email already in the database and sends an alert to the HTML scripts if found
- * Otherwise, adds user account details to db and hashes password
- */
-
-
-
- /* Login page
-  *
-  * Check if user exists based on submitted username and email, if found, sets sessions for email and
-  * logged in status. Also sets cookies which potentially could be removed considering session is set
-  * for logged in status. Db is then checked against users email for any favourited samples, if found,
-  * four samples are retrieved and recommended samples are then found from the database also, to
-  * display on the landing/index page.
-  *
-  * If user not found, alert is sent on HTML
-  */
-
-/* Results page
- *
- * Updates the favourites db for the current user based on the user's email and also updates
- * the isFavourited value (0 = false, 1 = true) which is sent through to the HTML scripts
- * Then queries the db for the genome sample details to display in results table and cytoscape scripts
- */
-
-
-/* Favourites page
- *
- * Removes favourites from user account and db
- */
-
-/*
- * --------------------------------------------------------------------------------
- */
 
 
 app.listen(8000);
