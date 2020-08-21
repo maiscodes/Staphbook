@@ -16,13 +16,12 @@ router.get('/', function (req, res) {
     // set session to 'false'
     req.session.favourited = isFavourited; //initially set to 'false' before SQL checks below
 
-
     if (userLoggedIn){
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
-        req.db.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
+        req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleID}).then((fav_results) => {
             console.log(err, fav_results);
-            if (fav_results.rows.length > 0) {
+            if (fav_results.length > 0) {
                 isFavourited = 1; //set to "true"
 
                 req.session.favourited = isFavourited;
@@ -31,97 +30,132 @@ router.get('/', function (req, res) {
         });
     }
 
+    // TODO: Find the current groups of sample
 
     // Tags
-    req.db.query('SELECT tag_id FROM tag_tosample WHERE sample_id=' + sampleID + '', (err, result_tag_tosample) => {
-        //console.log(err, result_tag_tosample);
+    req.knex.select('tag_id').from('tag_tosample').where({sample_id: sampleID}).then((result_tag_tosample) => {
 
         try {
-            let tagID = result_tag_tosample.rows[0].tag_id;
-            req.db.query('SELECT * FROM tag_tag WHERE id=' + tagID + '', (err, result_tag_tag) => {
+            let tagID = result_tag_tosample[0].tag_id;
+            req.knex.select('*').from('tag_tag').where({id: tagID}).then((result_tag_tag) => {
 
                 // Sample Name
-                req.db.query('SELECT name FROM sample_sample WHERE id=' + sampleID + '', (err, result_sample_sample) => {
-                    console.log(err, result_tag_tosample);
-                    let sampleName = result_sample_sample.rows[0].name;
+                req.knex.select('name').from('sample_sample').where({id: sampleID}).then((result_sample_sample) => {
+                    let sampleName = result_sample_sample[0].name;
 
                     // Sample's weighted distances
-                    req.db.query("SELECT * FROM weighted_distance WHERE selected_sample='" + sampleName + "'", (err, result_weighted_distances) => {
-                        //console.log(err, result_weighted_distances);
+                    req.knex.select('*').from('weighted_distance').where({selected_sample: sampleName}).then((result_weighted_distances) => {
 
                         // Metadata
-                        req.db.query('SELECT * FROM sample_metadata WHERE sample_id=' + sampleID + '', (err, result_sample_metadata) => {
+                        req.knex.select('*').from('sample_metadata').where({sample_id: sampleID}).then((result_sample_metadata) => {
 
                             // BLASTquery
-                            req.db.query('SELECT * FROM staphopia_blastquery', (err, result_blastquery) => {
+                            req.knex.select('*').from('staphopia_blastquery').then((result_blastquery) => {
 
                                 // Sequencing Metrics
-                                req.db.query('SELECT * FROM sequence_summary WHERE sample_id=' + sampleID + '', (err, result_sequence_summary) => {
-                                    //console.log(err, result_sequence_summary);
+                                req.knex.select('*').from('sequence_summary').where({sample_id: sampleID}).then((result_sequence_summary) => {
 
                                     // Assembly Metrics
-                                    req.db.query('SELECT * FROM assembly_summary WHERE sample_id=' + sampleID + '', (err, result_assembly_summary) => {
-                                        //console.log(err, result_assembly_summary);
+                                    req.knex.select('*').from('assembly_summary').where({sample_id: sampleID}).then((result_assembly_summary) => {
 
                                         // MLST
-                                        req.db.query('SELECT * FROM mlst_mlst WHERE sample_id=' + sampleID + '', (err, result_mlst_mlst) => {
+                                        req.knex.select('*').from('mlst_mlst').where({sample_id: sampleID}).then((result_mlst_mlst) => {
 
                                             // SCCmec Primer Hits
-                                            req.db.query('SELECT * FROM sccmec_primers WHERE sample_id=' + sampleID + '', (err, result_sccmec_primers) => {
+                                            req.knex.select('*').from('sccmec_primers').where({sample_id: sampleID}).then((result_sccmec_primers) => {
 
                                                 // SCCmec Subtype Hits
-                                                req.db.query('SELECT * FROM sccmec_subtypes WHERE sample_id=' + sampleID + '', (err, result_sccmec_subtypes) => {
+                                                req.knex.select('*').from('sccmec_subtypes').where({sample_id: sampleID}).then((result_sccmec_subtypes) => {
 
                                                     // SCCmec Protien Hits
-                                                    req.db.query('SELECT * FROM sccmec_proteins WHERE sample_id=' + sampleID + '', (err, result_sccmec_proteins) => {
+                                                    req.knex.select('*').from('sccmec_proteins').where({sample_id: sampleID}).then((result_sccmec_proteins) => {
 
                                                         // Samples with the same Sequence Type
-                                                        let st = result_mlst_mlst.rows[0].st;
-                                                        req.db.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                            "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                            "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_sample.name, sample_sample.id " +
-                                                            "FROM mlst_mlst  " +
-                                                            "INNER JOIN sample_sample ON mlst_mlst.sample_id=sample_sample.id " +
-                                                            "INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                                                            "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                            "WHERE st = '" + st + "')", (err, same_sequence) => {
-                                                            number = number + same_sequence.rows.length;
+                                                        let st = result_mlst_mlst[0].st;
+                                                        console.log(st);
+                                                        let same_sequence_samples = req.knex.select('sample_id').from('sample_metadata').where({st: st});
+                                                        req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                        name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+                                                            .from('mlst_mlst')
+                                                            .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                            .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                            .where('mlst_mlst.sample_id', 'in', same_sequence_samples)
+                                                            .then((same_sequence) => {
+                                                              for(same of same_sequence) { // Make backwards compatible, TODO: keep as metadata later
+                                                                same.country = same.metadata.country;
+                                                                same.strain = same.metadata.strain;
+                                                                same.host = same.metadata.host;
+                                                                same.isolation_source = same.metadata.isolation_source;
+                                                              }
+                                                            number = number + same_sequence.length;
+
 
                                                             // Samples with the same Location
-                                                            let location = result_sample_metadata.rows[0].metadata.country;
-                                                            req.db.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                "sample_metadata.metadata->>'isolation_source' AS isolation_source , sample_sample.name, sample_sample.id " +
-                                                                "FROM sample_metadata INNER JOIN sample_sample ON sample_metadata.sample_id = sample_sample.id " +
-                                                                "INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                "WHERE metadata->>'country' = '" + location + "')", (err, same_location) => {
-                                                                console.log(err);
-                                                                number = number + same_location.rows.length;
+                                                            let location = result_sample_metadata[0].metadata.country;
+                                                            // console.log(location);
+                                                            if (location == undefined) {
+                                                              location = "";
+                                                            }
+                                                            let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['country', location]);
+                                                            req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                            name: 'sample_sample.name', id: 'sample_sample.id'})
+                                                                .from('mlst_mlst')
+                                                                .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                                .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                                .where('mlst_mlst.sample_id', 'in', same_location_samples)
+                                                                .then((same_location) => {
+                                                                  for(same of same_location) {
+                                                                    same.country = same.metadata.country;
+                                                                    same.strain = same.metadata.strain;
+                                                                    same.host = same.metadata.host;
+                                                                    same.isolation_source = same.metadata.isolation_source;
+                                                                  }
+                                                                number = number + same_location.length;
+
 
                                                                 // Samples with the same Host
-                                                                let host = result_sample_metadata.rows[0].metadata.host;
-                                                                req.db.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                    "sample_metadata.metadata->>'isolation_source' AS isolation_source , sample_sample.name, sample_sample.id " +
-                                                                    "FROM sample_metadata " +
-                                                                    "INNER JOIN sample_sample ON sample_metadata.sample_id=sample_sample.id " +
-                                                                    "INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                    "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                    "WHERE metadata->>'host' = '" + host + "')", (err, same_host) => {
-                                                                    number = number + same_host.rows.length;
+                                                                let host = result_sample_metadata[0].metadata.host;
+                                                                if (host == undefined) {
+                                                                  host = "";
+                                                                }
+                                                                // console.log(host);
+                                                                let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['host', host]);
+                                                                req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                                name: 'sample_sample.name', id: 'sample_sample.id'})
+                                                                    .from('mlst_mlst')
+                                                                    .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                                    .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                                    .where('mlst_mlst.sample_id', 'in', same_host_samples)
+                                                                    .then((same_host) => {
+                                                                      for(same of same_location) {
+                                                                        same.country = same.metadata.country;
+                                                                        same.strain = same.metadata.strain;
+                                                                        same.host = same.metadata.host;
+                                                                        same.isolation_source = same.metadata.isolation_source;
+                                                                      }
+                                                                    number = number + same_host.length;
 
                                                                     // Samples with the same Isolation Source
-                                                                    let iso = result_sample_metadata.rows[0].metadata.isolation_source;
-                                                                    req.db.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                                                        "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                                                        "sample_metadata.metadata->>'isolation_source' AS isolation_source , sample_sample.name, sample_sample.id " +
-                                                                        "FROM sample_metadata " +
-                                                                        "INNER JOIN sample_sample ON sample_metadata.sample_id=sample_sample.id " +
-                                                                        "INNER JOIN mlst_mlst ON sample_metadata.sample_id=mlst_mlst.sample_id " +
-                                                                        "WHERE sample_metadata.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                                                                        "WHERE metadata->>'isolation_source' = '" + iso + "')", (err, same_isolation) => {
-                                                                        number = number + same_isolation.rows.length;
+                                                                    let iso = result_sample_metadata[0].metadata.isolation_source;
+                                                                    if (iso == undefined) {
+                                                                      iso = "";
+                                                                    }
+                                                                    // console.log(iso);
+                                                                    let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['isolation_source', iso]);
+                                                                    req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                                    name: 'sample_sample.name', id: 'sample_sample.id'})
+                                                                        .from('mlst_mlst')
+                                                                        .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                                        .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                                        .where('mlst_mlst.sample_id', 'in', same_iso_samples)
+                                                                        .then((same_isolation) => {
+                                                                          for(same of same_location) {
+                                                                            same.country = same.metadata.country;
+                                                                            same.strain = same.metadata.strain;
+                                                                            same.host = same.metadata.host;
+                                                                            same.isolation_source = same.metadata.isolation_source;
+                                                                          }
+                                                                        number = number + same_isolation.length;
 
                                                                         /**
                                                                          //favourites
@@ -154,37 +188,90 @@ router.get('/', function (req, res) {
                                                                                         mainRelatedSampleDetails.push(detailedRow);
                                                                                     })
 
-                                                                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag.rows, isFavourited: isFavourited,
-                                                                                        sample_metadata: result_sample_metadata.rows, mlst_mlst: result_mlst_mlst.rows, userLoggedIn: userLoggedIn, same_hosts: same_host.rows,
-                                                                                        same_locations: same_location.rows, same_sequences: same_sequence.rows, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary.rows,
-                                                                                        same_isolations: same_isolation.rows, sccmec_primers: result_sccmec_primers.rows, assembly_summary: result_assembly_summary.rows,
-                                                                                        sccmec_subtypes: result_sccmec_subtypes.rows, sccmec_proteins: result_sccmec_proteins.rows, weighted_distance: result_weighted_distances.rows,
+                                                                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag, isFavourited: isFavourited,
+                                                                                        sample_metadata: result_sample_metadata, mlst_mlst: result_mlst_mlst, userLoggedIn: userLoggedIn, same_hosts: same_host,
+                                                                                        same_locations: same_location, same_sequences: same_sequence, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary,
+                                                                                        same_isolations: same_isolation, sccmec_primers: result_sccmec_primers, assembly_summary: result_assembly_summary,
+                                                                                        sccmec_subtypes: result_sccmec_subtypes, sccmec_proteins: result_sccmec_proteins, weighted_distance: result_weighted_distances,
                                                                                         all_weighted_distances: mainRelatedSampleDetails });
 
-                                                                                })
-                                                                        })
+                                                                                }).catch(function(err) {
+                                                                                  console.log(err);
+                                                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                                });
 
-
+                                                                        }).catch(function(err) {
+                                                                          console.log(err);
+                                                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                        });
+                                                                    }).catch(function(err) {
+                                                                      console.log(err);
+                                                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                                     });
+                                                                }).catch(function(err) {
+                                                                  console.log(err);
+                                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                                 });
+                                                            }).catch(function(err) {
+                                                              console.log(err);
+                                                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                             });
+                                                        }).catch(function(err) {
+                                                          console.log(err);
+                                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                         });
+                                                    }).catch(function(err) {
+                                                      console.log(err);
+                                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                     });
+                                                }).catch(function(err) {
+                                                  console.log(err);
+                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                                 });
+                                            }).catch(function(err) {
+                                              console.log(err);
+                                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                             });
+                                        }).catch(function(err) {
+                                          console.log(err);
+                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                         });
+                                    }).catch(function(err) {
+                                      console.log(err);
+                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                     });
+                                }).catch(function(err) {
+                                  console.log(err);
+                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                                 });
+                            }).catch(function(err) {
+                              console.log(err);
+                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                             });
+                        }).catch(function(err) {
+                          console.log(err);
+                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                         });
+                    }).catch(function(err) {
+                      console.log(err);
+                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                     });
+                }).catch(function(err) {
+                  console.log(err);
+                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
                 });
+            }).catch(function(err) {
+              console.log(err);
+              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
             });
         }
         catch (err) {
             res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
         }
 
+    }).catch(function(err) {
+      console.log(err);
+      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
     });
 });
 

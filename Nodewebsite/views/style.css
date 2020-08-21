@@ -861,5 +861,15 @@ input:checked + .toggle:before {
   padding: .8em;
 }
 
-/* min-height: 200px;
-width: 30%; */
+/* Error page */
+#errorPage {
+  margin-top: 2em;
+}
+
+#errorButton {
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px;
+  color: white;
+  background-color: rgba(0,0,0,.7);
+}
