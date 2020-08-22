@@ -2,13 +2,13 @@ var express = require('express')
 var router = express.Router()
 let url = require('url')
 
-// result page
+// Result page endpoint
 router.get('/', function (req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
     }
-    let number = 0;
+    //let number = 0;
     let sampleID = req.query.sampleSelection;
     req.session.prevSample = sampleID;
 
@@ -83,7 +83,7 @@ router.get('/', function (req, res) {
                                                                 same.host = same.metadata.host;
                                                                 same.isolation_source = same.metadata.isolation_source;
                                                               }
-                                                            number = number + same_sequence.length;
+                                                            //number = number + same_sequence.length;
 
 
                                                             // Samples with the same Location
@@ -106,7 +106,7 @@ router.get('/', function (req, res) {
                                                                     same.host = same.metadata.host;
                                                                     same.isolation_source = same.metadata.isolation_source;
                                                                   }
-                                                                number = number + same_location.length;
+                                                                //number = number + same_location.length;
 
 
                                                                 // Samples with the same Host
@@ -129,7 +129,7 @@ router.get('/', function (req, res) {
                                                                         same.host = same.metadata.host;
                                                                         same.isolation_source = same.metadata.isolation_source;
                                                                       }
-                                                                    number = number + same_host.length;
+                                                                    //number = number + same_host.length;
 
                                                                     // Samples with the same Isolation Source
                                                                     let iso = result_sample_metadata[0].metadata.isolation_source;
@@ -151,7 +151,7 @@ router.get('/', function (req, res) {
                                                                             same.host = same.metadata.host;
                                                                             same.isolation_source = same.metadata.isolation_source;
                                                                           }
-                                                                        number = number + same_isolation.length;
+                                                                        //number = number + same_isolation.length;
 
                                                                         /**
                                                                          //favourites
@@ -271,13 +271,14 @@ router.get('/', function (req, res) {
     });
 });
 
+// Favorites endpoint
 router.post('/', function (req, res) {
     let userLoggedIn = false;
-    if(req.session.userStatus === "loggedIn") {
+    if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
     }
     let email = "NA";
-    let number = 0;
+    //let number = 0;
     let sampleID = req.session.prevSample;
 
     // Async programming, because javascript

@@ -873,3 +873,20 @@ input:checked + .toggle:before {
   color: white;
   background-color: rgba(0,0,0,.7);
 }
+
+/* Favourites */
+.unfavoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #ebebeb;
+}
+
+.favoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #468e94;
+}
