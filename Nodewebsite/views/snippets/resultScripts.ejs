@@ -708,6 +708,7 @@
       let minValue = document.getElementById("minGeneticDistInput").value;
       let maxValue = document.getElementById("maxGeneticDistInput").value;
       displayFindMyFriendsSection(minValue, maxValue);
+      updateFavoritesButton();
     }
 
     // Update display when window is rezied, TODO: figure out a way to make this more efficient
@@ -720,6 +721,19 @@
         card = cards[i];
         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
       }
+    }
+
+    function updateFavoritesButton(){
+      let isFavorite = <%- isFavourited %>; // TODO: Change to american spelling
+      let style = "";
+      if (isFavorite) {
+        style = "favoriteSample";
+      }
+      else {
+        style = "unfavoriteSample";
+      }
+      let favoriteButton = document.getElementById("favoriteButton");
+      favoriteButton.setAttribute("style", `btn btn-outline-dark btn-sm ${style}`);
     }
 
 </script>

@@ -11,20 +11,16 @@ router.get('/', function (req, res) {
     let number = 0;
     let sampleID = req.query.sampleSelection;
     req.session.prevSample = sampleID;
-    let isFavourited = 0;
 
-    // set session to 'false'
-    req.session.favourited = isFavourited; //initially set to 'false' before SQL checks below
+    req.session.favourited = false; // Assume that sample is not favorited before check
 
     if (userLoggedIn){
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
         req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleID}).then((fav_results) => {
-            console.log(err, fav_results);
+            //console.log(`Results are: ${JSON.stringify(fav_results)}`);
             if (fav_results.length > 0) {
-                isFavourited = 1; //set to "true"
-
-                req.session.favourited = isFavourited;
+                req.session.favourited = true;
 
             }
         });
@@ -188,7 +184,7 @@ router.get('/', function (req, res) {
                                                                                         mainRelatedSampleDetails.push(detailedRow);
                                                                                     })
 
-                                                                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag, isFavourited: isFavourited,
+                                                                                    res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag, isFavourited: req.session.favourited,
                                                                                         sample_metadata: result_sample_metadata, mlst_mlst: result_mlst_mlst, userLoggedIn: userLoggedIn, same_hosts: same_host,
                                                                                         same_locations: same_location, same_sequences: same_sequence, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary,
                                                                                         same_isolations: same_isolation, sccmec_primers: result_sccmec_primers, assembly_summary: result_assembly_summary,
@@ -279,57 +275,49 @@ router.post('/', function (req, res) {
     let userLoggedIn = false;
     if(req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
-
     }
     let email = "NA";
     let number = 0;
     let sampleID = req.session.prevSample;
 
-
-    let isFavourited = req.session.favourited;
-
-    // if isFavourited is 'false', set it to 'true'
-    if (isFavourited == 0) {
-        if (userLoggedIn){
-            let value = req.session.userEmail;
-            let email = decodeURIComponent(value);
-            req.db.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
-                console.log(err, fav_results);
-                if(fav_results.rows.length < 1){
-                    req.db.query('INSERT INTO user_favorites (email, sample_id) VALUES (\''
-                        + email + '\',\'' + sampleID + '\')',
-                        function (error, results, fields) {
-                            if (error) {
-                                throw error;
-                            }
-                        });
-                }
-            });
-        }
-
-        isFavourited = 1;
+    // Async programming, because javascript
+    const getFavorite = async () => {
+      return !req.session.favourited;
     }
-    else if (isFavourited == 1) { // isFavourited is set to 'true', so set it to 'false'
-        if (userLoggedIn){
-            let value = req.session.userEmail;
-            let email = decodeURIComponent(value);
-            console.log("=============================================================");
-            req.db.query("SELECT * FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "", (err, fav_results) => {
-                console.log(err, fav_results);
-                if(fav_results.rows.length > 0){
-                    req.db.query("DELETE FROM user_favorites WHERE email='" + email + "' AND sample_id=" + sampleID + "",
-                        function (error, results, fields) {
-                            if (error) {
-                                throw error;
-                            }
-                        });
-                }
-            });
-        }
-        isFavourited = 0;
+
+    getFavorite().then((isFavourited) => {
+      console.log(isFavourited);
+      req.session.favourited = isFavourited;
+
+      if (!isFavourited && userLoggedIn ) {
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        // Delete from database, if record exists
+        req.knex('user_favorites')
+        .where({email: email, sample_id: sampleID})
+        .del()
+        .then((result) => {
+          console.log(`User favorites record ${email}-${sampleID} has been deleted successfully`);
+        })
+        .catch((error) => {
+          console.log(`User favourites record ${email}-${sampleID} does not exist and cannot be deleted`);
+        })
+      }
+      else if (isFavourited && userLoggedIn){ // isFavourited is set to 'true', so set it to 'false'
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        console.log(email);
+        // Unique constraint applied in postgres database
+        req.knex('user_favorites')
+        .insert({email: email, sample_id: sampleID})
+        .then((result) => {
+          console.log(`${sampleID} added to ${email}'s' favourites`);
+        })
+        .catch((error) => {
+          console.log("Already added to favourites");
+        })
+
     }
-    // update session to reflect new value
-    req.session.favourited = isFavourited;
 
     res.redirect(url.format({
         pathname: "/result",
@@ -337,6 +325,9 @@ router.post('/', function (req, res) {
             sampleSelection: sampleID
         }
     }))
+
+    });
+
 });
 
 module.exports = router;
