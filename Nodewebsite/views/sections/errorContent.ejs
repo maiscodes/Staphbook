@@ -1,9 +1,9 @@
 <div id = "errorPage">
 
-  <h3> Sorry, there was an error trying to retrieve sample <%- sample_ID %>.</h3>
+  <h3> Sorry, there was an error trying to retrieve <%= description %> <%= id %>.</h3>
 
-  <form action='/result' method="get">
-    <button id="errorButton" submit" name="sampleSelection" onclick="window.location.href='/result'" value="<%= sample_ID %>">
+  <form action="<%= endpoint %>" method="get">
+    <button id="errorButton" submit" name="<%= query %>" onclick="window.location.href='<%= endpoint %>'" value="<%= id %>">
       Click here to try again
     </button>
   </form>

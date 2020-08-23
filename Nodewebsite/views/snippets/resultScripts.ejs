@@ -723,14 +723,15 @@
       }
     }
 
+    /*
+     * Script for Favorites Functionality
+     * Displaying whether or not a sample has been favorited by a user.
+     */
     function updateFavoritesButton(){
       let isFavorite = <%- isFavourited %>; // TODO: Change to american spelling
-      let style = "";
+      let style = "unfavoriteSample";
       if (isFavorite) {
         style = "favoriteSample";
-      }
-      else {
-        style = "unfavoriteSample";
       }
       let favoriteButton = document.getElementById("favoriteButtonHeart");
       favoriteButton.setAttribute("class", `fas fa-heart ${style}`);

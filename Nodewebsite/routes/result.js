@@ -4,10 +4,11 @@ let url = require('url')
 
 // Result page endpoint
 router.get('/', function (req, res) {
-    let userLoggedIn = false;
-    if (req.session.userStatus === "loggedIn") {
-        userLoggedIn = true;
-    }
+    let userLoggedIn = req.session.userStatus === "loggedIn";
+    //let userLoggedIn = false;
+    //if (req.session.userStatus === "loggedIn") {
+    //    userLoggedIn = true;
+    //}
     //let number = 0;
     let sampleID = req.query.sampleSelection;
     req.session.prevSample = sampleID;
@@ -25,6 +26,9 @@ router.get('/', function (req, res) {
             }
         });
     }
+
+    // Setup error page config
+    errorPageConfig = { description: 'sample', query: 'sampleSelection', id: sampleID, endpoint: '/result', userLoggedIn: userLoggedIn };
 
     // TODO: Find the current groups of sample
 
@@ -193,81 +197,81 @@ router.get('/', function (req, res) {
 
                                                                                 }).catch(function(err) {
                                                                                   console.log(err);
-                                                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                                  res.render('pages/error', errorPageConfig);
                                                                                 });
 
                                                                         }).catch(function(err) {
                                                                           console.log(err);
-                                                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                          res.render('pages/error', errorPageConfig);
                                                                         });
                                                                     }).catch(function(err) {
                                                                       console.log(err);
-                                                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                      res.render('pages/error', errorPageConfig);
                                                                     });
                                                                 }).catch(function(err) {
                                                                   console.log(err);
-                                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                                  res.render('pages/error', errorPageConfig);
                                                                 });
                                                             }).catch(function(err) {
                                                               console.log(err);
-                                                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                              res.render('pages/error', errorPageConfig);
                                                             });
                                                         }).catch(function(err) {
                                                           console.log(err);
-                                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                          res.render('pages/error', errorPageConfig);
                                                         });
                                                     }).catch(function(err) {
                                                       console.log(err);
-                                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                      res.render('pages/error', errorPageConfig);
                                                     });
                                                 }).catch(function(err) {
                                                   console.log(err);
-                                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                                  res.render('pages/error', errorPageConfig);
                                                 });
                                             }).catch(function(err) {
                                               console.log(err);
-                                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                              res.render('pages/error', errorPageConfig);
                                             });
                                         }).catch(function(err) {
                                           console.log(err);
-                                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                          res.render('pages/error', errorPageConfig);
                                         });
                                     }).catch(function(err) {
                                       console.log(err);
-                                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                      res.render('pages/error', errorPageConfig);
                                     });
                                 }).catch(function(err) {
                                   console.log(err);
-                                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                                  res.render('pages/error', errorPageConfig);
                                 });
                             }).catch(function(err) {
                               console.log(err);
-                              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                              res.render('pages/error', errorPageConfig);
                             });
                         }).catch(function(err) {
                           console.log(err);
-                          res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                          res.render('pages/error', errorPageConfig);
                         });
                     }).catch(function(err) {
                       console.log(err);
-                      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                      res.render('pages/error', errorPageConfig);
                     });
                 }).catch(function(err) {
                   console.log(err);
-                  res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+                  res.render('pages/error', errorPageConfig);
                 });
             }).catch(function(err) {
               console.log(err);
-              res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+              res.render('pages/error', errorPageConfig);
             });
         }
         catch (err) {
-            res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+            res.render('pages/error', errorPageConfig);
         }
 
     }).catch(function(err) {
       console.log(err);
-      res.render('pages/error', { sample_ID: sampleID, userLoggedIn: userLoggedIn });
+      res.render('pages/error', errorPageConfig);
     });
 });
 
