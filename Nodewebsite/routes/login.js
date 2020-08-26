@@ -77,6 +77,10 @@ router.post("/", function (req, res) {
                     //   "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
                     //   "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
                     //   "WHERE";
+                    let same_sequence;
+                    let same_sequence_samples = req.knex
+                      .select("sample_id")
+                      .from("sample_metadata");
                     let selectKnex = req.knex
                       .select({
                         st: "mlst_mlst.st",
@@ -96,33 +100,37 @@ router.post("/", function (req, res) {
                         "mlst_mlst.sample_id",
                         "sample_metadata.sample_id"
                       )
-                      .where(
-                        "mlst_mlst.sample_id",
-                        "in",
-                        same_sequence_samples
-                      );
-
+                      .where("mlst_mlst.sample_id", "in", same_sequence_samples)
+                      .then((same_sequence) => {
+                        for (same of same_sequence) {
+                          // Make backwards compatible, TODO: keep as metadata later
+                          same.country = same.metadata.country;
+                          same.strain = same.metadata.strain;
+                          same.host = same.metadata.host;
+                          same.isolation_source =
+                            same.metadata.isolation_source;
+                          same.date = same.metadata.date_collected;
+                        }
+                      }).where;
                     if (fav_results.rows.length > 0) {
-                      selectKnex +=
-                        " sample_id = " + fav_results.rows[0].sample_id + "";
+                      selectKnex += {
+                        sample_id: fav_results.rows[0].sample_id,
+                      };
                     }
                     if (fav_results.rows.length > 1) {
-                      selectKnex +=
-                        " OR  sample_id = " +
-                        fav_results.rows[1].sample_id +
-                        "";
+                      selectKnex += {
+                        sample_id: fav_results.rows[1].sample_id,
+                      };
                     }
                     if (fav_results.rows.length > 2) {
-                      selectKnex +=
-                        " OR  sample_id = " +
-                        fav_results.rows[2].sample_id +
-                        "";
+                      selectKnex += {
+                        sample_id: fav_results.rows[2].sample_id,
+                      };
                     }
                     if (fav_results.rows.length > 3) {
-                      selectKnex +=
-                        " OR  sample_id = " +
-                        fav_results.rows[3].sample_id +
-                        "";
+                      selectKnex += {
+                        sample_id: fav_results.rows[3].sample_id,
+                      };
                     }
                     console.log(selectKnex);
 
@@ -189,22 +197,23 @@ router.post("/", function (req, res) {
                                 .where(
                                   "mlst_mlst.sample_id",
                                   "in",
-                                  same_sequence_samples +
-                                    result_weighted_distances.rows[1]
-                                      .comparison_sample +
-                                    "' " +
-                                    "OR sample_sample.name='" +
-                                    result_weighted_distances.rows[2]
-                                      .comparison_sample +
-                                    "' " +
-                                    "OR sample_sample.name='" +
-                                    result_weighted_distances.rows[3]
-                                      .comparison_sample +
-                                    "' " +
-                                    "OR sample_sample.name='" +
-                                    result_weighted_distances.rows[4]
-                                      .comparison_sample +
-                                    "'",
+                                  same_sequence_samples,
+                                  result_weighted_distances.rows[1].comparison_sample
+                                    .wherein(
+                                      sample_sample.name,
+                                      result_weighted_distances.rows[2]
+                                        .comparison_sample
+                                    )
+                                    .wherein(
+                                      sample_sample.name,
+                                      result_weighted_distances.rows[3]
+                                        .comparison_sample
+                                    )
+                                    .wherein(
+                                      sample_sample.name,
+                                      result_weighted_distances.rows[4]
+                                        .comparison_sample
+                                    ),
                                   (err, suggested) => {
                                     console.log(err, suggested);
                                     console.log(haveFavs);
