@@ -792,6 +792,20 @@ input:checked + .toggle:before {
     background-color: white;
     position: relative;
   }
+
+  .groupCard {
+    border-radius: 10px;
+    border: 1px solid #636363;
+    float: left;
+    width: 22%;
+    padding-left: 2em;
+    padding-right: 2em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    margin: 1em;
+    background-color: white;
+    position: relative;
+  }
 }
 
 
@@ -809,6 +823,21 @@ input:checked + .toggle:before {
     margin: 1em;
     background-color: white;
     position:relative;
+  }
+
+  .groupCard {
+    border-radius: 10px;
+    border: 1px solid #636363;
+    float: left;
+    width: 50%;
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    padding-left: 2em;
+    padding-right: 2em;
+    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    margin: 1em;
+    background-color: white;
+    position: relative;
   }
 }
 
@@ -859,6 +888,10 @@ input:checked + .toggle:before {
 
 .radarGraph {
   padding: .8em;
+}
+
+#groupSamplesFilterBar {
+  text-align: center;
 }
 
 /* Error page */

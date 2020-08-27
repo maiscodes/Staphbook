@@ -5,14 +5,8 @@ let url = require('url')
 // Result page endpoint
 router.get('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
-    //let userLoggedIn = false;
-    //if (req.session.userStatus === "loggedIn") {
-    //    userLoggedIn = true;
-    //}
-    //let number = 0;
     let sampleID = req.query.sampleSelection;
     req.session.prevSample = sampleID;
-
     req.session.favourited = false; // Assume that sample is not favorited before check
 
     if (userLoggedIn){
@@ -87,7 +81,6 @@ router.get('/', function (req, res) {
                                                                 same.host = same.metadata.host;
                                                                 same.isolation_source = same.metadata.isolation_source;
                                                               }
-                                                            //number = number + same_sequence.length;
 
 
                                                             // Samples with the same Location
@@ -110,7 +103,6 @@ router.get('/', function (req, res) {
                                                                     same.host = same.metadata.host;
                                                                     same.isolation_source = same.metadata.isolation_source;
                                                                   }
-                                                                //number = number + same_location.length;
 
 
                                                                 // Samples with the same Host
@@ -133,7 +125,6 @@ router.get('/', function (req, res) {
                                                                         same.host = same.metadata.host;
                                                                         same.isolation_source = same.metadata.isolation_source;
                                                                       }
-                                                                    //number = number + same_host.length;
 
                                                                     // Samples with the same Isolation Source
                                                                     let iso = result_sample_metadata[0].metadata.isolation_source;
@@ -155,14 +146,6 @@ router.get('/', function (req, res) {
                                                                             same.host = same.metadata.host;
                                                                             same.isolation_source = same.metadata.isolation_source;
                                                                           }
-                                                                        //number = number + same_isolation.length;
-
-                                                                        /**
-                                                                         //favourites
-                                                                         req.db.query('SELECT favourites FROM registered_users WHERE email=' + req.body.email + '', (err, result_registered_users) => {
-                                              console.log(err, result_registered_users);
-                                              will need to pass result_registered_users through res.render user_favourites: result_registered_users.rows
-                                                                         **/
 
                                                                         // Samples genetically related to current sample
                                                                         req.knex.select('name').from('sample_sample').where('id', '=', sampleID).then((sampleName) => {
@@ -282,7 +265,6 @@ router.post('/', function (req, res) {
         userLoggedIn = true;
     }
     let email = "NA";
-    //let number = 0;
     let sampleID = req.session.prevSample;
 
     // Async programming, because javascript
@@ -290,47 +272,50 @@ router.post('/', function (req, res) {
       return !req.session.favourited;
     }
 
+    const toggleFavourite = async (isFavourited) => {
+      if (userLoggedIn) {
+        if (!isFavourited) {
+          let value = req.session.userEmail;
+          let email = decodeURIComponent(value);
+          // Delete from database, if record exists
+          req.knex('user_favorites')
+          .where({email: email, sample_id: sampleID})
+          .del()
+          .then((result) => {
+            console.log(`User favorites record ${email}-${sampleID} has been deleted successfully`);
+          })
+          .catch((error) => {
+            console.log(`User favourites record ${email}-${sampleID} does not exist and cannot be deleted`);
+          })
+        }
+        else { // If it is already favourited, then it means the user wants it to be removed
+          let value = req.session.userEmail;
+          let email = decodeURIComponent(value);
+          console.log(email);
+          // Unique constraint applied in postgres database
+          req.knex('user_favorites')
+          .insert({email: email, sample_id: sampleID})
+          .then((result) => {
+            console.log(`${sampleID} added to ${email}'s' favourites`);
+          })
+          .catch((error) => {
+            console.log("Already added to favourites");
+          })
+        }
+      }
+    }
+
     getFavorite().then((isFavourited) => {
       console.log(isFavourited);
       req.session.favourited = isFavourited;
-
-      if (!isFavourited && userLoggedIn ) {
-        let value = req.session.userEmail;
-        let email = decodeURIComponent(value);
-        // Delete from database, if record exists
-        req.knex('user_favorites')
-        .where({email: email, sample_id: sampleID})
-        .del()
-        .then((result) => {
-          console.log(`User favorites record ${email}-${sampleID} has been deleted successfully`);
-        })
-        .catch((error) => {
-          console.log(`User favourites record ${email}-${sampleID} does not exist and cannot be deleted`);
-        })
-      }
-      else if (isFavourited && userLoggedIn){ // isFavourited is set to 'true', so set it to 'false'
-        let value = req.session.userEmail;
-        let email = decodeURIComponent(value);
-        console.log(email);
-        // Unique constraint applied in postgres database
-        req.knex('user_favorites')
-        .insert({email: email, sample_id: sampleID})
-        .then((result) => {
-          console.log(`${sampleID} added to ${email}'s' favourites`);
-        })
-        .catch((error) => {
-          console.log("Already added to favourites");
-        })
-
-    }
-
-    res.redirect(url.format({
-        pathname: "/result",
-        query: {
-            sampleSelection: sampleID
-        }
-    }))
-
+      toggleFavourite(isFavourited).then(() => {
+        res.redirect(url.format({
+            pathname: "/result",
+            query: {
+                sampleSelection: sampleID
+            }
+        }));
+      });
     });
 
 });

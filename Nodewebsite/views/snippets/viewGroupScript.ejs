@@ -1,7 +1,56 @@
-<!-- Groups Page Scripts -->
+<!-- Group Samples Page Scripts -->
 <script>
   function displayGenomeCards() {
      let groupSamples =  <%- JSON.stringify(samples) %>;
+
+      groupSamples.forEach(function(sample) { // Handle undefined properties
+        if ( sample.st == undefined ) {
+          sample.st = "Unknown";
+        }
+        if ( sample.country == undefined ) {
+          sample.country = "Unknown";
+        }
+        if ( sample.strain == undefined ) {
+          sample.strain = "Unknown";
+        }
+        if ( sample.host == undefined ) {
+          sample.host = "Unknown";
+        }
+        if ( sample.isolation_source == undefined ) {
+          sample.isolation_source = "Unknown";
+        }
+      });
+
+
+      let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
+      groupSamples.sort(function(a,b) {
+        if (orderBy == "sequenceType") {
+          if (a.st < b.st) {
+            return -1;
+          }
+          if (a.st > b.st) {
+            return 1;
+          }
+          return 0;
+        }
+        if (orderBy == "location") {
+          return a.country.localeCompare(b.country);
+        }
+        if (orderBy == "strain") {
+          return a.strain.localeCompare(b.strain);
+        }
+        if (orderBy == "host") {
+          return a.host.localeCompare(b.host);
+        }
+        if (orderBy == "isolationSource") {
+          return a.isolation_source.localeCompare(b.isolation_source);
+        }
+      });
+
+     orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
+     if (orderByAsc.checked == false) {
+       groupSamples.reverse();
+     }
 
      let parentSection = document.getElementById("groupSamplesCards");
 
@@ -28,6 +77,16 @@
        parentSection.appendChild(newCard);
 
      });
+  }
+
+  function clearGroupSampleCards() {
+    let groupSamplesSection = document.getElementById("groupSamplesCards");
+    groupSamplesSection.innerHTML = "";
+  }
+
+  function updateCards() {
+    clearGroupSampleCards();
+    displayGenomeCards();
   }
 
   // Returns each category's max count and genome information from the given array of dictionaries
@@ -124,7 +183,9 @@
 
   }
 
+  // Insert a radar chart inside the element id specified
   function createRadarChart(id, labels, data) {
+    // Setup aesthetic options
     options = {
       legend: {
         display: false
@@ -152,15 +213,18 @@
       }
     };
 
+    // Alow for multi-line labels
     plugins = [{
      beforeInit: function(chart) {
         chart.data.labels.forEach(function(e, i, a) {
            if (/\n/.test(e)) {
-              a[i] = e.split(/\n/); // Multi-line labels
+              a[i] = e.split(/\n/);
            }
         });
-     }
-   }];
+      }
+    }];
+
+    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
 
     var canvas = document.getElementById(id);
     var myChart = new Chart(canvas, {
@@ -178,9 +242,10 @@
       }]},
       options: options,
       plugins: plugins
-   });
+    });
   }
 
+  // Insert a horizontal bar chart inside the specified document id
   function createBarChart(id, title, labels, data) {
     backgroundColours = []; // Same colour for consistency
     for (i = 0; i < labels.length; i ++) {
@@ -191,7 +256,7 @@
       backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
     }
 
-    options = {
+    options = {  // Setup aesthetic configurations
       legend: {
           display: false
       },
@@ -229,6 +294,9 @@
         }]
       }
     };
+
+    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
+    //Chart.defaults.global.defaultFontSize = 20;
 
     var canvas = document.getElementById(id)
     var myChart = new Chart(canvas, {

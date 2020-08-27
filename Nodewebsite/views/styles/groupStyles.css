@@ -1,0 +1,33 @@
+/* Groups page */
+#groupsCards {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2em;
+}
+
+.groupCard:hover {
+  border: 1.5px solid #3399FF;
+  transition: 0.3s;
+}
+
+.groupCountTag {
+  background-color: #1ABC9C;
+  color: white;
+  border-radius: 20px;
+  position: absolute;
+  padding: 0.3em;
+}
+
+.groupCardTitle {
+  padding-bottom: 0.7em;
+}
+
+#groupsPageContainer {
+  margin: 0 auto;
+  min-height: 100%;
+  height: calc(100vh - 100px);
+  margin-bottom: -100px;
+}
