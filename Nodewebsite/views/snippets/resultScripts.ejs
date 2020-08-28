@@ -472,7 +472,9 @@
      var maxPercentage = 100;
      var stepValue = 0.00000001;
 
-     // Updates slider and description for selected minimum genetic distance
+     /*
+     * Update input
+     */
      function updateMinSliderSelection() {
         let minSlider = document.getElementById("minGeneticDistInput");
         let minInputBox = document.getElementById("minGeneticDistanceTyped");
@@ -487,7 +489,6 @@
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
-     // Updates slider and descripton for selected maximum genetic distance
      function updateMaxSliderSelection() {
         let maxSlider = document.getElementById("maxGeneticDistInput");
         let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
@@ -502,7 +503,6 @@
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
-     // Tries to update min tag given potential value
      function updateMinSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
@@ -521,7 +521,6 @@
       };
      }
 
-    // Tries to update max tag given potential value
      function updateMaxSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
@@ -595,12 +594,13 @@
        displayFindMyFriendsSection(minValue, maxValue);
      }
 
-     // Wipe out the section when the filter is updated
+     /*
+     * Display genome cards
+     */
      function clearFindMyFriendsSection() {
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
-     // Display genetically related genomes
      function displayFindMyFriendsSection(minValue, maxValue){
 
        let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
@@ -661,8 +661,6 @@
         desiredRelatedSamples.reverse();
       }
 
-       //console.log(desiredRelatedSamples);
-
        let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
        let count = 0
        desiredRelatedSamples.forEach(function(relatedSample) {
@@ -678,7 +676,6 @@
 
      }
 
-     // Returns the html of a genome card
      function createGenomeCard(sample){
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCard");

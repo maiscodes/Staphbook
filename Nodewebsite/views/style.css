@@ -846,6 +846,10 @@ input:checked + .toggle:before {
   text-align: center;
 }
 
+.groupsPage {
+    text-align: center;
+}
+
 .groupsPage h4 {
   margin-top: 1.5em;
   text-align: center;
