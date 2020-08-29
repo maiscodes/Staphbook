@@ -1,14 +1,6 @@
 var express = require('express')
 var router = express.Router()
 
-// TODO look at getting all knex into single function
-function getSamples(req, res, next){
-
-
-    next();
-}
-
-
 router.get('/', function (req, res, next) {
     let userLoggedIn = false;
     let option = req.query.searchOption;
