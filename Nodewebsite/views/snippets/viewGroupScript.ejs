@@ -1,11 +1,20 @@
 <!-- Group Samples Page Scripts -->
 <script>
+
   /*
   * Display group statistics functionality
+  * Currently displaying a radar and five separate bar graphs
   *
   */
+
   function displayGenomeCards() {
      let groupSamples =  <%- JSON.stringify(samples) %>;
+
+     if (groupSamples.length < 1) {
+       let emptyGroupMessage = document.getElementById("emptyGroupMessage");
+       emptyGroupMessage.innerHTML = "No samples have been added to this group yet";
+       return;
+     }
 
       groupSamples.forEach(function(sample) { // Handle undefined properties
         if ( sample.st == undefined ) {
@@ -79,7 +88,7 @@
        newCard.innerHTML = info.outerHTML;
        let newCardGroup = document.createElement("div");
        newCardGroup.setAttribute("class", "genomeCard");
-       newCardGroup.innerHTML = `<form action='/result' method="get">${newCard.outerHTML}</form> <button class="removeCheckBox" id="${groupSample.id}CheckBox" value="false" onclick="toggleCheckBox(this.id)">&#10006;</button>`
+       newCardGroup.innerHTML = `<form action='/result' method="get">${newCard.outerHTML}</form> <button class="removeCheckBox" id="${groupSample.id}" value="false" onclick="toggleCheckBox(this.id)">&#10006;</button>`
        parentSection.appendChild(newCardGroup);
 
      });
@@ -93,6 +102,7 @@
   function updateCards() {
     clearGroupSampleCards();
     displayGenomeCards();
+    adjustRemoveCheckBoxes();
   }
 
   // Returns each category's max count and genome information from the given array of dictionaries
@@ -103,9 +113,15 @@
     for (d = 0; d < dictionaries.length; d++) { // Find most common sample information(s) for each category
       max = 0;
       label= "";
+      stringCount = 0;
+
       for (const [key, value] of Object.entries(dictionaries[d])) {
         if (value == max) { // Add to current most common list
-           label += `, ${key}`;
+          label += ", ";
+          if (`, ${key}`.length > 8) {
+            label += "\n";
+          }
+          label += `${key}`;
         }
         if (value > max) { // Reset most common value
           max = value;
@@ -119,12 +135,16 @@
     // Calculate percentages
     for (m = 0; m < maxes.length; m++) {
       maxes[m] = parseFloat((maxes[m] / total * 100).toFixed(2));
+      if ( isNaN(maxes[m]) ) {
+        maxes[m] = "Not Applicable ";
+      }
     }
 
     // Reformat labels
     labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
+      console.log(labels[l]);
     }
 
     return [labels, maxes];
@@ -319,10 +339,39 @@
     });
   }
 
+
   /*
   * Remove group sample functionality
   *
   */
+
+  function displayRemoveButton() {
+    let editButton = document.getElementById("groupEditButton");
+    editButton.innerText = "Remove";
+    editButton.style.backgroundColor = "#F22E31";
+    editButton.style.border = "1px solid #F22E31";
+    editButton.style.color = "white";
+    editButton.setAttribute("onclick", "removeGenomeSamples()"); // create function
+  }
+
+  function displayCancelButton(){
+    let editButton = document.getElementById("groupEditButton");
+    editButton.innerText = "Cancel";
+    editButton.style.backgroundColor = "#1ABC9C";
+    editButton.style.border = "1px solid #1ABC9C";
+    editButton.style.color = "white";
+    editButton.setAttribute("onclick", "cancelRemoveGenomeSamples()");
+  }
+
+  function displayEditButton(){
+    let editButton = document.getElementById("groupEditButton");
+    editButton.innerText = "Edit";
+    editButton.style.backgroundColor = "white";
+    editButton.style.border = "1px solid #636363";
+    editButton.style.color = "#468e94";
+    editButton.setAttribute("onclick", "enableRemoveGenomeSamples()");
+  }
+
   function toggleCheckBox(id) {
 	let button = document.getElementById(id);
     const toggleValue = async () => {
@@ -338,32 +387,62 @@
         if (button.value == "true") {
         	button.style.backgroundColor = "red";
 
+          // Update button
+          let editButton = document.getElementById("groupEditButton");
+          if (editButton.innerText != "Remove") {
+            displayRemoveButton();
+          }
+        }
+
+        // If none selected, then user has the option to cancel
+        let checkboxes = document.getElementsByClassName("removeCheckBox");
+        let noneSelected = true;
+        for (i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].style.backgroundColor == "red") {
+            noneSelected = false;
+          }
+        }
+        if (noneSelected){
+          displayCancelButton();
         }
     });
 }
 
-function adjustRemoveCheckboxes() {
+function setupRemoveCheckBoxes() {
   checkboxes = document.getElementsByClassName("removeCheckBox");
   cards = document.getElementsByClassName("genomeCard");
 
   for (i = 0; i < checkboxes.length; i++) {
     checkbox = checkboxes[i];
-    card = cards[i] //getBoundingClientRect();;
+    card = cards[i];
 
-    console.log(checkbox.offsetTop);
+    //console.log(checkbox.offsetTop);
     checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
     checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
     checkbox.style.visibility = "hidden";
   }
 }
 
+function adjustRemoveCheckBoxes() {
+  checkboxes = document.getElementsByClassName("removeCheckBox");
+  cards = document.getElementsByClassName("genomeCard");
+
+  for (i = 0; i < checkboxes.length; i++) {
+    checkbox = checkboxes[i];
+    card = cards[i];
+
+    //console.log(checkbox.offsetTop);
+    checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
+    checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
+    let editButton = document.getElementById("groupEditButton");
+    if (editButton.textContent == "Edit") {
+      checkbox.style.visibility = "hidden";
+    }
+  }
+}
+
 function enableRemoveGenomeSamples() {
-  let editButton = document.getElementById("groupEditButton"); // Change to cancel button
-  editButton.innerText = "Cancel";
-  editButton.style.backgroundColor = "#1ABC9C";
-  editButton.style.border = "1px solid #1ABC9C";
-  editButton.style.color = "white";
-  editButton.setAttribute("onclick", "cancelRemoveGenomeSamples()");
+  displayCancelButton();
 
   let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
   for (i = 0; i < removeCheckBoxes.length; i++) {
@@ -384,14 +463,14 @@ function enableRemoveGenomeSamples() {
 
 }
 
-function cancelRemoveGenomeSamples(){
-  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
+function cancelRemoveGenomeSamples() {
+  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); //  disable remove checkboxes
   for (i = 0; i < removeCheckBoxes.length; i++) {
     removeCheckBoxes[i].style.visibility = "hidden";
 
   }
 
-  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // disable redirect to sample
+  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // enable redirect to sample
   for (i = 0; i < genomeCardButtons.length; i++) {
     genomeCardButtons[i].setAttribute('class', 'genomeCardInfo');
   }
@@ -409,19 +488,54 @@ function cancelRemoveGenomeSamples(){
     }
   }
 
-  let editButton = document.getElementById("groupEditButton"); // Change to original button
-  editButton.innerText = "Edit";
-  editButton.style.backgroundColor = "white";
-  editButton.style.border = "1px solid #636363";
-  editButton.style.color = "#468e94";
-  editButton.setAttribute("onclick", "enableRemoveGenomeSamples()");
+  displayEditButton();
+}
+
+function removeGenomeSamples() {
+  let checkboxes = document.getElementsByClassName("removeCheckBox");
+  selectedSamples = [];
+  for (i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].value == "true") {
+      selectedSamples.push(checkboxes[i].id);
+    }
+  }
+  console.log(selectedSamples);
+
+  let url = "http://localhost:8000/removeGroupSample"; // So user can't delete directly from uri
+  console.log(url);
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({groupId: <%- groupInfo.group_id %>, sampleId: selectedSamples.toString()})
+    })
+    .then(response => {
+        //console.log(response);
+        if (response.status == 200) { // reload page
+          location.reload(true);
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+
+  let errorLabel = document.getElementById("errorMessage");
+  errorLabel.innerHTML = "Sorry, the samples could not be removed. Please try again later.";
+  cancelRemoveGenomeSamples();
 
 }
 
   window.onload = function() {
     displayGenomeCards();
     displayGraphs();
-    adjustRemoveCheckboxes();
+    setupRemoveCheckBoxes();
+  }
+
+  window.onresize = function() {
+    adjustRemoveCheckBoxes();
   }
 
 </script>

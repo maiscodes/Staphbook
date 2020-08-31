@@ -36,9 +36,17 @@
   border-color: transparent;
   background-color: transparent;
 }
+
+.genomeCardInfo:focus {
+  outline: none;
+}
 /*
   Edit button
 */
+#groupEditButton:focus {
+  outline: none;
+}
+
 #groupEditButton:hover {
   background-color: #1ABC9C;
   border: 1px solid #1ABC9C;
@@ -59,6 +67,11 @@
   margin-bottom: 0.7em;
 }
 
+/* selection bar */
+#groupSamplesFilterBar {
+  margin-top: 0.3em;
+}
+
 /* Remove sample checkboxes */
 .removeCheckBox {
  background-color: white;
@@ -76,6 +89,14 @@
  background-color: #F22E31;
 }
 
+.removeCheckBox:focus {
+  outline: none;
+}
+
 .disabled {
     pointer-events: none;
+}
+
+#errorMessage #emptyGroupMessage {
+  font-size: 1em;
 }

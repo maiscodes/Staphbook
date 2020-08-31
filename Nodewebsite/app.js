@@ -102,7 +102,7 @@ app.use('/advSearchResults', advSearchResultRouter);
 app.use('/login', loginRouter);
 app.use('/favourites', favouriteRouter)
 app.use('/groups', groupsRouter)
-app.use('/viewGroup', viewGroupRouter);
+app.use('/', viewGroupRouter);
 
 
 

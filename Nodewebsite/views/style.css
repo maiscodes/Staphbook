@@ -757,6 +757,10 @@ input:checked + .toggle:before {
   transition: 0.3s;
 }
 
+.genomeCard:focus {
+  outline: none;
+}
+
 .geneticDistanceTag {
   background-color: #1ABC9C;
   color: white;
@@ -842,6 +846,10 @@ input:checked + .toggle:before {
 }
 
 /* View groups page */
+.groupCard:focus {
+    outline: none;
+}
+
 .groupDescription {
   text-align: center;
 }
