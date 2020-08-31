@@ -24,16 +24,18 @@ router.post("/", function (req, res) {
   let haveFavs = false;
   let haveSugs = false;
 
-  let value = req.session.userEmail;
+  let value = req.body.email;
   let email = decodeURIComponent(value);
+
+  //console.log("The email is: " + value);
 
   req.knex
     .select("*")
     .from("registered_users")
     .where({ email: email })
-    .then((err, result_registered_users) => {
-      //console.log(err, result_registered_users);
-      if (result_registered_users.rows.length != 1) {
+    .then((result_registered_users, err) => {
+      console.log(result_registered_users, err);
+      if (result_registered_users.length !== 1) {
         console.log("user not registered");
         var userNotRegistered = true;
         res.render("pages/login", {
@@ -44,7 +46,7 @@ router.post("/", function (req, res) {
       } else {
         bcrypt.compare(
           req.body.password,
-          result_registered_users.rows[0].password,
+          result_registered_users[0].password,
           function (err, result) {
             //if password matched DB password
             if (result) {
@@ -63,20 +65,14 @@ router.post("/", function (req, res) {
               req.knex
                 .select("*")
                 .from("user_favorites")
-                .where({ email: email, limit: 4 })
-                .then((err, fav_results) => {
-                  //console.log(err, fav_results);
-                  if (fav_results.rows.length > 0) {
+                .where({ email: email })
+                .limit(4)
+                .then((fav_results, err) => {
+                  console.log(fav_results, err);
+                  if (fav_results.length > 0) {
                     haveFavs = true;
                     haveSugs = true;
-                    // let selectSQL = "";
-                    // selectSQL =
-                    //   "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                    //   "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                    //   "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
-                    //   "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                    //   "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                    //   "WHERE";
+
                     let same_sequence;
                     let same_sequence_samples = req.knex
                       .select("sample_id")
@@ -112,69 +108,49 @@ router.post("/", function (req, res) {
                           same.date = same.metadata.date_collected;
                         }
                       }).where;
-                    if (fav_results.rows.length > 0) {
+                    if (fav_results.length > 0) {
                       selectKnex += {
-                        sample_id: fav_results.rows[0].sample_id,
+                        sample_id: fav_results[0].sample_id,
                       };
                     }
-                    if (fav_results.rows.length > 1) {
+                    if (fav_results.length > 1) {
                       selectKnex += {
-                        sample_id: fav_results.rows[1].sample_id,
+                        sample_id: fav_results[1].sample_id,
                       };
                     }
-                    if (fav_results.rows.length > 2) {
+                    if (fav_results.length > 2) {
                       selectKnex += {
-                        sample_id: fav_results.rows[2].sample_id,
+                        sample_id: fav_results[2].sample_id,
                       };
                     }
-                    if (fav_results.rows.length > 3) {
+                    if (fav_results.length > 3) {
                       selectKnex += {
-                        sample_id: fav_results.rows[3].sample_id,
+                        sample_id: fav_results[3].sample_id,
                       };
                     }
                     console.log(selectKnex);
 
                     req.knex(selectKnex + ");", (err, favorites) => {
-                      // req.db.query(
-                      //   "SELECT name FROM sample_sample WHERE id=" +
-                      //     fav_results.rows[fav_results.rows.length - 1]
-                      //       .sample_id +
-                      //     "",
                       req.knex
                         .select("name")
                         .from("sample_sample")
                         .where({
-                          id:
-                            fav_results.rows[fav_results.rows.length - 1]
-                              .sample_id,
+                          id: fav_results[fav_results.length - 1].sample_id,
                         })
                         .then((err, result_sample_sample) => {
                           //console.log(err, result_tag_tosample);
-                          let sampleName = result_sample_sample.rows[0].name;
+                          let sampleName = result_sample_sample[0].name;
 
-                          // Sample's weighted distances
-                          // req.db.query(
-                          //   "SELECT * FROM weighted_distance WHERE selected_sample='" +
-                          //     sampleName +
-                          //     "' ORDER BY distance ASC LIMIT 5",
-                          //   (err, result_weighted_distances) =>
                           req.knex
                             .select("*")
                             .from("weighted_distance")
-                            .where({ selected_sample: sampleName, limit: 5 })
+                            .where({ selected_sample: sampleName })
+                            .limit(5)
                             .orderBy("distance", "asc")
                             .then((err, result_weighted_distances) => {
                               //console.log(err, result_weighted_distances);
                               console.log(err, result_weighted_distances);
 
-                              // req.db.query(
-                              //   "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                              //     "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                              //     "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_sample.name, sample_sample.id " +
-                              //     "FROM sample_sample  " +
-                              //     "INNER JOIN mlst_mlst ON sample_sample.id=mlst_mlst.sample_id " +
-                              //     "INNER JOIN sample_metadata ON sample_sample.id=sample_metadata.sample_id " +
-                              //     "WHERE sample_sample.name='" +
                               req.knex
                                 .select({
                                   st: "mlst_mlst.st",
@@ -198,20 +174,20 @@ router.post("/", function (req, res) {
                                   "mlst_mlst.sample_id",
                                   "in",
                                   same_sequence_samples,
-                                  result_weighted_distances.rows[1].comparison_sample
+                                  result_weighted_distances[1].comparison_sample
                                     .wherein(
                                       sample_sample.name,
-                                      result_weighted_distances.rows[2]
+                                      result_weighted_distances[2]
                                         .comparison_sample
                                     )
                                     .wherein(
                                       sample_sample.name,
-                                      result_weighted_distances.rows[3]
+                                      result_weighted_distances[3]
                                         .comparison_sample
                                     )
                                     .wherein(
                                       sample_sample.name,
-                                      result_weighted_distances.rows[4]
+                                      result_weighted_distances[4]
                                         .comparison_sample
                                     ),
                                   (err, suggested) => {
@@ -219,8 +195,8 @@ router.post("/", function (req, res) {
                                     console.log(haveFavs);
                                     res.render("pages/index", {
                                       userLoggedIn: userLoggedIn,
-                                      favorites: favorites.rows,
-                                      suggested: suggested.rows,
+                                      favorites: favorites,
+                                      suggested: suggested,
                                       haveFavs: haveFavs,
                                       haveSugs: haveSugs,
                                       creationSuccess: false,
@@ -236,8 +212,8 @@ router.post("/", function (req, res) {
                       userLoggedIn: userLoggedIn,
                       creationSuccess: false,
                       userNotRegistered: userNotRegistered,
-                      favorites: favorites.rows,
-                      suggested: suggested.rows,
+                      favorites: favorites,
+                      suggested: suggested,
                       haveFavs: haveFavs,
                       haveSugs: haveSugs,
                     });
@@ -248,8 +224,8 @@ router.post("/", function (req, res) {
                 userLoggedIn: userLoggedIn,
                 creationSuccess: false,
                 userNotRegistered: userNotRegistered,
-                favorites: favorites.rows,
-                suggested: suggested.rows,
+                favorites: favorites,
+                suggested: suggested,
                 haveFavs: haveFavs,
                 haveSugs: haveSugs,
               });

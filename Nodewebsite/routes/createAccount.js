@@ -30,11 +30,11 @@ router.post("/", function (req, res) {
         .select("*")
         .from("registered_users")
         .where({ email: email })
-        .then((err, result_registered_users) => {
-          //console.log(err, result_registered_users);
+        .then((result_registered_users, err) => {
+          console.log(result_registered_users, err);
 
           //return knex('registered_users').where
-          if (result_registered_users.rows.length != 0) {
+          if (result_registered_users.length != 0) {
             console.log("User already entered into database");
             res.render("pages/createAccount", {
               userLoggedIn: userLoggedIn,
@@ -50,18 +50,16 @@ router.post("/", function (req, res) {
                 organisation: organisation,
                 occupation: occupation,
               })
-              .then(
-                () =>
-                  function (error, results, fields) {
-                    if (error) {
-                      throw error;
-                      res.redirect("/");
-                    } else {
-                      creationSuccess = true;
-                      res.redirect("/login");
-                    }
-                  }
-              );
+              .then((result_registered_users, error) => {
+                console.log(result_registered_users, error);
+                if (error) {
+                  throw error;
+                  res.redirect("/");
+                } else {
+                  creationSuccess = true;
+                  res.redirect("/login");
+                }
+              });
           }
         });
     });
