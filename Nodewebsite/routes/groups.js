@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router()
 
-router.get('/', function (req, res) {
+router.get('/groups', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
 
     let groups = [];
@@ -34,6 +34,50 @@ router.get('/', function (req, res) {
                 })
               })
           })
+    }
+    else{
+        res.status(404);
+        res.send({ error: 'Not found' });
+    }
+})
+
+
+router.post('/updateGroup', function (req, res) {
+    let userLoggedIn = req.session.userStatus === "loggedIn";
+    console.log(userLoggedIn);
+    let groupId = req.body.groupId;
+    let title = req.body.title;
+    let description = req.body.description;
+    let updateTime = req.body.modified;
+
+    let update = {};
+    if ( title != undefined ) {
+      update["name"] = title;
+    }
+
+    if ( description != undefined ) {
+      update["description"] = description;
+    }
+
+    if ( updateTime != undefined ) {
+      update["modified"] = updateTime;
+    }
+
+    console.log(update);
+    if ( userLoggedIn ) {
+      req.knex('groups')
+        .where({ group_id: groupId })
+        .update(update)
+        .then(() => {
+          res.status(200).json({"message": "successfully updated group"})
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(401).json({"message": "error updating group"})
+          return;
+        });
+        return;
     }
     else{
         res.status(404);

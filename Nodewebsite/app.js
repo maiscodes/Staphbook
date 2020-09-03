@@ -101,7 +101,7 @@ app.use('/searchResults', searchResultRouter);
 app.use('/advSearchResults', advSearchResultRouter);
 app.use('/login', loginRouter);
 app.use('/favourites', favouriteRouter)
-app.use('/groups', groupsRouter)
+app.use('/', groupsRouter)
 app.use('/', viewGroupRouter);
 
 
