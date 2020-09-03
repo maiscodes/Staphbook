@@ -798,10 +798,11 @@ input:checked + .toggle:before {
   }
 
   .groupCard {
+    margin: 0;
     border-radius: 10px;
     border: 1px solid #636363;
     float: left;
-    width: 22%;
+    width: 70%;
     padding-left: 2em;
     padding-right: 2em;
     min-height: 100%;
@@ -830,6 +831,7 @@ input:checked + .toggle:before {
   }
 
   .groupCard {
+    margin: 0;
     border-radius: 10px;
     border: 1px solid #636363;
     float: left;
