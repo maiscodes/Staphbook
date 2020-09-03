@@ -42,17 +42,17 @@
 }
 
 /* Edit button */
-#groupEditButton:focus {
+#groupSampleEditButton:focus, #groupEditButton:focus {
   outline: none;
 }
 
-#groupEditButton:hover {
+#groupSampleEditButton:hover, #groupEditButton:hover {
   background-color: #1ABC9C;
   border: 1px solid #1ABC9C;
   color: white;
 }
 
-#groupEditButton {
+#groupSampleEditButton, #groupEditButton{
   margin: 0 auto;
   padding: 0.5em;
   background-color: white;
@@ -147,4 +147,29 @@
 #maxPageNumber{
   margin-left: 0.2em;
   margin-right: 0.2em;
+}
+
+/* Input for editting title and description */
+#inputTitle {
+  font-size: 2.5em;
+  border: 1px solid white;
+  background-color: white;
+  text-align: center;
+  width: 50%;
+  height: auto;
+  border-radius: 0.3em;
+}
+
+#inputDescription {
+  font-size: 1em;
+  border: 1px solid white;
+  background-color: white;
+  text-align: center;
+  width: 50%;
+  height: auto;
+  border-radius: 0.3em;
+}
+
+#inputTitle:hover, #inputDescription:hover {
+  background-color: #f7f7f7;
 }

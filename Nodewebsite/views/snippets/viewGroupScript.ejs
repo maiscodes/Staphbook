@@ -354,7 +354,7 @@
   */
 
   function displayRemoveButton() {
-    let editButton = document.getElementById("groupEditButton");
+    let editButton = document.getElementById("groupSampleEditButton");
     editButton.innerText = "Remove";
     editButton.style.backgroundColor = "#F22E31";
     editButton.style.border = "1px solid #F22E31";
@@ -363,7 +363,7 @@
   }
 
   function displayCancelButton(){
-    let editButton = document.getElementById("groupEditButton");
+    let editButton = document.getElementById("groupSampleEditButton");
     editButton.innerText = "Cancel";
     editButton.style.backgroundColor = "#1ABC9C";
     editButton.style.border = "1px solid #1ABC9C";
@@ -372,7 +372,7 @@
   }
 
   function displayEditButton(){
-    let editButton = document.getElementById("groupEditButton");
+    let editButton = document.getElementById("groupSampleEditButton");
     editButton.innerText = "Edit";
     editButton.style.backgroundColor = "white";
     editButton.style.border = "1px solid #636363";
@@ -398,7 +398,7 @@
         	button.style.backgroundColor = "red";
 
           // Update button
-          let editButton = document.getElementById("groupEditButton");
+          let editButton = document.getElementById("groupSampleEditButton");
           if (editButton.innerText != "Remove") {
             displayRemoveButton();
           }
@@ -441,7 +441,7 @@ function adjustRemoveCheckBoxes() {
     checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
     checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
 
-    let editButton = document.getElementById("groupEditButton");
+    let editButton = document.getElementById("groupSampleEditButton");
     if (editButton.textContent == "Edit") {
       checkbox.style.visibility = "hidden";
     }
@@ -550,7 +550,7 @@ function removeGenomeSamples() {
 
   }
 
-  /* Navigate group sam20le functionality
+  /* Navigate group sample functionality
   * Includes functions to determine how many pages a group
   * may have, samples to show, buttons to activate/deactivate.
   */
@@ -582,23 +582,54 @@ function removeGenomeSamples() {
 
   function stepToPage(step) {
     step = parseInt(step);
-    console.log(step);
+    //console.log(step);
     let pageNumberSelection = document.getElementById("samplePageNumber");
     let maxPageNumber = parseInt(pageNumberSelection.max);
     let pageNumber = parseInt(pageNumberSelection.value);
     pageNumber = pageNumber + step;
-    console.log(pageNumber);
+    //console.log(pageNumber);
     if (step < 0 && pageNumber < 1) {
       pageNumber = 1;
     }
     if (step > 0 && pageNumber > maxPageNumber) {
       pageNumber = maxPageNumber;
     }
+
     document.getElementById("samplePageNumber").value = pageNumber;
     clearGroupSampleCards();
     displayGenomeCards();
     setupRemoveCheckBoxes();
   }
+
+  /*
+  * Edit group functionality
+  * Consisting of functions to let users update
+  * group names and descriptions.
+  */
+  function enableEditGroupInfo() {
+    let inputTitleDiv = document.createElement('div');
+    let inputTitle = document.createElement('textarea');
+    inputTitle.setAttribute('type', 'text');
+    inputTitle.setAttribute('id', 'inputTitle');
+    inputTitle.innerHTML =  <%- JSON.stringify(groupInfo.name) %>;
+    inputTitleDiv.innerHTML = `${inputTitle.outerHTML}<br>`;
+
+    let inputDescriptionDiv = document.createElement('div');
+    let inputDescription = document.createElement('textarea');
+    inputDescription.setAttribute('type', 'text');
+    inputDescription.setAttribute('id', 'inputDescription');
+    inputDescription.innerHTML = <%- JSON.stringify(groupInfo.description) %>;
+    inputDescriptionDiv.innerHTML = `${inputDescription.outerHTML}<br>`;
+
+    // replace with inputs
+    let title = document.getElementById("groupName");
+    let description = document.getElementById("groupDescription");
+
+    title.parentNode.replaceChild(inputTitleDiv, title);
+    description.parentNode.replaceChild(inputDescriptionDiv, description);
+  }
+
+
 
   window.onload = function() {
     displayGenomeCards();

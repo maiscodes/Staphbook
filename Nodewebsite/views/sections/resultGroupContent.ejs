@@ -4,18 +4,17 @@
         Staphlyococcus Aureus <br>
     </h5>
 
-    <h1 style="text-align: center; margin-top: -10px;">
+    <h1 id="groupName" style="text-align: center; margin-top: -10px;">
         <%- groupInfo.name %>
     </h1>
 
-    <p class="groupDescription">
+    <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
+
+    <p id="groupDescription" class="groupDescription">
         <%- groupInfo.description %>
     </p>
 
     <!-- Download button -->
-
-    <!-- Edit button -->
-    <!-- Tag to delete samples, go through all the tags again and add samples to list to delete -->
 
     <!-- Display aggregated data -->
     <h4>Common Statistics and Distributions</h4>
@@ -34,7 +33,7 @@
     <!-- Display genome cards -->
     <div id="groupGenomeSection">
       <h4>Genomes</h4>
-      <button id="groupEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
+      <button id="groupSampleEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
 
       <!-- Let user choose order to show samples -->
       <p id ="groupSamplesFilterBar">
