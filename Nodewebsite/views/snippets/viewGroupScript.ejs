@@ -3,8 +3,11 @@
 
   /*
   * Display group statistics functionality
-  * Currently displaying a radar and five separate bar graphs
-  *
+  * Functions for displaying a radar and five separate bar graphs
+  * for displaying the count and percentages of ST, country, strain,
+  * host and isolation source information, and genome cards
+  * based on field to order by set in a dropdown
+  * and toggle button.
   */
 
   function displayGenomeCards() {
@@ -16,7 +19,7 @@
        return;
      }
 
-      groupSamples.forEach(function(sample) { // Handle undefined properties
+      groupSamples.forEach(function(sample) { // Throws error otherwise with undefined properties
         if ( sample.st == undefined ) {
           sample.st = "Unknown";
         }
@@ -250,8 +253,6 @@
       }
     }];
 
-    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
-
     var canvas = document.getElementById(id);
     var myChart = new Chart(canvas, {
       type: 'radar',
@@ -321,9 +322,6 @@
       }
     };
 
-    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
-    //Chart.defaults.global.defaultFontSize = 20;
-
     var canvas = document.getElementById(id)
     var myChart = new Chart(canvas, {
       type: 'horizontalBar',
@@ -342,7 +340,9 @@
 
   /*
   * Remove group sample functionality
-  *
+  * Includes functions making the backend API call,
+  * updating the genome cards in each group,
+  * remove checkboxes and edit button correspondingly.
   */
 
   function displayRemoveButton() {
@@ -374,12 +374,14 @@
 
   function toggleCheckBox(id) {
 	let button = document.getElementById(id);
+
     const toggleValue = async () => {
       if (button.value == "false") {
       	return true;
       }
       return false;
     }
+
     toggleValue().then((newValue) => {
     	button.value = newValue;
         console.log(button.value);
@@ -415,8 +417,6 @@ function setupRemoveCheckBoxes() {
   for (i = 0; i < checkboxes.length; i++) {
     checkbox = checkboxes[i];
     card = cards[i];
-
-    //console.log(checkbox.offsetTop);
     checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
     checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
     checkbox.style.visibility = "hidden";
@@ -430,10 +430,9 @@ function adjustRemoveCheckBoxes() {
   for (i = 0; i < checkboxes.length; i++) {
     checkbox = checkboxes[i];
     card = cards[i];
-
-    //console.log(checkbox.offsetTop);
     checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
     checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
+
     let editButton = document.getElementById("groupEditButton");
     if (editButton.textContent == "Edit") {
       checkbox.style.visibility = "hidden";
@@ -499,10 +498,10 @@ function removeGenomeSamples() {
       selectedSamples.push(checkboxes[i].id);
     }
   }
-  console.log(selectedSamples);
+  //console.log(selectedSamples);
 
-  let url = "http://localhost:8000/removeGroupSample"; // So user can't delete directly from uri
-  console.log(url);
+  let url = "http://localhost:8000/removeGroupSample"; // TODO: update when hosted
+  //console.log(url);
   fetch(url, {
     method: 'POST',
     headers: {
@@ -513,7 +512,7 @@ function removeGenomeSamples() {
     })
     .then(response => {
         //console.log(response);
-        if (response.status == 200) { // reload page
+        if (response.status == 200) { // Update page with new statistics and cards
           location.reload(true);
         }
     })
@@ -526,7 +525,7 @@ function removeGenomeSamples() {
   errorLabel.innerHTML = "Sorry, the samples could not be removed. Please try again later.";
   cancelRemoveGenomeSamples();
 
-}
+  }
 
   window.onload = function() {
     displayGenomeCards();
@@ -536,6 +535,6 @@ function removeGenomeSamples() {
 
   window.onresize = function() {
     adjustRemoveCheckBoxes();
-  }
+}
 
 </script>
