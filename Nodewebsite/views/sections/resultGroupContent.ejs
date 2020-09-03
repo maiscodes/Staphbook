@@ -35,6 +35,8 @@
     <div id="groupGenomeSection">
       <h4>Genomes</h4>
       <button id="groupEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
+
+      <!-- Let user choose order to show samples -->
       <p id ="groupSamplesFilterBar">
         Order by
         <select name="orderBy" id="orderBy" onchange="updateCards()">
@@ -54,12 +56,14 @@
 
     <div id="errorMessage"></div>
     <div id="emptyGroupMessage"></div>
+
+    <!-- Let user browse groups of genomes at a time so they don't get overwhelmed -->
     <div id="sampleNavigationBar">
-      <button class="navigationButton">&lt;&lt;</button>
-      <button class="navigationButton">&lt;</button> <span id="pageMessage"> Viewing page
-      <input type="text" id="samplePageNumber" name="samplePageNumber" value="1"> of <span id="maxPageNumber">1</span> </span>
-      <button class="navigationButton">&gt;</button>
-      <button class="navigationButton">&gt;&gt;</button>
+      <button class="navigationButton" onclick="stepToPage(-2)">&lt;&lt;</button>
+      <button class="navigationButton" onclick="stepToPage(-1)">&lt;</button> <span id="pageMessage"> Viewing page
+      <input type="number" id="samplePageNumber" name="samplePageNumber" min="1" value="1" onchange="updateSamples()"> of <span id="maxPageNumber">1</span> </span>
+      <button class="navigationButton" onclick="stepToPage(1)">&gt;</button>
+      <button class="navigationButton" onclick="stepToPage(2)">&gt;&gt;</button>
    </div>
     <div id="groupSamplesCards"></div>
     </div>

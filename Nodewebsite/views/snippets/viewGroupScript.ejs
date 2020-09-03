@@ -9,8 +9,13 @@
   * based on field to order by set in a dropdown
   * and toggle button.
   */
-
   function displayGenomeCards() {
+     let numberSamplesPerPage = samplesPerPage;
+     let pageNumber = parseInt(document.getElementById("samplePageNumber").value);
+     if ( pageNumber == NaN ) {
+       return;
+     }
+
      let groupSamples =  <%- JSON.stringify(samples) %>;
 
      if (groupSamples.length < 1) {
@@ -70,6 +75,9 @@
 
      let parentSection = document.getElementById("groupSamplesCards");
 
+     groupSamples = groupSamples.slice(numberSamplesPerPage * (pageNumber - 1), numberSamplesPerPage * pageNumber); // Show samples by page
+     // 0 to 19
+     // 20 t0 39
      groupSamples.forEach(function(groupSample) {
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCardInfo");
@@ -500,8 +508,8 @@ function removeGenomeSamples() {
   }
   //console.log(selectedSamples);
 
-  let baseUrl = "http://localhost:8000";
-  let url = `${baseUrl}/removeGroupSample`; // TODO: update when hosted
+  let baseUrl = "http://localhost:8000"; // TODO: update when hosted
+  let url = `${baseUrl}/removeGroupSample`;
   //console.log(url);
   fetch(url, {
     method: 'POST',
@@ -542,10 +550,61 @@ function removeGenomeSamples() {
 
   }
 
+  /* Navigate group sam20le functionality
+  * Includes functions to determine how many pages a group
+  * may have, samples to show, buttons to activate/deactivate.
+  */
+  var samplesPerPage = 21; // global variable
+  var maxPageNumber;
+
+  function displayMaxPage() {
+    let groupSamples =  <%- JSON.stringify(samples) %>;
+    let display = document.getElementById("maxPageNumber");
+    maxPageNumber = Math.ceil( groupSamples.length / samplesPerPage );
+    display.innerHTML = maxPageNumber;
+    document.getElementById("samplePageNumber").setAttribute("max", maxPageNumber);
+  }
+
+  function updateSamples(){
+    let newPageNumber = document.getElementById("samplePageNumber").value;
+    newPageNumber = parseInt(newPageNumber);
+    if ( newPageNumber == NaN ) {
+      return;
+    }
+    console.log(newPageNumber);
+    if ( newPageNumber >= 1 && newPageNumber <= maxPageNumber ) {
+      console.log(newPageNumber);
+      clearGroupSampleCards();
+      displayGenomeCards();
+      setupRemoveCheckBoxes();
+    }
+  }
+
+  function stepToPage(step) {
+    step = parseInt(step);
+    console.log(step);
+    let pageNumberSelection = document.getElementById("samplePageNumber");
+    let maxPageNumber = parseInt(pageNumberSelection.max);
+    let pageNumber = parseInt(pageNumberSelection.value);
+    pageNumber = pageNumber + step;
+    console.log(pageNumber);
+    if (step < 0 && pageNumber < 1) {
+      pageNumber = 1;
+    }
+    if (step > 0 && pageNumber > maxPageNumber) {
+      pageNumber = maxPageNumber;
+    }
+    document.getElementById("samplePageNumber").value = pageNumber;
+    clearGroupSampleCards();
+    displayGenomeCards();
+    setupRemoveCheckBoxes();
+  }
+
   window.onload = function() {
     displayGenomeCards();
     displayGraphs();
     setupRemoveCheckBoxes();
+    displayMaxPage();
   }
 
   window.onresize = function() {

@@ -104,6 +104,8 @@ router.post('/removeGroupSample', function (req, res) {
         return;
     }
     res.status(401).json({"message": "permissions error - user not logged in"})
+
+    // Include update time stamp here instead?
 })
 
 module.exports = router;
