@@ -2,6 +2,21 @@ var express = require('express')
 var router = express.Router()
 let url = require('url')
 
+let placeholder_groups = [
+    {
+        group_id: 1,
+        name: "Group 1"
+    },
+    {
+        group_id: 2,
+        name: "Group 2"
+    },
+    {
+        group_id: 3,
+        name: "Group 3"
+    },
+];
+
 // Result page endpoint
 router.get('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
@@ -176,7 +191,9 @@ router.get('/', function (req, res) {
                                                                                         same_locations: same_location, same_sequences: same_sequence, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary,
                                                                                         same_isolations: same_isolation, sccmec_primers: result_sccmec_primers, assembly_summary: result_assembly_summary,
                                                                                         sccmec_subtypes: result_sccmec_subtypes, sccmec_proteins: result_sccmec_proteins, weighted_distance: result_weighted_distances,
-                                                                                        all_weighted_distances: mainRelatedSampleDetails });
+                                                                                        all_weighted_distances: mainRelatedSampleDetails,
+                                                                                        avail_groups: placeholder_groups
+                                                                                    });
 
                                                                                 }).catch(function(err) {
                                                                                   console.log(err);
