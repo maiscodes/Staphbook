@@ -464,7 +464,7 @@
 
     /*
      * Script for Find my Friends functionality
-     * Functionality for selecting min and max genetic distance
+     * Functionality for selecting a range of genetic distance
      * and displaying genome information on cards
      */
 
@@ -472,68 +472,136 @@
      var maxPercentage = 100;
      var stepValue = 0.00000001;
 
-     // Updates slider and description for selected minimum genetic distance
+     /*
+     * Update input
+     */
      function updateMinSliderSelection() {
         let minSlider = document.getElementById("minGeneticDistInput");
-        let maxSlider = document.getElementById("maxGeneticDistInput");
+        let minInputBox = document.getElementById("minGeneticDistanceTyped");
 
-        minSlider.value = Math.min(minSlider.value, maxSlider.value - (stepValue));
-        let value = (100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.value)-(100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.min);
+        let rangeSelected = updateMinSlider(minSlider.value);
 
-        document.getElementById("leftSlider").style.width = value + "%";
-        document.getElementById("selectedSlider").style.left = value + "%";
-        document.getElementById("leftGeneticDistThumb").style.left = value + "%";
-        document.getElementById("minGeneticDist").innerHTML = minSlider.value;
+        if (parseFloat(minInputBox.value) != rangeSelected.minValue) {
+          minInputBox.value = rangeSelected.minValue;
+        }
 
         clearFindMyFriendsSection();
-        displayFindMyFriendsSection();
+        displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
-     // Updates slider and descripton for selected maximum genetic distance
      function updateMaxSliderSelection() {
-        let minSlider = document.getElementById("minGeneticDistInput");
         let maxSlider = document.getElementById("maxGeneticDistInput");
+        let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
 
-        maxSlider.value = Math.max(maxSlider.value, minSlider.value + stepValue);
-        var value = (100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.value)-(100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.min);
+        let rangeSelected = updateMaxSlider(maxSlider.value);
 
-        document.getElementById("rightSlider").style.width = (maxPercentage - value) + "%";
-        document.getElementById("selectedSlider").style.right = (maxPercentage - value) + "%";
-        document.getElementById("rightGeneticDistThumb").style.left = value + "%";
-        document.getElementById("maxGeneticDist").innerHTML = maxSlider.value;
+        if (parseFloat(maxInputBox.value) != rangeSelected.maxValue) {
+          maxInputBox.value = rangeSelected.maxValue;
+        }
 
         clearFindMyFriendsSection();
-        displayFindMyFriendsSection();
+        displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
+     }
+
+     function updateMinSlider(newValue) {
+       let minSlider = document.getElementById("minGeneticDistInput");
+       let maxSlider = document.getElementById("maxGeneticDistInput");
+
+       minSlider.value = Math.min(parseFloat(newValue), parseFloat(maxSlider.value) - (stepValue));
+       let value = (100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.value)-(100/(parseFloat(minSlider.max)-parseFloat(minSlider.min)))*parseFloat(minSlider.min);
+
+       document.getElementById("leftSlider").style.width = value + "%";
+       document.getElementById("selectedSlider").style.left = value + "%";
+       document.getElementById("leftGeneticDistThumb").style.left = value + "%";
+       document.getElementById("minGeneticDist").innerHTML = minSlider.value;
+
+      return {
+        minValue: minSlider.value,
+        maxValue: maxSlider.value
+      };
+     }
+
+     function updateMaxSlider(newValue) {
+       let minSlider = document.getElementById("minGeneticDistInput");
+       let maxSlider = document.getElementById("maxGeneticDistInput");
+
+       let minValue = parseFloat(minSlider.value) + stepValue;
+       maxSlider.value = Math.max(parseFloat(newValue), minValue);
+       let value = (100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.value)-(100/(parseFloat(maxSlider.max)-parseFloat(maxSlider.min)))*parseFloat(maxSlider.min);
+
+       document.getElementById("rightSlider").style.width = (maxPercentage - value) + "%";
+       document.getElementById("selectedSlider").style.right = (maxPercentage - value) + "%";
+       document.getElementById("rightGeneticDistThumb").style.left = value + "%";
+       document.getElementById("maxGeneticDist").innerHTML = maxSlider.value;
+
+       return {
+         minValue: minSlider.value,
+         maxValue: maxSlider.value
+       };
+     }
+
+     function updateMinTypedSelection() {
+       let minInputBox = document.getElementById("minGeneticDistanceTyped");  // Update values in input boxes
+
+       let minValue = parseFloat(minInputBox.value);
+
+       console.log(minValue);
+
+       if (minValue != NaN) {
+         let rangeSelected = updateMinSlider(minValue);
+         if (parseFloat(minInputBox.value) != rangeSelected.minValue) {
+           minInputBox.value = rangeSelected.minValue;
+         }
+
+         clearFindMyFriendsSection();
+         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
+
+       }
+
+     }
+
+     function updateMaxTypedSelection() {
+       let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
+
+       let maxValue = parseFloat(maxInputBox.value);
+
+       console.log(maxValue);
+
+       if (maxValue != NaN) {
+         let rangeSelected = updateMaxSlider(maxValue);
+         if (parseFloat(maxInputBox.value) != rangeSelected.maxValue) {
+           maxInputBox.value = rangeSelected.maxValue;
+         }
+
+         clearFindMyFriendsSection();
+         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
+
+       }
+
      }
 
      function updateOrderByProperty() {
+       let minValue = document.getElementById("minGeneticDistanceTyped").value;
+       let maxValue = document.getElementById("maxGeneticDistanceTyped").value;
        clearFindMyFriendsSection();
-       displayFindMyFriendsSection();
+       displayFindMyFriendsSection(minValue, maxValue);
      }
 
      function updateOrderByAsc() {
+       let minValue = document.getElementById("minGeneticDistanceTyped").value;  // Update values in input boxes
+       let maxValue = document.getElementById("maxGeneticDistanceTyped").value;
        clearFindMyFriendsSection();
-       displayFindMyFriendsSection();
+       displayFindMyFriendsSection(minValue, maxValue);
      }
 
-     // Wipe out the section when the filter is updated
+     /*
+     * Display genome cards
+     */
      function clearFindMyFriendsSection() {
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
-     // Display genetically related genomes
-     function displayFindMyFriendsSection(){  // TODO: Cleanup, accept min, max as value
-       let minValue = document.getElementById("minGeneticDistInput").value; // Read chosen min and max values
-       let maxValue = document.getElementById("maxGeneticDistInput").value;
-
-       let minInputBox = document.getElementById("minGeneticDistanceTyped");  // Update values in input boxes
-       let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
-       if ( minInputBox.value != minValue ) {
-         minInputBox.value = minValue;
-       }
-       if ( maxInputBox.value != maxValue ) {
-         maxInputBox.value = maxValue;
-       }
+     function displayFindMyFriendsSection(minValue, maxValue){
 
        let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
        let desiredRelatedSamples = [];
@@ -544,7 +612,7 @@
          }
        });
 
-       relatedSamples.forEach(function(sample) { // Filter desired genetic distance
+       relatedSamples.forEach(function(sample) { // Handle undefined properties
          if ( sample.st == undefined ) {
            sample.st = "Unknown";
          }
@@ -563,7 +631,7 @@
        });
 
 
-       let orderBy = document.getElementById("orderBy").value; // Edit to handle undefined
+       let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
        desiredRelatedSamples.sort(function(a,b) {
          if (orderBy == "sequenceType") {
            if (a.st < b.st) {
@@ -593,8 +661,6 @@
         desiredRelatedSamples.reverse();
       }
 
-       //console.log(desiredRelatedSamples);
-
        let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
        let count = 0
        desiredRelatedSamples.forEach(function(relatedSample) {
@@ -603,14 +669,13 @@
 
          tag = parentSection.getElementsByClassName("geneticDistanceTag")[count]; // Position the tag
          card = parentSection.getElementsByClassName("genomeCard")[count];
-         console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`);
+         //console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`);
          tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
          count++;
        });
 
      }
 
-     // Returns the html of a genome card
      function createGenomeCard(sample){
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCard");
@@ -637,7 +702,10 @@
 
     // Display cards when first loaded
     window.onload = function() {
-      displayFindMyFriendsSection();
+      let minValue = document.getElementById("minGeneticDistInput").value;
+      let maxValue = document.getElementById("maxGeneticDistInput").value;
+      displayFindMyFriendsSection(minValue, maxValue);
+      updateFavoritesButton();
     }
 
     // Update display when window is rezied, TODO: figure out a way to make this more efficient
@@ -651,5 +719,36 @@
         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
       }
     }
+
+    /*
+     * Script for Favorites Functionality
+     * Display whether or not a sample has been favorited by a user.
+     */
+    function updateFavoritesButton(){
+      let isFavorite = <%- isFavourited %>; // TODO: Change to american spelling
+      let style = "unfavoriteSample";
+      if (isFavorite) {
+        style = "favoriteSample";
+      }
+      let favoriteButton = document.getElementById("favoriteButtonHeart");
+      favoriteButton.setAttribute("class", `fas fa-heart ${style}`);
+    }
+
+    /*
+    Updating dropdown with list of groups to add
+     */
+    let optionList = document.getElementById('groups-list').options;
+    optionList.add(new Option('Select a group'));
+    let groups = <%- JSON.stringify(avail_groups) %>;
+    groups.forEach(option => {
+        optionList.add(
+            new Option(option.name, option.group_id)
+        )
+    })
+
+    function addToGroup(){
+
+    }
+
 
 </script>

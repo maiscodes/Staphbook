@@ -13,24 +13,16 @@
         <% if (userLoggedIn) { %>
 
         <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
-            <% if (isFavourited == 1) { %>
-            <form method="POST">
-                <button type="submit" class="btn btn-outline-dark btn-sm" title="Unfavorite Sample"
-                        id="unfavouriteSample" style="margin-left: 2px; margin-right: 2px; color: #468e94;">
-                    <i class="fas fa-heart"
-                       style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
-                </button>
-            </form>
-            <% } else if (isFavourited == 0) { %>
-            <form method="POST">
+          <form method="POST">
+              <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Button"
+                      id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: #ebebeb;">
+                  <i id ="favoriteButtonHeart" class="fas fa-heart"
+                     style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
+              </button>
+              <select onchange="addToGroup" id="groups-list" name="groups-list">
+              </select>
+          </form>
 
-                <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Sample" id="favouriteSample"
-                        style="margin-left: 2px; margin-right: 2px; color: #468e94;">
-                    <i class="far fa-heart"
-                       style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
-                </button>
-            </form>
-            <% } %>
         </div>
         <!--  close favDiv -->
         <% } %>
@@ -256,11 +248,12 @@
         <!-- close resultsPageGraphComponent4 -->
 
         <!-- close resultsPageResultComponents -->
+        <!-- TODO: add information button, page move buttons << < Page X / 10 > >> Jumps 2 at a time -->
         <div id="resultsPageGraphComponent5" style="text-align: center;">
 
           <h3 style="text-align: center">Find My Friends</h3>
 
-          <p>Finding genetically related genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
+          <p>Finding closely related genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
 
           <% include ../snippets/rangedSliderGeneticDistance.ejs %>
 

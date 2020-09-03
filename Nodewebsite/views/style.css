@@ -792,6 +792,20 @@ input:checked + .toggle:before {
     background-color: white;
     position: relative;
   }
+
+  .groupCard {
+    border-radius: 10px;
+    border: 1px solid #636363;
+    float: left;
+    width: 22%;
+    padding-left: 2em;
+    padding-right: 2em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    margin: 1em;
+    background-color: white;
+    position: relative;
+  }
 }
 
 
@@ -810,4 +824,106 @@ input:checked + .toggle:before {
     background-color: white;
     position:relative;
   }
+
+  .groupCard {
+    border-radius: 10px;
+    border: 1px solid #636363;
+    float: left;
+    width: 50%;
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    padding-left: 2em;
+    padding-right: 2em;
+    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    margin: 1em;
+    background-color: white;
+    position: relative;
+  }
+}
+
+/* View groups page */
+.groupDescription {
+  text-align: center;
+}
+
+.groupsPage {
+    text-align: center;
+}
+
+.groupsPage h4 {
+  margin-top: 1.5em;
+  text-align: center;
+}
+
+#groupSamplesCards {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 80%;
+  margin-top: 2em;
+  margin: auto;
+}
+
+#barGraphsSection {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 80%;
+  margin: auto;
+  padding-top: 2em;
+}
+
+.barGraph {
+  padding: .8em;
+  min-height: 100%;
+}
+
+#radarGraphSection {
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 65%;
+  margin-top: 2em;
+  margin: auto;
+}
+
+.radarGraph {
+  padding: .8em;
+}
+
+#groupSamplesFilterBar {
+  text-align: center;
+}
+
+/* Error page */
+#errorPage {
+  margin-top: 2em;
+}
+
+#errorButton {
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px;
+  color: white;
+  background-color: rgba(0,0,0,.7);
+}
+
+/* Favourites */
+.unfavoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #ebebeb;
+}
+
+.favoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #468e94;
 }

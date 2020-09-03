@@ -1,0 +1,427 @@
+<!-- Group Samples Page Scripts -->
+<script>
+  /*
+  * Display group statistics functionality
+  *
+  */
+  function displayGenomeCards() {
+     let groupSamples =  <%- JSON.stringify(samples) %>;
+
+      groupSamples.forEach(function(sample) { // Handle undefined properties
+        if ( sample.st == undefined ) {
+          sample.st = "Unknown";
+        }
+        if ( sample.country == undefined ) {
+          sample.country = "Unknown";
+        }
+        if ( sample.strain == undefined ) {
+          sample.strain = "Unknown";
+        }
+        if ( sample.host == undefined ) {
+          sample.host = "Unknown";
+        }
+        if ( sample.isolation_source == undefined ) {
+          sample.isolation_source = "Unknown";
+        }
+      });
+
+
+      let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
+      groupSamples.sort(function(a,b) {
+        if (orderBy == "sequenceType") {
+          if (a.st < b.st) {
+            return -1;
+          }
+          if (a.st > b.st) {
+            return 1;
+          }
+          return 0;
+        }
+        if (orderBy == "location") {
+          return a.country.localeCompare(b.country);
+        }
+        if (orderBy == "strain") {
+          return a.strain.localeCompare(b.strain);
+        }
+        if (orderBy == "host") {
+          return a.host.localeCompare(b.host);
+        }
+        if (orderBy == "isolationSource") {
+          return a.isolation_source.localeCompare(b.isolation_source);
+        }
+      });
+
+     orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
+     if (orderByAsc.checked == false) {
+       groupSamples.reverse();
+     }
+
+     let parentSection = document.getElementById("groupSamplesCards");
+
+     groupSamples.forEach(function(groupSample) {
+       let newCard = document.createElement("button");
+       newCard.setAttribute("class", "genomeCardInfo");
+       newCard.setAttribute("name", "sampleSelection");
+       newCard.setAttribute("value", `${groupSample.id}`);
+       newCard.setAttribute("onclick", "window.location.href='/result'");
+       newCard.setAttribute("type", "submit");
+
+       let info = document.createElement("p");
+
+       let display = `<div class="genomeCardSampleId"><h4>${groupSample.id}</h4></div>
+       <b>Sequence Type: </b>${groupSample.st}<br>
+       <b>Location: </b>${groupSample.country}<br>
+       <b>Strain: </b>${groupSample.strain}<br>
+       <b>Host: </b>${groupSample.host}<br>
+       <b>Isolation Source: </b>${groupSample.isolation_source}<br>`
+
+       info.innerHTML = display;
+       newCard.innerHTML = info.outerHTML;
+       let newCardGroup = document.createElement("div");
+       newCardGroup.setAttribute("class", "genomeCard");
+       newCardGroup.innerHTML = `<form action='/result' method="get">${newCard.outerHTML}</form> <button class="removeCheckBox" id="${groupSample.id}CheckBox" value="false" onclick="toggleCheckBox(this.id)">&#10006;</button>`
+       parentSection.appendChild(newCardGroup);
+
+     });
+  }
+
+  function clearGroupSampleCards() {
+    let groupSamplesSection = document.getElementById("groupSamplesCards");
+    groupSamplesSection.innerHTML = "";
+  }
+
+  function updateCards() {
+    clearGroupSampleCards();
+    displayGenomeCards();
+  }
+
+  // Returns each category's max count and genome information from the given array of dictionaries
+  function getRadarLabelsData(dictionaries, total) {
+    labels = ["", "", "", "", ""];
+    maxes = [0,0,0,0,0];
+
+    for (d = 0; d < dictionaries.length; d++) { // Find most common sample information(s) for each category
+      max = 0;
+      label= "";
+      for (const [key, value] of Object.entries(dictionaries[d])) {
+        if (value == max) { // Add to current most common list
+           label += `, ${key}`;
+        }
+        if (value > max) { // Reset most common value
+          max = value;
+          label = key;
+        }
+      }
+      labels[d] = label;
+      maxes[d] = max;
+    }
+
+    // Calculate percentages
+    for (m = 0; m < maxes.length; m++) {
+      maxes[m] = parseFloat((maxes[m] / total * 100).toFixed(2));
+    }
+
+    // Reformat labels
+    labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
+    for (l=0; l < labels.length; l++) {
+      labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
+    }
+
+    return [labels, maxes];
+  }
+
+  // Separates the dictionary of names and numbers tp inject into chart
+  function getBarLabelsData(dictionary) {
+    labels = [];
+    data = [];
+
+    for (const [key, value] of Object.entries(dictionary)) {
+      labels.push(key);
+      data.push(value);
+    }
+
+    return [labels, data];
+  }
+
+  // Increase count
+  function increaseCount(count) {
+    if (count == undefined) {
+      count = 1;
+    }
+    else {
+      count ++;
+    }
+    return count;
+  }
+
+  // Show graphs
+  function displayGraphs() {
+    let groupSamples =  <%- JSON.stringify(samples) %>;
+
+    let sequenceTypes = {};
+    let locations = {};
+    let strains = {};
+    let hosts = {};
+    let isolationSources = {};
+
+    groupSamples.forEach(function(sample) {
+      sequenceTypes[sample.st] = increaseCount(sequenceTypes[sample.st]);
+      locations[sample.country] = increaseCount( locations[sample.country]);
+      strains[sample.strain] = increaseCount(strains[sample.strain]);
+      hosts[sample.host] = increaseCount(hosts[sample.host]);
+      isolationSources[sample.isolation_source] = increaseCount(isolationSources[sample.isolation_source]);
+    });
+
+    canvases = [["sequenceTypeBar", sequenceTypes, "Sequence Types"], ["locationBar", locations, "Locations"],
+    ["strainBar", strains, "Strains"], ["hostBar", hosts, "Hosts"], ["isolationSourceBar", isolationSources, "Isolation Sources"]];
+
+    canvases.forEach(function(canvas) {
+      console.log(canvas);
+      id = canvas[0];
+      chartInfo = getBarLabelsData(canvas[1]);
+      title = canvas[2];
+      createBarChart(id, title, chartInfo[0], chartInfo[1]);
+    });
+
+    // Create radar chart
+    chartInfo = getRadarLabelsData([sequenceTypes, locations, strains, hosts, isolationSources], Object.keys(groupSamples).length);
+    createRadarChart("aggregatedRadarGraph", chartInfo[0], chartInfo[1]);
+
+  }
+
+  // Insert a radar chart inside the element id specified
+  function createRadarChart(id, labels, data) {
+    // Setup aesthetic options
+    options = {
+      legend: {
+        display: false
+      },
+      scale: {
+        ticks: {
+          beginAtZero: true,
+          suggestedMax: 100,
+          suggestedMin: 0,
+          stepSize: 20,
+          fontSize: 16,
+          backdropColor: 'white',
+          display: false
+        },
+        angleLines: {
+          display: false,
+        },
+        gridLines: {
+        lineWidth: 1.5,
+        color: '#707070'
+        },
+        pointLabels: {
+            fontSize: 16,
+        }
+      }
+    };
+
+    // Alow for multi-line labels
+    plugins = [{
+     beforeInit: function(chart) {
+        chart.data.labels.forEach(function(e, i, a) {
+           if (/\n/.test(e)) {
+              a[i] = e.split(/\n/);
+           }
+        });
+      }
+    }];
+
+    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
+
+    var canvas = document.getElementById(id);
+    var myChart = new Chart(canvas, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Percentage",
+          data: data,
+         backgroundColor: "rgba(255, 99, 132, 0.2)",
+          pointHitRadius: 10,
+          pointRadius: 0,
+          border: 1,
+          borderColor: "rgba(255, 99, 132, 0.05)"
+      }]},
+      options: options,
+      plugins: plugins
+    });
+  }
+
+  // Insert a horizontal bar chart inside the specified document id
+  function createBarChart(id, title, labels, data) {
+    backgroundColours = []; // Same colour for consistency
+    for (i = 0; i < labels.length; i ++) {
+      alpha = Math.random()
+      if (alpha < 0.1) {
+        alpha += 0.1;
+      }
+      backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
+    }
+
+    options = {  // Setup aesthetic configurations
+      legend: {
+          display: false
+      },
+      responsive: false,
+      aspectRatio: 2,
+      maintainAspectRatio: true,
+      scales: {
+        xAxes: [{
+          ticks: {
+            maxRotation: 90,
+            minRotation: 80,
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            lineWidth: 1.5,
+            color: '#707070'
+          },
+           scaleLabel: {
+            display: true,
+            labelString: title
+          }
+
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            lineWidth: 1.5,
+            color: '#707070'
+          }
+        }]
+      }
+    };
+
+    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
+    //Chart.defaults.global.defaultFontSize = 20;
+
+    var canvas = document.getElementById(id)
+    var myChart = new Chart(canvas, {
+      type: 'horizontalBar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: backgroundColours,
+          border: 5
+        }]
+      },
+      options: options
+    });
+  }
+
+  /*
+  * Remove group sample functionality
+  *
+  */
+  function toggleCheckBox(id) {
+	let button = document.getElementById(id);
+    const toggleValue = async () => {
+      if (button.value == "false") {
+      	return true;
+      }
+      return false;
+    }
+    toggleValue().then((newValue) => {
+    	button.value = newValue;
+        console.log(button.value);
+        button.style.backgroundColor = "white";
+        if (button.value == "true") {
+        	button.style.backgroundColor = "red";
+
+        }
+    });
+}
+
+function adjustRemoveCheckboxes() {
+  checkboxes = document.getElementsByClassName("removeCheckBox");
+  cards = document.getElementsByClassName("genomeCard");
+
+  for (i = 0; i < checkboxes.length; i++) {
+    checkbox = checkboxes[i];
+    card = cards[i] //getBoundingClientRect();;
+
+    console.log(checkbox.offsetTop);
+    checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
+    checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
+    checkbox.style.visibility = "hidden";
+  }
+}
+
+function enableRemoveGenomeSamples() {
+  let editButton = document.getElementById("groupEditButton"); // Change to cancel button
+  editButton.innerText = "Cancel";
+  editButton.style.backgroundColor = "#1ABC9C";
+  editButton.style.border = "1px solid #1ABC9C";
+  editButton.style.color = "white";
+  editButton.setAttribute("onclick", "cancelRemoveGenomeSamples()");
+
+  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
+  for (i = 0; i < removeCheckBoxes.length; i++) {
+    removeCheckBoxes[i].style.visibility = "visible";
+  }
+
+  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // disable redirect to sample
+  for (i = 0; i < genomeCardButtons.length; i++) {
+    genomeCardButtons[i].setAttribute('class', 'genomeCardInfo disabled');
+  }
+
+  let genomeCards = document.getElementsByClassName("genomeCard");
+  for (i = 0; i < genomeCards.length; i++) {
+    genomeCards[i].onmouseover = function () {
+      this.style.border = "1px solid transparent"; // Will need to revert
+    }
+  }
+
+}
+
+function cancelRemoveGenomeSamples(){
+  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
+  for (i = 0; i < removeCheckBoxes.length; i++) {
+    removeCheckBoxes[i].style.visibility = "hidden";
+
+  }
+
+  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // disable redirect to sample
+  for (i = 0; i < genomeCardButtons.length; i++) {
+    genomeCardButtons[i].setAttribute('class', 'genomeCardInfo');
+  }
+
+  let genomeCards = document.getElementsByClassName("genomeCard");
+  for (i = 0; i < genomeCards.length; i++) {
+    genomeCards[i].onmouseover = function () {
+      this.style.border = "1.5px solid #3399FF";
+      this.style.transition = "0.3s";
+    }
+
+    genomeCards[i].onmouseleave = function () {
+      this.style.border = "1px solid #f3f3f3";
+      this.style.transition = "0.3s";
+    }
+  }
+
+  let editButton = document.getElementById("groupEditButton"); // Change to original button
+  editButton.innerText = "Edit";
+  editButton.style.backgroundColor = "white";
+  editButton.style.border = "1px solid #636363";
+  editButton.style.color = "#468e94";
+  editButton.setAttribute("onclick", "enableRemoveGenomeSamples()");
+
+}
+
+  window.onload = function() {
+    displayGenomeCards();
+    displayGraphs();
+    adjustRemoveCheckboxes();
+  }
+
+</script>
