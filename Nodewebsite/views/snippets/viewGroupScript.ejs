@@ -607,28 +607,113 @@ function removeGenomeSamples() {
   * group names and descriptions.
   */
   function enableEditGroupInfo() {
-    let inputTitleDiv = document.createElement('div');
     let inputTitle = document.createElement('textarea');
     inputTitle.setAttribute('type', 'text');
     inputTitle.setAttribute('id', 'inputTitle');
     inputTitle.innerHTML =  <%- JSON.stringify(groupInfo.name) %>;
-    inputTitleDiv.innerHTML = `${inputTitle.outerHTML}<br>`;
 
-    let inputDescriptionDiv = document.createElement('div');
     let inputDescription = document.createElement('textarea');
     inputDescription.setAttribute('type', 'text');
     inputDescription.setAttribute('id', 'inputDescription');
     inputDescription.innerHTML = <%- JSON.stringify(groupInfo.description) %>;
-    inputDescriptionDiv.innerHTML = `${inputDescription.outerHTML}<br>`;
+
+    let edittingGroupEditBar = document.createElement('div');
+    edittingGroupEditBar.setAttribute('id', 'groupEditBar');
+    edittingGroupEditBar.innerHTML = `${getGroupCancelEditButton().outerHTML}${getGroupUpdateButton().outerHTML}`;
 
     // replace with inputs
     let title = document.getElementById("groupName");
     let description = document.getElementById("groupDescription");
+    let groupEditBar = document.getElementById("groupEditBar");
 
-    title.parentNode.replaceChild(inputTitleDiv, title);
-    description.parentNode.replaceChild(inputDescriptionDiv, description);
+    title.parentNode.replaceChild(inputTitle, title);
+    description.parentNode.replaceChild(inputDescription, description);
+    groupEditBar.parentNode.replaceChild(edittingGroupEditBar, groupEditBar);
   }
 
+  function updateGroupInformation(){
+    let newTitle = document.getElementById("inputTitle").value;
+    let newDescription = document.getElementById("inputDescription").value;
+    let isoDate = new Date(Date.now()).toISOString();
+    let baseUrl = "http://localhost:8000"; // TODO: update when hosted
+    let url = `${baseUrl}/updateGroup`;
+    //console.log(url);
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({groupId: <%- groupInfo.group_id %>, title: newTitle, description: newDescription, modified: isoDate})
+      })
+      .then(response => {
+          if (response.status == 200) {
+              location.reload(true);
+          }
+          let errorMessage = document.getElementById("groupEditErrorMessage"); //TODO: Fix error handling 
+          errorMessage.innerHMTL = "There was an error updating the information. Please try again.";
+      })
+      .catch(error => {
+          console.log(error);
+      });
+  }
+
+  function getNormalTitle() {
+    let title = document.createElement('h1');
+    title.setAttribute('id', 'groupName');
+    title.innerHTML = <%- JSON.stringify(groupInfo.name) %>;
+    return title;
+  }
+
+  function getNormalDescription(){
+    let description = document.createElement('p');
+    description.setAttribute('id', 'groupDescription');
+    description.innerHTML = <%- JSON.stringify(groupInfo.description) %>;
+    return description;
+  }
+
+  function getNormalGroupEditBar(){
+    let button = document.createElement('button');
+    button.setAttribute('id', 'groupEditButton');
+    button.setAttribute('onclick', 'enableEditGroupInfo()');
+    button.innerHTML = "Edit";
+
+    let normalEditBar = document.createElement('div');
+    normalEditBar.setAttribute('id', 'groupEditBar');
+    normalEditBar.innerHTML = button.outerHTML;
+    return normalEditBar;
+  }
+
+  function getGroupCancelEditButton(){
+    let button = document.createElement('button');
+    button.setAttribute('id', 'groupEditCancelButton');
+    button.setAttribute('onclick', 'returnNormalPage()');
+    button.innerHTML = "Cancel";
+    return button;
+  }
+
+  function getGroupUpdateButton(){
+    let button = document.createElement('button');
+    button.setAttribute('id', 'groupUpdateButton');
+    button.setAttribute('onclick', 'updateGroupInformation()');
+    button.innerHTML = "Update";
+    return button;
+  }
+
+  function returnNormalPage(){
+    let inputTitle = document.getElementById("inputTitle");
+    let inputDescription = document.getElementById("inputDescription");
+    let groupEditBar = document.getElementById("groupEditBar");
+
+    let normalTitle = getNormalTitle();
+    let normalDescription = getNormalDescription();
+    let normalEditBar = getNormalGroupEditBar();
+
+    inputTitle.parentNode.replaceChild(normalTitle, inputTitle);
+    inputDescription.parentNode.replaceChild(normalDescription, inputDescription);
+    groupEditBar.parentNode.replaceChild(normalEditBar, groupEditBar);
+  }
 
 
   window.onload = function() {

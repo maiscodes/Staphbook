@@ -8,7 +8,10 @@
         <%- groupInfo.name %>
     </h1>
 
+    <div id="groupEditErrorMessage" class="errorMessage"></div>
+    <div id="groupEditBar">
     <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
+    </div>
 
     <p id="groupDescription" class="groupDescription">
         <%- groupInfo.description %>
@@ -53,7 +56,7 @@
         </label>
       </p>
 
-    <div id="errorMessage"></div>
+    <div id="errorMessage" class="errorMessage"></div>
     <div id="emptyGroupMessage"></div>
 
     <!-- Let user browse groups of genomes at a time so they don't get overwhelmed -->

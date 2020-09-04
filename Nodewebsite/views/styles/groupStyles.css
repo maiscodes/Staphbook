@@ -52,7 +52,7 @@
   color: white;
 }
 
-#groupSampleEditButton, #groupEditButton{
+#groupSampleEditButton, #groupEditButton, #groupEditCancelButton, #groupUpdateButton{
   margin: 0 auto;
   padding: 0.5em;
   background-color: white;
@@ -64,6 +64,22 @@
   position: relative;
   margin-top: 0.5em;
   margin-bottom: 0.7em;
+}
+
+#groupEditCancelButton {
+  background-color: #fafafa;
+  color: #1ABC9C;
+  border: 1px solid #9c9c9c;
+  margin-right: 0.5em;
+  outline: none;
+}
+
+#groupUpdateButton {
+  margin-left: 0.5em;
+  background-color: #1ABC9C;
+  border: 1px solid #1ABC9C;
+  color: white;
+  outline: none;
 }
 
 /* Selection bar */
@@ -96,7 +112,11 @@
     pointer-events: none;
 }
 
-#errorMessage #emptyGroupMessage {
+#emptyGroupMessage {
+  font-size: 1em;
+}
+
+.errorMessage {
   font-size: 1em;
 }
 
