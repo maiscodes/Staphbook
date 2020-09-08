@@ -84,6 +84,7 @@ app.set("view engine", "ejs");
 var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
+var groupAlreadyExists = true;
 var favSampleID;
 
 /*
@@ -98,6 +99,7 @@ let loginRouter = require("./routes/login");
 let favouriteRouter = require("./routes/favourites");
 let groupsRouter = require("./routes/groups");
 let viewGroupRouter = require("./routes/viewGroup");
+let createGroupRouter = require("./routes/createGroup");
 
 /* --------------------------------------------------------------------------------
  *
@@ -120,7 +122,7 @@ app.use("/login", loginRouter);
 app.use("/favourites", favouriteRouter);
 app.use("/groups", groupsRouter);
 app.use("/viewGroup", viewGroupRouter);
-
+app.use("/createGroup", createGroupRouter);
 // index page
 app.get("/", function (req, res) {
   let favorites = [];

@@ -290,6 +290,13 @@ a {
     margin-top: 30px;
 }
 
+#createGroupContainer {
+  width: 40%;
+  margin: 0 auto;
+  border: 0.5px solid silver;
+  padding: 15px 15px 15px 15px;
+  margin-top: 30px;
+}
 
 .homeResultItem {
     border: 0.5px solid silver;
