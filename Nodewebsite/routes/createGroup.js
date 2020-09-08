@@ -24,8 +24,8 @@ router.post("/", function (req, res) {
   let email = decodeURIComponent(value);
   var name = req.body.name;
   var description = req.body.description;
-  let date = Date().getTimezoneOffset();
-  let created = to_timestamp({date})
+  let date = new Date(Date.now()).toISOString();
+  let created = JSON.stringify(date);
 
   if (name !== "") {
     req.knex
@@ -51,6 +51,7 @@ router.post("/", function (req, res) {
               name: name,
               description: description,
               created: created,
+              modified: created,
             })
             .then((result_groups, error) => {
               console.log(result_groups, error);
