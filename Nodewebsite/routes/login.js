@@ -61,6 +61,7 @@ router.post("/", function (req, res) {
               userLoggedIn = true;
               let value = req.session.userEmail;
               let email = decodeURIComponent(value);
+              console.log(email);
 
               req.knex
                 .select("*")
@@ -68,15 +69,33 @@ router.post("/", function (req, res) {
                 .where({ email: email })
                 .limit(4)
                 .then((fav_results, err) => {
+                  console.log("fav_results");
                   console.log(fav_results, err);
+                  console.log(fav_results.length);
+
+                  let fav_sample_list=[];
                   if (fav_results.length > 0) {
+                    //maybe for-loop
+                    if (fav_results.length > 0) {
+                      fav_sample_list.push(fav_results[0].sample_id); 
+                    }
+                    if (fav_results.length > 1) {
+                      fav_sample_list.push(fav_results[1].sample_id);
+                    }
+                    if (fav_results.length > 2) {
+                      fav_sample_list.push(fav_results[2].sample_id);
+                    }
+                    if (fav_results.length > 3) {
+                      fav_sample_list.push(fav_results[3].sample_id);
+                    }
+
+                  let sample_id_subquery = req.knex.select("sample_id").from("sample_metadata").whereIn('sample_id', fav_sample_list);
+                  
                     haveFavs = true;
                     haveSugs = true;
 
                     let same_sequence;
-                    let same_sequence_samples = req.knex
-                      .select("sample_id")
-                      .from("sample_metadata");
+                  
                     let selectKnex = req.knex
                       .select({
                         st: "mlst_mlst.st",
@@ -96,50 +115,20 @@ router.post("/", function (req, res) {
                         "mlst_mlst.sample_id",
                         "sample_metadata.sample_id"
                       )
-                      .where("mlst_mlst.sample_id", "in", same_sequence_samples)
-                      .then((same_sequence) => {
-                        for (same of same_sequence) {
-                          // Make backwards compatible, TODO: keep as metadata later
-                          same.country = same.metadata.country;
-                          same.strain = same.metadata.strain;
-                          same.host = same.metadata.host;
-                          same.isolation_source =
-                            same.metadata.isolation_source;
-                          same.date = same.metadata.date_collected;
-                        }
-                      }).where;
-                    if (fav_results.length > 0) {
-                      selectKnex += {
-                        sample_id: fav_results[0].sample_id,
-                      };
-                    }
-                    if (fav_results.length > 1) {
-                      selectKnex += {
-                        sample_id: fav_results[1].sample_id,
-                      };
-                    }
-                    if (fav_results.length > 2) {
-                      selectKnex += {
-                        sample_id: fav_results[2].sample_id,
-                      };
-                    }
-                    if (fav_results.length > 3) {
-                      selectKnex += {
-                        sample_id: fav_results[3].sample_id,
-                      };
-                    }
-                    console.log(selectKnex);
-
-                    req.knex(selectKnex + ");", (err, favorites) => {
-                      req.knex
+                      .where("mlst_mlst.sample_id", "in", sample_id_subquery)
+                      .then((same_sequence, err) => {
+                        console.log(same_sequence);
+                        req.knex
                         .select("name")
                         .from("sample_sample")
                         .where({
                           id: fav_results[fav_results.length - 1].sample_id,
                         })
-                        .then((err, result_sample_sample) => {
-                          //console.log(err, result_tag_tosample);
+                        .then((result_sample_sample, err) => {
+                        
+                          console.log(err, result_sample_sample);
                           let sampleName = result_sample_sample[0].name;
+                          console.log(sampleName);
 
                           req.knex
                             .select("*")
@@ -147,10 +136,14 @@ router.post("/", function (req, res) {
                             .where({ selected_sample: sampleName })
                             .limit(5)
                             .orderBy("distance", "asc")
-                            .then((err, result_weighted_distances) => {
+                            .then((result_weighted_distances, err) => {
                               //console.log(err, result_weighted_distances);
-                              console.log(err, result_weighted_distances);
-
+                              console.log(result_weighted_distances, err);
+                              if(result_weighted_distances.length>1){
+                                let close_genetic_distances=[];
+                              for (let i = 1; i < 5; i++) {
+                                close_genetic_distances.push(result_weighted_distances[i].comparison_sample);
+                            }
                               req.knex
                                 .select({
                                   st: "mlst_mlst.st",
@@ -173,25 +166,26 @@ router.post("/", function (req, res) {
                                 .where(
                                   "mlst_mlst.sample_id",
                                   "in",
-                                  same_sequence_samples,
-                                  result_weighted_distances[1].comparison_sample
-                                    .wherein(
-                                      sample_sample.name,
-                                      result_weighted_distances[2]
-                                        .comparison_sample
-                                    )
-                                    .wherein(
-                                      sample_sample.name,
-                                      result_weighted_distances[3]
-                                        .comparison_sample
-                                    )
-                                    .wherein(
-                                      sample_sample.name,
-                                      result_weighted_distances[4]
-                                        .comparison_sample
-                                    ),
-                                  (err, suggested) => {
-                                    console.log(err, suggested);
+                                  close_genetic_distances)
+                                  // result_weighted_distances[1].comparison_sample
+                                  //   .wherein(
+                                  //     sample_sample.name,
+                                  //     result_weighted_distances[2]
+                                  //       .comparison_sample
+                                  //   )
+                                  //   .wherein(
+                                  //     sample_sample.name,
+                                  //     result_weighted_distances[3]
+                                  //       .comparison_sample
+                                  //   )
+                                  //   .wherein(
+                                  //     sample_sample.name,
+                                  //     result_weighted_distances[4]
+                                  //       .comparison_sample
+                                  //   ),
+                                  .then(
+                                                      (suggested, err) => {
+                                    console.log(suggested, err);
                                     console.log(haveFavs);
                                     res.render("pages/index", {
                                       userLoggedIn: userLoggedIn,
@@ -203,10 +197,43 @@ router.post("/", function (req, res) {
                                       userNotRegistered: userNotRegistered,
                                     });
                                   }
-                                );
-                            });
+                            )
+                              }
+                              // in case weighted distance not set up in DB
+                              else{
+                                res.render("pages/index", {
+                                  userLoggedIn: userLoggedIn,
+                                  favorites: favorites,
+                                  suggested:[],
+                                  haveFavs: haveFavs,
+                                  haveSugs: haveSugs,
+                                  creationSuccess: false,
+                                  userNotRegistered: userNotRegistered,
+                                });
+                              }
+
+                              
+                                                            });
                         });
-                    });
+                        /*
+                        //console.log(same_sequence);
+                        for (same of same_sequence) {
+                          // Make backwards compatible, TODO: keep as metadata later
+                          same.country = same.metadata.country;
+                          same.strain = same.metadata.strain;
+                          same.host = same.metadata.host;
+                          same.isolation_source =
+                            same.metadata.isolation_source;
+                          same.date = same.metadata.date_collected;
+                        }
+                      })//.where;
+                    console.log("Fave results are"); */
+                    
+                    //console.log(selectKnex);
+
+                    //req.knex(selectKnex + ");", (favorites, err) => {
+               
+                  });
                   } else {
                     res.render("pages/index", {
                       userLoggedIn: userLoggedIn,
