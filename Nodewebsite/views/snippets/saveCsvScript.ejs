@@ -283,7 +283,7 @@
 
     sccmec_primers.forEach(function(object){
     var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
+    arr.push("\r" + staphopia_blatstquery.rows[object.query_id-1].title);
     arr.push(object.contig);
     arr.push(object.hamming_distance);
     arr.push(object.bitscore);
@@ -324,7 +324,7 @@
 
     sccmec_subtypes.forEach(function(object){
     var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
+    arr.push("\r" + staphopia_blatstquery.rows[object.query_id-1].title);
     arr.push(object.contig);
     arr.push(object.hamming_distance);
     arr.push(object.bitscore);
@@ -366,7 +366,7 @@
 
     sccmec_proteins.forEach(function(object){
     var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
+    arr.push("\r" + staphopia_blatstquery.rows[object.query_id-1].title);
     arr.push(object.contig);
     arr.push(object.hamming_distance);
     arr.push(object.bitscore);

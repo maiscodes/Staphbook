@@ -19,7 +19,7 @@
     </tr>
     <% sccmec_proteins.forEach(function (result_sccmec_proteins) { %>
     <tr>
-        <td > <%= staphopia_blatstquery[result_sccmec_proteins.query_id-1].title %> </td>
+        <td > <%= staphopia_blatstquery.rows[result_sccmec_proteins.query_id-1].title %> </td>
         <td > <%= result_sccmec_proteins.contig %> </td>
         <td > <%= result_sccmec_proteins.hamming_distance %> </td>
         <td > <%= result_sccmec_proteins.bitscore %> </td>
