@@ -15,7 +15,6 @@
     <!-- Download button -->
 
     <!-- Edit button -->
-    <!-- Tag to delete samples, go through all the tags again and add samples to list to delete -->
 
     <!-- Display aggregated data -->
     <h4>Common Statistics and Distributions</h4>
@@ -32,28 +31,8 @@
     </div>
 
     <!-- Display genome cards -->
-    <div id="groupGenomeSection">
-      <h4>Genomes</h4>
-      <button id="groupEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
-      <p id ="groupSamplesFilterBar">
-        Order by
-        <select name="orderBy" id="orderBy" onchange="updateCards()">
-        <option value="sequenceType">Sequence Type</option>
-        <option value="location">Location</option>
-        <option value="strain">Strain</option>
-        <option value="host">Host</option>
-        <option value="isolationSource">Isolation Source</option>
-        </select>
-
-        Ascending
-        <label class="switch">
-          <input id="toggleOrder" type="checkbox" checked onchange="updateCards()">
-          <span class="toggle round"></span>
-        </label>
-      </p>
-
-    <div id="groupSamplesCards"></div>
-    </div>
+    <h4>Genomes</h4>
+    <form action='/result' method="get"><div id="groupSamplesCards"></div></form>
 
     <% include ../snippets/viewGroupScript.ejs %>
 

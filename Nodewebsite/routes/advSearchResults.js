@@ -7,7 +7,6 @@ router.get('/', function (req, res) {
         userLoggedIn = true;
     }
 
-    //TODO clean this up
     let sequenceInput = req.query.sequenceInput;
     let startDate = req.query.inputDateStart;
     let endDate = req.query.inputDateEnd;
@@ -17,48 +16,59 @@ router.get('/', function (req, res) {
     let sourceInput = req.query.sourceInput;
     if(strainInput == "" && sequenceInput=="" && startDate=="" && endDate=="" && locationInput=="" && hostInput=="" && sourceInput=="") {
         res.redirect('/advancedSearch');
-    }
-    //TO HERE
-    else {
-        req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-            name: 'sample_sample.name', id: 'sample_sample.id'})
-            .from('mlst_mlst')
-            .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
-            .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-            .modify(function (queryBuilder){
-                if(req.query.sequenceInput){
-                    queryBuilder.where({'mlst_mlst.st': req.query.sequenceInput});
-                }
-                if(req.query.inputDateStart){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) >= ?", [req.query.inputDateStart])
-                }
-                if(req.query.inputDateEnd){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) <= ?", [req.query.inputDateStart])
-                }
-                if(req.query.locationInput){
-                    queryBuilder.whereRaw("metadata->>'country' ILIKE ?", ["%"+req.query.locationInput+"%"])
-                }
-                if(req.query.strainInput){
-                    queryBuilder.whereRaw("metadata->>'strain' ILIKE ?", ["%"+req.query.strainInput+"%"])
-                }
-                if(req.query.hostInput){
-                    queryBuilder.whereRaw("metadata->>'host' ILIKE ?", ["%"+req.query.hostInput+"%"])
-                }
-                if(req.query.sourceInput){
-                    queryBuilder.whereRaw("metadata->>'isolation_source' ILIKE ?", ["%"+req.query.sourceInput+"%"])
-                }
+    } else {
+        let selectSQL = "";
+        selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
+            "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
+            "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
+            "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
+            "WHERE";
+        if (sequenceInput != ""){
+            selectSQL += " mlst_mlst.st = '" + sequenceInput + "'";
+            if (locationInput != "" || strainInput != "" || hostInput != "" || sourceInput != "" || startDate != "" || endDate != ""){
+                selectSQL += " AND ";
+            }
+        }
+        if (startDate != "" || endDate != ""){
+            if(endDate == ""){
+                selectSQL += " CAST(metadata->>'collection_date' AS DATE) >= '" + startDate + "'";
+            } else if (startDate == ""){
+                selectSQL += " CAST(metadata->>'collection_date' AS DATE) <= '" + endDate + "'";
+            } else{
+                selectSQL += " CAST(metadata->>'collection_date' AS DATE) >= '" + startDate + "' AND  CAST(metadata->>'collection_date' AS DATE) <= '" + endDate + "'";
+            }
+            if (strainInput != "" || hostInput != "" || sourceInput != ""){
+                selectSQL += " AND ";
+            }
+        }
+        if (locationInput != ""){
+            selectSQL += " metadata->>'country' ILIKE '%" + locationInput + "%'";
+            if (strainInput != "" || hostInput != "" || sourceInput != ""){
+                selectSQL += " AND ";
+            }
+        }
+        if (strainInput != ""){
+            selectSQL += " metadata->>'strain' ILIKE '%" + strainInput + "%'";
+            if (hostInput != "" || sourceInput != ""){
+                selectSQL += " AND ";
+            }
+        }
+        if (hostInput != ""){
+            selectSQL += " metadata->>'host' ILIKE '%" + hostInput + "%'";
+            if (sourceInput != ""){
+                selectSQL += " AND ";
+            }
+        }
+        if (sourceInput != ""){
+            selectSQL += " metadata->>'isolation_source' ILIKE '%" + sourceInput + "%' ";
+        }
+        console.log(selectSQL);
 
-            })
-            .then((results) => {
-                for (const same of results) {
-                    same.country = same.metadata.country;
-                    same.strain = same.metadata.strain;
-                    same.host = same.metadata.host;
-                    same.isolation_source = same.metadata.isolation_source;
-                }
-                let number = results.length;
-                res.render('pages/advSearchResults', { samples: results, number: number, userLoggedIn: userLoggedIn });
-            })
+        req.db.query(selectSQL + ";", (err, result_samples) => {
+            console.log(err, result_samples);
+            number = result_samples.rows.length;
+            res.render('pages/advSearchResults', { samples: result_samples.rows, number: number, userLoggedIn: userLoggedIn });
+        });
     }
 });
 
