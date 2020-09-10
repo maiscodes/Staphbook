@@ -1,66 +1,13 @@
-<!-- Group Samples Page Scripts -->
+<!-- Groups Page Scripts -->
 <script>
-  /*
-  * Display group statistics functionality
-  *
-  */
   function displayGenomeCards() {
      let groupSamples =  <%- JSON.stringify(samples) %>;
-
-      groupSamples.forEach(function(sample) { // Handle undefined properties
-        if ( sample.st == undefined ) {
-          sample.st = "Unknown";
-        }
-        if ( sample.country == undefined ) {
-          sample.country = "Unknown";
-        }
-        if ( sample.strain == undefined ) {
-          sample.strain = "Unknown";
-        }
-        if ( sample.host == undefined ) {
-          sample.host = "Unknown";
-        }
-        if ( sample.isolation_source == undefined ) {
-          sample.isolation_source = "Unknown";
-        }
-      });
-
-
-      let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
-      groupSamples.sort(function(a,b) {
-        if (orderBy == "sequenceType") {
-          if (a.st < b.st) {
-            return -1;
-          }
-          if (a.st > b.st) {
-            return 1;
-          }
-          return 0;
-        }
-        if (orderBy == "location") {
-          return a.country.localeCompare(b.country);
-        }
-        if (orderBy == "strain") {
-          return a.strain.localeCompare(b.strain);
-        }
-        if (orderBy == "host") {
-          return a.host.localeCompare(b.host);
-        }
-        if (orderBy == "isolationSource") {
-          return a.isolation_source.localeCompare(b.isolation_source);
-        }
-      });
-
-     orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
-     if (orderByAsc.checked == false) {
-       groupSamples.reverse();
-     }
 
      let parentSection = document.getElementById("groupSamplesCards");
 
      groupSamples.forEach(function(groupSample) {
        let newCard = document.createElement("button");
-       newCard.setAttribute("class", "genomeCardInfo");
+       newCard.setAttribute("class", "genomeCard");
        newCard.setAttribute("name", "sampleSelection");
        newCard.setAttribute("value", `${groupSample.id}`);
        newCard.setAttribute("onclick", "window.location.href='/result'");
@@ -73,26 +20,14 @@
        <b>Location: </b>${groupSample.country}<br>
        <b>Strain: </b>${groupSample.strain}<br>
        <b>Host: </b>${groupSample.host}<br>
-       <b>Isolation Source: </b>${groupSample.isolation_source}<br>`
+       <b>Isolation Source: </b>${groupSample.isolation_source}<br>
+       </div>`
 
        info.innerHTML = display;
        newCard.innerHTML = info.outerHTML;
-       let newCardGroup = document.createElement("div");
-       newCardGroup.setAttribute("class", "genomeCard");
-       newCardGroup.innerHTML = `<form action='/result' method="get">${newCard.outerHTML}</form> <button class="removeCheckBox" id="${groupSample.id}CheckBox" value="false" onclick="toggleCheckBox(this.id)">&#10006;</button>`
-       parentSection.appendChild(newCardGroup);
+       parentSection.appendChild(newCard);
 
      });
-  }
-
-  function clearGroupSampleCards() {
-    let groupSamplesSection = document.getElementById("groupSamplesCards");
-    groupSamplesSection.innerHTML = "";
-  }
-
-  function updateCards() {
-    clearGroupSampleCards();
-    displayGenomeCards();
   }
 
   // Returns each category's max count and genome information from the given array of dictionaries
@@ -189,9 +124,7 @@
 
   }
 
-  // Insert a radar chart inside the element id specified
   function createRadarChart(id, labels, data) {
-    // Setup aesthetic options
     options = {
       legend: {
         display: false
@@ -219,18 +152,15 @@
       }
     };
 
-    // Alow for multi-line labels
     plugins = [{
      beforeInit: function(chart) {
         chart.data.labels.forEach(function(e, i, a) {
            if (/\n/.test(e)) {
-              a[i] = e.split(/\n/);
+              a[i] = e.split(/\n/); // Multi-line labels
            }
         });
-      }
-    }];
-
-    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
+     }
+   }];
 
     var canvas = document.getElementById(id);
     var myChart = new Chart(canvas, {
@@ -248,10 +178,9 @@
       }]},
       options: options,
       plugins: plugins
-    });
+   });
   }
 
-  // Insert a horizontal bar chart inside the specified document id
   function createBarChart(id, title, labels, data) {
     backgroundColours = []; // Same colour for consistency
     for (i = 0; i < labels.length; i ++) {
@@ -262,7 +191,7 @@
       backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
     }
 
-    options = {  // Setup aesthetic configurations
+    options = {
       legend: {
           display: false
       },
@@ -301,9 +230,6 @@
       }
     };
 
-    //Chart.defaults.global.defaultFontFamily = "'apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Helvetica Neue','Arial','sans-serif','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'";
-    //Chart.defaults.global.defaultFontSize = 20;
-
     var canvas = document.getElementById(id)
     var myChart = new Chart(canvas, {
       type: 'horizontalBar',
@@ -319,109 +245,9 @@
     });
   }
 
-  /*
-  * Remove group sample functionality
-  *
-  */
-  function toggleCheckBox(id) {
-	let button = document.getElementById(id);
-    const toggleValue = async () => {
-      if (button.value == "false") {
-      	return true;
-      }
-      return false;
-    }
-    toggleValue().then((newValue) => {
-    	button.value = newValue;
-        console.log(button.value);
-        button.style.backgroundColor = "white";
-        if (button.value == "true") {
-        	button.style.backgroundColor = "red";
-
-        }
-    });
-}
-
-function adjustRemoveCheckboxes() {
-  checkboxes = document.getElementsByClassName("removeCheckBox");
-  cards = document.getElementsByClassName("genomeCard");
-
-  for (i = 0; i < checkboxes.length; i++) {
-    checkbox = checkboxes[i];
-    card = cards[i] //getBoundingClientRect();;
-
-    console.log(checkbox.offsetTop);
-    checkbox.style.top = `${ -1 * ( checkbox.offsetTop + 0.5 * checkbox.clientHeight ) }px`;
-    checkbox.style.left = `${ 0.5 * card.clientWidth }px`;
-    checkbox.style.visibility = "hidden";
-  }
-}
-
-function enableRemoveGenomeSamples() {
-  let editButton = document.getElementById("groupEditButton"); // Change to cancel button
-  editButton.innerText = "Cancel";
-  editButton.style.backgroundColor = "#1ABC9C";
-  editButton.style.border = "1px solid #1ABC9C";
-  editButton.style.color = "white";
-  editButton.setAttribute("onclick", "cancelRemoveGenomeSamples()");
-
-  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
-  for (i = 0; i < removeCheckBoxes.length; i++) {
-    removeCheckBoxes[i].style.visibility = "visible";
-  }
-
-  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // disable redirect to sample
-  for (i = 0; i < genomeCardButtons.length; i++) {
-    genomeCardButtons[i].setAttribute('class', 'genomeCardInfo disabled');
-  }
-
-  let genomeCards = document.getElementsByClassName("genomeCard");
-  for (i = 0; i < genomeCards.length; i++) {
-    genomeCards[i].onmouseover = function () {
-      this.style.border = "1px solid transparent"; // Will need to revert
-    }
-  }
-
-}
-
-function cancelRemoveGenomeSamples(){
-  let removeCheckBoxes = document.getElementsByClassName("removeCheckBox"); // Enable remove checkboxes
-  for (i = 0; i < removeCheckBoxes.length; i++) {
-    removeCheckBoxes[i].style.visibility = "hidden";
-
-  }
-
-  let genomeCardButtons = document.getElementsByClassName("genomeCardInfo"); // disable redirect to sample
-  for (i = 0; i < genomeCardButtons.length; i++) {
-    genomeCardButtons[i].setAttribute('class', 'genomeCardInfo');
-  }
-
-  let genomeCards = document.getElementsByClassName("genomeCard");
-  for (i = 0; i < genomeCards.length; i++) {
-    genomeCards[i].onmouseover = function () {
-      this.style.border = "1.5px solid #3399FF";
-      this.style.transition = "0.3s";
-    }
-
-    genomeCards[i].onmouseleave = function () {
-      this.style.border = "1px solid #f3f3f3";
-      this.style.transition = "0.3s";
-    }
-  }
-
-  let editButton = document.getElementById("groupEditButton"); // Change to original button
-  editButton.innerText = "Edit";
-  editButton.style.backgroundColor = "white";
-  editButton.style.border = "1px solid #636363";
-  editButton.style.color = "#468e94";
-  editButton.setAttribute("onclick", "enableRemoveGenomeSamples()");
-
-}
-
   window.onload = function() {
     displayGenomeCards();
     displayGraphs();
-    adjustRemoveCheckboxes();
   }
 
 </script>
