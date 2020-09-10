@@ -18,7 +18,7 @@
     </tr>
     <% sccmec_primers.forEach(function (result_sccmec_primers) { %>
     <tr>
-        <td > <%= staphopia_blatstquery.rows[result_sccmec_primers.query_id-1].title %> </td>
+        <td > <%= staphopia_blatstquery[result_sccmec_primers.query_id-1].title %> </td>
         <td > <%= result_sccmec_primers.contig %> </td>
         <td > <%= result_sccmec_primers.hamming_distance %> </td>
         <td > <%= result_sccmec_primers.bitscore %> </td>

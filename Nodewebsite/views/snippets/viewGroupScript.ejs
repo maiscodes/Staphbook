@@ -1,4 +1,4 @@
-<!-- Groups Page Scripts -->
+<!-- Group Samples Page Scripts -->
 <script>
 
   /*
@@ -80,7 +80,7 @@
      // 20 t0 39
      groupSamples.forEach(function(groupSample) {
        let newCard = document.createElement("button");
-       newCard.setAttribute("class", "genomeCard");
+       newCard.setAttribute("class", "genomeCardInfo");
        newCard.setAttribute("name", "sampleSelection");
        newCard.setAttribute("value", `${groupSample.id}`);
        newCard.setAttribute("onclick", "window.location.href='/result'");
@@ -93,8 +93,7 @@
        <b>Location: </b>${groupSample.country}<br>
        <b>Strain: </b>${groupSample.strain}<br>
        <b>Host: </b>${groupSample.host}<br>
-       <b>Isolation Source: </b>${groupSample.isolation_source}<br>
-       </div>`
+       <b>Isolation Source: </b>${groupSample.isolation_source}<br>`
 
        info.innerHTML = display;
        newCard.innerHTML = info.outerHTML;
@@ -221,7 +220,9 @@
 
   }
 
+  // Insert a radar chart inside the element id specified
   function createRadarChart(id, labels, data) {
+    // Setup aesthetic options
     options = {
       legend: {
         display: false
@@ -249,11 +250,12 @@
       }
     };
 
+    // Alow for multi-line labels
     plugins = [{
      beforeInit: function(chart) {
         chart.data.labels.forEach(function(e, i, a) {
            if (/\n/.test(e)) {
-              a[i] = e.split(/\n/); // Multi-line labels
+              a[i] = e.split(/\n/);
            }
         });
       }
@@ -275,9 +277,10 @@
       }]},
       options: options,
       plugins: plugins
-   });
+    });
   }
 
+  // Insert a horizontal bar chart inside the specified document id
   function createBarChart(id, title, labels, data) {
     backgroundColours = []; // Same colour for consistency
     for (i = 0; i < labels.length; i ++) {
@@ -288,7 +291,7 @@
       backgroundColours.push(`rgba(255, 99, 132, ${alpha})`);
     }
 
-    options = {
+    options = {  // Setup aesthetic configurations
       legend: {
           display: false
       },

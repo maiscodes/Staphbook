@@ -863,6 +863,10 @@ input:checked + .toggle:before {
   text-align: center;
 }
 
+.groupsPage {
+    text-align: center;
+}
+
 .groupsPage h4 {
   margin-top: 1.5em;
   text-align: center;
@@ -907,5 +911,36 @@ input:checked + .toggle:before {
   padding: .8em;
 }
 
-/* min-height: 200px;
-width: 30%; */
+#groupSamplesFilterBar {
+  text-align: center;
+}
+
+/* Error page */
+#errorPage {
+  margin-top: 2em;
+}
+
+#errorButton {
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px;
+  color: white;
+  background-color: rgba(0,0,0,.7);
+}
+
+/* Favourites */
+.unfavoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #ebebeb;
+}
+
+.favoriteSample {
+  font-size:20px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #468e94;
+}

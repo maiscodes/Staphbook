@@ -18,7 +18,7 @@
     </tr>
     <% sccmec_subtypes.forEach(function (result_sccmec_subtypes) { %>
     <tr>
-        <td > <%= staphopia_blatstquery.rows[result_sccmec_subtypes.query_id-1].title %> </td>
+        <td > <%= staphopia_blatstquery[result_sccmec_subtypes.query_id-1].title %> </td>
         <td > <%= result_sccmec_subtypes.contig %> </td>
         <td > <%= result_sccmec_subtypes.hamming_distance %> </td>
         <td > <%= result_sccmec_subtypes.bitscore %> </td>
