@@ -472,7 +472,9 @@
      var maxPercentage = 100;
      var stepValue = 0.00000001;
 
-     // Updates slider and description for selected minimum genetic distance
+     /*
+     * Update input
+     */
      function updateMinSliderSelection() {
         let minSlider = document.getElementById("minGeneticDistInput");
         let minInputBox = document.getElementById("minGeneticDistanceTyped");
@@ -487,7 +489,6 @@
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
-     // Updates slider and descripton for selected maximum genetic distance
      function updateMaxSliderSelection() {
         let maxSlider = document.getElementById("maxGeneticDistInput");
         let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
@@ -502,7 +503,6 @@
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
 
-     // Tries to update min tag given potential value
      function updateMinSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
@@ -521,7 +521,6 @@
       };
      }
 
-    // Tries to update max tag given potential value
      function updateMaxSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
@@ -595,12 +594,13 @@
        displayFindMyFriendsSection(minValue, maxValue);
      }
 
-     // Wipe out the section when the filter is updated
+     /*
+     * Display genome cards
+     */
      function clearFindMyFriendsSection() {
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
-     // Display genetically related genomes
      function displayFindMyFriendsSection(minValue, maxValue){
 
        let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
@@ -661,8 +661,6 @@
         desiredRelatedSamples.reverse();
       }
 
-       //console.log(desiredRelatedSamples);
-
        let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
        let count = 0
        desiredRelatedSamples.forEach(function(relatedSample) {
@@ -678,7 +676,6 @@
 
      }
 
-     // Returns the html of a genome card
      function createGenomeCard(sample){
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCard");
@@ -708,6 +705,7 @@
       let minValue = document.getElementById("minGeneticDistInput").value;
       let maxValue = document.getElementById("maxGeneticDistInput").value;
       displayFindMyFriendsSection(minValue, maxValue);
+      updateFavoritesButton();
     }
 
     // Update display when window is rezied, TODO: figure out a way to make this more efficient
@@ -721,5 +719,36 @@
         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
       }
     }
+
+    /*
+     * Script for Favorites Functionality
+     * Display whether or not a sample has been favorited by a user.
+     */
+    function updateFavoritesButton(){
+      let isFavorite = <%- isFavourited %>; // TODO: Change to american spelling
+      let style = "unfavoriteSample";
+      if (isFavorite) {
+        style = "favoriteSample";
+      }
+      let favoriteButton = document.getElementById("favoriteButtonHeart");
+      favoriteButton.setAttribute("class", `fas fa-heart ${style}`);
+    }
+
+    /*
+    Updating dropdown with list of groups to add
+     */
+    let optionList = document.getElementById('groups-list').options;
+    optionList.add(new Option('Select a group'));
+    let groups = <%- JSON.stringify(avail_groups) %>;
+    groups.forEach(option => {
+        optionList.add(
+            new Option(option.name, option.group_id)
+        )
+    })
+
+    function addToGroup(){
+
+    }
+
 
 </script>

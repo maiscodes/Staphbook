@@ -1,86 +1,111 @@
 var express = require('express')
 var router = express.Router()
 
-router.get('/', function (req, res) {
+router.get('/viewGroup', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
+    let groupID = req.query.groupId;
 
-    let groupID = req.query.sampleSelection; // groupID instead?
+    // Setup error handling
+    errorPageConfig = { description: 'group', query: 'groupId', id: groupID, endpoint: '/viewGroup', userLoggedIn: userLoggedIn };
 
-    if(userLoggedIn){
-        // TODO: SQL Query to get of group information and samples belonging to each group
-        // result_samples.rows
+    // Now execute SQL queries
+    if ( userLoggedIn ) {
+      try {
+        req.knex.select('*').from('groups').where({group_id: groupID || 0}).then((groupInfo) => {
+            groupInfo = groupInfo[0];
 
-        let result_samples = [{
-            country: "unknown/missing",
-            host: "undefined",
-            id: "40584",
-            isolation_source: "undefined",
-            st: "72",
-            strain: "undefined"
-        }, {
-            country: "United States of America (USA)",
-            host: "Homo sapiens",
-            id: "43765",
-            isolation_source: "Nares",
-            st: "8",
-            strain: "H51158"
-        }, {
-            country: "United States of America (USA)",
-            host: "Homo sapiens",
-            id: "44028",
-            isolation_source: "Nares",
-            st: "8",
-            strain: "M42212"
-        }, {
-            country: "United States of America (USA)",
-            host: "Human",
-            id: "41697",
-            isolation_source: "Respiratory",
-            st: "8",
-            strain: "2588STDY5627603"
-        }, {
-            country: "United States of America (USA)",
-            host: "Human",
-            id: 41823,
-            isolation_source: "Respiratory",
-            st: 15,
-            strain: "undefined",
-        }, {
-            country: "unknown/missing",
-            host: "undefined",
-            id: "43502",
-            isolation_source: "Sputum",
-            st: "8",
-            strain: "COAS6087"
-        }, {
-            country: "unknown/missing",
-            host: "undefined",
-            id: "43502",
-            isolation_source: "Sputum",
-            st: "8",
-            strain: "COAS6087"
-        }];
+            req.knex.select('*').from('group_samples').where({group_id: groupID || 0}).then((row) => {
+                row = row[0];
+                groupSampleIds = row.sample_id || 0;
+                //console.log(sampleIds); TODO: add handling when group doesn't have any samples
+                req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+                    .from('mlst_mlst')
+                    .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                    .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                    .where('mlst_mlst.sample_id', 'in', groupSampleIds || 0)
+                    .then((sampleInfos) => {
+                      console.log(sampleInfos);
+                      for(sampleInfo of sampleInfos) {
+                        sampleInfo.country = sampleInfo.metadata.country;
+                        sampleInfo.strain = sampleInfo.metadata.strain;
+                        sampleInfo.host = sampleInfo.metadata.host;
+                        sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
+                      }
 
-        let groupInfo = {
-            group_id: "4000",
-            description: "Really close genomes to sample 44140",
-            name: "Group 4",
-            count: "4",
-            created: "2019-09-15T13:45:30",
-            modified: "2020-01-02T13:45:30"
-        };
+                      res.render('pages/viewGroup', {
+                          userLoggedIn: userLoggedIn,
+                          samples: sampleInfos,
+                          groupInfo: groupInfo
+                      });
 
-        res.render('pages/viewGroup', {
-            userLoggedIn: userLoggedIn,
-            samples: result_samples,
-            groupInfo: groupInfo
+                }).catch(function(err) {
+                  console.log(err);
+                  res.render('pages/error', errorPageConfig);
+                });
+
+            }).catch(function(err) {
+              console.log(err);
+              res.render('pages/error', errorPageConfig);
+            });
+
+        }).catch(function(err) {
+          console.log(err);
+          res.render('pages/error', errorPageConfig);
         });
+
+      } catch (err) {
+            res.render('pages/error', errorPageConfig);
+      }
+
     }
     else{
         res.status(404);
         res.send({ error: 'Not found' });
         res.render('pages/error');
     }
+})
+
+
+router.post('/removeGroupSample', function (req, res) {
+    let userLoggedIn = req.session.userStatus === "loggedIn";
+    let groupId = req.body.groupId;
+    let sampleIds = req.body.sampleId;
+    sampleIds = sampleIds.split(',');
+    //console.log(groupId);
+    //console.log(sampleIds);
+
+    if (userLoggedIn) {
+      req.knex.select('sample_id').from('group_samples').where({group_id: groupId || 0}).then((currentSamples) => {
+          currentSamples = currentSamples[0].sample_id;
+
+          let remainingSamples = currentSamples.filter(function(item) {
+            return !sampleIds.includes(JSON.stringify(item));
+          })
+
+          req.knex('group_samples')
+            .where({ group_id: groupId })
+            .update({ sample_id: remainingSamples }, ['group_id', 'sample_id'])
+            .then(() => {
+              res.status(200).json({"message": "successfully removed from group"})
+              return;
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(401).json({"message": "error deleting from group"})
+              return;
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(401).json({"message": "error deleting from group"})
+          return;
+        });
+        return;
+    }
+    res.status(401).json({"message": "permissions error - user not logged in"})
+
+    // Include update time stamp here instead?
 })
 
 module.exports = router;

@@ -1,64 +1,103 @@
 <div id="favouritesContainer">
   <div id="TitleContainer" style="margin-left: auto; margin-right: auto; width: 50 px; margin-top: 20px;">
     <h1 class="text-center">Groups</h1>
-    <hr style="height: 0.5px"></hr>
+    <hr style="height: 0.5px">
+    </hr>
     <a class="btn btn-outline-dark btn-sm" title="Add New Group" id="addNewGroup"
       style="margin-left: 450px; margin-right: 2px; color: #468e94;" href="/createGroup">
-      <i class="fas fa-plus" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>   
-       </a>
+      <i class="fas fa-plus" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
+    </a>
   </div>
 
   <% if (haveGroups) { %>
-    <form action='/viewGroup' method="get">
+  <form action='/viewGroup' method="get">
     <div id="findMyFriendsCards">
-    <% groups.forEach(function (result_groups) { %>
+      <% groups.forEach(function (result_groups) { %>
 
-<!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
-<!--              style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">-->
-<!--              Group Name: <%= result_groups.name %> ||-->
-<!--              Count: <%= result_groups.count %> ||-->
-<!--              Created: <%= new Date(result_groups.created).toDateString() %> ||-->
-<!--              Last modified: <%= new Date(result_groups.modified).toDateString() %> ||-->
-<!--            </button>-->
+      <!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
+      <!--              style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">-->
+      <!--              Group Name: <%= result_groups.name %> ||-->
+      <!--              Count: <%= result_groups.count %> ||-->
+      <!--              Created: <%= new Date(result_groups.created).toDateString() %> ||-->
+      <!--              Last modified: <%= new Date(result_groups.modified).toDateString() %> ||-->
+      <!--            </button>-->
 
-            <button class="genomeCard"
-                    name="sampleSelection"
-                    value="<%= result_groups.group_id %>"
-                    onclick="window.location.href='/viewGroup'"
-                    type="submit">
-              <p></p>
-              <div class="genomeCardSampleId"><h4><%= result_groups.name %></h4></div>
-              <b>Description: </b><%= result_groups.description%><br>
-              <b>Created: </b><%= new Date(result_groups.created).toDateString() %><br>
-              <b>Last modified: </b><%= new Date(result_groups.modified).toDateString() %><br>
-              <div class="geneticDistanceTag"><%= result_groups.count%></div>
-              <p></p>
-            </button>
-    <% }) %>
+      <button class="genomeCard" name="sampleSelection" value="<%= result_groups.group_id %>"
+        onclick="window.location.href='/viewGroup'" type="submit">
+        <p></p>
+        <div class="genomeCardSampleId">
+          <h4><%= result_groups.name %></h4>
+        </div>
+        <b>Description: </b><%= result_groups.description%><br>
+        <b>Created: </b><%= new Date(result_groups.created).toDateString() %><br>
+        <b>Last modified: </b><%= new Date(result_groups.modified).toDateString() %><br>
+        <div class="geneticDistanceTag"><%= result_groups.count%></div>
+        <p></p>
+      </button>
+      <% }) %>
     </div>
-    </form>
+  </form>
   <% } else { %>
+  <div id="groupsPageContainer">
+    <div class="resultsPageTopComponent">
+      <!-- Display Group Information  -->
+      <h5 style="text-align: center; margin-top: 5px;">
+        Staphlyococcus Aureus <br>
+      </h5>
 
-  <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a" disabled="">
-    No groups found.
-  </button>
-  <% } %>
-</div>
+      <h1 style="text-align: center; margin-top: -10px;">Groups</h1>
 
-<script>
-  function tag_label() {
-    tags = document.getElementsByClassName("geneticDistanceTag");
-    cards = document.getElementsByClassName("genomeCard");
+      <% if (haveGroups) { %>
+      <div id="groupsCards">
+        <form action='/viewGroup' method="get">
+          <% groups.forEach(function (result_groups) { %>
 
-    for (i = 0; i < tags.length; i++) {
-      tag = tags[i];
-      card = cards[i];
-      tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
+          <!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
+          <!--              style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">-->
+          <!--              Group Name: <%= result_groups.name %> ||-->
+          <!--              Count: <%= result_groups.count %> ||-->
+          <!--              Created: <%= new Date(result_groups.created).toDateString() %> ||-->
+          <!--              Last modified: <%= new Date(result_groups.modified).toDateString() %> ||-->
+          <!--            </button>-->
+
+          <button class="groupCard" name="groupId" value="<%= result_groups.group_id %>"
+            onclick="window.location.href='/viewGroup'" type="submit">
+
+            <div class="groupCardTitle">
+              <h4><%= result_groups.name %></h4>
+            </div>
+            <b>Description: </b><%= result_groups.description%><br>
+            <b>Created: </b><%= new Date(result_groups.created).toDateString() %><br>
+            <b>Last modified: </b><%= new Date(result_groups.modified).toDateString() %><br>
+            <div class="groupCountTag"><%= result_groups.count%></div>
+          </button>
+          <% }) %>
+        </form>
+      </div>
+      <% } else { %>
+
+      <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a"
+        disabled="">
+        No groups found.
+      </button>
+      <% } %>
+    </div>
+  </div>
+
+  <script>
+    function tag_label() {
+      tags = document.getElementsByClassName("groupCountTag");
+      cards = document.getElementsByClassName("groupCard");
+
+      for (i = 0; i < tags.length; i++) {
+        tag = tags[i];
+        card = cards[i];
+        tag.setAttribute("style", `z-index: 1; top: ${- 1 * 0.5 * tag.clientHeight}px; left: ${0.8 * card.clientWidth}px; width: ${0.25 * card.clientWidth}px;`);
+      }
+      console.log("Fixing");
     }
-    console.log("Fixing");
-  }
-  tag_label();
-  window.onresize = () => {
     tag_label();
-  };
-</script>
+    window.onresize = () => {
+      tag_label();
+    };
+  </script>

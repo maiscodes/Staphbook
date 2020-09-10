@@ -4,17 +4,20 @@
         Staphlyococcus Aureus <br>
     </h5>
 
-    <h1 style="text-align: center; margin-top: -10px;">
+    <h1 id="groupName" style="text-align: center; margin-top: -10px;">
         <%- groupInfo.name %>
     </h1>
 
-    <p class="groupDescription">
+    <div id="groupEditErrorMessage" class="errorMessage"></div>
+    <div id="groupEditBar">
+    <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
+    </div>
+
+    <p id="groupDescription" class="groupDescription">
         <%- groupInfo.description %>
     </p>
 
     <!-- Download button -->
-
-    <!-- Edit button -->
 
     <!-- Display aggregated data -->
     <h4>Common Statistics and Distributions</h4>
@@ -31,8 +34,41 @@
     </div>
 
     <!-- Display genome cards -->
-    <h4>Genomes</h4>
-    <form action='/result' method="get"><div id="groupSamplesCards"></div></form>
+    <div id="groupGenomeSection">
+      <h4>Genomes</h4>
+      <button id="groupSampleEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
+
+      <!-- Let user choose order to show samples -->
+      <p id ="groupSamplesFilterBar">
+        Order by
+        <select name="orderBy" id="orderBy" onchange="updateCards()">
+        <option value="sequenceType">Sequence Type</option>
+        <option value="location">Location</option>
+        <option value="strain">Strain</option>
+        <option value="host">Host</option>
+        <option value="isolationSource">Isolation Source</option>
+        </select>
+
+        Ascending
+        <label class="switch">
+          <input id="toggleOrder" type="checkbox" checked onchange="updateCards()">
+          <span class="toggle round"></span>
+        </label>
+      </p>
+
+    <div id="errorMessage" class="errorMessage"></div>
+    <div id="emptyGroupMessage"></div>
+
+    <!-- Let user browse groups of genomes at a time so they don't get overwhelmed -->
+    <div id="sampleNavigationBar">
+      <button class="navigationButton" onclick="stepToPage(-2)">&lt;&lt;</button>
+      <button class="navigationButton" onclick="stepToPage(-1)">&lt;</button> <span id="pageMessage"> Viewing page
+      <input type="number" id="samplePageNumber" name="samplePageNumber" min="1" value="1" onchange="updateSamples()"> of <span id="maxPageNumber">1</span> </span>
+      <button class="navigationButton" onclick="stepToPage(1)">&gt;</button>
+      <button class="navigationButton" onclick="stepToPage(2)">&gt;&gt;</button>
+   </div>
+    <div id="groupSamplesCards"></div>
+    </div>
 
     <% include ../snippets/viewGroupScript.ejs %>
 
