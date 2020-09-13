@@ -870,6 +870,10 @@ input:checked + .toggle:before {
     border: 1px solid #cfcfcf;
 }
 
+/* Focus */
+.highlighted {
+  background-color: #dbfffe;
+}
 /* View groups page */
 .groupCard:focus {
     outline: none;

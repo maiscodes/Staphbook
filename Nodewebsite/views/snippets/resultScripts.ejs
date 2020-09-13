@@ -485,7 +485,7 @@
           minInputBox.value = rangeSelected.minValue;
         }
 
-        clearFindMyFriendsSection();  
+        clearFindMyFriendsSection();
         updateMaxPage();
         displayFindMyFriendsSection(rangeSelected.minValue, rangeSelected.maxValue);
      }
@@ -739,8 +739,11 @@
       desiredRelatedSamples = desiredRelatedSamples.slice(numberSamplesPerPage * (pageNumber - 1), numberSamplesPerPage * pageNumber);
 
        let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
-       let count = 0
+       let count = 0;
+       let orderBy = document.getElementById("orderBy").value;
+
        desiredRelatedSamples.forEach(function(relatedSample) {
+         relatedSample["highlight"] = orderBy;
          genomeCard = createGenomeCard(relatedSample);
          parentSection.appendChild(genomeCard);
 
@@ -754,6 +757,14 @@
      }
 
      function createGenomeCard(sample){
+       let focus = sample.highlight;
+       sample["sequenceType"] = "false";
+       sample["highlightlocation"] = "false";
+       sample["highlightstrain"] = "false";
+       sample["highlighthost"] = "false";
+       sample["highlightisolationSource"] = "false";
+       sample[`highlight${focus}`] = "highlighted";
+
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCard");
        newCard.setAttribute("name", "sampleSelection");
@@ -764,11 +775,11 @@
        let info = document.createElement("p");
 
        let display = `<div class="genomeCardSampleId"><h4>${sample.id}</h4></div>
-       <b>Sequence Type: </b>${sample.st}<br>
-       <b>Location: </b>${sample.country}<br>
-       <b>Strain: </b>${sample.strain}<br>
-       <b>Host: </b>${sample.host}<br>
-       <b>Isolation Source: </b>${sample.isolation_source}<br>
+       <span class=${sample.highlightsequenceType}><b>Sequence Type: </b>${sample.st}<br></span>
+       <span class=${sample.highlightlocation}><b>Location: </b>${sample.country}<br></span>
+       <span class=${sample.highlightstrain}><b>Strain: </b>${sample.strain}<br></span>
+       <span class=${sample.highlighthost}><b>Host: </b>${sample.host}<br></span>
+       <span class=${sample.highlightisolationSource}><b>Isolation Source: </b>${sample.isolation_source}<br></span>
        <div class="geneticDistanceTag">${sample.distance}</div>`;
 
        info.innerHTML = display;
