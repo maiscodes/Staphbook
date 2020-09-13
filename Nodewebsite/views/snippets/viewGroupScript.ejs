@@ -561,6 +561,9 @@ function removeGenomeSamples() {
     let groupSamples =  <%- JSON.stringify(samples) %>;
     let display = document.getElementById("maxPageNumber");
     maxPageNumber = Math.ceil( groupSamples.length / samplesPerPage );
+    if (maxPageNumber < 1) {
+      maxPageNumber = 1;
+    }
     display.innerHTML = maxPageNumber;
     document.getElementById("samplePageNumber").setAttribute("max", maxPageNumber);
   }
@@ -651,7 +654,7 @@ function removeGenomeSamples() {
           if (response.status == 200) {
               location.reload(true);
           }
-          let errorMessage = document.getElementById("groupEditErrorMessage"); //TODO: Fix error handling 
+          let errorMessage = document.getElementById("groupEditErrorMessage"); //TODO: Fix error handling
           errorMessage.innerHMTL = "There was an error updating the information. Please try again.";
       })
       .catch(error => {

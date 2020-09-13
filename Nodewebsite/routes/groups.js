@@ -7,33 +7,29 @@ router.get('/groups', function (req, res) {
     let groups = [];
     let haveGroups = false;
 
-    if(userLoggedIn){
-        req.knex
-            .select('*')
-            .from('groups')
-            .where({email: req.session.userEmail})
-            .orderBy('group_id', 'asc')
-            .then((groups) => {
-              let ids = [];
-              for (i = 0; i < groups.length; i ++) {
-                ids.push(groups[i].group_id);
-              }
-              req.knex
-                .select('*')
-                .from('group_samples')
-                .whereIn('group_id', ids)
-                .orderBy('group_id', 'asc')
-                .then((group_samples) => {
-                  for (i = 0; i < group_samples.length; i++) {
-                    groups[i].count = group_samples[i].sample_id.length;
-                  }
-                  res.render('pages/groups', {
-                      userLoggedIn: userLoggedIn,
-                      groups: groups,
-                      haveGroups: true
-                })
-              })
-          })
+    if ( userLoggedIn ) {
+      let groupCount = req.knex
+                          .select('group_id as sample_group_id', req.knex.raw('COUNT(sample_id) as count'))
+                          .from('group_samples')
+                          .groupBy('sample_group_id')
+                          .as('group_samples');
+      req.knex
+        .select('*')
+        .from('groups')
+        .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
+        .then((groups) => {
+          console.log(groups);
+          for (i = 0; i < groups.length; i++) {
+            if (groups[i].count == undefined) {
+              groups[i].count = 0;
+            }
+          }
+          res.render('pages/groups', {
+              userLoggedIn: userLoggedIn,
+              groups: groups,
+              haveGroups: true
+          });
+        });
     }
     else{
         res.status(404);

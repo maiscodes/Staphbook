@@ -802,7 +802,7 @@ input:checked + .toggle:before {
     border-radius: 10px;
     border: 1px solid #636363;
     float: left;
-    width: 70%;
+    width: 30%;
     padding-left: 2em;
     padding-right: 2em;
     min-height: 100%;
