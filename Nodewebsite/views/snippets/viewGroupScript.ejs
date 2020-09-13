@@ -54,6 +54,15 @@
           }
           return 0;
         }
+        if (orderBy == "sampleId") {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+          return 0;
+        }
         if (orderBy == "location") {
           return a.country.localeCompare(b.country);
         }
