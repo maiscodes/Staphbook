@@ -11,68 +11,61 @@ router.get('/viewGroup', function (req, res) {
     // Now execute SQL queries
     if ( userLoggedIn ) {
       try {
-        req.knex
-          .select('*')
-          .from('groups')
-          .where({group_id: groupID || 0})
-          .then((groupInfo) => {
-            groupInfo = groupInfo[0];
+        let getGroupsInfo = req.knex
+                                .select('*')
+                                .from('groups')
+                                .where({group_id: groupID || 0});
 
-            req.knex
-              .select('sample_id')
-              .from('group_samples')
-              .where({group_id: groupID || 0})
-              .then((sampleIds) => {
-                if (sampleIds.length < 1) {
-                  sampleIds = [ { sample_id: -1 } ];
+        let getSampleIds = req.knex
+                              .select('sample_id')
+                              .from('group_samples')
+                              .where({group_id: groupID || 0});
+
+        Promise.all([getGroupsInfo, getSampleIds]).then(function([groupInfo, sampleIds]) {
+          groupInfo = groupInfo[0];
+          if (sampleIds.length < 1) {
+            sampleIds = [ { sample_id: -1 } ];
+          }
+          req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+          name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+              .from('mlst_mlst')
+              .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+              .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+              .modify(function (queryBuilder) {
+                  queryBuilder.where('mlst_mlst.sample_id', sampleIds[0].sample_id || 0);
+                  for (i = 1; i < sampleIds.length; i++) {
+                    queryBuilder.orWhere('mlst_mlst.sample_id', sampleIds[i].sample_id);
+                  }
+              })
+              .then((sampleInfos) => {
+                //console.log(sampleInfos);
+                for(sampleInfo of sampleInfos) {
+                  sampleInfo.country = sampleInfo.metadata.country;
+                  sampleInfo.strain = sampleInfo.metadata.strain;
+                  sampleInfo.host = sampleInfo.metadata.host;
+                  sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                 }
-                //console.log(sampleIds); TODO: add handling when group doesn't have any samples
-                req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-                name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
-                    .from('mlst_mlst')
-                    .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
-                    .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                    .modify(function (queryBuilder) {
-                        queryBuilder.where('mlst_mlst.sample_id', sampleIds[0].sample_id || 0);
-                        for (i = 1; i < sampleIds.length; i++) {
-                          queryBuilder.orWhere('mlst_mlst.sample_id', sampleIds[i].sample_id);
-                        }
-                    })
 
-                    .then((sampleInfos) => {
-                      //console.log(sampleInfos);
-                      for(sampleInfo of sampleInfos) {
-                        sampleInfo.country = sampleInfo.metadata.country;
-                        sampleInfo.strain = sampleInfo.metadata.strain;
-                        sampleInfo.host = sampleInfo.metadata.host;
-                        sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
-                      }
-
-                      res.render('pages/viewGroup', {
-                          userLoggedIn: userLoggedIn,
-                          samples: sampleInfos,
-                          groupInfo: groupInfo
-                      });
-
-                }).catch(function(err) {
-                  console.log(err);
+                if (groupInfo == undefined) {
                   res.render('pages/error', errorPageConfig);
+                  return;
+                }
+
+                res.render('pages/viewGroup', {
+                    userLoggedIn: userLoggedIn,
+                    samples: sampleInfos,
+                    groupInfo: groupInfo
                 });
-
-            }).catch(function(err) {
-              console.log(err);
-              res.render('pages/error', errorPageConfig);
-            });
-
-        }).catch(function(err) {
+              });
+        })
+        .catch(function(err) {
           console.log(err);
           res.render('pages/error', errorPageConfig);
         });
 
       } catch (err) {
-            res.render('pages/error', errorPageConfig);
+          res.render('pages/error', errorPageConfig);
       }
-
     }
     else{
         res.status(404);
@@ -87,19 +80,16 @@ router.post('/removeGroupSample', function (req, res) {
     let groupId = req.body.groupId;
     let sampleIds = req.body.sampleId;
     sampleIds = sampleIds.split(',');
-    //console.log(groupId);
-    //console.log(sampleIds);
 
-    if (userLoggedIn) {
+    if ( userLoggedIn ) {
       req.knex('group_samples')
-        //.where({ group_id: groupId })
         .modify(function (queryBuilder) {
             queryBuilder.where({ group_id: groupId, sample_id: sampleIds[0] });
             for (i = 1; i < sampleIds.length; i++) {
               queryBuilder.orWhere({ group_id: groupId, sample_id: sampleIds[i] });
             }
         })
-        .del()//update({ sample_id: remainingSamples }, ['group_id', 'sample_id'])
+        .del()
         .then(() => {
           res.status(200).json({"message": "successfully removed from group"})
           return;
@@ -109,35 +99,9 @@ router.post('/removeGroupSample', function (req, res) {
           res.status(401).json({"message": "error deleting from group"})
           return;
         });
-      /*
-      req.knex.select('sample_id').from('group_samples').where({group_id: groupId || 0}).then((currentSamples) => {
-          currentSamples = currentSamples[0].sample_id;
-
-          let remainingSamples = currentSamples.filter(function(item) {
-            return !sampleIds.includes(JSON.stringify(item));
-          })
-
-          req.knex('group_samples')
-            .where({ group_id: groupId })
-            .update({ sample_id: remainingSamples }, ['group_id', 'sample_id'])
-            .then(() => {
-              res.status(200).json({"message": "successfully removed from group"})
-              return;
-            })
-            .catch((err) => {
-              console.log(err);
-              res.status(401).json({"message": "error deleting from group"})
-              return;
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          res.status(401).json({"message": "error deleting from group"})
-          return;
-        });
-        */
         return;
     }
+
     res.status(401).json({"message": "permissions error - user not logged in"})
 
     // Include update time stamp here instead?

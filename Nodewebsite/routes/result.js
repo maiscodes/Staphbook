@@ -52,6 +52,162 @@ router.get('/', function (req, res) {
                 req.knex.select('name').from('sample_sample').where({id: sampleID}).then((result_sample_sample) => {
                     let sampleName = result_sample_sample[0].name;
 
+                    let getWeightedDistances = req.knex.select('*').from('weighted_distance').where({selected_sample: sampleName}); //result_weighted_distances
+
+                    let getSampleMetadata = req.knex.select('*').from('sample_metadata').where({sample_id: sampleID}); //result_sample_metadata
+
+                    let getBlastQuery = req.knex.select('*').from('staphopia_blastquery'); //result_blastquery
+
+                    let getSequencingMetrics = req.knex.select('*').from('sequence_summary').where({sample_id: sampleID}); //result_sequence_summary
+
+                    let getAssemblyMetrics = req.knex.select('*').from('assembly_summary').where({sample_id: sampleID}); //result_assembly_summary
+
+                    let getMlst = req.knex.select('*').from('mlst_mlst').where({sample_id: sampleID}); //.then((result_mlst_mlst)
+
+                    let getSccmecPrimerHits = req.knex.select('*').from('sccmec_primers').where({sample_id: sampleID}); //.then((result_sccmec_primers)
+
+                    let getSccmecSubtypeHits = req.knex.select('*').from('sccmec_subtypes').where({sample_id: sampleID}); //.then((result_sccmec_subtypes)
+
+                    let getSccmecProteinHits =   req.knex.select('*').from('sccmec_proteins').where({sample_id: sampleID}); //.then((result_sccmec_proteins)
+
+                    Promise
+                    .all([ getWeightedDistances, getSampleMetadata, getBlastQuery, getSequencingMetrics, getAssemblyMetrics, getMlst, getSccmecPrimerHits, getSccmecSubtypeHits, getSccmecProteinHits])
+                    .then(function([result_weighted_distances, result_sample_metadata, result_blastquery, result_sequence_summary, result_assembly_summary, result_mlst_mlst, result_sccmec_primers, result_sccmec_subtypes, result_sccmec_proteins]) {
+
+                      let st = result_mlst_mlst[0].st;
+                      console.log(st);
+                      //console.log(result_sample_metadata);
+
+                      let same_sequence_samples = req.knex.select('sample_id').from('sample_metadata').where({st: st});
+                      let getSameSequenceSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                      name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+                          .from('mlst_mlst')
+                          .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                          .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                          .where('mlst_mlst.sample_id', 'in', same_sequence_samples);
+
+                      let location = result_sample_metadata[0].metadata.country;
+                      // console.log(location);
+                      if (location == undefined) {
+                        location = "";
+                      }
+                      let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['country', location]);
+                      let getSameLocationSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                      name: 'sample_sample.name', id: 'sample_sample.id'})
+                          .from('mlst_mlst')
+                          .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                          .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                          .where('mlst_mlst.sample_id', 'in', same_location_samples);
+
+                      let host = result_sample_metadata[0].metadata.host;
+                      if (host == undefined) {
+                        host = "";
+                      }
+                      // console.log(host);
+                      let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['host', host]);
+                      let getSameHostSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                      name: 'sample_sample.name', id: 'sample_sample.id'})
+                          .from('mlst_mlst')
+                          .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                          .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                          .where('mlst_mlst.sample_id', 'in', same_host_samples);
+
+                      let iso = result_sample_metadata[0].metadata.isolation_source;
+                      if (iso == undefined) {
+                        iso = "";
+                      }
+                      let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['isolation_source', iso]);
+                      let getSameIsoSourceSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                      name: 'sample_sample.name', id: 'sample_sample.id'})
+                          .from('mlst_mlst')
+                          .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                          .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                          .where('mlst_mlst.sample_id', 'in', same_iso_samples);
+
+
+                      let sample_name = req.knex.select('name').from('sample_sample').where('id', '=', sampleID);
+                      let getGeneticallyCloseSampleInfo = req.knex.select('sample_sample.id', 'weighted_distance.distance', 'mlst_mlst.st', 'sample_metadata.metadata')
+                              .from('weighted_distance')
+                              .innerJoin('sample_sample', 'weighted_distance.comparison_sample', 'sample_sample.name')
+                              .innerJoin('sample_metadata', 'sample_sample.id', 'sample_metadata.sample_id')
+                              .innerJoin('mlst_mlst', 'sample_sample.id', 'mlst_mlst.sample_id')
+                              .where('weighted_distance.selected_sample', '=', sample_name) //req.knex.select('name').from('sample_sample').where('id', '=', sampleID).then((sampleName) => {
+                              .orderBy('weighted_distance.distance', 'asc');
+
+
+                      Promise
+                        .all([getSameSequenceSampleInfo, getSameLocationSampleInfo, getSameHostSampleInfo, getSameIsoSourceSampleInfo, getGeneticallyCloseSampleInfo])
+                        .then(function([same_sequence, same_location, same_host, same_isolation, genetically_close]) {
+                          for(same of same_sequence) {
+                            same.country = same.metadata.country;
+                            same.strain = same.metadata.strain;
+                            same.host = same.metadata.host;
+                            same.isolation_source = same.metadata.isolation_source;
+                          }
+
+                          for(same of same_location) {
+                            same.country = same.metadata.country;
+                            same.strain = same.metadata.strain;
+                            same.host = same.metadata.host;
+                            same.isolation_source = same.metadata.isolation_source;
+                          }
+
+                          for(same of same_host) {
+                            same.country = same.metadata.country;
+                            same.strain = same.metadata.strain;
+                            same.host = same.metadata.host;
+                            same.isolation_source = same.metadata.isolation_source;
+                          }
+
+                          for(same of same_isolation) {
+                            same.country = same.metadata.country;
+                            same.strain = same.metadata.strain;
+                            same.host = same.metadata.host;
+                            same.isolation_source = same.metadata.isolation_source;
+                          }
+
+                          let mainRelatedSampleDetails = [];
+                          genetically_close.forEach(function (row) {
+                              var detailedRow = {};
+                              detailedRow.id = row.id;
+                              detailedRow.distance = row.distance;
+                              detailedRow.st = row.st;
+                              detailedRow.country = row.metadata.country;
+                              detailedRow.strain = row.metadata.strain;
+                              detailedRow.host = row.metadata.host;
+                              detailedRow.isolation_source = row.metadata.isolation_source;
+                              mainRelatedSampleDetails.push(detailedRow);
+                          })
+
+                          res.render('pages/result', { sample_ID: sampleID, tag_tag: result_tag_tag, isFavourited: req.session.favourited,
+                              sample_metadata: result_sample_metadata, mlst_mlst: result_mlst_mlst, userLoggedIn: userLoggedIn, same_hosts: same_host,
+                              same_locations: same_location, same_sequences: same_sequence, staphopia_blatstquery: result_blastquery, sequence_summary: result_sequence_summary,
+                              same_isolations: same_isolation, sccmec_primers: result_sccmec_primers, assembly_summary: result_assembly_summary,
+                              sccmec_subtypes: result_sccmec_subtypes, sccmec_proteins: result_sccmec_proteins, weighted_distance: result_weighted_distances,
+                              all_weighted_distances: mainRelatedSampleDetails,
+                              avail_groups: placeholder_groups
+                          });
+
+
+                        })
+                        .catch(function(err) {
+                          console.log(err);
+                          res.render('pages/error', errorPageConfig);
+                        });
+
+
+
+                    })
+                    .catch(function(err) {
+                      console.log(err);
+                      res.render('pages/error', errorPageConfig);
+                    });
+
+
+
+
+
+                    /*
                     // Sample's weighted distances
                     req.knex.select('*').from('weighted_distance').where({selected_sample: sampleName}).then((result_weighted_distances) => {
 
@@ -255,7 +411,7 @@ router.get('/', function (req, res) {
                     }).catch(function(err) {
                       console.log(err);
                       res.render('pages/error', errorPageConfig);
-                    });
+                    }); */
                 }).catch(function(err) {
                   console.log(err);
                   res.render('pages/error', errorPageConfig);
