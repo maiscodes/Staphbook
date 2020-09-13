@@ -1,0 +1,38 @@
+/* Collapsible sections */
+.collapsible {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+
+.collapsible:hover {
+  background-color: #fcfcfc;
+}
+
+.sectionActive {
+	border-bottom: 1.5px solid #f5f5f5;
+}
+
+.sectionContent {
+  padding-top: 1em;
+  padding-bottom: 2em;
+  display: none;
+  overflow: hidden;
+  background-color: #fcfcfc;
+}
+
+.v {
+	display:inline-block;
+  -webkit-transform:scale(1.8,1); /* Safari and Chrome */
+  -moz-transform:scale(1.8,1); /* Firefox */
+  -ms-transform:scale(1.8,1); /* IE 9 */
+  -o-transform:scale(1.8,1); /* Opera */
+  transform:scale(1.8,1); /* W3C */
+  transform:scale(1.8,1);
+  margin-right: 1em;
+}

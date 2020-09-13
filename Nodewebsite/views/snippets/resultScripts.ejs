@@ -795,6 +795,19 @@
       displayFindMyFriendsSection(minValue, maxValue);
       updateFavoritesButton();
       updateMaxPage();
+
+      let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("sectionActive");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
     }
 
     // Update display when window is rezied, TODO: figure out a way to make this more efficient
