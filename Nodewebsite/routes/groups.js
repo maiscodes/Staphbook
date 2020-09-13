@@ -23,6 +23,9 @@ router.get('/groups', function (req, res) {
             if (groups[i].count == undefined) {
               groups[i].count = 0;
             }
+            if (groups[i].description.length >= 100) {
+              groups[i].description = `${groups[i].description.substring(0,100)}...`;
+            }
           }
           res.render('pages/groups', {
               userLoggedIn: userLoggedIn,
