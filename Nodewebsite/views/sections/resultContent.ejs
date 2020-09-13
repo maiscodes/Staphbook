@@ -259,6 +259,14 @@
 
           <% include ../snippets/selectionBar.ejs %>
 
+          <div id="closelyRelatedGenomesNavigationBar">
+            <button class="navigationButton" onclick="stepToPage(-2)">&lt;&lt;</button>
+            <button class="navigationButton" onclick="stepToPage(-1)">&lt;</button> <span id="pageMessage"> Viewing page
+            <input type="number" id="samplePageNumber" name="samplePageNumber" min="1" value="1" onchange="updatePageSamples()"> of <span id="maxPageNumber">1</span> </span>
+            <button class="navigationButton" onclick="stepToPage(1)">&gt;</button>
+            <button class="navigationButton" onclick="stepToPage(2)">&gt;&gt;</button>
+         </div>
+
           <form action='/result' method="get"><div id="findMyFriendsCards"></div></form>
 
         </div>
