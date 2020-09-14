@@ -79,6 +79,7 @@ router.post('/addGroupSample', function (req, res) {
     let groupId = req.body.groupId;
     let sampleId = req.body.sampleId;
 
+    console.log("Add sample to group login: " + userLoggedIn);
     if ( userLoggedIn ) {
         req.knex('group_samples')
             .insert({
