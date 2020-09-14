@@ -37,8 +37,13 @@
      function downloadGenomeInformation(){
        let groupSamples =  <%- JSON.stringify(samples) %>;
 
+       let groupName = ["Name", `${<%- JSON.stringify(groupInfo.name) %>}`];
+       let groupDescription = ["Description", `${<%- JSON.stringify(groupInfo.description) %>}`];
        let headers = ["Sample Id", "Sequence Type", "Location", "Strain", "Host", "Isolation Source"];
+
        let master_information = [];
+       master_information.push(groupName);
+       master_information.push(groupDescription);
        master_information.push(headers);
 
         groupSamples.forEach(function(sample) {
