@@ -898,18 +898,6 @@
       displayFindMyFriendsSection(minValue, maxValue);
     }
 
-    /*
-    Updating dropdown with list of groups to add
-     */
-    let optionList = document.getElementById('groups-list').options;
-    optionList.add(new Option('Select a group'));
-    let groups = <%- JSON.stringify(avail_groups) %>;
-    groups.forEach(option => {
-        optionList.add(
-            new Option(option.name, option.group_id)
-        )
-    })
-
     function addToGroup(){
 
     }
