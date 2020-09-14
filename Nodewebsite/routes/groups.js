@@ -43,7 +43,7 @@ router.get('/groups', function (req, res) {
 
 router.post('/updateGroup', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
-    console.log(userLoggedIn);
+    console.log("user logged in: " + userLoggedIn);
     let groupId = req.body.groupId;
     let title = req.body.title;
     let description = req.body.description;

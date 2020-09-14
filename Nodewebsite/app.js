@@ -1,6 +1,7 @@
 // Require modules
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 const session = require('express-session');
@@ -9,6 +10,7 @@ var knex = require('knex')(options);
 
 // Change secret to unique value
 app.use(session({ secret: "Shh, its a secret!" }));
+app.use(cors());
 
 //postgreSQL
 const { Pool, Client } = require('pg');
@@ -23,6 +25,9 @@ const { Pool, Client } = require('pg');
 
 // Sam's connection
 // const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
+
+// Chaashya's connection
+const connectionString = "postgresql://postgres:12345@127.0.0.1:5432/staph";
 
 // Andrew's connection
 //const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
@@ -67,20 +72,22 @@ app.set('view engine', 'ejs');
 var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
+var groupAlreadyExists = true;
 var favSampleID;
 
 /*
 ROUTERS
  */
-let resultRouter = require('./routes/result');
-let advancedSearchRouter = require('./routes/advancedSearch');
-let createAccountRouter = require('./routes/createAccount')
-let searchResultRouter = require('./routes/searchResults')
-let advSearchResultRouter = require('./routes/advSearchResults');
-let loginRouter = require('./routes/login');
-let favouriteRouter = require('./routes/favourites');
-let groupsRouter = require('./routes/groups');
-let viewGroupRouter = require('./routes/viewGroup')
+let resultRouter = require("./routes/result");
+let advancedSearchRouter = require("./routes/advancedSearch");
+let createAccountRouter = require("./routes/createAccount");
+let searchResultRouter = require("./routes/searchResults");
+let advSearchResultRouter = require("./routes/advSearchResults");
+let loginRouter = require("./routes/login");
+let favouriteRouter = require("./routes/favourites");
+let groupsRouter = require("./routes/groups");
+let viewGroupRouter = require("./routes/viewGroup");
+let createGroupRouter = require("./routes/createGroup");
 
 /* --------------------------------------------------------------------------------
  *
@@ -94,16 +101,16 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/result', resultRouter);
-app.use('/advancedSearch', advancedSearchRouter);
-app.use('/createAccount', createAccountRouter);
-app.use('/searchResults', searchResultRouter);
-app.use('/advSearchResults', advSearchResultRouter);
-app.use('/login', loginRouter);
-app.use('/favourites', favouriteRouter)
-app.use('/', groupsRouter)
-app.use('/', viewGroupRouter);
-
+app.use("/result", resultRouter);
+app.use("/advancedSearch", advancedSearchRouter);
+app.use("/createAccount", createAccountRouter);
+app.use("/searchResults", searchResultRouter);
+app.use("/advSearchResults", advSearchResultRouter);
+app.use("/login", loginRouter);
+app.use("/favourites", favouriteRouter);
+app.use("/", groupsRouter);
+app.use("/", viewGroupRouter);
+app.use("/createGroup", createGroupRouter);
 
 
 // index page
@@ -116,76 +123,158 @@ app.get('/', function (req, res) {
         userLoggedIn = true;
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
-        client.query("SELECT * FROM user_favorites WHERE email='" + email + "' LIMIT 4", (err, fav_results) => {
-            //console.log(err, fav_results);
-            if(fav_results.rows.length > 0){
-                haveFavs = true;
-                haveSugs = true;
-                let selectSQL = "";
-                selectSQL = "SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                    "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                    "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_metadata.metadata->>'date_collected' AS date " +
-                    "FROM mlst_mlst  INNER JOIN sample_metadata ON mlst_mlst.sample_id=sample_metadata.sample_id " +
-                    "WHERE mlst_mlst.sample_id IN (SELECT sample_id FROM sample_metadata " +
-                    "WHERE";
-                if (fav_results.rows.length > 0){
-                    selectSQL += " sample_id = " + fav_results.rows[0].sample_id + "";
-                }
-                if (fav_results.rows.length > 1){
-                    selectSQL += " OR  sample_id = " + fav_results.rows[1].sample_id + "";
-                }
-                if (fav_results.rows.length > 2){
-                    selectSQL += " OR  sample_id = " + fav_results.rows[2].sample_id + "";
-                }
-                if (fav_results.rows.length > 3){
-                    selectSQL += " OR  sample_id = " + fav_results.rows[3].sample_id + "";
-                }
-                //console.log(selectSQL);
+        userNotRegistered = false;
 
-                client.query(selectSQL + ");", (err, favorites) => {
-                    //console.log(err, favorites);
+            req.knex
+                .select("*")
+                .from("user_favorites")
+                .where({ email: email })
+                .limit(4)
+                .then((fav_results, err) => {
+                    console.log("fav_results");
+                    console.log(fav_results, err);
+                    console.log(fav_results.length);
 
-                    client.query('SELECT name FROM sample_sample WHERE id=' + fav_results.rows[fav_results.rows.length-1].sample_id + '', (err, result_sample_sample) => {
-                        //console.log(err, result_tag_tosample);
-                        let sampleName = result_sample_sample.rows[0].name;
+                    let fav_sample_list = [];
+                    if (fav_results.length > 0) {
+                        //maybe for-loop
+                        if (fav_results.length > 0) {
+                            fav_sample_list.push(fav_results[0].sample_id);
+                        }
+                        if (fav_results.length > 1) {
+                            fav_sample_list.push(fav_results[1].sample_id);
+                        }
+                        if (fav_results.length > 2) {
+                            fav_sample_list.push(fav_results[2].sample_id);
+                        }
+                        if (fav_results.length > 3) {
+                            fav_sample_list.push(fav_results[3].sample_id);
+                        }
 
-                        // Sample's weighted distances
-                        client.query("SELECT * FROM weighted_distance WHERE selected_sample='" + sampleName + "' ORDER BY distance ASC LIMIT 5", (err, result_weighted_distances) => {
-                            //console.log(err, result_weighted_distances);
-                            console.log(err, result_weighted_distances);
+                        let sample_id_subquery = req.knex.select("sample_id").from("sample_metadata").whereIn('sample_id', fav_sample_list);
 
-                            client.query("SELECT mlst_mlst.st, sample_metadata.sample_id, metadata->>'country' AS country, " +
-                                "sample_metadata.metadata->>'strain' AS strain, sample_metadata.metadata->>'host' AS host, " +
-                                "sample_metadata.metadata->>'isolation_source' AS isolation_source, sample_sample.name, sample_sample.id " +
-                                "FROM sample_sample  " +
-                                "INNER JOIN mlst_mlst ON sample_sample.id=mlst_mlst.sample_id " +
-                                "INNER JOIN sample_metadata ON sample_sample.id=sample_metadata.sample_id " +
-                                "WHERE sample_sample.name='" + result_weighted_distances.rows[1].comparison_sample + "' " +
-                                "OR sample_sample.name='" + result_weighted_distances.rows[2].comparison_sample + "' " +
-                                "OR sample_sample.name='" + result_weighted_distances.rows[3].comparison_sample + "' " +
-                                "OR sample_sample.name='" + result_weighted_distances.rows[4].comparison_sample + "'", (err, suggested) => {
-                                console.log(err, suggested);
+                        haveFavs = true;
+                        haveSugs = true;
 
-                                res.render('pages/index', {
-                                    userLoggedIn: userLoggedIn,
-                                    favorites: favorites.rows,
-                                    suggested: suggested.rows,
-                                    haveFavs: haveFavs,
-                                    haveSugs: haveSugs
-                                });
+                        req.knex
+                            .select({
+                                st: "mlst_mlst.st",
+                                sample_id: "sample_metadata.sample_id",
+                                metadata: "sample_metadata.metadata",
+                                name: "sample_sample.name",
+                                id: "sample_sample.id",
+                            })
+                            .from("mlst_mlst")
+                            .innerJoin(
+                                "sample_sample",
+                                "mlst_mlst.sample_id",
+                                "sample_sample.id"
+                            )
+                            .innerJoin(
+                                "sample_metadata",
+                                "mlst_mlst.sample_id",
+                                "sample_metadata.sample_id"
+                            )
+                            .whereIn("mlst_mlst.sample_id", sample_id_subquery)
+                            .then((same_sequence, err) => {
+                                console.log("I found sample data of my favs");
+                                console.log(same_sequence);
+                                req.knex
+                                    .select("name")
+                                    .from("sample_sample")
+                                    .where({
+                                        id: fav_results[fav_results.length - 1].sample_id,
+                                    })
+                                    .then((result_sample_sample, err) => {
+
+                                        console.log(err, result_sample_sample);
+                                        let sampleName = result_sample_sample[0].name;
+                                        console.log(sampleName);
+
+                                        req.knex
+                                            .select("*")
+                                            .from("weighted_distance")
+                                            .where({ selected_sample: sampleName })
+                                            .limit(5)
+                                            .orderBy("distance", "asc")
+                                            .then((result_weighted_distances, err) => {
+                                                //console.log(err, result_weighted_distances);
+                                                console.log(result_weighted_distances, err);
+                                                if (result_weighted_distances.length > 1) {
+                                                    let close_genetic_distances = [];
+                                                    for (let i = 1; i < 5; i++) {
+                                                        close_genetic_distances.push(result_weighted_distances[i].comparison_sample);
+                                                        console.log("Index: " + [i]);
+                                                        console.log(result_weighted_distances[i].comparison_sample);
+                                                    }
+
+                                                    req.knex
+                                                        .select({
+                                                            st: "mlst_mlst.st",
+                                                            sample_id: "sample_metadata.sample_id",
+                                                            metadata: "sample_metadata.metadata",
+                                                            name: "sample_sample.name",
+                                                            id: "sample_sample.id",
+                                                        })
+                                                        .from("mlst_mlst")
+                                                        .innerJoin(
+                                                            "sample_sample",
+                                                            "mlst_mlst.sample_id",
+                                                            "sample_sample.id"
+                                                        )
+                                                        .innerJoin(
+                                                            "sample_metadata",
+                                                            "mlst_mlst.sample_id",
+                                                            "sample_metadata.sample_id"
+                                                        )
+                                                        .where(
+                                                            "sample_sample.name",
+                                                            "in",
+                                                            close_genetic_distances)
+                                                        .then(
+                                                            (suggested, err) => {
+                                                                console.log(suggested, err);
+                                                                console.log(haveFavs);
+                                                                res.render("pages/index", {
+                                                                    userLoggedIn: userLoggedIn,
+                                                                    favorites: favorites,
+                                                                    suggested: suggested,
+                                                                    haveFavs: haveFavs,
+                                                                    haveSugs: haveSugs,
+                                                                });
+                                                            })
+                                                }
+                                                else {
+                                                    res.render("pages/index", {
+                                                        userLoggedIn: userLoggedIn,
+                                                        favorites: favorites,
+                                                        suggested: [],
+                                                        haveFavs: haveFavs,
+                                                        haveSugs: haveSugs,
+                                                    });
+                                                }
+                                            });
+                                    });
                             });
-                        });
-                    });
+                    }
+                    else{
+                        res.render("pages/index", {
+                            userLoggedIn: userLoggedIn,
+                            haveFavs: false,
+                            haveSugs: false,
+                        })
+                    }
                 });
-            } else {
-                res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
-            }
-        });
-
     } else {
         userLoggedIn = false;
         console.log(haveFavs);
-        res.render('pages/index', { userLoggedIn: userLoggedIn, favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs });
+        res.render("pages/index", {
+            userLoggedIn: userLoggedIn,
+            favorites: favorites,
+            suggested: suggested,
+            haveFavs: haveFavs,
+            haveSugs: haveSugs,
+        });
     }
 });
 

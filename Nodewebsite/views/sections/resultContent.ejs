@@ -19,7 +19,12 @@
                   <i id ="favoriteButtonHeart" class="fas fa-heart"
                      style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
               </button>
-              <select onchange="addToGroup" id="groups-list" name="groups-list">
+              <select onchange="addToGroup()" id="groups-list" name="groups-list">
+                  <% avail_groups.forEach(function (group) { %>
+                      <option value=<%= group.group_id %>>
+                          <%= group.name %>
+                      </option>
+                  <% }) %>
               </select>
           </form>
 
