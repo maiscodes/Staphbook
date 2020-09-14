@@ -1,6 +1,7 @@
 // Require modules
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const bcrypt = require('bcrypt');
 const cookie = require('cookie');
 const session = require('express-session');
@@ -9,6 +10,7 @@ var knex = require('knex')(options);
 
 // Change secret to unique value
 app.use(session({ secret: "Shh, its a secret!" }));
+app.use(cors());
 
 //postgreSQL
 const { Pool, Client } = require('pg');
