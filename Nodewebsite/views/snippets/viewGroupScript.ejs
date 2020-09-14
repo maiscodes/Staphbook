@@ -647,7 +647,7 @@ function removeGenomeSamples() {
     let newTitle = document.getElementById("inputTitle").value;
     let newDescription = document.getElementById("inputDescription").value;
     let isoDate = new Date(Date.now()).toISOString();
-    let baseUrl = "http://localhost:8000"; // TODO: update when hosted
+    let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
     let url = `${baseUrl}/updateGroup`;
     //console.log(url);
 
