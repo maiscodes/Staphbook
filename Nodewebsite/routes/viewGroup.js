@@ -5,8 +5,13 @@ router.get('/viewGroup', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let groupID = req.query.groupId;
 
-    // Setup error handling
+    // TODO: HANDLE ERRORS 
+    if (userLoggedIn == undefined) {
+      userLoggedIn = False;
+    }
+
     errorPageConfig = { description: 'group', query: 'groupId', id: groupID, endpoint: '/viewGroup', userLoggedIn: userLoggedIn };
+    console.log(errorPageConfig);
 
     // Now execute SQL queries
     if ( userLoggedIn ) {
