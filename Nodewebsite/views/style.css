@@ -964,3 +964,11 @@ input:checked + .toggle:before {
   padding-right: 20px;
   color: #468e94;
 }
+
+#createGroupContainer {
+    width: 40%;
+    margin: 0 auto;
+    border: 0.5px solid silver;
+    padding: 15px 15px 15px 15px;
+    margin-top: 30px;
+}
