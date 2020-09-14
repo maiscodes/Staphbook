@@ -65,8 +65,8 @@
 
     </div>
 
-    <div id="resultsPageTableComponent">
-      <button type="button" class="collapsible"><span class="v">V</span>Tags</button>
+    <div id="resultsPageSampleExpandableInformation">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Tags</button>
       <div class="sectionContent">
         <table class="adjustedTable">
             <% tag_tag.forEach(function (result_tag_tag) { %>
@@ -86,23 +86,23 @@
         </table>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>Metadata</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Metadata</button>
+      <div class="sectionContent" id="Metadata">
           <% include ../snippets/resultMetadata %>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>Sequencing Metrics</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
+      <div class="sectionContent" id="Sequencing">
         <% include ../snippets/resultSequence %>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>Assembly Metrics</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Assembly Metrics</button>
+      <div class="sectionContent" id="Assembly">
         <% include ../snippets/resultAssembly %>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>MLST</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>MLST</button>
+      <div class="sectionContent" id="MLST">
         <table style="width: 100%;">
             <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
             <tr>
@@ -133,112 +133,21 @@
         </table>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>SCCmec Primer Hits</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Primer Hits</button>
+      <div class="sectionContent"  id="Sccmec_Primers">
         <% include ../snippets/resultSccmecPrimers %>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>SCCmec Subtype Hits</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Subtype Hits</button>
+      <div class="sectionContent" id="Sccmec_Subtypes">
         <% include ../snippets/resultSccmecSubtypes %>
       </div>
 
-      <button type="button" class="collapsible"><span class="v">V</span>SCCmec Protein Hits</button>
-      <div class="sectionContent">
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Protein Hits</button>
+      <div class="sectionContent" id="Sccmec_Proteins">
           <% include ../snippets/resultSccmecProteins.ejs %>
       </div>
-
-
-        <div class="tab">
-            <!--Information category tabs-->
-            <button class="tablinks active" onclick="resultsTabs(event, 'Tags')" title="">Tags</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Metadata')" title="">Metadata</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Sequencing')" title="">Sequencing Metrics</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Assembly')" title="">Assembly Metrics</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'MLST')" title="">MLST</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Primers')" title="">SCCmec Primer Hits</button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Subtypes')" title="">SCCmec Subtype Hits
-            </button>
-            <button class="tablinks" onclick="resultsTabs(event, 'Sccmec_Proteins')" title="">SCCmec Protein Hits
-            </button>
-        </div>
-
-        <!--Information category tabs content-->
-        <div id="Tags" class="tabcontent" style="display: block;">
-            <table class="adjustedTable">
-                <% tag_tag.forEach(function (result_tag_tag) { %>
-                <tr>
-                    <td><b>Tag:</b></td>
-                    <td>
-                        <%= result_tag_tag.tag %>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Comment:</b></td>
-                    <td>
-                        <%= result_tag_tag.comment %>
-                    </td>
-                </tr>
-                <% }) %>
-            </table>
-        </div>
-
-        <div id="Metadata" class="tabcontent">
-            <% include ../snippets/resultMetadata %>
-        </div>
-
-        <div id="Sequencing" class="tabcontent">
-            <% include ../snippets/resultSequence %>
-        </div>
-
-        <div id="Assembly" class="tabcontent">
-            <% include ../snippets/resultAssembly %>
-        </div>
-
-        <div id="MLST" class="tabcontent">
-            <table style="width: 100%;">
-                <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
-                <tr>
-                    <td><b>st:</b></td>
-                    <td>
-                        <%= result_mlst_mlst.st %>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>ariba:</b></td>
-                    <td>
-                        <%= result_mlst_mlst.ariba %>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>mentalist:</b></td>
-                    <td>
-                        <%= result_mlst_mlst.mentalist %>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>BLAST:</b></td>
-                    <td>
-                        <%= result_mlst_mlst.blast %>
-                    </td>
-                </tr>
-                <% }) %>
-            </table>
-        </div>
-
-        <div id="Sccmec_Primers" class="tabcontent">
-            <% include ../snippets/resultSccmecPrimers %>
-        </div>
-
-        <div id="Sccmec_Subtypes" class="tabcontent">
-            <% include ../snippets/resultSccmecSubtypes %>
-        </div>
-
-        <div id="Sccmec_Proteins" class="tabcontent">
-            <% include ../snippets/resultSccmecProteins.ejs %>
-        </div>
     </div>
-
     <!--Result page interactive element-->
     <div id="resultsPageGraphComponents">
         <div id="resultsPageGraphComponent1">

@@ -127,15 +127,6 @@ hr.divider {
     float: left;
 }
 
-
-#resultsPageTableComponent {
-    width: 90%;
-    height: auto;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    border: 0;
-}
-
 #displayDescription {
     text-align: center;
     padding-top: 17px;
@@ -203,29 +194,28 @@ hr.divider {
 }
 
 #Metadata {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Assembly {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Sccmec_Primers {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Sccmec_Subtypes {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
-
 #Sccmec_Proteins {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 

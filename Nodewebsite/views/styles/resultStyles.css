@@ -1,13 +1,14 @@
 /* Collapsible sections */
 .collapsible {
   background-color: white;
-  color: black;
+  color: #212529;
   cursor: pointer;
-  padding: 18px;
+  padding: 1em;
   width: 100%;
   border: none;
   text-align: left;
   outline: none;
+  font-size: 1.3em;
 }
 
 .collapsible:hover {
@@ -19,20 +20,45 @@
 }
 
 .sectionContent {
+  transition:max-height 0.5s;
+  -moz-transition:max-height 0.5s; /* Firefox 4 */
+  -webkit-transition:max-height 0.5s; /* Safari and Chrome */
+  -o-transition:max-height 0.5s; /* Opera */
+  overflow: hidden;
+  background-color: white;
+  opacity:0;
+  max-height: 0;
+}
+
+.contentActive {
   padding-top: 1em;
   padding-bottom: 2em;
-  display: none;
-  overflow: hidden;
-  background-color: #fcfcfc;
+  opacity: 100;
+  max-height: var(--max-height);
+}
+
+.v:hover {
+  background-color: #ededed;
 }
 
 .v {
 	display:inline-block;
-  -webkit-transform:scale(1.8,1); /* Safari and Chrome */
-  -moz-transform:scale(1.8,1); /* Firefox */
-  -ms-transform:scale(1.8,1); /* IE 9 */
-  -o-transform:scale(1.8,1); /* Opera */
-  transform:scale(1.8,1); /* W3C */
-  transform:scale(1.8,1);
+  -webkit-transform:scale(1.8,1.5); /* Safari and Chrome */
+  -moz-transform:scale(1.8,1.5); /* Firefox */
+  -ms-transform:scale(1.8,1.5); /* IE 9 */
+  -o-transform:scale(1.8,1.5); /* Opera */
+  transform:scale(1.8,1.5); /* W3C */
   margin-right: 1em;
+  color: #343a40;
+  border-radius: 2px;
+}
+
+
+/* Expandable section */
+#resultsPageSampleExpandableInformation {
+  width: 90%;
+  height: auto;
+  margin: 0 auto;
+  padding-bottom: 3em;
+  border: 0;
 }
