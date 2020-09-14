@@ -6,6 +6,11 @@ button:focus {
   outline: none;
 }
 
+#page-container {
+  width: 70%;
+  margin: 0 auto;
+  text-align: center;
+}
 #queryTitleContainer {
     padding-top: 20px;
     text-align: center;
@@ -352,6 +357,18 @@ a {
     margin-right: 10px;
 }
 
+[data-id="layer0-selectbox"] { /* Centering cytoscape */
+  left: 0px;
+}
+
+[data-id="layer1-drag"] {
+  left: 0px;
+}
+
+[data-id="layer2-node"] {
+  left: 0px;
+}
+
 .legendColorSquare {
     height: 10px;
     width: 10px;
@@ -654,6 +671,7 @@ div[slider] > input[type=range]::-ms-tooltip {
   width: 4.6em;
   height: 2.6em;
   margin-left: 0.8em;
+  margin-top: 1.5em;
 }
 
 .switch input {

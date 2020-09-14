@@ -1,13 +1,12 @@
 /* Groups Page */
 #groupsCards {
   display: -webkit-flex;
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   width: 90%;
-  margin-top: 2em;
-  position: absolute;
-  left: 5%;
+  margin: 0 auto;
+  margin-top: 1em;
+  position: relative;
 }
 
 
