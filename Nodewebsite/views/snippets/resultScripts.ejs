@@ -421,11 +421,19 @@
     function downloadGraph() {
         console.log("download graph");
 
-
         var png64 = cy.png();
-        saveAs(png64, "StaphBook-Graph.png");
+        saveImageAs(png64, `StaphBook-Sample ${<%- JSON.stringify(sample_ID) %>} Network.png`);
+    }
 
-
+    function saveImageAs(base64Data, fileName) { //TODO: Check for multi-browser functionality
+      //  var encodedUri = encodeURI(csvContent);
+      let link = document.createElement("a");
+      link.setAttribute("href", base64Data);
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link); // for Firefox
+      //link.setAttribute("href", base64Data);
+      //link.setAttribute("download", fileName);
+      link.click();
     }
 
     <!-- expandGraph functionality-->

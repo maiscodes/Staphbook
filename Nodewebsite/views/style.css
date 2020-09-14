@@ -198,6 +198,11 @@ hr.divider {
   overflow-y: hidden;
 }
 
+#Sequencing {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
 #Assembly {
   overflow-x: scroll;
   overflow-y: hidden;
