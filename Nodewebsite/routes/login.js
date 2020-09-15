@@ -20,16 +20,17 @@ router.post('/', function (req, res) {
     let suggested = [];
     let haveFavs = false;
     let haveSugs = false;
+    let email = decodeURIComponent(req.body.email);
 
     req.knex.select("*").from("registered_users").where({ email: email }).then((result_registered_users, err) => {
         console.log(err, result_registered_users);
 
-        if (result_registered_users.rows.length != 1) {
+        if (result_registered_users.length != 1) {
             console.log('user not registered');
             var userNotRegistered = true;
             res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered });
         } else {
-            bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
+            bcrypt.compare(req.body.password, result_registered_users[0].password, function (err, result) {
                 //if password matched DB password
                 if (result) {
                     //setting the 'set-cookie' header
