@@ -1,47 +1,53 @@
 <div id="groupsPageContainer">
   <div class="resultsPageTopComponent">
-      <!-- Display Group Information  -->
-      <h5 style="text-align: center; margin-top: 5px;">
-          Staphlyococcus Aureus <br>
-      </h5>
+    <!-- Display Group Information  -->
+    <h5 style="text-align: center; margin-top: 5px;">
+      Staphlyococcus Aureus <br>
+    </h5>
 
-      <h1 style="text-align: center; margin-top: -10px;">Groups</h1>
+    <h1 style="text-align: center; margin-top: -10px;">Groups</h1>
+    <div id="ButtonContainer" style="text-align:center;">
+      <a class="btn btn-outline-dark btn-sm" title="Add New Group" id="addNewGroup" style="color: #468e94;"
+        href="/createGroup">
+        <i class="fas fa-plus" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
+      </a>
+    </div>
 
-      <% if (haveGroups) { %>
-        <div id="groupsCards">
-        <form action='/viewGroup' method="get">
+    <% if (haveGroups) { %>
+    <div id="groupsCards">
+      <form action='/viewGroup' method="get">
         <% groups.forEach(function (result_groups) { %>
 
-    <!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
-    <!--              style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">-->
-    <!--              Group Name: <%= result_groups.name %> ||-->
-    <!--              Count: <%= result_groups.count %> ||-->
-    <!--              Created: <%= new Date(result_groups.created).toDateString() %> ||-->
-    <!--              Last modified: <%= new Date(result_groups.modified).toDateString() %> ||-->
-    <!--            </button>-->
+        <!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
+        <!--              style="color: #0a0a0a; overflow: hidden; height: 85px;" onclick="window.location.href='/result'" value="<%= result_groups.group_id %>">-->
+        <!--              Group Name: <%= result_groups.name %> ||-->
+        <!--              Count: <%= result_groups.count %> ||-->
+        <!--              Created: <%= new Date(result_groups.created).toDateString() %> ||-->
+        <!--              Last modified: <%= new Date(result_groups.modified).toDateString() %> ||-->
+        <!--            </button>-->
 
-                <button class="groupCard"
-                        name="groupId"
-                        value="<%= result_groups.group_id %>"
-                        onclick="window.location.href='/viewGroup'"
-                        type="submit">
+        <button class="groupCard" name="groupId" value="<%= result_groups.group_id %>"
+          onclick="window.location.href='/viewGroup'" type="submit">
 
-                  <div class="groupCardTitle"><h4><%= result_groups.name %></h4></div>
-                  <b>Description: </b><%= result_groups.description %><br>
-                  <b>Created: </b><%= new Date(result_groups.created).toDateString() %><br>
-                  <b>Last modified: </b><%= new Date(result_groups.modified).toDateString() %><br>
-                  <div class="groupCountTag"><%= result_groups.count%></div>
-                </button>
+          <div class="groupCardTitle">
+            <h4><%= result_groups.name %></h4>
+          </div>
+          <b>Description: </b><%= result_groups.description %><br>
+          <b>Created: </b><%= new Date(result_groups.created).toDateString() %><br>
+          <b>Last modified: </b><%= new Date(result_groups.modified).toDateString() %><br>
+          <div class="groupCountTag"><%= result_groups.count%></div>
+        </button>
         <% }) %>
-        </form>
-        </div>
-      <% } else { %>
-
-      <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a" disabled="">
-        No groups found.
-      </button>
-      <% } %>
+      </form>
     </div>
+    <% } else { %>
+
+    <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a"
+      disabled="">
+      No groups found.
+    </button>
+    <% } %>
+  </div>
 </div>
 
 <script>
@@ -52,7 +58,7 @@
     for (i = 0; i < tags.length; i++) {
       tag = tags[i];
       card = cards[i];
-      tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.8 * card.clientWidth }px; width: ${ 0.25 * card.clientWidth }px;`);
+      tag.setAttribute("style", `z-index: 1; top: ${- 1 * 0.5 * tag.clientHeight}px; left: ${0.8 * card.clientWidth}px; width: ${0.25 * card.clientWidth}px;`);
     }
     console.log("Fixing");
   }
