@@ -21,13 +21,13 @@ router.post('/', function (req, res) {
     let haveFavs = false;
     let haveSugs = false;
 
-    req.db.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
+    req.knex.select("*").from("registered_users").where({ email: email }).then((result_registered_users, err) => {
         console.log(err, result_registered_users);
 
         if (result_registered_users.rows.length != 1) {
             console.log('user not registered');
             var userNotRegistered = true;
-            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered});
+            res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered });
         } else {
             bcrypt.compare(req.body.password, result_registered_users.rows[0].password, function (err, result) {
                 //if password matched DB password
@@ -38,12 +38,14 @@ router.post('/', function (req, res) {
                     });
 
                     req.session.userStatus = "loggedIn";
-                    req.session.userEmail =  req.body.email;
+                    req.session.userEmail = req.body.email;
 
                     res.redirect('/');
                 } else {
-                    res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered,
-                        favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs});
+                    res.render('pages/login', {
+                        userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered,
+                        favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs
+                    });
                 }
             });
         }
