@@ -631,7 +631,7 @@ function removeGenomeSamples() {
 
     let edittingGroupEditBar = document.createElement('div');
     edittingGroupEditBar.setAttribute('id', 'groupEditBar');
-    edittingGroupEditBar.innerHTML = `${getGroupCancelEditButton().outerHTML}${getGroupUpdateButton().outerHTML}`;
+    edittingGroupEditBar.innerHTML = `${getGroupCancelEditButton().outerHTML}${getGroupUpdateButton().outerHTML}${getGroupDeleteButton().outerHTML}`;
 
     // replace with inputs
     let title = document.getElementById("groupName");
@@ -669,6 +669,10 @@ function removeGenomeSamples() {
       .catch(error => {
           console.log(error);
       });
+  }
+
+  function deleteGroup(){
+    returnNormalPage();
   }
 
   function getNormalTitle() {
@@ -710,6 +714,14 @@ function removeGenomeSamples() {
     button.setAttribute('id', 'groupUpdateButton');
     button.setAttribute('onclick', 'updateGroupInformation()');
     button.innerHTML = "Update";
+    return button;
+  }
+
+  function getGroupDeleteButton(){
+    let button = document.createElement('button');
+    button.setAttribute('id', 'groupDeleteButton');
+    button.setAttribute('onclick', 'deleteGroup()');
+    button.innerHTML = "Delete";
     return button;
   }
 

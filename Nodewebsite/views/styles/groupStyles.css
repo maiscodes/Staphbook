@@ -52,7 +52,7 @@
   color: white;
 }
 
-#groupSampleEditButton, #groupEditButton, #groupEditCancelButton, #groupUpdateButton{
+#groupSampleEditButton, #groupEditButton, #groupEditCancelButton, #groupUpdateButton, #groupDeleteButton{
   margin: 0 auto;
   padding: 0.5em;
   background-color: white;
@@ -80,6 +80,14 @@
   border: 1px solid #1ABC9C;
   color: white;
   outline: none;
+}
+
+#groupDeleteButton {
+  background-color: #fafafa;
+  color: #ce2009;
+  border: 1px solid #9c9c9c;
+  outline: none;
+  margin-left: 0.8em;
 }
 
 /* Selection bar */
