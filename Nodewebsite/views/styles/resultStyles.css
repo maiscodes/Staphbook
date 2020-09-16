@@ -61,3 +61,29 @@
   padding-bottom: 3em;
   border: 0;
 }
+
+/* Sample grouping */
+#selectGroup {
+  padding: 0.7em;
+  border-radius: 2em;
+}
+
+.groupLabel {
+  background-color: #1ABC9C;
+  color: white;
+  padding: 1em;
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
+  border-radius: 2em;
+  border: 1px solid #1ABC9C;
+}
+
+.groupLabel:hover {
+  background-color: red;
+  border: 1px solid red;
+}
+
+.groupLabel:hover:after {
+  content:"x";
+  padding-left: 0.5em;
+}
