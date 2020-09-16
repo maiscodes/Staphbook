@@ -54,18 +54,25 @@ router.get('/', function (req, res) {
                     let getSccmecProteinHits =   req.knex.select('*').from('sccmec_proteins').where({sample_id: sampleID});
 
                     let getGroups =  req.knex.select('group_id', 'name').from('groups').where({email: ''});
+                    let sampleGroups;
 
                     if (userLoggedIn) {
                         getGroups =  req.knex.select('group_id', 'name').from('groups').where({email: decodeURIComponent(req.session.userEmail)});
+                        sampleGroups =
+                            req.knex.select('groups.group_id', 'name')
+                                .from('group_samples')
+                                .innerJoin('groups', 'groups.group_id', 'group_samples.group_id')
+                                .where({sample_id: sampleID, email: decodeURIComponent(req.session.userEmail)})
                     }
 
 
                     Promise
-                    .all([ getWeightedDistances, getSampleMetadata, getBlastQuery, getSequencingMetrics, getAssemblyMetrics, getMlst, getSccmecPrimerHits, getSccmecSubtypeHits, getSccmecProteinHits, getGroups])
-                    .then(function([result_weighted_distances, result_sample_metadata, result_blastquery, result_sequence_summary, result_assembly_summary, result_mlst_mlst, result_sccmec_primers, result_sccmec_subtypes, result_sccmec_proteins, groupsInfo]) {
+                    .all([ getWeightedDistances, getSampleMetadata, getBlastQuery, getSequencingMetrics, getAssemblyMetrics, getMlst, getSccmecPrimerHits, getSccmecSubtypeHits, getSccmecProteinHits, getGroups, sampleGroups])
+                    .then(function([result_weighted_distances, result_sample_metadata, result_blastquery, result_sequence_summary, result_assembly_summary, result_mlst_mlst, result_sccmec_primers, result_sccmec_subtypes, result_sccmec_proteins, groupsInfo, sampleGroups]) {
 
                       let st = result_mlst_mlst[0].st;
                       console.log(st);
+                      console.log(sampleGroups);
                       //console.log(result_sample_metadata);
 
                       let same_sequence_samples = req.knex.select('sample_id').from('sample_metadata').where({st: st});
@@ -173,7 +180,8 @@ router.get('/', function (req, res) {
                               same_isolations: same_isolation, sccmec_primers: result_sccmec_primers, assembly_summary: result_assembly_summary,
                               sccmec_subtypes: result_sccmec_subtypes, sccmec_proteins: result_sccmec_proteins, weighted_distance: result_weighted_distances,
                               all_weighted_distances: mainRelatedSampleDetails,
-                              avail_groups: groupsInfo
+                              avail_groups: groupsInfo,
+                              sample_groups: sampleGroups,
                           });
 
                         })
