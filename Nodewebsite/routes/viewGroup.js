@@ -97,7 +97,7 @@ router.post('/addGroupSample', function (req, res) {
                     .update({modified: new Date(Date.now()).toISOString()})
                     .then(() => {
                         console.log("Success")
-                        res.status(200)
+                        res.status(200).json({"message": "successfully added to group"})
                     })
                     .catch((err) => {
                         console.log("error updating")
