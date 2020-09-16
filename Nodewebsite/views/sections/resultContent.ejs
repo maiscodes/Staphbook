@@ -2,11 +2,11 @@
 
     <div class="resultsPageTopComponent">
         <h5 style="text-align: center; margin-top: 5px;">
-            Staphlyococcus Aureus <br>
+            Staphlyococcus aureus <br>
         </h5>
 
         <h1 style="text-align: center; margin-top: -10px;">
-            Sample: <%- sample_ID %>
+            Sample <%- sample_ID %>
         </h1>
 
         <!--Check if the user is logged in-->
@@ -73,7 +73,7 @@
             <br>
             <b>Isolation Source:</b> <%= result_sample_metadata.metadata.isolation_source %>
             <br>
-            <b>Scientific Name:</b> <%= result_sample_metadata.metadata.scientific_name %>
+            <b>Scientific Name:</b><i> <%= result_sample_metadata.metadata.scientific_name %> </i>
             <br>
             <% }) %>
             <% tag_tag.forEach(function (result_tag_tag) { %>
