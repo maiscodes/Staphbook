@@ -11,24 +11,38 @@
 
         <!--Check if the user is logged in-->
         <% if (userLoggedIn) { %>
+            <%sample_groups.forEach(function (group) { %>
+                <button onclick="remGroup(this.value)" value=<%= group.group_id%> class="groupLabel">
+                    <%= group.name %>
+                </button>
+            <% }) %>
 
-        <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
-          <form method="POST">
-              <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Button"
-                      id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: #ebebeb;">
-                  <i id ="favoriteButtonHeart" class="fas fa-heart"
-                     style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
-              </button>
-              <select onchange="addToGroup()" id="groups-list" name="groups-list">
-                  <% avail_groups.forEach(function (group) { %>
-                      <option value=<%= group.group_id %>>
-                          <%= group.name %>
-                      </option>
-                  <% }) %>
-              </select>
-          </form>
-
+        <div class="dropdown">
+            <button id="downloadButton" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Add to Group
+            </button>
+            <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <% avail_groups.forEach(function (group) { %>
+                    <button class="dropDownButton" onclick="addToGroup(this.value)" value=<%= group.group_id %>>
+                        <%= group.name %>
+                    </button>
+                <% }) %>
+                <button class="dropDownButton" onclick="addToGroup(this.value)" value="create">
+                    Create new group
+                </button>
+            </div>
         </div>
+
+            <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
+                <form method="POST">
+                    <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Button"
+                            id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: #ebebeb;">
+                        <i id ="favoriteButtonHeart" class="fas fa-heart"
+                           style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
+                    </button>
+                </form>
+            </div>
         <!--  close favDiv -->
         <% } %>
         <!-- close if userLogged in -->
