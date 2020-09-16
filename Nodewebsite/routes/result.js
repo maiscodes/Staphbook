@@ -57,7 +57,12 @@ router.get('/', function (req, res) {
                     let sampleGroups;
 
                     if (userLoggedIn) {
-                        getGroups =  req.knex.select('group_id', 'name').from('groups').where({email: decodeURIComponent(req.session.userEmail)});
+                        let alreadyInGroups = req.knex.select('group_id').from('group_samples').where({sample_id: sampleID});
+                        getGroups =  req.knex.select('group_id', 'name')
+                                        .from('groups')
+                                        .where({email: decodeURIComponent(req.session.userEmail)})
+                                        .whereNotIn('group_id', alreadyInGroups);
+
                         sampleGroups =
                             req.knex.select('groups.group_id', 'name')
                                 .from('group_samples')
