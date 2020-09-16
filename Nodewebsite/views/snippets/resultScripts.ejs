@@ -913,12 +913,15 @@
       displayFindMyFriendsSection(minValue, maxValue);
     }
 
-    function addToGroup(){
-        let group_id = document.getElementById('groups-list').value;
+    function addToGroup(group_id){
+        //let group_id = document.getElementById('groups-list').value;
 
         let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
         let url = `${baseUrl}/addGroupSample`;
-        console.log(url);
+
+        if(group_id === 'create'){
+            window.location.href = `${baseUrl}/createGroup`;
+        }
 
         fetch(url, {
             method: 'POST',
@@ -933,16 +936,38 @@
         })
             .then(response => {
                 if (response.status == 200) {
-                    console.log("success");
+                    console.log("successful addition");
                     location.reload(true);
                 }
-                let errorMessage = document.getElementById("groupEditErrorMessage"); //TODO: Fix error handling
-                errorMessage.innerHMTL = "There was an error updating the information. Please try again.";
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
+    function remGroup(group_id){
+        let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+        let url = `${baseUrl}/removeGroupSample`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                groupId: group_id,
+                sampleId: "<%- sample_ID %>",
+            })
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    console.log("successful removal");
+                    location.reload(true);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
 </script>
