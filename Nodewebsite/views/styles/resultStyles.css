@@ -1,3 +1,37 @@
+/* Button bar */
+#favoriteButton {
+  margin: 0 auto;
+  padding-bottom: 0.5em;
+  background-color: white;
+  border-radius: 2em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  border: 1px solid #636363;
+  color: #468e94;
+  position: relative;
+  margin-top: 0.5em;
+  margin-bottom: 0.7em;
+  padding-top: 0.7em;
+}
+
+#favoriteButtonForm {
+  display: inline;
+}
+#downloadSampleInfo {
+  margin: 0 auto;
+  padding-bottom: 0.5em;
+  background-color: white;
+  border-radius: 2em;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  border: 1px solid #636363;
+  color: #468e94;
+  position: relative;
+  margin-top: 0.5em;
+  margin-bottom: 0.7em;
+  padding-top: 0.5em;
+}
+
 /* Collapsible sections */
 .collapsible {
   background-color: white;
