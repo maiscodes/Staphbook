@@ -13,10 +13,13 @@ router.get('/groups', function (req, res) {
                           .from('group_samples')
                           .groupBy('sample_group_id')
                           .as('group_samples');
+      // Get public groups
+      // Get shared groups
       req.knex
         .select('*')
         .from('groups')
         .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
+        // Put email here
         .then((groups) => {
           console.log(groups);
           for (i = 0; i < groups.length; i++) {

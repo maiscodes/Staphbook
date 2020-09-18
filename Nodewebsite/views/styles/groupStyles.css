@@ -1,4 +1,19 @@
 /* Groups Page */
+#showGroupsContainer {
+  margin-top: 0.7em;
+  text-align: center;
+}
+
+#sharedGroupsButton, #userGroupsButton {
+  background-color: white;
+  border: 1px solid white;
+  borde-radius: 5px;
+}
+
+#sharedGroupsButton:hover, #userGroupsButton:hover {
+  background-color: #fcfcfc;
+}
+
 #groupsCards {
   display: -webkit-flex;
   flex-wrap: wrap;
@@ -8,7 +23,6 @@
   margin-top: 1em;
   position: relative;
 }
-
 
 .groupCard:hover {
   border: 1.5px solid #3399FF;

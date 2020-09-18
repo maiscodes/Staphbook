@@ -2,7 +2,7 @@
   <div class="resultsPageTopComponent">
     <!-- Display Group Information  -->
     <h5 style="text-align: center; margin-top: 5px;">
-      Staphlyococcus Aureus <br>
+      Staphlyococcus aureus <br>
     </h5>
 
     <h1 style="text-align: center; margin-top: -10px;">Groups</h1>
@@ -11,6 +11,10 @@
         href="/createGroup">
         <i class="fas fa-plus" style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
       </a>
+    </div>
+    <div id="showGroupsContainer">
+      <button id="sharedGroupsButton">Shared with you</button> |
+      <button id="userGroupsButton">Your Groups</button>
     </div>
 
     <% if (haveGroups) { %>
@@ -51,6 +55,7 @@
 </div>
 
 <script>
+
   function tag_label() {
     tags = document.getElementsByClassName("groupCountTag");
     cards = document.getElementsByClassName("groupCard");
@@ -65,5 +70,10 @@
   tag_label();
   window.onresize = () => {
     tag_label();
+  };
+
+  window.onload = () => {
+    let yourGroupsButton = document.getElementById("userGroupsButton");
+    yourGroupsButton.style.fontWeight = "bold";
   };
 </script>
