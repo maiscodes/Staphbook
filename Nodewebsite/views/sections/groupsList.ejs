@@ -13,8 +13,8 @@
       </a>
     </div>
     <div id="showGroupsContainer">
-      <button id="sharedGroupsButton">Shared with you</button> |
-      <button id="userGroupsButton">Your Groups</button>
+      <button id="sharedGroupsButton" onclick="loadSharedGroups()">Shared with you</button> |
+      <button id="userGroupsButton" onclick="loadUserGroups()">Your Groups</button>
     </div>
 
     <% if (haveGroups) { %>
@@ -52,28 +52,8 @@
     </button>
     <% } %>
   </div>
+
+  <!-- Scripts to view shared groups functionality  -->
+  <% include ../snippets/sharedGroupScript.ejs %>
+
 </div>
-
-<script>
-
-  function tag_label() {
-    tags = document.getElementsByClassName("groupCountTag");
-    cards = document.getElementsByClassName("groupCard");
-
-    for (i = 0; i < tags.length; i++) {
-      tag = tags[i];
-      card = cards[i];
-      tag.setAttribute("style", `z-index: 1; top: ${- 1 * 0.5 * tag.clientHeight}px; left: ${0.8 * card.clientWidth}px; width: ${0.25 * card.clientWidth}px;`);
-    }
-    console.log("Fixing");
-  }
-  tag_label();
-  window.onresize = () => {
-    tag_label();
-  };
-
-  window.onload = () => {
-    let yourGroupsButton = document.getElementById("userGroupsButton");
-    yourGroupsButton.style.fontWeight = "bold";
-  };
-</script>

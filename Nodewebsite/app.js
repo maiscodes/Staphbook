@@ -177,8 +177,8 @@ app.get('/', function (req, res) {
                             )
                             .whereIn("mlst_mlst.sample_id", sample_id_subquery)
                             .then((same_sequence, err) => {
-                                console.log("I found sample data of my favs");
-                                console.log(same_sequence);
+                                //console.log("I found sample data of my favs");
+                                //console.log(same_sequence);
                                 req.knex
                                     .select("name")
                                     .from("sample_sample")
@@ -187,9 +187,9 @@ app.get('/', function (req, res) {
                                     })
                                     .then((result_sample_sample, err) => {
 
-                                        console.log(err, result_sample_sample);
+                                        //console.log(err, result_sample_sample);
                                         let sampleName = result_sample_sample[0].name;
-                                        console.log(sampleName);
+                                        //console.log(sampleName);
 
                                         req.knex
                                             .select("*")
@@ -204,8 +204,8 @@ app.get('/', function (req, res) {
                                                     let close_genetic_distances = [];
                                                     for (let i = 1; i < 5; i++) {
                                                         close_genetic_distances.push(result_weighted_distances[i].comparison_sample);
-                                                        console.log("Index: " + [i]);
-                                                        console.log(result_weighted_distances[i].comparison_sample);
+                                                        //console.log("Index: " + [i]);
+                                                        //console.log(result_weighted_distances[i].comparison_sample);
                                                     }
 
                                                     req.knex
@@ -233,8 +233,8 @@ app.get('/', function (req, res) {
                                                             close_genetic_distances)
                                                         .then(
                                                             (suggested, err) => {
-                                                                console.log(suggested, err);
-                                                                console.log(haveFavs);
+                                                                //console.log(suggested, err);
+                                                                //console.log(haveFavs);
                                                                 res.render("pages/index", {
                                                                     userLoggedIn: userLoggedIn,
                                                                     favorites: favorites,
