@@ -1,0 +1,121 @@
+<script>
+  /*
+  *
+  * Scripts to display group cards on page based
+  * on user selection, of shared and private groups.
+  *
+  */
+
+  function tag_label() {
+    tags = document.getElementsByClassName("groupCountTag");
+    cards = document.getElementsByClassName("groupCard");
+
+    for (i = 0; i < tags.length; i++) {
+      tag = tags[i];
+      card = cards[i];
+      tag.setAttribute("style", `z-index: 1; top: ${- 1 * 0.5 * tag.clientHeight}px; left: ${0.8 * card.clientWidth}px; width: ${0.25 * card.clientWidth}px;`);
+    }
+    console.log("Fixing");
+  }
+  tag_label();
+  window.onresize = () => {
+    tag_label();
+  };
+
+  window.onload = () => {
+    let yourGroupsButton = document.getElementById("userGroupsButton");
+    yourGroupsButton.style.fontWeight = "bold";
+    tag_label();
+  };
+
+  function createGroupCard(group){
+    let groupCard = document.createElement('button');
+
+    groupCard.setAttribute('name', 'groupId');
+    groupCard.setAttribute('value',  `${ group.group_id }`);
+    groupCard.setAttribute('onclick',  "window.location.href='/viewGroup'");
+    groupCard.setAttribute('type',  "submit");
+    groupCard.setAttribute('class', 'groupCard')
+
+    let groupCardContent = `<div class="groupCardTitle">
+                  <h4>${ group.name }</h4>
+                  </div>
+                  <b>Description: </b>${ group.description }<br>
+                  <b>Created: </b>${ new Date(group.created).toDateString() }<br>
+                  <b>Last modified: </b>${ new Date(group.modified).toDateString() }<br>
+                  <div class="groupCountTag">${ group.count}</div>`;
+    groupCard.innerHTML = groupCardContent;
+
+    return groupCard
+  }
+
+  function loadSharedGroups(){
+    let sharedGroupButton = document.getElementById('sharedGroupsButton');
+    sharedGroupButton.style.fontWeight = 'bold';
+
+    let userGroupButton = document.getElementById('userGroupsButton');
+    userGroupButton.style.fontWeight = 'normal';
+
+    let displayGroupsDiv = document.getElementById('groupsCards');
+    displayGroupsDiv.innerHTML = "";
+
+    if ( <%= haveGroups %> ) {
+      let sharedGroupsList = <%- JSON.stringify(sharedGroups) %>;
+      let groupCardForm = document.createElement('form');
+      groupCardForm.setAttribute('action', '/viewGroup');
+      groupCardForm.setAttribute('method', 'get');
+
+      sharedGroupsList.forEach((group) => {
+        let groupCard = createGroupCard(group);
+        groupCardForm.appendChild(groupCard);
+      });
+
+      displayGroupsDiv.appendChild(groupCardForm);
+      tag_label();
+
+    }
+    else {
+      let button = `<button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a"
+          disabled="">
+          No groups found.
+          </button>`;
+      displayGroupsDiv.innerHTML = button;
+    }
+  }
+
+  function loadUserGroups() {
+    let sharedGroupButton = document.getElementById('sharedGroupsButton');
+    sharedGroupButton.style.fontWeight = 'normal';
+
+    let userGroupButton = document.getElementById('userGroupsButton');
+    userGroupButton.style.fontWeight = 'bold';
+
+    let displayGroupsDiv = document.getElementById('groupsCards');
+    displayGroupsDiv.innerHTML = "";
+
+    if ( <%= haveGroups %> ) {
+      let groupsList = <%- JSON.stringify(groups) %>;
+      let groupCardForm = document.createElement('form');
+      groupCardForm.setAttribute('action', '/viewGroup');
+      groupCardForm.setAttribute('method', 'get');
+
+      groupsList.forEach((group) => {
+        let groupCard = createGroupCard(group);
+        groupCardForm.appendChild(groupCard);
+      });
+
+      displayGroupsDiv.appendChild(groupCardForm);
+      tag_label();
+
+    }
+    else {
+      let button = `<button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a"
+          disabled="">
+          No groups found.
+          </button>`;
+      displayGroupsDiv.innerHTML = button;
+    }
+
+  }
+
+</script>
