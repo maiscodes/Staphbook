@@ -88,6 +88,8 @@ let favouriteRouter = require("./routes/favourites");
 let groupsRouter = require("./routes/groups");
 let viewGroupRouter = require("./routes/viewGroup");
 let createGroupRouter = require("./routes/createGroup");
+let uploadResultRouter = require("./routes/uploadResult");
+let uploadSampleRouter = require("./routes/uploadSample");
 
 /* --------------------------------------------------------------------------------
  *
@@ -111,6 +113,8 @@ app.use("/favourites", favouriteRouter);
 app.use("/", groupsRouter);
 app.use("/", viewGroupRouter);
 app.use("/createGroup", createGroupRouter);
+app.use("/uploadResult", uploadResultRouter);
+app.use("/uploadSample", uploadSampleRouter);
 
 
 // index page
@@ -119,7 +123,7 @@ app.get('/', function (req, res) {
     let suggested=[];
     let haveFavs = false;
     let haveSugs = false;
-    if (req.session.userStatus == "loggedIn") {
+    if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
