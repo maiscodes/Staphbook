@@ -161,7 +161,6 @@ router.post('/removeGroup', function (req, res) {
         .del()
         .then(() => {
           console.log("GROUP DELETED")
-          //res.redirect(url.format({pathname: "/groups"}))
           res.status(200).json({"message": "successfully removed group"})
           return;
         })
