@@ -103,6 +103,13 @@
             <div id="cy"></div>
         </div>
         <!-- close resultsPageGraphComponent3 -->
+        <div id="resultsPageGraphComponent4" style="text-align: center;">
+            <div class="weightedDistanceSliders">
+                <p id="weighteddistnum">Minimum Connections = 2</p>
+                <input type="range" min="1" max="4" value="2" class="slider" id="myRange1" oninput="changeDist()"
+                       style="width: 40%; "></input>
+            </div>
+        </div>
     </div>
 
 
@@ -111,8 +118,8 @@
     <img id="saveableGraphImage">
 
     <!-- Scripts for result page functionality -->
-    <% include ../snippets/resultScripts.ejs %>
+    <% include ../snippets/uploadResultScripts.ejs %>
     <!-- Scripts for downloading the sample information -->
-    <% include ../snippets/saveCsvScript.ejs %>
+
 
 </div>

@@ -33,7 +33,7 @@
      * Sets up the popups which will appear when the user clicks on one of the nodes.
      *
      */
-    var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
+    var sampleIdentity = "New Sample";
     console.log("HELP");
     console.log(sampleIdentity);
 
@@ -41,7 +41,7 @@
         container: document.getElementById('cy'),
         elements: [
             // nodes
-            { data: { id: sampleIdentity }, style: {'background-color': 'grey'} }
+            {data: {id: sampleIdentity}, style: {'background-color': 'grey'}}
         ],
         style: [{
             selector: 'node', style: {'background-color': '#468e94', label: 'data(id)'},
@@ -59,29 +59,21 @@
     let same_loc = <%- JSON.stringify(same_locations) %>;
     let same_ho = <%- JSON.stringify(same_hosts) %>;
     let same_iso = <%- JSON.stringify(same_isolations) %>;
-    let weighted_dist = <%- JSON.stringify(weighted_distance) %>;
 
     // Add nodes for samples with the same sequence type and connect them
     // Iterate through the SQL results
     same_sq.forEach(function(same_sequence) {
         let same_sequence_sample_id = same_sequence.sample_id;
         if (same_sequence_sample_id != sampleIdentity){
-
-            weighted_dist.forEach(function (weighted_distance_list) {
-                if (weighted_distance_list.comparison_sample == same_sequence.name) {
-
-                    // Create nodes and assign each node summary information
-                    cy.add({
-                        data: {
-                            id: same_sequence_sample_id,
-                            seq: same_sequence.st,
-                            loc: same_sequence.country,
-                            strain: same_sequence.strain,
-                            host: same_sequence.host,
-                            iso: same_sequence.isolation_source,
-                            dist: weighted_distance_list.distance
-                        }
-                    });
+            // Create nodes and assign each node summary information
+            cy.add({
+                data: {
+                    id: same_sequence_sample_id,
+                    seq: same_sequence.st,
+                    loc: same_sequence.country,
+                    strain: same_sequence.strain,
+                    host: same_sequence.host,
+                    iso: same_sequence.isolation_source,
                 }
             });
             //cy.$id(same_sequence_sample_id).addClass('seq');
@@ -111,18 +103,14 @@
         let same_location_sample_id = same_location.sample_id;
         if (same_location_sample_id != sampleIdentity){
             if(cy.$id(same_location_sample_id).empty()){
-                weighted_dist.forEach(function (weighted_distance_list) {
-                    if (weighted_distance_list.comparison_sample == same_location.name) {
-
-                        // Create nodes and assign each node summary information
-                        cy.add({
-                            data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
-                                host: same_location.host, iso: same_location.isolation_source, dist: weighted_distance_list.distance},
-                        });
-                        // Add nodes to the collection
-                        collection = collection.add(cy.$id(same_location_sample_id));
-                    }
+                // Create nodes and assign each node summary information
+                cy.add({
+                    data: {id: same_location_sample_id, seq: same_location.st, loc: same_location.country, strain: same_location.strain,
+                        host: same_location.host, iso: same_location.isolation_source},
                 });
+                // Add nodes to the collection
+                collection = collection.add(cy.$id(same_location_sample_id));
+
             }
             //cy.$id(same_location_sample_id).addClass('loc');
             var source = same_location_sample_id;
@@ -148,18 +136,12 @@
         let same_host_sample_id = same_host.sample_id;
         if (same_host_sample_id != sampleIdentity){
             if(cy.$id(same_host_sample_id).empty()){
-                weighted_dist.forEach(function (weighted_distance_list) {
-                    if (weighted_distance_list.comparison_sample == same_host.name) {
-
-                        // Create nodes and assign each node summary information
-                        cy.add({
-                            data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
-                                host: same_host.host, iso: same_host.isolation_source, dist: weighted_distance_list.distance}
-                        });
-                        // Add nodes to the collection
-                        collection = collection.add(cy.$id(same_host_sample_id));
-                    }
+                cy.add({
+                    data: {id: same_host_sample_id, seq: same_host.st, loc: same_host.country, strain: same_host.strain,
+                        host: same_host.host, iso: same_host.isolation_source}
                 });
+                // Add nodes to the collection
+                collection = collection.add(cy.$id(same_host_sample_id));
             }
             //cy.$id(same_host_sample_id).addClass('host');
             var source = same_host_sample_id;
@@ -185,18 +167,13 @@
         let same_iso_sample_id = same_isolation.sample_id;
         if (same_iso_sample_id != sampleIdentity){
             if(cy.$id(same_iso_sample_id).empty()){
-                weighted_dist.forEach(function (weighted_distance_list) {
-                    if (weighted_distance_list.comparison_sample == same_isolation.name) {
-
-                        // Create nodes and assign each node summary information
-                        cy.add({
-                            data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
-                                host: same_isolation.host, iso: same_isolation.isolation_source, dist: weighted_distance_list.distance}
-                        });
-                        // Add nodes to the collection
-                        collection = collection.add(cy.$id(same_iso_sample_id));
-                    }
+                // Create nodes and assign each node summary information
+                cy.add({
+                    data: {id: same_iso_sample_id, seq: same_isolation.st, loc: same_isolation.country, strain: same_isolation.strain,
+                        host: same_isolation.host, iso: same_isolation.isolation_source}
                 });
+                // Add nodes to the collection
+                collection = collection.add(cy.$id(same_iso_sample_id));
             }
             //cy.$id(same_iso_sample_id).addClass('iso');
             var source = same_iso_sample_id;
@@ -218,29 +195,26 @@
 
     // Set up the initial display for the user by limiting the minimum connections to 2 and maximum weighted distance to 0.015
     // Go through all of the elements in the collection
-    collection.forEach(function(ele, i ,eles) {
+    collection.forEach(function (ele, i, eles) {
         // Check if the element is a node
-        if(ele.isNode()){
+        if (ele.isNode()) {
             let e = ele.connectedEdges();
             // Check if the node has less than 2 connected edges and remove if true
-            if(e.length < 2){
-                ele.remove();
-            }
-            // Check if the node's sample has a weighted distance greater than 0.015 and remove if true
-            if (ele.data('dist') > 0.015){
+            if (e.length < 2) {
                 ele.remove();
             }
 
             // Set up links for all nodes to their respective sample results page
-            ele.on('click', function(evt){
+            ele.on('click', function (evt) {
                 let id = this.id();
-                function get_sample(){
+
+                function get_sample() {
                     let form = document.createElement("form");
                     let element = document.createElement("input");
                     form.action = '/result';
                     form.method = "get";
-                    element.name ="sampleSelection";
-                    element.value= id;
+                    element.name = "sampleSelection";
+                    element.value = id;
                     form.appendChild(element);
                     document.body.appendChild(form);
                     form.submit();
@@ -248,14 +222,13 @@
 
                 // Set up popup boxes for each node
                 popupS.confirm({
-                    content: '<b>Sample: </b>' + id +'<br><b>Sequence Type: </b>' + ele.data('seq') +'<br><b>Location: </b>' + ele.data('loc') +
-                    '<br><b>Strain: </b>' + ele.data('strain') +'<br><b>Host: </b>' + ele.data('host') +'<br><b>Isolation Source: </b>' + ele.data('iso') +
-                    '<br><b>Weighted Distance: </b>' + ele.data('dist'),
+                    content: '<b>Sample: </b>' + id + '<br><b>Sequence Type: </b>' + ele.data('seq') + '<br><b>Location: </b>' + ele.data('loc') +
+                        '<br><b>Strain: </b>' + ele.data('strain') + '<br><b>Host: </b>' + ele.data('host') + '<br><b>Isolation Source: </b>' + ele.data('iso'),
                     labelOk: 'View',
                     labelCancel: 'Cancel',
                     additionalButtonCancelClass: 'popUpButtonCSS',
                     additionalButtonOkClass: 'popUpButtonCSS',
-                    onSubmit: function() {
+                    onSubmit: function () {
                         get_sample();
                     }
                 });
@@ -291,25 +264,20 @@
     function called when clicking labels
     connType = string of the type of connection to hide
     */
-    function changeConnection(connType){
-        console.log(filters);
-        if(connType === 'location'){
+    function changeConnection(connType) {
+        if (connType === 'location') {
             filters.location = !filters.location;
             strikeThrough(filters.location, "locLegend");
-        }
-        else if(connType === 'sequence'){
+        } else if (connType === 'sequence') {
             filters.sequence = !filters.sequence;
             strikeThrough(filters.sequence, "seqLegend");
-        }
-        else if(connType === 'host'){
+        } else if (connType === 'host') {
             filters.host = !filters.host;
             strikeThrough(filters.host, "hostLegend");
-        }
-        else if(connType === 'isolation'){
+        } else if (connType === 'isolation') {
             filters.isolation = !filters.isolation;
             strikeThrough(filters.isolation, "isoLegend");
         }
-        console.log(filters);
         changeDist();
     }
 
@@ -318,15 +286,56 @@
     strike = boolean strikethrough or not
     id = element id to have text strikethrough
     */
-    function strikeThrough(strike, id){
-        if(strike){
+    function strikeThrough(strike, id) {
+        if (strike) {
             let ele = document.getElementById(id);
             ele.style.setProperty("text-decoration", "line-through");
-        }
-        else{
+        } else {
             let ele = document.getElementById(id);
             ele.style.setProperty("text-decoration", "none");
         }
+    }
+
+    function changeDist() {
+        let num = document.getElementById("myRange1").value;
+        collection.restore();
+        collection.forEach(function (ele, i, eles) {
+            if (ele.isEdge()) {
+                if (filters.location) {
+                    if (ele.classes().includes('loc')) {
+                        ele.remove();
+                    }
+                }
+                if (filters.isolation) {
+                    if (ele.classes().includes('iso')) {
+                        ele.remove();
+                    }
+                }
+                if (filters.host) {
+                    if (ele.classes().includes('host')) {
+                        ele.remove();
+                    }
+                }
+                if (filters.sequence) {
+                    if (ele.classes().includes('seq')) {
+                        ele.remove();
+                    }
+                }
+            }
+        });
+        collection.forEach(function (ele) {
+            if (ele.isNode()) {
+                let e = ele.connectedEdges();
+                if (e.length < num) {
+                    ele.remove();
+                }
+            }
+        })
+        // Change display above sliders to display new value
+        document.getElementById("weighteddistnum").innerHTML = "Minimum Connections = " + num;
+        cy.layout({
+            name: 'cola'
+        }).run()
     }
 
 
@@ -345,10 +354,10 @@
 
     <!-- zoomInGraph functionality-->
     function zoomInGraph() {
-        console.log("ZOOM IN - "+zoomAmount);
+        console.log("ZOOM IN - " + zoomAmount);
         zoomAmount = zoomAmount + 0.25;
         newZoom = zoomAmount;
-        console.log("IN - "+newZoom);
+        console.log("IN - " + newZoom);
 
         cy.zoom({level: newZoom});
 
@@ -356,11 +365,11 @@
 
     <!-- zoomOutGraph functionality-->
     function zoomOutGraph() {
-        console.log("ZOOM OUT - "+zoomAmount);
+        console.log("ZOOM OUT - " + zoomAmount);
 
         zoomAmount = zoomAmount - 0.25;
         newZoom = zoomAmount;
-        console.log("OUT - "+newZoom);
+        console.log("OUT - " + newZoom);
 
         cy.zoom({level: newZoom});
 
@@ -373,18 +382,18 @@
         console.log("download graph");
 
         var png64 = cy.png();
-        saveImageAs(png64, `StaphBook-Sample ${<%- JSON.stringify(sample_ID) %>} Network.png`);
+        saveImageAs(png64, `StaphBook-Sample ${sampleIdentity} Network.png`);
     }
 
     function saveImageAs(base64Data, fileName) { //TODO: Check for multi-browser functionality
-      //  var encodedUri = encodeURI(csvContent);
-      let link = document.createElement("a");
-      link.setAttribute("href", base64Data);
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link); // for Firefox
-      //link.setAttribute("href", base64Data);
-      //link.setAttribute("download", fileName);
-      link.click();
+        //  var encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", base64Data);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link); // for Firefox
+        //link.setAttribute("href", base64Data);
+        //link.setAttribute("download", fileName);
+        link.click();
     }
 
     <!-- expandGraph functionality-->
@@ -392,10 +401,10 @@
         var windowHeight = window.innerHeight;
         var graphHeight = windowHeight - 175;
 
-        document.getElementById("resultsPageGraphComponent3").style.height= graphHeight + "px";
+        document.getElementById("resultsPageGraphComponent3").style.height = graphHeight + "px";
 
         <!-- specifically modify cytoscape graph -->
-        document.getElementById("cy").style.height= graphHeight + "px";
+        document.getElementById("cy").style.height = graphHeight + "px";
 
         centerGraph();
 
@@ -410,12 +419,13 @@
         cy.reset();
 
     }
+
     <!-- minimize graph functionality -->
     function minimizeGraph() {
-        document.getElementById("resultsPageGraphComponent3").style.height= 400 + "px";
+        document.getElementById("resultsPageGraphComponent3").style.height = 400 + "px";
 
         <!-- specifically modify cytoscape graph -->
-        document.getElementById("cy").style.height= 400 + "px";
+        document.getElementById("cy").style.height = 400 + "px";
 
         cy.center();
         cy.reset();
