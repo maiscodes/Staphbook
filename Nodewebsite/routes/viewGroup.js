@@ -1,5 +1,7 @@
 var express = require('express')
 var router = express.Router()
+let url = require('url')
+
 
 router.get('/viewGroup', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
@@ -141,4 +143,37 @@ router.post('/removeGroupSample', function (req, res) {
     // Include update time stamp here instead?
 })
 
+router.post('/removeGroup', function (req, res) {
+  let userLoggedIn = req.session.userStatus === "loggedIn";
+  let groupId = req.body.groupId;
+
+  // const loggedIn = async () => {
+  //   return req.session.userStatus === "loggedIn";
+  // }
+  // loggedIn().then((userLoggedIn) => {
+    console.log(userLoggedIn);
+    if (userLoggedIn) {
+      let value = req.session.userEmail;
+      let email = decodeURIComponent(value);
+      console.log("=============================================================");
+      req.knex('groups')
+        .where({ email: email, group_id: groupId })
+        .del()
+        .then(() => {
+          console.log("GROUP DELETED")
+          //res.redirect(url.format({pathname: "/groups"}))
+          res.status(200).json({"message": "successfully removed group"})
+          return;
+        })
+        .catch((err) => {
+          console.log("err");
+          res.status(401).json({ "message": "error deleting group" })
+          return;
+        });
+      return;
+    }
+    res.status(401).json({"message": "permissions error - user not logged in"})
+  // })
+  })
+  
 module.exports = router;
