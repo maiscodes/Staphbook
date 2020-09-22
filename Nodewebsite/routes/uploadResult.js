@@ -54,7 +54,7 @@ router.get('/', function (req, res) {
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
         .where('mlst_mlst.sample_id', 'in', same_sequence_samples);
 
-    let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['country', location]);
+    let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['country', "%"+location+"%"]);
     let getSameLocationSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
@@ -62,7 +62,7 @@ router.get('/', function (req, res) {
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
         .where('mlst_mlst.sample_id', 'in', same_location_samples);
 
-    let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['host', host]);
+    let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['host', "%"+host+"%"]);
     let getSameHostSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
@@ -70,7 +70,7 @@ router.get('/', function (req, res) {
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
         .where('mlst_mlst.sample_id', 'in', same_host_samples);
 
-    let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? = ?', ['isolation_source', iso]);
+    let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['isolation_source', "%"+iso+"%"]);
     let getSameIsoSourceSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
