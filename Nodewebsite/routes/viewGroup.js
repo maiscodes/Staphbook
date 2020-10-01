@@ -5,7 +5,7 @@ router.get('/viewGroup', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let groupID = req.query.groupId;
 
-    // TODO: HANDLE ERRORS 
+    // TODO: HANDLE ERRORS
     if (userLoggedIn == undefined) {
       userLoggedIn = False;
     }
@@ -26,11 +26,27 @@ router.get('/viewGroup', function (req, res) {
                               .from('group_samples')
                               .where({group_id: groupID || 0});
 
-        Promise.all([getGroupsInfo, getSampleIds]).then(function([groupInfo, sampleIds]) {
+        let getSharingInfo = req.knex
+                             .select('*')
+                             .from('group_sharing')
+                             .where({group_id: groupID || 0}); // if length if 0, your group, not zero, if email is _public_
+
+
+        Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(function([groupInfo, sampleIds, sharingInfo]) {
           groupInfo = groupInfo[0];
           if (sampleIds.length < 1) {
             sampleIds = [ { sample_id: -1 } ];
           }
+          let status = "Your group"; // Tag group status for user
+          if (sharingInfo.length >= 1) {
+            status = "Private group";
+            for (share in sharingInfo) {
+              if (share.share_to_email == "_public_") {
+                status = "Public group";
+              }
+            }
+          }
+          groupInfo.status = status;
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
           name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
               .from('mlst_mlst')
@@ -59,7 +75,8 @@ router.get('/viewGroup', function (req, res) {
                 res.render('pages/viewGroup', {
                     userLoggedIn: userLoggedIn,
                     samples: sampleInfos,
-                    groupInfo: groupInfo
+                    groupInfo: groupInfo,
+                    sharingInfo: sharingInfo
                 });
               });
         })

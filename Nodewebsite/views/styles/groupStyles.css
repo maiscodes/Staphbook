@@ -4,13 +4,13 @@
   text-align: center;
 }
 
-#sharedGroupsButton, #userGroupsButton {
+#publicGroupsButton, #sharedGroupsButton, #userGroupsButton {
   background-color: white;
   border: 1px solid white;
   borde-radius: 5px;
 }
 
-#sharedGroupsButton:hover, #userGroupsButton:hover {
+#publicGroupsButton:hover, #sharedGroupsButton:hover, #userGroupsButton:hover {
   background-color: #fcfcfc;
 }
 
@@ -58,6 +58,11 @@
 }
 
 /* Group Samples Page */
+
+#groupDescription {
+  margin-top: 1em;
+  margin-bottom: 2em;
+}
 
 /* Edit button */
 #groupSampleEditButton:focus, #groupEditButton:focus {
@@ -257,4 +262,37 @@
 
 .dropDownButton:hover {
   background-color: #f8f9fa;
+}
+
+/* Share groups functionality */
+#displayUsers {
+  margin-top: 1em;
+}
+
+#status {
+  color: white;
+  background-color: #6ad8eb;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.5em;
+  padding-left: 1.7em;
+  padding-right: 1.7em;
+  margin-bottom: 0.7em;
+}
+
+#addUserButton, #makePublicButton {
+  padding: 0.5em;
+  background-color: white;
+  border-radius: 2em;
+  padding-left: 1.7em;
+  padding-right: 1.7em;
+  border: 1px solid #dbdbdb;
+  color: #468e94;
+  margin: 0.2em;
+}
+
+#addUserButton:hover, #makePublicButton:hover {
+  background-color: #1ABC9C;
+  border: 1px solid #1ABC9C;
+  color: white;
 }

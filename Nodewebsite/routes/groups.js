@@ -10,62 +10,89 @@ router.get('/groups', function (req, res) {
     let haveGroups = false;
 
     if ( userLoggedIn ) {
-      let groupCount = req.knex
+      let getGroupCount = req.knex
                           .select('group_id as sample_group_id', req.knex.raw('COUNT(sample_id) as count'))
                           .from('group_samples')
                           .groupBy('sample_group_id')
                           .as('group_samples');
 
       // Get public groups _all_users_
-
-      // Get shared groups
-      let sharedGroupIds = req.knex
+      let getPublicGroupIds = req.knex
                               .select('group_id')
                               .from('group_sharing')
-                              .where({share_to_email: email});
+                              .where({share_to_email: '_all_users_'});
 
-      req.knex
-        .select('*')
-        .from('groups')
-        .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
-        .where({email: email})
-        .then((groups) => {
-          console.log(groups);
-          for (i = 0; i < groups.length; i++) {
-            if (groups[i].count == undefined) {
-              groups[i].count = 0;
-            }
-            if (groups[i].description.length >= 100) {
-              groups[i].description = `${groups[i].description.substring(0,100)}...`;
-            }
+      // Get shared groups
+      let getSharedGroupIds = req.knex
+                              .select('group_id')
+                              .from('group_sharing')
+                              .where({share_to_email: email})
+                              .whereNotIn('group_id', getPublicGroupIds);
+
+      let getGroupInfo = req.knex
+                            .select('*')
+                            .from('groups')
+                            .leftJoin(getGroupCount, 'groups.group_id', 'group_samples.sample_group_id')
+                            .where({email: email});
+
+      let getpublicGroups = req.knex
+                                  .select('*')
+                                  .from('groups')
+                                  .leftJoin(getGroupCount, 'groups.group_id', 'group_samples.sample_group_id')
+                                  .whereNot({email: email}) // Not own groups
+                                  .where('group_id', 'in', getPublicGroupIds);
+
+      let getsharedGroups = req.knex
+                                  .select('*')
+                                  .from('groups')
+                                  .leftJoin(getGroupCount, 'groups.group_id', 'group_samples.sample_group_id')
+                                  .whereNot({email: email})
+                                  .where('group_id', 'in', getSharedGroupIds);
+
+      Promise.all([getGroupInfo, getpublicGroups, getsharedGroups]).then(function([userGroups, publicGroups, sharedGroups]) {
+        console.log(userGroups);
+        for (i = 0; i < userGroups.length; i++) {
+          if (userGroups[i].count == undefined) {
+            userGroups[i].count = 0;
           }
+          if (userGroups[i].description.length >= 100) {
+            userGroups[i].description = `${userGroups[i].description.substring(0,100)}...`;
+          }
+        }
 
-          req.knex
-            .select('*')
-            .from('groups')
-            .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
-            .whereNot({email: email}) // Not own groups
-            .where('group_id', 'in', sharedGroupIds)
-            .then((sharedGroupsInfo) => {
-              console.log(sharedGroupsInfo);
-              for (i = 0; i < sharedGroupsInfo.length; i++) {
-                if (sharedGroupsInfo[i].count == undefined) {
-                  sharedGroupsInfo[i].count = 0;
-                }
-                if (sharedGroupsInfo[i].description.length >= 100) {
-                  sharedGroupsInfo[i].description = `${sharedGroupsInfo[i].description.substring(0,100)}...`;
-                }
-              }
-              res.render('pages/groups', {
-                  userLoggedIn: userLoggedIn,
-                  groups: groups,
-                  sharedGroups: sharedGroupsInfo,
-                  haveGroups: true
-              });
+        console.log(publicGroups);
+        for (i = 0; i < publicGroups.length; i++) {
+          if (publicGroups[i].count == undefined) {
+            publicGroups[i].count = 0;
+          }
+          if (publicGroups[i].description.length >= 100) {
+            publicGroups[i].description = `${publicGroups[i].description.substring(0,100)}...`;
+          }
+        }
 
-          })
+        console.log(sharedGroups);
+        for (i = 0; i < sharedGroups.length; i++) {
+          if (sharedGroups[i].count == undefined) {
+            sharedGroups[i].count = 0;
+          }
+          if (sharedGroups[i].description.length >= 100) {
+            sharedGroups[i].description = `${sharedGroups[i].description.substring(0,100)}...`;
+          }
+        }
 
+        res.render('pages/groups', {
+            userLoggedIn: userLoggedIn,
+            groups: userGroups,
+            publicGroups: publicGroups,
+            sharedGroups: sharedGroups,
+            haveGroups: true
         });
+
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+
     }
     else{
         res.status(404);

@@ -1,16 +1,14 @@
 <div class="resultsPageTopComponent groupsPage">
     <!-- Display group status to user -->
+
     <!-- Display Download Options -->
-    <div class="dropdown">
-    <button id="downloadButton" type="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Download
+    <button id="downloadButton" type="button" data-toggle="dropdown">
+      Download
     </button>
     <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <button id="downloadRadarGraphButton" class="dropDownButton" onclick="downloadRadarGraph()">Radar Graph</button>
       <button id="downloadBarGraphButton" class="dropDownButton" onclick="downloadBarGraphs()">Bar Graphs</button>
       <button id="downloadGroupGenomesButton" class="dropDownButton" onclick="downloadGenomeInformation()">Genomes</button>
-    </div>
     </div>
 
     <!-- Display Group Information  -->
@@ -23,8 +21,9 @@
     </h1>
 
     <div id="groupEditErrorMessage" class="errorMessage"></div>
+
     <div id="groupEditBar">
-    <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
+      <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
     </div>
 
     <p id="groupDescription" class="groupDescription">
@@ -82,6 +81,15 @@
    </div>
    <div id="groupSamplesCards"></div>
   </div>
+
+  <!-- Display collaborators -->
+  <h4>Collaborators</h4>
+  <div id= "displayUsers">
+    <div id="userContainer"></div>
+    <button id="addUserButton">Share</button>
+    <button id="makePublicButton">Make Public</button>
+  </div>
+
 
   <% include ../snippets/downloadGroupInfoScript.ejs %>
   <% include ../snippets/viewGroupScript.ejs %>
