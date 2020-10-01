@@ -27,7 +27,7 @@ router.get('/viewGroup', function (req, res) {
                               .where({group_id: groupID || 0});
 
         let getSharingInfo = req.knex
-                             .select('*')
+                             .select('share_to_email')
                              .from('group_sharing')
                              .where({group_id: groupID || 0}); // if length if 0, your group, not zero, if email is _public_
 
@@ -71,6 +71,7 @@ router.get('/viewGroup', function (req, res) {
                   res.render('pages/error', errorPageConfig);
                   return;
                 }
+                console.log(sharingInfo);
 
                 res.render('pages/viewGroup', {
                     userLoggedIn: userLoggedIn,

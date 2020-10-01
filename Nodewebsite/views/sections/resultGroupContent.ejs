@@ -85,9 +85,15 @@
   <!-- Display collaborators -->
   <h4>Collaborators</h4>
   <div id= "displayUsers">
-    <div id="userContainer"></div>
-    <button id="addUserButton">Share</button>
+    <button id="addUserButton" data-toggle="dropdown">Share</button>
+    <div id="addUserDropDownMenu" class="dropdown-menu" aria-labelledby="addUserDropDownMenuButton">
+      <input id="inputUserEmail" type="text">
+      <form id="userForm" action='/addUserToGroup' method="post">
+      <button id="submitUserEmailButton" onclick="addNewCollaborator()">Add</button>
+      </form>
+    </div>
     <button id="makePublicButton">Make Public</button>
+    <div id="userContainer"></div>
   </div>
 
 

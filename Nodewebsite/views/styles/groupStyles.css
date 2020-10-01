@@ -264,7 +264,7 @@
   background-color: #f8f9fa;
 }
 
-/* Share groups functionality */
+/* Collaborator functionality */
 #displayUsers {
   margin-top: 1em;
 }
@@ -295,4 +295,56 @@
   background-color: #1ABC9C;
   border: 1px solid #1ABC9C;
   color: white;
+}
+
+#userContainer {
+  margin-top: 1em;
+}
+
+.ownerLabel {
+  width: 3em;
+  height: 3em;
+  background-color: #dbdbdb;
+  border-radius: 2em;
+  border: 2px solid #1ABC9C;
+  color: #468e94;
+  margin: 0.2em;
+}
+
+.collaboratorLabel {
+  width: 3em;
+  height: 3em;
+  background-color: #dbdbdb;
+  border-radius: 2em;
+  border: 1px solid #dbdbdb;
+  color: #468e94;
+  margin: 0.2em;
+}
+
+#addUserDropDownMenu {
+  padding: 1em;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.08), 0 0 10px 0 rgba(0,0,0,0.08);
+}
+
+#inputUserEmail {
+  border: 1px solid #dbdbdb;
+  border-radius: 0.1em;
+}
+
+#submitUserEmailButton {
+  background-color: white;
+  border-radius: 0.3em;
+  border: 1px solid #1ABC9C;
+  color: white;
+  padding-left: 0.7em;
+  padding-right: 0.7em;
+  background-color: #1ABC9C;
+}
+
+#submitUserEmailButton:hover {
+  font-weight: bold;
+}
+
+#userForm {
+  display: inline;
 }

@@ -88,6 +88,7 @@ let favouriteRouter = require("./routes/favourites");
 let groupsRouter = require("./routes/groups");
 let viewGroupRouter = require("./routes/viewGroup");
 let createGroupRouter = require("./routes/createGroup");
+let shareGroupRouter = require("./routes/shareGroup");
 
 /* --------------------------------------------------------------------------------
  *
@@ -111,6 +112,7 @@ app.use("/favourites", favouriteRouter);
 app.use("/", groupsRouter);
 app.use("/", viewGroupRouter);
 app.use("/createGroup", createGroupRouter);
+app.use("/", shareGroupRouter);
 
 
 // index page
