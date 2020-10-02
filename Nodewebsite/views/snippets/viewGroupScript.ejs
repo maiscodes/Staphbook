@@ -746,24 +746,29 @@ function removeGenomeSamples() {
   }
 
   function loadCollaborators() {
+    let owner = <%- JSON.stringify(groupInfo.email) %>;
     let collaborators = <%- JSON.stringify(sharingInfo) %>;
-    console.log(collaborators);
+    //console.log(collaborators);
     let container = document.getElementById('userContainer');
     collaborators.forEach((collaborator)=> {
-      console.log(collaborator);
+      //console.log(collaborator);
       let email = collaborator.share_to_email;
-      console.log(email);
-      let node = document.createElement("button");
-      node.setAttribute("class", "collaboratorLabel");
-      node.setAttribute("title", email);
-      node.innerHTML = email.substring(0,2);
-      container.appendChild(node);
+      if (email != owner) {
+        //console.log(email);
+        let node = document.createElement("button");
+        node.setAttribute("class", "collaboratorLabel");
+        node.setAttribute("title", email);
+        node.innerHTML = email.substring(0,2);
+        container.appendChild(node);
+      }
     });
   }
 
   function addNewCollaborator() {
     // Get email
     let email = document.getElementById('inputUserEmail').value;
+    console.log(email);
+    console.log(<%- groupInfo.group_id %>);
     let baseUrl = "http://127.0.0.1:8000";
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
@@ -787,6 +792,7 @@ function removeGenomeSamples() {
               body: JSON.stringify({groupId: <%- groupInfo.group_id %>, modified: isoDate})
               })
               .then(responseUpdate => {
+                console.log("Added User");
                 if (responseUpdate.status == 200) {
                   location.reload(true); // Update page with new statistics and cards
                   return;

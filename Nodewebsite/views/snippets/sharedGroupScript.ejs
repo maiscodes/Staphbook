@@ -76,7 +76,7 @@
     let displayGroupsDiv = document.getElementById('groupsCards');
     displayGroupsDiv.innerHTML = "";
 
-    if ( groups.length > 1 ) {
+    if ( groups.length >= 1 ) {
       let groupCardForm = document.createElement('form');
       groupCardForm.setAttribute('action', '/viewGroup');
       groupCardForm.setAttribute('method', 'get');

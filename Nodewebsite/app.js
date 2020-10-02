@@ -75,6 +75,10 @@ var userAlreadyExists = true;
 var groupAlreadyExists = true;
 var favSampleID;
 
+// Middleware
+let authenticateUserView = require('./middleware/authenticationViewGroup.js');
+let authenticateUserEdit = require('./middleware/authenticationEditGroup.js');
+
 /*
 ROUTERS
  */
@@ -88,7 +92,9 @@ let favouriteRouter = require("./routes/favourites");
 let groupsRouter = require("./routes/groups");
 let viewGroupRouter = require("./routes/viewGroup");
 let createGroupRouter = require("./routes/createGroup");
-let shareGroupRouter = require("./routes/shareGroup");
+let shareGroupRouter = require("./routes/addUserToGroup");
+let addGroupSampleRouter = require("./routes/addGroupSample");
+let removeGroupSampleRouter = require("./routes/removeGroupSample");
 
 /* --------------------------------------------------------------------------------
  *
@@ -110,9 +116,11 @@ app.use("/advSearchResults", advSearchResultRouter);
 app.use("/login", loginRouter);
 app.use("/favourites", favouriteRouter);
 app.use("/", groupsRouter);
-app.use("/", viewGroupRouter);
+app.use("/viewGroup", authenticateUserView, viewGroupRouter);
+app.use("/removeGroupSample", authenticateUserEdit, removeGroupSampleRouter)
+app.use("/addGroupSample", authenticateUserEdit, addGroupSampleRouter)
 app.use("/createGroup", createGroupRouter);
-app.use("/", shareGroupRouter);
+app.use("/addUserToGroup", authenticateUserEdit, shareGroupRouter);
 
 
 // index page

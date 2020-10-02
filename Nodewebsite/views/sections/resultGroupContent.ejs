@@ -88,9 +88,7 @@
     <button id="addUserButton" data-toggle="dropdown">Share</button>
     <div id="addUserDropDownMenu" class="dropdown-menu" aria-labelledby="addUserDropDownMenuButton">
       <input id="inputUserEmail" type="text">
-      <form id="userForm" action='/addUserToGroup' method="post">
-      <button id="submitUserEmailButton" onclick="addNewCollaborator()">Add</button>
-      </form>
+      <button id="submitUserEmailButton" onclick="addNewCollaborator()" type="submit">Add</button>
     </div>
     <button id="makePublicButton">Make Public</button>
     <div id="userContainer"></div>
