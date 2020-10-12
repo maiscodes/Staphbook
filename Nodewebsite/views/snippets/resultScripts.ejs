@@ -292,7 +292,6 @@
     connType = string of the type of connection to hide
     */
     function changeConnection(connType){
-        console.log(filters);
         if(connType === 'location'){
             filters.location = !filters.location;
             strikeThrough(filters.location, "locLegend");
@@ -309,7 +308,6 @@
             filters.isolation = !filters.isolation;
             strikeThrough(filters.isolation, "isoLegend");
         }
-        console.log(filters);
         changeDist();
     }
 
