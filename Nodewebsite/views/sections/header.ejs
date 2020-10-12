@@ -20,7 +20,7 @@
         <!--Search form-->
         <form class="form-inline" action='/searchResults' method="get" >
           <!--Search form dropdown-->
-          <select id="options" name="searchOption" onchange="changeInput()" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
+          <select id="options" name="searchOption" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
             <option value="Sequence">Sequence Type</option>
             <option value="Location">Location</option>
             <option value="Strain Name">Strain Name</option>
@@ -30,7 +30,7 @@
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
-            <input id="input" type="number" max="100000" name="searchInput"  style="border: 0.5px solid gray" class="form-inline form-control-sm typeahead tt-query "
+            <input id="input" name="searchInput"  style="border: 0.5px solid gray" class="form-inline form-control-sm typeahead tt-query "
                    autocomplete="off" spellcheck="false" placeholder="Type your search here" aria-label="Search" aria-describedby="basic-addon2">
             <div class="input-group-append">
               <button class="btn btn-dark" type="submit">
@@ -40,70 +40,6 @@
           </div>
         </form>
       </li>
-      <script>
-        function changeInput(){
-            $('input.typeahead').typeahead('destroy');
-            let option = document.getElementById("options").value;
-            if(option == "Sequence"){
-                document.getElementById("input").type = 'number';
-                document.getElementById("input").max = '10000';
-                $('input.typeahead').typeahead({
-                    name: 'Sequence',
-                    remote: {
-                        url: 'http://127.0.0.1:8000/predictSeq?key=%QUERY'
-                    },
-                    limit: 10
-                });
-            } else if(option == "Sample"){
-                document.getElementById("input").type = 'number';
-                document.getElementById("input").max = '100000';
-                $('input.typeahead').typeahead({
-                    name: 'Sample',
-                    remote: {
-                        url: 'http://127.0.0.1:8000/predictSam?key=%QUERY'
-                    },
-                    limit: 10
-                });
-            } else if(option == "Location"){
-                document.getElementById("input").type = 'text';
-                $('input.typeahead').typeahead({
-                    name: 'Location',
-                    remote: {
-                        url: 'http://127.0.0.1:8000/predictLoc?key=%QUERY'
-                    },
-                    limit: 10
-                });
-            } else if(option == "Strain Name"){
-                document.getElementById("input").type = 'text';
-                    $('input.typeahead').typeahead({
-                        name: 'Strain',
-                        remote: {
-                            url: 'http://127.0.0.1:8000/predictStr?key=%QUERY'
-                        },
-                        limit: 10
-                    });
-            } else if(option == "Host"){
-                document.getElementById("input").type = 'text';
-                $('input.typeahead').typeahead({
-                    name: 'Host',
-                    remote: {
-                        url: 'http://127.0.0.1:8000/predictHost?key=%QUERY'
-                    },
-                    limit: 10
-                });
-            } else if(option == "Source"){
-                document.getElementById("input").type = 'text';
-                $('input.typeahead').typeahead({
-                    name: 'Source',
-                    remote: {
-                        url: 'http://127.0.0.1:8000/predictIso?key=%QUERY'
-                    },
-                    limit: 10
-                });
-            }
-
-        }
-      </script>
     </ul>
 
     <!--Link to advanced search page-->
@@ -148,16 +84,5 @@
 	  
     </ul>
   </div>
-  <script>
-      $(document).ready(function(){
-          $('input.typeahead').typeahead({
-              name: 'Sequence',
-              remote: {
-                  url: 'http://127.0.0.1:8000/predictSeq?key=%QUERY'
-              },
-              limit: 10
-          });
-      });
-  </script>
 
 </nav>
