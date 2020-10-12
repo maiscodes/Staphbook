@@ -33,17 +33,18 @@ router.get('/', function (req, res) {
     if (req.query.name){
         name = req.query.name;
     }
+    else name = 'New sample'
     if (req.query.st) {
         sequence_type = req.query.st;
     }
     if (req.query.location) {
-        location = req.query.location;
+        location = "%"+req.query.location+"%";
     }
     if (req.query.host) {
-        host = req.query.host;
+        host = "%"+req.query.host+"%";
     }
     if (req.query.isolation_source) {
-        iso = req.query.isolation_source;
+        iso = "%"+req.query.isolation_source+"%";
     }
 
     let same_sequence_samples = req.knex.select('sample_id').from('sample_metadata').where({st: sequence_type});
@@ -52,31 +53,35 @@ router.get('/', function (req, res) {
         .from('mlst_mlst')
         .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-        .where('mlst_mlst.sample_id', 'in', same_sequence_samples);
+        .where('mlst_mlst.sample_id', 'in', same_sequence_samples)
+        .limit(20);
 
-    let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['country', "%"+location+"%"]);
+    let same_location_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['country', location]);
     let getSameLocationSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
         .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-        .where('mlst_mlst.sample_id', 'in', same_location_samples);
+        .where('mlst_mlst.sample_id', 'in', same_location_samples)
+        .limit(20);
 
-    let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['host', "%"+host+"%"]);
+    let same_host_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['host', host]);
     let getSameHostSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
         .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-        .where('mlst_mlst.sample_id', 'in', same_host_samples);
+        .where('mlst_mlst.sample_id', 'in', same_host_samples)
+        .limit(20);
 
-    let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['isolation_source', "%"+iso+"%"]);
+    let same_iso_samples = req.knex.select('sample_id').from('sample_metadata').whereRaw('metadata->>? ILIKE ?', ['isolation_source', iso]);
     let getSameIsoSourceSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
         name: 'sample_sample.name', id: 'sample_sample.id'})
         .from('mlst_mlst')
         .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-        .where('mlst_mlst.sample_id', 'in', same_iso_samples);
+        .where('mlst_mlst.sample_id', 'in', same_iso_samples)
+        .limit(20);
 
     Promise
         .all([getSameSequenceSampleInfo, getSameLocationSampleInfo, getSameHostSampleInfo, getSameIsoSourceSampleInfo])
@@ -112,10 +117,10 @@ router.get('/', function (req, res) {
             res.render('pages/uploadResult', {
                 uploaded: {
                     name: name,
-                    st: sequence_type,
-                    country: location,
-                    host: host,
-                    isolation_source: iso,
+                    st: req.query.st,
+                    country: req.query.location,
+                    host: req.query.host,
+                    isolation_source: req.query.isolation_source,
                 },
                 userLoggedIn: userLoggedIn,
                 same_hosts: same_host,
