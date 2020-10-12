@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
     let strainInput = req.query.strainInput;
     let hostInput = req.query.hostInput;
     let sourceInput = req.query.sourceInput;
-    if(strainInput == "" && sequenceInput=="" && startDate=="" && endDate=="" && locationInput=="" && hostInput=="" && sourceInput=="") {
+    if(strainInput === "" && sequenceInput === "" && startDate === "" && endDate === "" && locationInput === "" && hostInput === "" && sourceInput === "") {
         res.redirect('/advancedSearch');
     }
     //TO HERE
@@ -26,26 +26,26 @@ router.get('/', function (req, res) {
             .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
             .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
             .modify(function (queryBuilder){
-                if(req.query.sequenceInput){
-                    queryBuilder.where({'mlst_mlst.st': req.query.sequenceInput});
+                if(sequenceInput){
+                    queryBuilder.where({'mlst_mlst.st': sequenceInput});
                 }
-                if(req.query.inputDateStart){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) >= ?", [req.query.inputDateStart])
+                if(startDate){
+                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) >= ?", [startDate])
                 }
-                if(req.query.inputDateEnd){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) <= ?", [req.query.inputDateStart])
+                if(endDate){
+                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) <= ?", [endDate])
                 }
-                if(req.query.locationInput){
-                    queryBuilder.whereRaw("metadata->>'country' ILIKE ?", ["%"+req.query.locationInput+"%"])
+                if(locationInput){
+                    queryBuilder.whereRaw("metadata->>'country' ILIKE ?", ["%"+locationInput+"%"])
                 }
-                if(req.query.strainInput){
-                    queryBuilder.whereRaw("metadata->>'strain' ILIKE ?", ["%"+req.query.strainInput+"%"])
+                if(strainInput){
+                    queryBuilder.whereRaw("metadata->>'strain' ILIKE ?", ["%"+strainInput+"%"])
                 }
-                if(req.query.hostInput){
-                    queryBuilder.whereRaw("metadata->>'host' ILIKE ?", ["%"+req.query.hostInput+"%"])
+                if(hostInput){
+                    queryBuilder.whereRaw("metadata->>'host' ILIKE ?", ["%"+hostInput+"%"])
                 }
-                if(req.query.sourceInput){
-                    queryBuilder.whereRaw("metadata->>'isolation_source' ILIKE ?", ["%"+req.query.sourceInput+"%"])
+                if(sourceInput){
+                    queryBuilder.whereRaw("metadata->>'isolation_source' ILIKE ?", ["%"+sourceInput+"%"])
                 }
 
             })
