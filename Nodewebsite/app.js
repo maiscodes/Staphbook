@@ -57,9 +57,9 @@ app.use(bodyParser.json());
 
 //Cytoscape.js
 app.use('/cytoscape_scripts', express.static(__dirname + '/node_modules/cytoscape/dist/'));
-app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola/'));
+app.use('/cola', express.static(__dirname + '/node_modules/webcola'));
+app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola'));
 app.use('/popupS_scripts', express.static(__dirname + '/node_modules/popupS/'));
-app.use('/typehead_scripts', express.static(__dirname + '/node_modules/typehead/'));
 app.use('/filesaver_scripts', express.static(__dirname + '/node_modules/filesaver/'));
 
 //directories
