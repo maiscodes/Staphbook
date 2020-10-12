@@ -23,8 +23,6 @@ router.post('/', function (req, res) {
     let email = decodeURIComponent(req.body.email);
 
     req.knex.select("*").from("registered_users").where({ email: email }).then((result_registered_users, err) => {
-        console.log(err, result_registered_users);
-
         if (result_registered_users.length != 1) {
             console.log('user not registered');
             var userNotRegistered = true;
