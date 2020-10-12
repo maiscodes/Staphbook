@@ -9,11 +9,11 @@ const options = require('./knexfile.js');
 var knex = require('knex')(options);
 
 // Change secret to unique value
-app.use(session({ secret: "Shh, its a secret!" }));
+app.use(session({secret: "Shh, its a secret!"}));
 app.use(cors());
 
 //postgreSQL
-const { Pool, Client } = require('pg');
+const {Pool, Client} = require('pg');
 // Change secret to your login details for postgres
 //layout is const connectionString = 'postgresql://username:password@address/Database_name';
 
@@ -119,8 +119,8 @@ app.use("/uploadSample", uploadSampleRouter);
 
 // index page
 app.get('/', function (req, res) {
-    let favorites=[];
-    let suggested=[];
+    let favorites = [];
+    let suggested = [];
     let haveFavs = false;
     let haveSugs = false;
     if (req.session.userStatus === "loggedIn") {
@@ -129,156 +129,95 @@ app.get('/', function (req, res) {
         let email = decodeURIComponent(value);
         userNotRegistered = false;
 
-            req.knex
-                .select("*")
-                .from("user_favorites")
-                .where({ email: email })
-                .limit(4)
-                .then((fav_results, err) => {
-                    console.log("fav_results");
-                    console.log(fav_results, err);
-                    console.log(fav_results.length);
+        req.knex
+            .select('*')
+            .from('user_favorites')
+            .where({email: email})
+            .limit(4)
+            .then(favs => {
+                if(favs.length > 0){
+                    haveSugs = true;
+                    haveFavs = true;
 
-                    let fav_sample_list = [];
-                    if (fav_results.length > 0) {
-                        //maybe for-loop
-                        if (fav_results.length > 0) {
-                            fav_sample_list.push(fav_results[0].sample_id);
-                        }
-                        if (fav_results.length > 1) {
-                            fav_sample_list.push(fav_results[1].sample_id);
-                        }
-                        if (fav_results.length > 2) {
-                            fav_sample_list.push(fav_results[2].sample_id);
-                        }
-                        if (fav_results.length > 3) {
-                            fav_sample_list.push(fav_results[3].sample_id);
-                        }
+                    req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                        name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+                        .from('mlst_mlst')
+                        .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                        .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                        .modify(function (queryBuilder) {
+                            queryBuilder.where('mlst_mlst.sample_id', favs[0].sample_id || 0);
+                            for (i = 1; i < favs.length; i++) {
+                                queryBuilder.orWhere('mlst_mlst.sample_id', favs[i].sample_id);
+                            }
+                        })
+                        .then((favoriteSamples) => {
+                            //console.log(sampleInfos);
+                            for (sampleInfo of favoriteSamples) {
+                                sampleInfo.country = sampleInfo.metadata.country;
+                                sampleInfo.strain = sampleInfo.metadata.strain;
+                                sampleInfo.host = sampleInfo.metadata.host;
+                                sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
+                            }
 
-                        let sample_id_subquery = req.knex.select("sample_id").from("sample_metadata").whereIn('sample_id', fav_sample_list);
+                            knex.select('name')
+                                .from('sample_sample')
+                                .where({id: favoriteSamples[0].sample_id})
+                                .then(result => {
+                                    let sampleName = result[0].name;
 
-                        haveFavs = true;
-                        haveSugs = true;
-
-                        req.knex
-                            .select({
-                                st: "mlst_mlst.st",
-                                sample_id: "sample_metadata.sample_id",
-                                metadata: "sample_metadata.metadata",
-                                name: "sample_sample.name",
-                                id: "sample_sample.id",
-                            })
-                            .from("mlst_mlst")
-                            .innerJoin(
-                                "sample_sample",
-                                "mlst_mlst.sample_id",
-                                "sample_sample.id"
-                            )
-                            .innerJoin(
-                                "sample_metadata",
-                                "mlst_mlst.sample_id",
-                                "sample_metadata.sample_id"
-                            )
-                            .whereIn("mlst_mlst.sample_id", sample_id_subquery)
-                            .then((same_sequence, err) => {
-                                //console.log("I found sample data of my favs");
-                                //console.log(same_sequence);
-                                req.knex
-                                    .select("name")
-                                    .from("sample_sample")
-                                    .where({
-                                        id: fav_results[fav_results.length - 1].sample_id,
-                                    })
-                                    .then((result_sample_sample, err) => {
-
-                                        //console.log(err, result_sample_sample);
-                                        let sampleName = result_sample_sample[0].name;
-                                        //console.log(sampleName);
-
-                                        req.knex
-                                            .select("*")
-                                            .from("weighted_distance")
-                                            .where({ selected_sample: sampleName })
-                                            .limit(5)
-                                            .orderBy("distance", "asc")
-                                            .then((result_weighted_distances, err) => {
-                                                //console.log(err, result_weighted_distances);
-                                                console.log(result_weighted_distances, err);
-                                                if (result_weighted_distances.length > 1) {
-                                                    let close_genetic_distances = [];
-                                                    for (let i = 1; i < 5; i++) {
-                                                        close_genetic_distances.push(result_weighted_distances[i].comparison_sample);
-                                                        //console.log("Index: " + [i]);
-                                                        //console.log(result_weighted_distances[i].comparison_sample);
+                                    knex.select('*')
+                                        .from('weighted_distance')
+                                        .where({selected_sample: sampleName})
+                                        .orderBy('distance', 'asc')
+                                        .limit(5)
+                                        .then(close => {
+                                            req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+                                                .from('mlst_mlst')
+                                                .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                .modify(function (queryBuilder) {
+                                                    queryBuilder.where('sample_sample.name', close[0].comparison_sample || 0);
+                                                    for (let i = 1; i < close.length; i++) {
+                                                        queryBuilder.orWhere('sample_sample.name', close[i].comparison_sample);
+                                                    }
+                                                })
+                                                .then((suggestedSamples) => {
+                                                    //console.log(sampleInfos);
+                                                    for (sampleInfo of suggestedSamples) {
+                                                        sampleInfo.country = sampleInfo.metadata.country;
+                                                        sampleInfo.strain = sampleInfo.metadata.strain;
+                                                        sampleInfo.host = sampleInfo.metadata.host;
+                                                        sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                                                     }
 
-                                                    req.knex
-                                                        .select({
-                                                            st: "mlst_mlst.st",
-                                                            sample_id: "sample_metadata.sample_id",
-                                                            metadata: "sample_metadata.metadata",
-                                                            name: "sample_sample.name",
-                                                            id: "sample_sample.id",
-                                                        })
-                                                        .from("mlst_mlst")
-                                                        .innerJoin(
-                                                            "sample_sample",
-                                                            "mlst_mlst.sample_id",
-                                                            "sample_sample.id"
-                                                        )
-                                                        .innerJoin(
-                                                            "sample_metadata",
-                                                            "mlst_mlst.sample_id",
-                                                            "sample_metadata.sample_id"
-                                                        )
-                                                        .where(
-                                                            "sample_sample.name",
-                                                            "in",
-                                                            close_genetic_distances)
-                                                        .then(
-                                                            (suggested, err) => {
-                                                                //console.log(suggested, err);
-                                                                //console.log(haveFavs);
-                                                                res.render("pages/index", {
-                                                                    userLoggedIn: userLoggedIn,
-                                                                    favorites: favorites,
-                                                                    suggested: suggested,
-                                                                    haveFavs: haveFavs,
-                                                                    haveSugs: haveSugs,
-                                                                });
-                                                            })
-                                                }
-                                                else {
-                                                    res.render("pages/index", {
+                                                    res.render('pages/index', {
                                                         userLoggedIn: userLoggedIn,
-                                                        favorites: favorites,
-                                                        suggested: [],
+                                                        favorites: favoriteSamples,
+                                                        suggested: suggestedSamples,
                                                         haveFavs: haveFavs,
-                                                        haveSugs: haveSugs,
+                                                        haveSugs: haveSugs
                                                     });
-                                                }
-                                            });
-                                    });
-                            });
-                    }
-                    else{
-                        res.render("pages/index", {
-                            userLoggedIn: userLoggedIn,
-                            haveFavs: false,
-                            haveSugs: false,
-                        })
-                    }
-                });
+                                                })
+                                        })
+                                })
+                        });
+                }
+                else{
+                    res.render("pages/index", {
+                        userLoggedIn: userLoggedIn,
+                        haveFavs: false,
+                        haveSugs: false,
+                    })
+                }
+            });
+
     } else {
-        userLoggedIn = false;
-        console.log(haveFavs);
         res.render("pages/index", {
             userLoggedIn: userLoggedIn,
-            favorites: favorites,
-            suggested: suggested,
-            haveFavs: haveFavs,
-            haveSugs: haveSugs,
-        });
+            haveFavs: false,
+            haveSugs: false,
+        })
     }
 });
 
@@ -289,92 +228,9 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-app.get('/predictSeq', function (req, res) {
-    let sequence = req.query.key;
-    client.query("SELECT DISTINCT st FROM mlst_mlst WHERE CAST(st AS CHAR(10)) LIKE '" + sequence + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].st.toString());
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
-app.get('/predictSam', function (req, res) {
-    let sample = req.query.key;
-    client.query("SELECT DISTINCT sample_id FROM mlst_mlst WHERE CAST(sample_id AS CHAR(10)) LIKE '" + sample + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].sample_id.toString());
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
-app.get('/predictLoc', function (req, res) {
-    let location = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'country' AS country FROM sample_metadata WHERE metadata->>'country' ILIKE '%" + location + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].country);
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
-app.get('/predictStr', function (req, res) {
-    let strain = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'strain' AS strain FROM sample_metadata WHERE metadata->>'strain' ILIKE '%" + strain + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].strain);
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
-app.get('/predictHost', function (req, res) {
-    let host = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'host' AS host FROM sample_metadata WHERE metadata->>'host' ILIKE '%" + host + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].host);
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
-app.get('/predictIso', function (req, res) {
-    let source = req.query.key;
-    client.query("SELECT DISTINCT metadata->>'isolation_source' AS isolation_source FROM sample_metadata WHERE metadata->>'isolation_source' ILIKE '%" + source + "%' LIMIT 10", function (err, result, fields) {
-        if (err) throw err;
-        let i;
-        let data = [];
-        for (i = 0; i < result.rows.length; i++) {
-            data.push(result.rows[i].isolation_source);
-        }
-        res.end(JSON.stringify(data));
-    });
-});
-
 app.get('/tutorials', function (req, res) {
-    if (req.session.userStatus == "loggedIn") {
-        userLoggedIn = true;
-
-    } else {
-        userLoggedIn = false;
-    }
-    res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
+    userLoggedIn = req.session.userStatus === "loggedIn";
+    res.render('pages/tutorials', {userLoggedIn: userLoggedIn});
 });
 
 
