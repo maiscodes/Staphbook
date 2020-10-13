@@ -38,16 +38,19 @@ router.get('/', function (req, res, next) {
           }
           let status = "Your"; // Tag group status for user
           if (sharingInfo.length >= 1) {
-            console.log(sharingInfo);
             status = "Private";
+            console.log(sharingInfo);
+            let cleanedSharingInfo = [];
             sharingInfo.forEach(function(share) {
+              cleanedSharingInfo.push(share.share_to_email);
               console.log(share.share_to_email);
               if (share.share_to_email == "_public_all_users_") {
                 status = "Public";
-                sharingInfo = [];
+                //sharingInfo = [];
                 console.log("set to public");
               }
             });
+            sharingInfo = cleanedSharingInfo;
           }
           groupInfo.status = status;
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
@@ -80,7 +83,8 @@ router.get('/', function (req, res, next) {
                     userLoggedIn: req.userLoggedIn,
                     samples: sampleInfos,
                     groupInfo: groupInfo,
-                    sharingInfo: sharingInfo
+                    sharingInfo: sharingInfo,
+                    email: req.session.userEmail
                 });
               });
         })

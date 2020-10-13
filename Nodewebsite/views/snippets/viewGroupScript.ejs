@@ -752,7 +752,7 @@ function removeGenomeSamples() {
     let container = document.getElementById('userContainer');
     collaborators.forEach((collaborator)=> {
       //console.log(collaborator);
-      let email = collaborator.share_to_email;
+      let email = collaborator; //.share_to_email;
       if (email != owner) {
         //console.log(email);
         let node = document.createElement("button");
@@ -848,13 +848,53 @@ function removeGenomeSamples() {
       });
   }
 
+  function loadLeaveGroup() {
+    let container = document.getElementById("leaveGroup");
+    console.log(container);
+    container.innerHTML = '<p id="leaveMessage">You are currently a collaborator of this group. Would you like to leave this group?</p><Button id="makePrivateButton" onclick="leaveGroup()">Yes</Button>';
+    console.log(container);
+  }
+
+  function loadUnpubliciseGroup() {
+    let container = document.getElementById("makeGroupPrivate");
+    container.innerHTML = '<p id="unpubliciseMessage">You have editting rights as a collaborator. Would you like to change this group back to private?</p><Button id="makePrivateButton" onclick="unpubliciseGroup()">Yes</Button>';
+  }
+
+  function loadEdittingBars() {
+    let groupEditBar = document.getElementById("groupEditBar");
+    groupEditBar.innerHTML = '<button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>';
+
+    let removeGroupBar = document.getElementById("removeGroupBar");
+    removeGroupBar.innerHTML = '<button id="groupSampleEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>';
+  }
+
   window.onload = function() {
     displayGenomeCards();
     displayGraphs();
     setupRemoveCheckBoxes();
     displayMaxPage();
-    loadOwner();
-    loadCollaborators();
+
+    let email = <%-  JSON.stringify(email) %>;
+    let collaborators = <%-  JSON.stringify(sharingInfo) %>;
+    let owner = <%-  JSON.stringify(groupInfo.email) %>;
+    let status = <%-  JSON.stringify(groupInfo.status) %>;
+
+    console.log(email);
+    console.log(collaborators);
+    if ( status == "Your" || status == "Private") {
+      loadOwner();
+      loadCollaborators();
+    }
+    if (email == owner || collaborators.includes(email) ) {
+      loadEdittingBars();
+      console.log("Have editting rights");
+      if ( status == "Public" ) {
+          loadUnpubliciseGroup();
+      } else if ( status == "Private" && email != owner ) {
+          console.log("private group");
+          loadLeaveGroup();
+      }
+    }
   }
 
   window.onresize = function() {

@@ -360,3 +360,27 @@
 #userForm {
   display: inline;
 }
+
+/* Unpublicize group functionality */
+#leaveGroup {
+  text-align: center;
+}
+
+#makeGroupPrivate {
+  text-align: center;
+}
+
+#unpubliciseMessage, #leaveMessage {
+  display: inline-block;
+}
+
+#leaveMessage {
+  margin-top: 1em;
+}
+
+#makePrivateButton {
+  color: #1ABC9C;
+  text-decoration: underline;
+  background-color: transparent;
+  border: 1px solid transparent;
+}

@@ -22,9 +22,7 @@
 
     <div id="groupEditErrorMessage" class="errorMessage"></div>
 
-    <div id="groupEditBar">
-      <button id="groupEditButton" onclick="enableEditGroupInfo()">Edit</button>
-    </div>
+    <div id="groupEditBar"></div>
 
     <p id="groupDescription" class="groupDescription">
         <%- groupInfo.description %>
@@ -47,7 +45,7 @@
     <!-- Display genome cards -->
     <div id="groupGenomeSection">
       <h4>Genomes</h4>
-      <button id="groupSampleEditButton" onclick="enableRemoveGenomeSamples()">Edit</button>
+      <div id="removeGroupBar"></div>
 
       <!-- Let user choose order to show samples -->
       <p id ="groupSamplesFilterBar">
@@ -89,6 +87,7 @@
   <% if (groupInfo.status == "Public") { %>
   <div id="public"> Public </div>
   <p> This is a public group shared with everyone </div>
+  <div id="makeGroupPrivate"></div>
   <% } else { %>
     <div id= "displayUsers">
       <button id="addUserButton" data-toggle="dropdown">Share</button>
@@ -98,6 +97,7 @@
       </div>
       <button id="makePublicButton" onclick="makeGroupPublic()">Make Public</button>
       <div id="userContainer"></div>
+      <div id="leaveGroup"></div>
     </div>
   <% } %>
 

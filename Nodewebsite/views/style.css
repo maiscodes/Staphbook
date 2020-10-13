@@ -826,7 +826,7 @@ input:checked + .toggle:before {
     width: 30%;
     padding-left: 2em;
     padding-right: 2em;
-    min-height: 100%;
+    min-height: 50%;
     -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
     margin: 1em;
     background-color: white;
@@ -857,6 +857,7 @@ input:checked + .toggle:before {
     border: 1px solid #636363;
     float: left;
     width: 50%;
+    height: 20%;
     padding-top: 0.8em;
     padding-bottom: 0.8em;
     padding-left: 2em;
