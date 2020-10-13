@@ -3,7 +3,7 @@ var router = express.Router()
 
 router.post('/', function (req, res) {
     console.log("Readed add user to group endpoint");
-    let userLoggedIn = req.session.userStatus === "loggedIn";
+    //let userLoggedIn = req.session.userStatus === "loggedIn";
     let userEmail = decodeURIComponent(req.session.userEmail);
     let groupId = req.body.groupId;
     let email = req.body.email;

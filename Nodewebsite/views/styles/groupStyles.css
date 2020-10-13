@@ -59,6 +59,18 @@
 
 /* Group Samples Page */
 
+/* Status */
+#public {
+  width: 5em;
+  background-color: #f7af1e;
+  border-radius: 2em;
+  padding: 0.5em;
+  display: inline-block;
+  margin: 0.7em;
+  color: black;
+
+}
+
 #groupDescription {
   margin-top: 1em;
   margin-bottom: 2em;

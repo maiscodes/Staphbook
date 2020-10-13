@@ -1,6 +1,10 @@
 var express = require('express');
 
-/* Setup middleware to check user's login and has edditing rights */
+/* Setup middleware to check user's login and has editting rights
+* At the moment two separate ones are used as view groups
+* render page while this one is used only for
+* back end only operations.
+*/
 function checkUserLoggedIn (req, res, next) {
     req.userLoggedIn = false;
     if ( !req.session.userStatus === "loggedIn") {

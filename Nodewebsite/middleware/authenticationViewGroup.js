@@ -11,12 +11,6 @@ function checkUserLoggedIn (req, res, next) {
     //console.log("Setting userloggedin as true")
     req.userLoggedIn = true;
     next();
-
-    /*
-    let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: userLoggedIn };
-    res.status(404);
-    res.send({ error: 'Not found' });
-    res.render('pages/error', errorPageConfig); */
 }
 
 function checkUserHasAccess(req, res, next) {
@@ -50,12 +44,6 @@ function checkUserHasAccess(req, res, next) {
         req.allowedAccess = true;
         next();
       });
-
-      /*
-      let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: true};
-      res.status(404);
-      res.send({ error: 'Not found' });
-      res.render('pages/error', errorPageConfig); */
 }
 
 const authenticateUser = [checkUserLoggedIn, checkUserHasAccess];

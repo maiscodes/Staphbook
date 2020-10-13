@@ -84,15 +84,23 @@
 
   <!-- Display collaborators -->
   <h4>Collaborators</h4>
-  <div id= "displayUsers">
-    <button id="addUserButton" data-toggle="dropdown">Share</button>
-    <div id="addUserDropDownMenu" class="dropdown-menu" aria-labelledby="addUserDropDownMenuButton">
-      <input id="inputUserEmail" type="text">
-      <button id="submitUserEmailButton" onclick="addNewCollaborator()" type="submit">Add</button>
+
+  <!-- Display Group Status -->
+  <% if (groupInfo.status == "Public") { %>
+  <div id="public"> Public </div>
+  <p> This is a public group shared with everyone </div>
+  <% } else { %>
+    <div id= "displayUsers">
+      <button id="addUserButton" data-toggle="dropdown">Share</button>
+      <div id="addUserDropDownMenu" class="dropdown-menu" aria-labelledby="addUserDropDownMenuButton">
+        <input id="inputUserEmail" type="text">
+        <button id="submitUserEmailButton" onclick="addNewCollaborator()" type="submit">Add</button>
+      </div>
+      <button id="makePublicButton" onclick="makeGroupPublic()">Make Public</button>
+      <div id="userContainer"></div>
     </div>
-    <button id="makePublicButton">Make Public</button>
-    <div id="userContainer"></div>
-  </div>
+  <% } %>
+
 
 
   <% include ../snippets/downloadGroupInfoScript.ejs %>

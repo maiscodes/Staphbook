@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
         let getSharingInfo = req.knex
                              .select('share_to_email')
                              .from('group_sharing')
-                             .where({group_id: groupId || 0}); // if length if 0, your group, not zero, if email is _public_
+                             .where({group_id: groupId || 0})
 
 
         Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(function([groupInfo, sampleIds, sharingInfo]) {
@@ -36,14 +36,18 @@ router.get('/', function (req, res, next) {
           if (sampleIds.length < 1) {
             sampleIds = [ { sample_id: -1 } ];
           }
-          let status = "Your group"; // Tag group status for user
+          let status = "Your"; // Tag group status for user
           if (sharingInfo.length >= 1) {
-            status = "Private group";
-            for (share in sharingInfo) {
-              if (share.share_to_email == "_public_") {
-                status = "Public group";
+            console.log(sharingInfo);
+            status = "Private";
+            sharingInfo.forEach(function(share) {
+              console.log(share.share_to_email);
+              if (share.share_to_email == "_public_all_users_") {
+                status = "Public";
+                sharingInfo = [];
+                console.log("set to public");
               }
-            }
+            });
           }
           groupInfo.status = status;
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',

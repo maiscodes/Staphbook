@@ -20,7 +20,7 @@ router.get('/groups', function (req, res) {
       let getPublicGroupIds = req.knex
                               .select('group_id')
                               .from('group_sharing')
-                              .where({share_to_email: '_all_users_'});
+                              .where({share_to_email: '_public_all_users_'});
 
       // Get shared groups
       let getSharedGroupIds = req.knex
@@ -39,7 +39,7 @@ router.get('/groups', function (req, res) {
                                   .select('*')
                                   .from('groups')
                                   .leftJoin(getGroupCount, 'groups.group_id', 'group_samples.sample_group_id')
-                                  .whereNot({email: email}) // Not own groups
+                                  //.whereNot({email: email}) // Not own groups
                                   .where('group_id', 'in', getPublicGroupIds);
 
       let getsharedGroups = req.knex
@@ -49,7 +49,7 @@ router.get('/groups', function (req, res) {
                                   .whereNot({email: email})
                                   .where('group_id', 'in', getSharedGroupIds);
 
-      Promise.all([getGroupInfo, getpublicGroups, getsharedGroups]).then(function([userGroups, publicGroups, sharedGroups]) {
+      Promise.all([getGroupInfo, getpublicGroups, getsharedGroups,]).then(function([userGroups, publicGroups, sharedGroups]) {
         console.log(userGroups);
         for (i = 0; i < userGroups.length; i++) {
           if (userGroups[i].count == undefined) {

@@ -6,7 +6,7 @@ router.post('/', function (req, res) {
     let groupId = req.body.groupId;
     let sampleId = req.body.sampleId;
 
-    console.log("Add sample to group login: " + userLoggedIn);
+    //console.log("Add sample to group login ");
     req.knex('group_samples')
         .insert({
             group_id: groupId,
