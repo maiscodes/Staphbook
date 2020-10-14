@@ -10,6 +10,7 @@ router.get('/', function (req, res, next) {
     }
 
     res.locals.input = req.query.searchInput;
+    let input = res.locals.input;
     res.locals.option = option;
     res.locals.number = 0;
     res.locals.userLoggedIn = userLoggedIn;

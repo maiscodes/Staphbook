@@ -1,4 +1,18 @@
 <div class="resultsPageTopComponent groupsPage">
+    <!-- Display group status to user -->
+    <!-- Display Download Options -->
+    <div class="dropdown">
+    <button id="downloadButton" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Download
+    </button>
+    <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <button id="downloadRadarGraphButton" class="dropDownButton" onclick="downloadRadarGraph()">Radar Graph</button>
+      <button id="downloadBarGraphButton" class="dropDownButton" onclick="downloadBarGraphs()">Bar Graphs</button>
+      <button id="downloadGroupGenomesButton" class="dropDownButton" onclick="downloadGenomeInformation()">Genomes</button>
+    </div>
+    </div>
+
     <!-- Display Group Information  -->
     <h5 style="text-align: center; margin-top: 5px;">
         Staphlyococcus Aureus <br>
@@ -16,8 +30,6 @@
     <p id="groupDescription" class="groupDescription">
         <%- groupInfo.description %>
     </p>
-
-    <!-- Download button -->
 
     <!-- Display aggregated data -->
     <h4>Common Statistics and Distributions</h4>
@@ -68,10 +80,9 @@
       <button class="navigationButton" onclick="stepToPage(1)">&gt;</button>
       <button class="navigationButton" onclick="stepToPage(2)">&gt;&gt;</button>
    </div>
-    <div id="groupSamplesCards"></div>
-    </div>
+   <div id="groupSamplesCards"></div>
+  </div>
 
-    <% include ../snippets/viewGroupScript.ejs %>
-
-
+  <% include ../snippets/downloadGroupInfoScript.ejs %>
+  <% include ../snippets/viewGroupScript.ejs %>
 </div>

@@ -421,11 +421,19 @@
     function downloadGraph() {
         console.log("download graph");
 
-
         var png64 = cy.png();
-        saveAs(png64, "StaphBook-Graph.png");
+        saveImageAs(png64, `StaphBook-Sample ${<%- JSON.stringify(sample_ID) %>} Network.png`);
+    }
 
-
+    function saveImageAs(base64Data, fileName) { //TODO: Check for multi-browser functionality
+      //  var encodedUri = encodeURI(csvContent);
+      let link = document.createElement("a");
+      link.setAttribute("href", base64Data);
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link); // for Firefox
+      //link.setAttribute("href", base64Data);
+      //link.setAttribute("download", fileName);
+      link.click();
     }
 
     <!-- expandGraph functionality-->
@@ -797,15 +805,22 @@
       updateMaxPage();
 
       let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
+
+      // Set heights of genome information blocks
+      for (i = 0; i < coll.length; i++) {
+        let sectionContent = coll[i].nextElementSibling;
+        sectionContent.classList.toggle("contentActive");
+        let contentHeight = sectionContent.getBoundingClientRect().height;
+        sectionContent.style.setProperty('--max-height', contentHeight + 'px');
+        sectionContent.classList.toggle("contentActive");
+      }
+
       for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
           this.classList.toggle("sectionActive");
-          var content = this.nextElementSibling;
-          if (content.style.display === "block") {
-            content.style.display = "none";
-          } else {
-            content.style.display = "block";
-          }
+          let content = this.nextElementSibling;
+          content.classList.toggle("contentActive");
+
         });
       }
     }
@@ -898,12 +913,15 @@
       displayFindMyFriendsSection(minValue, maxValue);
     }
 
-    function addToGroup(){
-        let group_id = document.getElementById('groups-list').value;
+    function addToGroup(group_id){
+        //let group_id = document.getElementById('groups-list').value;
 
         let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
         let url = `${baseUrl}/addGroupSample`;
-        console.log(url);
+
+        if(group_id === 'create'){
+            window.location.href = `${baseUrl}/createGroup`;
+        }
 
         fetch(url, {
             method: 'POST',
@@ -918,16 +936,38 @@
         })
             .then(response => {
                 if (response.status == 200) {
-                    console.log("success");
+                    console.log("successful addition");
                     location.reload(true);
                 }
-                let errorMessage = document.getElementById("groupEditErrorMessage"); //TODO: Fix error handling
-                errorMessage.innerHMTL = "There was an error updating the information. Please try again.";
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
+    function remGroup(group_id){
+        let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+        let url = `${baseUrl}/removeGroupSample`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                groupId: group_id,
+                sampleId: "<%- sample_ID %>",
+            })
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    console.log("successful removal");
+                    location.reload(true);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
 </script>

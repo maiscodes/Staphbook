@@ -6,6 +6,11 @@ button:focus {
   outline: none;
 }
 
+#page-container {
+  width: 70%;
+  margin: 0 auto;
+  text-align: center;
+}
 #queryTitleContainer {
     padding-top: 20px;
     text-align: center;
@@ -127,15 +132,6 @@ hr.divider {
     float: left;
 }
 
-
-#resultsPageTableComponent {
-    width: 90%;
-    height: auto;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    border: 0;
-}
-
 #displayDescription {
     text-align: center;
     padding-top: 17px;
@@ -203,29 +199,33 @@ hr.divider {
 }
 
 #Metadata {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+#Sequencing {
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Assembly {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Sccmec_Primers {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 #Sccmec_Subtypes {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
-
 #Sccmec_Proteins {
-    overflow: scroll;
-    height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 
@@ -355,6 +355,18 @@ a {
     font-size: 14px;
     display: inline-block;
     margin-right: 10px;
+}
+
+[data-id="layer0-selectbox"] { /* Centering cytoscape */
+  left: 0px;
+}
+
+[data-id="layer1-drag"] {
+  left: 0px;
+}
+
+[data-id="layer2-node"] {
+  left: 0px;
 }
 
 .legendColorSquare {
@@ -659,6 +671,7 @@ div[slider] > input[type=range]::-ms-tooltip {
   width: 4.6em;
   height: 2.6em;
   margin-left: 0.8em;
+  margin-top: 1.5em;
 }
 
 .switch input {

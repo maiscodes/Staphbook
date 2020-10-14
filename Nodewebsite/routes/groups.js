@@ -3,6 +3,8 @@ var router = express.Router()
 
 router.get('/groups', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
+    let emailValue = req.session.userEmail;
+    let email = decodeURIComponent(emailValue);
 
     let groups = [];
     let haveGroups = false;
@@ -13,10 +15,20 @@ router.get('/groups', function (req, res) {
                           .from('group_samples')
                           .groupBy('sample_group_id')
                           .as('group_samples');
+
+      // Get public groups _all_users_
+
+      // Get shared groups
+      let sharedGroupIds = req.knex
+                              .select('group_id')
+                              .from('group_sharing')
+                              .where({share_to_email: email});
+
       req.knex
         .select('*')
         .from('groups')
         .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
+        .where({email: email})
         .then((groups) => {
           console.log(groups);
           for (i = 0; i < groups.length; i++) {
@@ -27,11 +39,32 @@ router.get('/groups', function (req, res) {
               groups[i].description = `${groups[i].description.substring(0,100)}...`;
             }
           }
-          res.render('pages/groups', {
-              userLoggedIn: userLoggedIn,
-              groups: groups,
-              haveGroups: true
-          });
+
+          req.knex
+            .select('*')
+            .from('groups')
+            .leftJoin(groupCount, 'groups.group_id', 'group_samples.sample_group_id')
+            .whereNot({email: email}) // Not own groups
+            .where('group_id', 'in', sharedGroupIds)
+            .then((sharedGroupsInfo) => {
+              console.log(sharedGroupsInfo);
+              for (i = 0; i < sharedGroupsInfo.length; i++) {
+                if (sharedGroupsInfo[i].count == undefined) {
+                  sharedGroupsInfo[i].count = 0;
+                }
+                if (sharedGroupsInfo[i].description.length >= 100) {
+                  sharedGroupsInfo[i].description = `${sharedGroupsInfo[i].description.substring(0,100)}...`;
+                }
+              }
+              res.render('pages/groups', {
+                  userLoggedIn: userLoggedIn,
+                  groups: groups,
+                  sharedGroups: sharedGroupsInfo,
+                  haveGroups: true
+              });
+
+          })
+
         });
     }
     else{

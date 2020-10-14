@@ -1,11 +1,27 @@
-/* Group Samples page */
+/* Groups Page */
+#showGroupsContainer {
+  margin-top: 0.7em;
+  text-align: center;
+}
+
+#sharedGroupsButton, #userGroupsButton {
+  background-color: white;
+  border: 1px solid white;
+  borde-radius: 5px;
+}
+
+#sharedGroupsButton:hover, #userGroupsButton:hover {
+  background-color: #fcfcfc;
+}
+
 #groupsCards {
   display: -webkit-flex;
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
-  margin-top: 2em;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 1em;
+  position: relative;
 }
 
 .groupCard:hover {
@@ -40,6 +56,8 @@
 .genomeCardInfo:focus {
   outline: none;
 }
+
+/* Group Samples Page */
 
 /* Edit button */
 #groupSampleEditButton:focus, #groupEditButton:focus {
@@ -147,7 +165,7 @@
 }
 
 .navigationButton {
-	height: 2em;
+	  height: 2em;
     width: 3em;
     border-radius: 2em;
     background-color: white;
@@ -200,4 +218,51 @@
 
 #inputTitle:hover, #inputDescription:hover {
   background-color: #f7f7f7;
+}
+
+/* Download elements */
+#groupDropDownMenu {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 8px 0;
+  margin: auto;
+}
+
+#downloadButton:focus {
+  outline: none;
+}
+
+#downloadButton:hover {
+  background-color: #1ABC9C;
+  border: 1px solid #1ABC9C;
+  color: white;
+}
+
+#downloadButton {
+  margin: 0 auto;
+  padding: 0.5em;
+  background-color: white;
+  border-radius: 2em;
+  padding-left: 1.7em;
+  padding-right: 1.7em;
+  border: 1px solid #636363;
+  color: #468e94;
+  position: relative;
+  margin-top: 0.5em;
+  margin-bottom: 0.7em;
+}
+
+.dropDownButton {
+  position: relative;
+  display: block;
+  background-color: white;
+  border: 1px solid white;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  width: 100%;
+}
+
+.dropDownButton:hover {
+  background-color: #f8f9fa;
 }
