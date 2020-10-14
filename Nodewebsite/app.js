@@ -95,6 +95,7 @@ let createGroupRouter = require("./routes/createGroup");
 let shareGroupRouter = require("./routes/addUserToGroup");
 let addGroupSampleRouter = require("./routes/addGroupSample");
 let removeGroupSampleRouter = require("./routes/removeGroupSample");
+let removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
 
 /* --------------------------------------------------------------------------------
  *
@@ -121,7 +122,7 @@ app.use("/removeGroupSample", authenticateUserEdit, removeGroupSampleRouter)
 app.use("/addGroupSample", authenticateUserEdit, addGroupSampleRouter)
 app.use("/createGroup", createGroupRouter);
 app.use("/addUserToGroup", authenticateUserEdit, shareGroupRouter);
-
+app.use("/removeUserFromGroup", authenticateUserEdit, removeUserGroupAccessRouter);
 
 // index page
 app.get('/', function (req, res) {

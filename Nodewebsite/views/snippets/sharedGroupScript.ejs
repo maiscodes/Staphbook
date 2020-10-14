@@ -2,7 +2,8 @@
   /*
   *
   * Scripts to display group cards on page based
-  * on user selection of public, shared and private groups.
+  * on user selection of public, shared and private groups,
+  * and corresponding group descriptions.
   *
   */
 
@@ -23,7 +24,7 @@
   };
 
   window.onload = () => {
-    loadGroups("userGroupsButton", <%- JSON.stringify(groups) %>);
+    loadUserGroups();
     tag_label();
   };
 
@@ -49,18 +50,21 @@
   }
 
   function loadPublicGroups() {
-    loadGroups("publicGroupsButton", <%- JSON.stringify(publicGroups) %>);
+    let description = "All groups that have been made available for public access";
+    loadGroups("publicGroupsButton", <%- JSON.stringify(publicGroups) %>, description);
   }
 
   function loadSharedGroups(){
-    loadGroups("sharedGroupsButton", <%- JSON.stringify(sharedGroups) %>);
+    let description = "Groups that someone else has created and shared with you";
+    loadGroups("sharedGroupsButton", <%- JSON.stringify(sharedGroups) %>, description);
   }
 
   function loadUserGroups() {
-    loadGroups("userGroupsButton", <%- JSON.stringify(groups) %>);
+    let description = "Groups you have created";
+    loadGroups("userGroupsButton", <%- JSON.stringify(groups) %>, description);
   }
 
-  function loadGroups(titleId, groups){ // Given div id to insert cards in and group details
+  function loadGroups(titleId, groups, description){ // Given div id to insert cards in and group details
     let publicGroupButton = document.getElementById('publicGroupsButton');
     publicGroupButton.style.fontWeight = 'normal';
 
@@ -75,6 +79,9 @@
 
     let displayGroupsDiv = document.getElementById('groupsCards');
     displayGroupsDiv.innerHTML = "";
+
+    let groupDescirption = document.getElementById('groupsDescription');
+    groupsDescription.innerHTML = description;
 
     if ( groups.length >= 1 ) {
       let groupCardForm = document.createElement('form');

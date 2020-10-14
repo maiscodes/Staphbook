@@ -26,8 +26,8 @@ router.get('/groups', function (req, res) {
       let getSharedGroupIds = req.knex
                               .select('group_id')
                               .from('group_sharing')
-                              .where({share_to_email: email})
-                              .whereNotIn('group_id', getPublicGroupIds);
+                              .where({share_to_email: email});
+                              //.whereNotIn('group_id', getPublicGroupIds);
 
       let getGroupInfo = req.knex
                             .select('*')

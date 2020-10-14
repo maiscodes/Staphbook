@@ -54,7 +54,7 @@ router.get('/', function (req, res, next) {
           }
           groupInfo.status = status;
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-          name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+          name: 'sample_sample.name', id: 'sample_sample.id'}) 
               .from('mlst_mlst')
               .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
               .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
@@ -104,18 +104,6 @@ router.get('/', function (req, res, next) {
         res.render('pages/error', errorPageConfig);
     }
     return;
-
-
-
-    /*
-    if ( userLoggedIn ) {
-
-    }
-    else{
-        res.status(404);
-        res.send({ error: 'Not found' });
-        res.render('pages/error', errorPageConfig);
-    } */
 })
 
 

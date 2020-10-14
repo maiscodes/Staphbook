@@ -87,6 +87,15 @@
   <% if (groupInfo.status == "Public") { %>
   <div id="public"> Public </div>
   <p> This is a public group shared with everyone </div>
+  <!--
+  <div id= "displayUsers">
+    <button id="addUserButton" data-toggle="dropdown" style="margin:auto;display:block;">Share</button>
+    <div id="addUserDropDownMenu" class="dropdown-menu" aria-labelledby="addUserDropDownMenuButton">
+      <input id="inputUserEmail" type="text">
+      <button id="submitUserEmailButton" onclick="addNewCollaborator()" type="submit">Add</button>
+    </div>
+    <div id="userContainer"></div>
+  <div> -->
   <div id="makeGroupPrivate"></div>
   <% } else { %>
     <div id= "displayUsers">
@@ -100,8 +109,6 @@
       <div id="leaveGroup"></div>
     </div>
   <% } %>
-
-
 
   <% include ../snippets/downloadGroupInfoScript.ejs %>
   <% include ../snippets/viewGroupScript.ejs %>

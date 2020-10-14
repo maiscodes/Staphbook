@@ -1,4 +1,8 @@
 /* Groups Page */
+#groupsDescription {
+  text-align: center;
+  margin-top: 1em;
+}
 #showGroupsContainer {
   margin-top: 0.7em;
   text-align: center;
@@ -279,6 +283,7 @@
 /* Collaborator functionality */
 #displayUsers {
   margin-top: 1em;
+  justify-content: center;
 }
 
 #status {
@@ -383,4 +388,8 @@
   text-decoration: underline;
   background-color: transparent;
   border: 1px solid transparent;
+}
+
+#makePrivateButton:hover {
+  color: #23947e;
 }

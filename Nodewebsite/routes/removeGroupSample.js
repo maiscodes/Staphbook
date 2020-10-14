@@ -27,14 +27,6 @@ router.post('/', function (req, res) {
       });
       return;
 
-    /*
-    if ( userLoggedIn ) {
-
-    }
-
-    res.status(401).json({"message": "permissions error - user not logged in"}) */
-
-    // Include update time stamp here instead?
 })
 
 module.exports = router;
