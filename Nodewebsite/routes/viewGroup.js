@@ -146,33 +146,29 @@ router.post('/removeGroupSample', function (req, res) {
 router.post('/removeGroup', function (req, res) {
   let userLoggedIn = req.session.userStatus === "loggedIn";
   let groupId = req.body.groupId;
+  console.log(groupId);
 
-  // const loggedIn = async () => {
-  //   return req.session.userStatus === "loggedIn";
-  // }
-  // loggedIn().then((userLoggedIn) => {
-    console.log(userLoggedIn);
-    if (userLoggedIn) {
-      let value = req.session.userEmail;
-      let email = decodeURIComponent(value);
-      console.log("=============================================================");
-      req.knex('groups')
-        .where({ email: email, group_id: groupId })
-        .del()
-        .then(() => {
-          console.log("GROUP DELETED")
-          res.status(200).json({"message": "successfully removed group"})
-          return;
-        })
-        .catch((err) => {
-          console.log("err");
-          res.status(401).json({ "message": "error deleting group" })
-          return;
-        });
-      return;
-    }
-    res.status(401).json({"message": "permissions error - user not logged in"})
-  // })
-  })
-  
+  console.log(userLoggedIn);
+  if (userLoggedIn) {
+
+    console.log("=============================================================");
+    req.knex('groups')
+      .where({ group_id: groupId }) 
+      .del()
+      .then(() => {
+        console.log("GROUP DELETED")
+        res.status(200).json({"message": "successfully removed group"})
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(401).json({ "message": "error deleting group" })
+        return;
+      });
+    return;
+  }
+  res.status(401).json({"message": "permissions error - user not logged in"})
+// })
+})
+
 module.exports = router;
