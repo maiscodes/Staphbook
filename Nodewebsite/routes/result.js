@@ -86,7 +86,8 @@ router.get('/', function (req, res) {
                           .from('mlst_mlst')
                           .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
                           .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                          .where('mlst_mlst.sample_id', 'in', same_sequence_samples);
+                          .where('mlst_mlst.sample_id', 'in', same_sequence_samples)
+                          .limit(20);
 
                       let location = result_sample_metadata[0].metadata.country;
                       if (location == undefined) {
@@ -98,7 +99,8 @@ router.get('/', function (req, res) {
                           .from('mlst_mlst')
                           .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
                           .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                          .where('mlst_mlst.sample_id', 'in', same_location_samples);
+                          .where('mlst_mlst.sample_id', 'in', same_location_samples)
+                          .limit(20);
 
                       let host = result_sample_metadata[0].metadata.host;
                       if (host == undefined) {
@@ -110,7 +112,8 @@ router.get('/', function (req, res) {
                           .from('mlst_mlst')
                           .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
                           .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                          .where('mlst_mlst.sample_id', 'in', same_host_samples);
+                          .where('mlst_mlst.sample_id', 'in', same_host_samples)
+                          .limit(20);
 
                       let iso = result_sample_metadata[0].metadata.isolation_source;
                       if (iso == undefined) {
@@ -122,7 +125,8 @@ router.get('/', function (req, res) {
                           .from('mlst_mlst')
                           .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
                           .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                          .where('mlst_mlst.sample_id', 'in', same_iso_samples);
+                          .where('mlst_mlst.sample_id', 'in', same_iso_samples)
+                          .limit(20);
 
 
                       let sample_name = req.knex.select('name').from('sample_sample').where('id', '=', sampleID);

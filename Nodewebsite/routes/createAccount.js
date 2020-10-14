@@ -18,39 +18,32 @@ router.post('/', function (req, res) {
         userLoggedIn = true;
     }
 
+    let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     var email = req.body.email;
     var organisation = req.body.organisation;
     var occupation = req.body.occupation;
 
-    if (email !== "") {
-
+    if (regex.test(email)) {
         bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
 
-            req.db.query('SELECT * FROM registered_users WHERE email=\'' + req.body.email + '\'', (err, result_registered_users) => {
-                console.log(err, result_registered_users);
-
-                if (result_registered_users.rows.length != 0) {
-                    console.log('User already entered into database');
-                    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: true });
-                    return;
-                } else {
-                    req.db.query('INSERT INTO registered_users (email, password, organisation, occupation) VALUES (\''
-                        + email + '\',\'' + hashedPassword + '\',\'' + organisation + '\',\'' + occupation + '\')',
-                        function (error, results, fields) {
-                            if (error) {
-                                throw error;
-                                res.redirect('/');
-                            } else {
-                                creationSuccess = true;
-                                res.redirect('/login');
-                            }
-                        });
-                }
-            });
+            req.knex('registered_users')
+                .insert({
+                    email: email,
+                    password: hashedPassword,
+                    organisation: organisation,
+                    occupation: occupation
+                })
+                .then(() => {
+                    res.redirect('/login');
+                })
+                .catch((err) => {
+                    res.status(400).json({message: "User with that email already exists"});
+                });
         });
-    } else {
-        res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: false });
-
+    }
+    else {
+        res.status(400).json({message: "Invalid email"});
+        //res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: false });
     }
 });
 

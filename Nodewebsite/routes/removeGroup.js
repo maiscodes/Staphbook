@@ -1,0 +1,37 @@
+var express = require('express')
+var router = express.Router()
+let url = require('url')
+
+router.post('/', function (req, res) {
+  //let userLoggedIn = req.session.userStatus === "loggedIn";
+  let groupId = req.body.groupId;
+  console.log(groupId);
+
+  console.log("=============================================================");
+  req.knex('groups')
+    .where({ group_id: groupId })
+    .del()
+    .then(() => {
+      console.log("GROUP DELETED")
+      res.status(200).json({"message": "successfully removed group"})
+      return;
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(401).json({ "message": "error deleting group" })
+      return;
+    });
+  return;
+  res.status(401).json({"message": "permissions error - user not logged in"})
+
+  /*
+  console.log(userLoggedIn);
+  if (userLoggedIn) {
+
+
+  } */
+
+// })
+})
+
+module.exports = router;
