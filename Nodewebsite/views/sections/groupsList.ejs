@@ -1,5 +1,4 @@
 <div id="groupsPageContainer">
-  <div class="resultsPageTopComponent">
     <!-- Display Group Information  -->
     <h5 style="text-align: center; margin-top: 5px;">
       Staphlyococcus aureus <br>
@@ -20,8 +19,8 @@
     <p id="groupsDescription">Groups that you have created</p>
 
     <% if (haveGroups) { %>
-    <div id="groupsCards">
-      <form action='/viewGroup' method="get">
+    <form action='/viewGroup' method="get">
+      <div id="groupsCards">
         <% groups.forEach(function (result_groups) { %>
 
         <!--            <button type="submit" name="groupID" class="list-group-item list-group-item-action list-group-item-light"-->
@@ -44,8 +43,8 @@
           <div class="groupCountTag"><%= result_groups.count%></div>
         </button>
         <% }) %>
-      </form>
-    </div>
+      </div>
+    </form>
     <% } else { %>
 
     <button type="button" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a"
@@ -53,7 +52,6 @@
       No groups found.
     </button>
     <% } %>
-  </div>
 
   <!-- Scripts to view shared groups functionality  -->
   <% include ../snippets/sharedGroupScript.ejs %>

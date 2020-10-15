@@ -45,6 +45,7 @@
                   <b>Last modified: </b>${ new Date(group.modified).toDateString() }<br>
                   <div class="groupCountTag">${ group.count}</div>`;
     groupCard.innerHTML = groupCardContent;
+    console.log(groupCard.outerHMTL);
 
     return groupCard;
   }
@@ -84,16 +85,12 @@
     groupsDescription.innerHTML = description;
 
     if ( groups.length >= 1 ) {
-      let groupCardForm = document.createElement('form');
-      groupCardForm.setAttribute('action', '/viewGroup');
-      groupCardForm.setAttribute('method', 'get');
 
       groups.forEach((group) => {
         let groupCard = createGroupCard(group);
-        groupCardForm.appendChild(groupCard);
+        displayGroupsDiv.appendChild(groupCard);
       });
 
-      displayGroupsDiv.appendChild(groupCardForm);
       tag_label();
     }
     else {

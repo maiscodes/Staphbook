@@ -819,15 +819,15 @@ input:checked + .toggle:before {
   }
 
   .groupCard {
-    margin: 0;
-    border-radius: 10px;
-    border: 1px solid #636363;
+    border-radius: 15px;
+    border: 1px solid #f3f3f3;
     float: left;
-    width: 30%;
-    padding-left: 2em;
-    padding-right: 2em;
-    min-height: 50%;
-    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    width: 22%;
+    padding: .5em;
+    padding-left: .8em;
+    padding-right: .8em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
     margin: 1em;
     background-color: white;
     position: relative;
@@ -852,17 +852,15 @@ input:checked + .toggle:before {
   }
 
   .groupCard {
-    margin: 0;
-    border-radius: 10px;
-    border: 1px solid #636363;
+    border-radius: 15px;
+    border: 1px solid #f3f3f3;
     float: left;
-    width: 50%;
-    height: 20%;
-    padding-top: 0.8em;
-    padding-bottom: 0.8em;
-    padding-left: 2em;
-    padding-right: 2em;
-    -webkit-box-shadow: 0px 0px 8px 1px rgba(0,0,0,0.15);
+    width: 22%;
+    padding: .5em;
+    padding-left: .8em;
+    padding-right: .8em;
+    min-height: 100%;
+    -webkit-box-shadow: 0px 0px 18px 1px rgba(0,0,0,0.1);
     margin: 1em;
     background-color: white;
     position: relative;

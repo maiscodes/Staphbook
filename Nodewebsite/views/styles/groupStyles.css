@@ -3,6 +3,7 @@
   text-align: center;
   margin-top: 1em;
 }
+
 #showGroupsContainer {
   margin-top: 0.7em;
   text-align: center;
@@ -19,13 +20,14 @@
 }
 
 #groupsCards {
-  display: -webkit-flex;
-  flex-wrap: wrap;
-  justify-content: center;
   width: 90%;
-  margin: 0 auto;
-  margin-top: 1em;
-  position: relative;
+  flex-wrap: wrap;
+  padding-top: 0.5em;
+  margin: auto;
+  text-align: center;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
 }
 
 .groupCard:hover {
@@ -48,8 +50,9 @@
 #groupsPageContainer {
   margin: 0 auto;
   min-height: 100%;
-  height: calc(100vh - 100px);
-  margin-bottom: -100px;
+  height: calc(100% - 100px);
+  justify-content: center;
+  padding-top: 3em;
 }
 
 .genomeCardInfo {
