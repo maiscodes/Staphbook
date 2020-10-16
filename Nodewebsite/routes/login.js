@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
     let userLoggedIn = false;
-    if (req.session.userStatus == "loggedIn") {
+    if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
 
     }
@@ -23,7 +23,7 @@ router.post('/', function (req, res) {
     let email = decodeURIComponent(req.body.email);
 
     req.knex.select("*").from("registered_users").where({ email: email }).then((result_registered_users, err) => {
-        if (result_registered_users.length != 1) {
+        if (result_registered_users.length !== 1) {
             console.log('user not registered');
             var userNotRegistered = true;
             res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered });
