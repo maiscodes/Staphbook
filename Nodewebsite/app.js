@@ -1,50 +1,37 @@
 // Require modules
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const cookie = require('cookie');
+//const cookie = require('cookie');
 const session = require('express-session');
-const options = require('./knexfile.js');
-var knex = require('knex')(options);
+
+const options = {
+    client: 'pg',
+    connection: {
+        host:     process.env.DB_HOST,
+        port:     process.env.DB_PORT,
+        database: process.env.DB_DB,
+        user:     process.env.DB_USER,
+        password: process.env.DB_PASS
+    }
+}
+
+const knex = require('knex')(options);
 
 // Change secret to unique value
-app.use(session({secret: "Shh, its a secret!"}));
+app.use(session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: false
+}));
 app.use(cors());
 
 //postgreSQL
-const {Pool, Client} = require('pg');
-// Change secret to your login details for postgres
-//layout is const connectionString = 'postgresql://username:password@address/Database_name';
+const {Client} = require('pg');
 
-// Sandra's connection
-//const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-
-// Maisie's connection
-// const connectionString = 'postgresql://postgres:12345@127.0.0.1:5432/staph';
-
-// Sam's connection
-// const connectionString = 'postgresql://postgres:postgreSAM@127.0.0.1:5433/postgres';
-
-// Chaashya's connection
-const connectionString = "postgresql://postgres:12345@127.0.0.1:5432/staph";
-
-// Andrew's connection
-//const connectionString = 'postgresql://postgres:password@127.0.0.1:5432/Staphopia';
-
-// const pool = new Pool({
-//     connectionString: connectionString,
-// });
-const pool = new Pool(options.connection);
-
-pool.query('SELECT NOW()', (err, res) => {
-    console.log(err, res);
-    pool.end();
-});
-
-// const client = new Client({
-//     connectionString: connectionString,
-// });
 const client = new Client(options.connection);
 client.connect();
 
@@ -248,5 +235,5 @@ app.get('/tutorials', function (req, res) {
 });
 
 
-app.listen(8000);
-console.log('8000 is the magic port');
+app.listen(process.env.PORT);
+console.log(process.env.PORT+' is the magic port');
