@@ -916,7 +916,7 @@
     function addToGroup(group_id){
         //let group_id = document.getElementById('groups-list').value;
 
-        let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+        let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
         let url = `${baseUrl}/addGroupSample`;
 
         if(group_id === 'create'){
@@ -936,7 +936,6 @@
         })
             .then(response => {
                 if (response.status == 200) {
-                    console.log("successful addition");
                     location.reload(true);
                 }
             })
@@ -946,7 +945,7 @@
     }
 
     function remGroup(group_id){
-        let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+        let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
         let url = `${baseUrl}/removeGroupSample`;
         fetch(url, {
             method: 'POST',
@@ -961,7 +960,6 @@
         })
             .then(response => {
                 if (response.status == 200) {
-                    console.log("successful removal");
                     location.reload(true);
                 }
             })

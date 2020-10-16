@@ -517,7 +517,7 @@ function removeGenomeSamples() {
   }
   //console.log(selectedSamples);
 
-  let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+  let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
   let url = `${baseUrl}/removeGroupSample`;
   //console.log(url);
   fetch(url, {
@@ -651,7 +651,7 @@ function removeGenomeSamples() {
     let newTitle = document.getElementById("inputTitle").value;
     let newDescription = document.getElementById("inputDescription").value;
     let isoDate = new Date(Date.now()).toISOString();
-    let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
     let url = `${baseUrl}/updateGroup`;
     //console.log(url);
 
@@ -676,7 +676,7 @@ function removeGenomeSamples() {
   }
 
   function deleteGroup(){
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/removeGroup`;
       //console.log(url);
       fetch(url, {
@@ -806,7 +806,7 @@ function removeGenomeSamples() {
     let email = document.getElementById('inputUserEmail').value;
     console.log(email);
     console.log(<%- groupInfo.group_id %>);
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
       method: 'POST',
@@ -847,7 +847,7 @@ function removeGenomeSamples() {
     let email = "_public_all_users_";
     console.log(email);
     console.log(<%- groupInfo.group_id %>);
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
       method: 'POST',
@@ -905,7 +905,7 @@ function removeGenomeSamples() {
   }
 
   function leaveGroup() {
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/removeUserFromGroup`;
     fetch(url, {
       method: 'POST',
@@ -943,7 +943,7 @@ function removeGenomeSamples() {
   }
 
   function unpubliciseGroup() {
-    let baseUrl = "http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/removeUserFromGroup`;
     fetch(url, {
       method: 'POST',
