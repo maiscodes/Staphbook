@@ -1,5 +1,5 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 let bcrypt = require('bcrypt')
 
 router.get('/', function (req, res) {
@@ -25,7 +25,6 @@ router.post('/', function (req, res) {
 
     if (regex.test(email)) {
         bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
-
             req.knex('registered_users')
                 .insert({
                     email: email,
