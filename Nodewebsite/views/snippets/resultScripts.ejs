@@ -913,10 +913,22 @@
       displayFindMyFriendsSection(minValue, maxValue);
     }
 
-    function addToGroup(group_id){
-        //let group_id = document.getElementById('groups-list').value;
+    function addSamplesToGroup(group_id){
+        collection.forEach((ele) => {
+            if(ele.isNode() && ele.inside()){
+                addSampleToGroup(group_id, ele.id());
+            }
+        });
+        addSampleToGroup(group_id, sampleIdentity);
+    }
 
-        let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
+    function addToGroup(group_id){
+        addSampleToGroup(group_id, sampleIdentity);
+    }
+
+    function addSampleToGroup(group_id, sample_id){
+        //let group_id = document.getElementById('groups-list').value;
+        let baseUrl = window.location.origin;
         let url = `${baseUrl}/addGroupSample`;
 
         if(group_id === 'create'){
@@ -931,11 +943,11 @@
             },
             body: JSON.stringify({
                 groupId: group_id,
-                sampleId: <%- sample_ID %>,
+                sampleId: sample_id,
             })
         })
             .then(response => {
-                if (response.status == 200) {
+                if (response.status === 200 && sample_id === sampleIdentity) {
                     location.reload(true);
                 }
             })
