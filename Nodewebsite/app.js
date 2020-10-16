@@ -225,9 +225,10 @@ app.get('/', function (req, res) {
                 }
             });
 
-    } else {
+    }
+    else {
         res.render("pages/index", {
-            userLoggedIn: userLoggedIn,
+            userLoggedIn: false,
             haveFavs: false,
             haveSugs: false,
         })
