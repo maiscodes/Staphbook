@@ -192,34 +192,83 @@ app.get('/', function (req, res) {
                                                         sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                                                     }
 
-                                                    res.render('pages/index', {
-                                                        userLoggedIn: userLoggedIn,
-                                                        favorites: favoriteSamples,
-                                                        suggested: suggestedSamples,
-                                                        haveFavs: haveFavs,
-                                                        haveSugs: haveSugs
-                                                    });
+                                                    req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                                                        name: 'sample_sample.name', id: 'sample_sample.id'})
+                                                        .from('mlst_mlst')
+                                                        .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                                                        .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                                                        .orderByRaw('random()')
+                                                        .limit(4)
+                                                        .then((random) => {
+                                                            for (const same of random) {
+                                                                same.country = same.metadata.country;
+                                                                same.strain = same.metadata.strain;
+                                                                same.host = same.metadata.host;
+                                                                same.isolation_source = same.metadata.isolation_source;
+                                                            }
+                                                            console.log(random);
+                                                            res.render('pages/index', {
+                                                                userLoggedIn: userLoggedIn,
+                                                                randomSamples: random,
+                                                                favorites: favoriteSamples,
+                                                                suggested: suggestedSamples,
+                                                                haveFavs: haveFavs,
+                                                                haveSugs: haveSugs
+                                                            });
+                                                        });
                                                 })
                                         })
                                 })
                         });
                 }
                 else{
-                    res.render("pages/index", {
-                        userLoggedIn: userLoggedIn,
-                        haveFavs: false,
-                        haveSugs: false,
-                    })
+                    req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+                        name: 'sample_sample.name', id: 'sample_sample.id'})
+                        .from('mlst_mlst')
+                        .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+                        .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+                        .orderByRaw('random()')
+                        .limit(4)
+                        .then((random) => {
+                            for (const same of random) {
+                                same.country = same.metadata.country;
+                                same.strain = same.metadata.strain;
+                                same.host = same.metadata.host;
+                                same.isolation_source = same.metadata.isolation_source;
+                            }
+                            res.render("pages/index", {
+                                userLoggedIn: userLoggedIn,
+                                randomSamples: random,
+                                haveFavs: false,
+                                haveSugs: false,
+                            });
+                        });
                 }
             });
 
     }
     else {
-        res.render("pages/index", {
-            userLoggedIn: false,
-            haveFavs: false,
-            haveSugs: false,
-        })
+        req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
+            name: 'sample_sample.name', id: 'sample_sample.id'})
+            .from('mlst_mlst')
+            .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
+            .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
+            .orderByRaw('random()')
+            .limit(4)
+            .then((random) => {
+                for (const same of random) {
+                    same.country = same.metadata.country;
+                    same.strain = same.metadata.strain;
+                    same.host = same.metadata.host;
+                    same.isolation_source = same.metadata.isolation_source;
+                }
+                res.render("pages/index", {
+                    userLoggedIn: userLoggedIn,
+                    randomSamples: random,
+                    haveFavs: false,
+                    haveSugs: false,
+                });
+            });
     }
 });
 
