@@ -56,13 +56,6 @@ app.use(express.static(__dirname + '/views/'));
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-// global variable, will need to pop into get and post routes later when published
-//var userLoggedIn;
-var creationSuccess = false;
-var userAlreadyExists = true;
-var groupAlreadyExists = true;
-var favSampleID;
-
 // Middleware
 let authenticateUserView = require('./middleware/authenticationViewGroup.js');
 let authenticateUserEdit = require('./middleware/authenticationEditGroup.js');
