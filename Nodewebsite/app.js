@@ -48,7 +48,7 @@ app.use('/webcola', express.static(__dirname + '/node_modules/webcola/'));
 app.use('/cola_scripts', express.static(__dirname + '/node_modules/cytoscape-cola/'));
 app.use('/popupS_scripts', express.static(__dirname + '/node_modules/popupS/'));
 app.use('/typehead_scripts', express.static(__dirname + '/node_modules/typehead/'));
-app.use('/filesaver_scripts', express.static(__dirname + '/node_modules/filesaver/'));
+app.use('/filesaver_scripts', express.static(__dirname + '/node_modules/file-saver/'));
 
 //directories
 app.use(express.static(__dirname + '/views/'));
@@ -57,7 +57,7 @@ app.use(express.static(__dirname + '/views/'));
 app.set('view engine', 'ejs');
 
 // global variable, will need to pop into get and post routes later when published
-var userLoggedIn;
+//var userLoggedIn;
 var creationSuccess = false;
 var userAlreadyExists = true;
 var groupAlreadyExists = true;
@@ -120,11 +120,12 @@ app.use("/removeGroup", removeGroupRouter);
 
 // index page
 app.get('/', function (req, res) {
+    let userLoggedIn = req.session.userStatus === "loggedIn";
     let favorites = [];
     let suggested = [];
     let haveFavs = false;
     let haveSugs = false;
-    if (req.session.userStatus === "loggedIn") {
+    if (userLoggedIn) {
         userLoggedIn = true;
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
@@ -206,7 +207,6 @@ app.get('/', function (req, res) {
                                                                 same.host = same.metadata.host;
                                                                 same.isolation_source = same.metadata.isolation_source;
                                                             }
-                                                            console.log(random);
                                                             res.render('pages/index', {
                                                                 userLoggedIn: userLoggedIn,
                                                                 randomSamples: random,
