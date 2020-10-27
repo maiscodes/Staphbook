@@ -99,6 +99,7 @@ let removeGroupSampleRouter = require("./routes/removeGroupSample");
 let removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
 let uploadResultRouter = require("./routes/uploadResult");
 let uploadSampleRouter = require("./routes/uploadSample");
+let getCloseSampleRouter = require("./routes/getCloseSamples");
 
 /* --------------------------------------------------------------------------------
  *
@@ -129,6 +130,7 @@ app.use("/removeUserFromGroup", authenticateUserEdit, removeUserGroupAccessRoute
 app.use("/uploadResult", uploadResultRouter);
 app.use("/uploadSample", uploadSampleRouter);
 app.use("/removeGroup", removeGroupRouter);
+app.use("/getCloseSamples", getCloseSampleRouter);
 
 // index page
 app.get('/', function (req, res) {
