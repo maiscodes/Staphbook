@@ -20,10 +20,10 @@ router.get('/', function (req, res) {
     }
 
     // Set order by to table
-    if (orderBy === "distance") {
+    if (orderBy === "geneticDistance") { // TODO: Fix, does not seem to recognise column
       orderBy = "weighted_distance.distance";
     }
-    else if (orderBy === "st") {
+    else if (orderBy === "sequenceType") {
         orderBy = "mlst_mlst.st";
     }
     else if (orderBy === "location") {
@@ -35,7 +35,7 @@ router.get('/', function (req, res) {
     else if (orderBy === "host") {
         orderBy = "sample_metadata.metadata->>'host'";
     }
-    else if (orderBy === "source") {
+    else if (orderBy === "isolationSource") {
         orderBy = "sample_metadata.metadata->>'isolation_source'";
     } //metadata->>'collection_date'
     // sample_metadata.metadata->>isolation_source
@@ -47,7 +47,7 @@ router.get('/', function (req, res) {
     let genomesPerPage = 100;
 
     let sample_name = req.knex.select('name').from('sample_sample').where('id', '=', sampleID);
-    let getGeneticallyCloseSampleInfo = req.knex.select('sample_sample.id', 'weighted_distance.distance', 'mlst_mlst.st', 'sample_metadata.metadata')
+    req.knex.select('sample_sample.id', 'weighted_distance.distance', 'mlst_mlst.st', 'sample_metadata.metadata')
     .from('weighted_distance')
     .innerJoin('sample_sample', 'weighted_distance.comparison_sample', 'sample_sample.name')
     .innerJoin('sample_metadata', 'sample_sample.id', 'sample_metadata.sample_id')
@@ -76,6 +76,34 @@ router.get('/', function (req, res) {
     .catch((err) => {
       console.log(err);
         res.json({"Error" : true, "Message" : "Error executing query"})
+    }); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 20;
+})
+
+router.get('/count', function (req, res) {
+    let sampleID = req.query.sampleSelection;
+    let min = req.query.min;
+    let max = req.query.max;
+
+    if (min === null) {
+      min = 0;
+    }
+
+    if (max === null ){
+      max = 0.015;
+    }
+
+    let sample_name = req.knex.select('name').from('sample_sample').where('id', '=', sampleID);
+    req.knex.count('distance')
+    .from('weighted_distance')
+    .where('selected_sample', '=', sample_name)
+    .andWhere('distance', '>=', min) // UPDATE COLUMN NAME
+    .andWhere('distance', '<=', max)
+    .then((numSamples) => {
+      res.json({"numSamples" : numSamples});
+    })
+    .catch((err) => {
+      console.log(err);
+        res.json({"Error" : true, "Message" : "Error executing count query"})
     }); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 20;
 })
 

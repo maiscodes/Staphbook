@@ -136,8 +136,9 @@ router.get('/', function (req, res) {
                               .innerJoin('sample_metadata', 'sample_sample.id', 'sample_metadata.sample_id')
                               .innerJoin('mlst_mlst', 'sample_sample.id', 'mlst_mlst.sample_id')
                               .where('weighted_distance.selected_sample', '=', sample_name)
-                              .orderBy('weighted_distance.distance', 'asc');
-
+                              .orderBy('weighted_distance.distance', 'asc')
+                              .limit(100)  // About 21 * 10 200 worth at a time.
+                              .offset(0); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 21;
 
                       Promise
                         .all([getSameSequenceSampleInfo, getSameLocationSampleInfo, getSameHostSampleInfo, getSameIsoSourceSampleInfo, getGeneticallyCloseSampleInfo])
