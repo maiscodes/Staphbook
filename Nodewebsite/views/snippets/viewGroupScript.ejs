@@ -164,7 +164,7 @@
     labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
-      console.log(labels[l]);
+      //console.log(labels[l]);
     }
 
     return [labels, maxes];
@@ -216,7 +216,7 @@
     ["strainBar", strains, "Strains"], ["hostBar", hosts, "Hosts"], ["isolationSourceBar", isolationSources, "Isolation Sources"]];
 
     canvases.forEach(function(canvas) {
-      console.log(canvas);
+      //console.log(canvas);
       id = canvas[0];
       chartInfo = getBarLabelsData(canvas[1]);
       title = canvas[2];
@@ -401,7 +401,7 @@
 
     toggleValue().then((newValue) => {
     	button.value = newValue;
-        console.log(button.value);
+        //console.log(button.value);
         button.style.backgroundColor = "white";
         if (button.value == "true") {
         	button.style.backgroundColor = "red";
@@ -585,7 +585,7 @@ function removeGenomeSamples() {
     if ( newPageNumber == NaN ) {
       return;
     }
-    console.log(newPageNumber);
+    //console.log(newPageNumber);
     if ( newPageNumber >= 1 && newPageNumber <= maxPageNumber ) {
       console.log(newPageNumber);
       clearGroupSampleCards();
@@ -804,8 +804,8 @@ function removeGenomeSamples() {
     // Enter of users. (split by , and strip )
     // Get email
     let email = document.getElementById('inputUserEmail').value;
-    console.log(email);
-    console.log(<%- groupInfo.group_id %>);
+    //console.log(email);
+    //console.log(<%- groupInfo.group_id %>);
     let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
@@ -845,8 +845,8 @@ function removeGenomeSamples() {
 
   function makeGroupPublic() {
     let email = "_public_all_users_";
-    console.log(email);
-    console.log(<%- groupInfo.group_id %>);
+    //console.log(email);
+    //console.log(<%- groupInfo.group_id %>);
     let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
@@ -870,7 +870,7 @@ function removeGenomeSamples() {
               body: JSON.stringify({groupId: <%- groupInfo.group_id %>, modified: isoDate})
               })
               .then(responseUpdate => {
-                console.log("Added User");
+                //console.log("Added User");
                 if (responseUpdate.status == 200) {
                   location.reload(true); // Update page with new user
                   return;
@@ -886,9 +886,9 @@ function removeGenomeSamples() {
 
   function loadLeaveGroup() {
     let container = document.getElementById("leaveGroup");
-    console.log(container);
+    //console.log(container);
     container.innerHTML = '<p id="leaveMessage">You are currently a collaborator of this group. Would you like to leave this group?</p><Button id="makePrivateButton" onclick="leaveGroup()">Yes</Button>';
-    console.log(container);
+    //console.log(container);
   }
 
   function loadUnpubliciseGroup() {
@@ -916,7 +916,7 @@ function removeGenomeSamples() {
       body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: <%-  JSON.stringify(email) %>})
       })
       .then(response => {
-          console.log(response);
+          //console.log(response);
           if (response.status == 200) {
             let isoDate = new Date(Date.now()).toISOString(); // Update last modified
             fetch(`${baseUrl}/updateGroup`, {
@@ -928,7 +928,7 @@ function removeGenomeSamples() {
               body: JSON.stringify({groupId: <%- groupInfo.group_id %>, modified: isoDate})
               })
               .then(responseUpdate => {
-                console.log("Added User");
+                //console.log("Added User");
                 if (responseUpdate.status == 200) {
                   location.reload(true); // Update page with new user
                   return;
@@ -954,7 +954,7 @@ function removeGenomeSamples() {
       body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: "_public_all_users_"})
       })
       .then(response => {
-          console.log(response);
+          //console.log(response);
           if (response.status == 200) {
             let isoDate = new Date(Date.now()).toISOString();
             fetch(`${baseUrl}/updateGroup`, {
@@ -966,7 +966,7 @@ function removeGenomeSamples() {
               body: JSON.stringify({groupId: <%- groupInfo.group_id %>, modified: isoDate})
               })
               .then(responseUpdate => {
-                console.log("Added User");
+                //console.log("Added User");
                 if (responseUpdate.status == 200) {
                   location.reload(true);
                   return;
@@ -992,19 +992,19 @@ function removeGenomeSamples() {
     let owner = <%-  JSON.stringify(groupInfo.email) %>;
     let status = <%-  JSON.stringify(groupInfo.status) %>;
 
-    console.log(email);
-    console.log(collaborators);
+    //console.log(email);
+    //console.log(collaborators);
     if ( status == "Your" || status == "Private") {
       loadOwner();
       loadCollaborators();
     }
     if (email == owner || collaborators.includes(email) ) {
       loadEdittingBars();
-      console.log("Have editting rights");
+      //console.log("Have editting rights");
       if ( status == "Public" ) {
           loadUnpubliciseGroup();
       } else if ( status == "Private" && email != owner ) {
-          console.log("private group");
+          //console.log("private group");
           loadLeaveGroup();
       }
     }
