@@ -496,7 +496,7 @@
        if (pageNumber === 0) {
          pageNumber = numPagesPerSection;
        }
-       console.log("Page nuumber is " + pageNumber);
+       console.log("Page number is " + pageNumber);
        var sectionGenomes = pageGenomes.slice((pageNumber - 1) * samplesPerPage, pageNumber * samplesPerPage);
        console.log(sectionGenomes);
        if (sectionGenomes == undefined) {
@@ -531,20 +531,24 @@
         })
      }
 
-     function fetchCloseSamples(){
+     async function fetchCloseSamples(){
        let baseUrl =  "http://127.0.0.1:8000/getCloseSamples";
        let sampleId = <%- sample_ID %>;
        let page = currentPage;
        let orderBy = document.getElementById("orderBy").value;
        let order = (document.getElementById("toggleOrder").checked) ? "asc" : "desc";
        let min = document.getElementById("minGeneticDistanceTyped").value;
-       let max = document.getElementById("maxGeneticDistanceTyped").value
+       let max = document.getElementById("maxGeneticDistanceTyped").value;
+
+       console.log("Passed information");
+       console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
 
       fetch(`${baseUrl}?sampleSelection=${sampleId}&page=${page}&orderBy=${orderBy}&order=${order}&min=${min}&max=${max}`)
       .then((resp) => resp.json())
       .then(function(samples) {
+        console.log("Samples fetched");
+        console.log(samples.closeSamples);
         pageGenomes = samples.closeSamples;
-        //console.log(samples.closeSamples);
       })
      }
 
@@ -560,7 +564,7 @@
          clearFindMyFriendsSection();
 
          if (~~(newPageNumber / numPagesPerSection) !=  ~~(currentPage / numPagesPerSection)) { // Next hundred genomes
-           fetchCloseSamples(); // Calls to load new samples, however does not save previously loaded
+           fetchCloseSamples(); // Call to load new samples and discards previously loaded samples
          }
          DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
        }
@@ -568,12 +572,9 @@
 
      function stepToPage(step) {
        step = parseInt(step);
-       //console.log(step);
        let pageNumberSelection = document.getElementById("samplePageNumber");
-       //let maxPageNumber = parseInt(pageNumberSelection.max);
        let pageNumber = parseInt(pageNumberSelection.value);
        pageNumber = pageNumber + step;
-       //console.log(pageNumber);
        if (step < 0 && pageNumber < 1) {
          pageNumber = 1;
        }
@@ -584,16 +585,33 @@
        updatePageSamples();
      }
 
-
      /*
      * Update input
      */
      function reloadSamples() { // After min and max sliders have been adjusted
-       clearFindMyFriendsSection();
-       fetchCloseSamples();
-       let newPageNumber = document.getElementById("samplePageNumber").value;
-       newPageNumber = parseInt(newPageNumber);
-       DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
+       let baseUrl =  "http://127.0.0.1:8000/getCloseSamples";
+       let sampleId = <%- sample_ID %>;
+       let page = currentPage;
+       let orderBy = document.getElementById("orderBy").value;
+       let order = (document.getElementById("toggleOrder").checked) ? "asc" : "desc";
+       let min = document.getElementById("minGeneticDistanceTyped").value;
+       let max = document.getElementById("maxGeneticDistanceTyped").value;
+
+       console.log("Passed information");
+       console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
+
+      fetch(`${baseUrl}?sampleSelection=${sampleId}&page=${page}&orderBy=${orderBy}&order=${order}&min=${min}&max=${max}`)
+      .then((resp) => resp.json())
+      .then(function(samples) {
+        console.log("Samples fetched");
+        console.log(samples.closeSamples);
+        pageGenomes = samples.closeSamples;
+        let newPageNumber = document.getElementById("samplePageNumber").value;
+        newPageNumber = parseInt(newPageNumber);
+        console.log("Update genome display");
+        clearFindMyFriendsSection();
+        DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
+      })
      }
 
      function updateMinSliderSelection() {
@@ -622,6 +640,7 @@
         reloadSamples();
      }
 
+     // Update visuals of slider
      function updateMinSlider(newValue) {
        let minSlider = document.getElementById("minGeneticDistInput");
        let maxSlider = document.getElementById("maxGeneticDistInput");
@@ -924,12 +943,13 @@
 
     // Display cards when first loaded
     window.onload = function() {
-      let minValue = document.getElementById("minGeneticDistInput").value;
-      let maxValue = document.getElementById("maxGeneticDistInput").value;
+      //let minValue = document.getElementById("minGeneticDistInput").value;
+      //let maxValue = document.getElementById("maxGeneticDistInput").value;
       //displayFindMyFriendsSection(minValue, maxValue);
+      updateMaxPage();
       updatePageSamples();
       updateFavoritesButton();
-      updateMaxPage();
+
 
       let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
 
@@ -952,7 +972,7 @@
       }
     }
 
-    // Update display when window is rezied, TODO: figure out a way to make this more efficient
+    // Update display when window is rezied
     window.onresize = function() {
       tags = document.getElementsByClassName("geneticDistanceTag");
       cards = document.getElementsByClassName("genomeCard");
@@ -982,8 +1002,6 @@
     }
 
     function addToGroup(group_id){
-        //let group_id = document.getElementById('groups-list').value;
-
         let baseUrl = "http://127.0.0.1:8000"; // TODO: update when hosted
         let url = `${baseUrl}/addGroupSample`;
 

@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
         orderBy = "sample_metadata.metadata->>'country'";
     }
     else if (orderBy === "strain") {
-        orderBy = "sample_metadata.metadata->>'isolation_strain";
+        orderBy = "sample_metadata.metadata->>'isolation_strain'";
     }
     else if (orderBy === "host") {
         orderBy = "sample_metadata.metadata->>'host'";
@@ -53,9 +53,17 @@ router.get('/', function (req, res) {
     .innerJoin('sample_metadata', 'sample_sample.id', 'sample_metadata.sample_id')
     .innerJoin('mlst_mlst', 'sample_sample.id', 'mlst_mlst.sample_id')
     .where('weighted_distance.selected_sample', '=', sample_name)
-    .andWhere('weighted_distance.distance', '>=', min) // UPDATE COLUMN NAME
+    .andWhere('weighted_distance.distance', '>=', min)
     .andWhere('weighted_distance.distance', '<=', max)
-    .orderBy(orderBy, order)
+    .modify(function (queryBuilder){ // Supports order by .json object value
+          if(orderBy.includes('>')){
+            console.log(`${orderBy} ${order}`);
+              queryBuilder.orderByRaw(`${orderBy} ${order}`);
+          }
+          else {
+            queryBuilder.orderBy(orderBy, order)
+          }
+    })
     .limit(genomesPerPage)  // About 21 * 10 200 worth at a time.
     .offset((page - 1 ) * genomesPerPage)
     .then((rows) => {
