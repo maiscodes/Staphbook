@@ -34,8 +34,8 @@
      *
      */
     var sampleIdentity = <%- JSON.stringify(sample_ID) %>;
-    console.log("HELP");
-    console.log(sampleIdentity);
+    //console.log("HELP");
+    //console.log(sampleIdentity);
 
     var cy = cytoscape({
         container: document.getElementById('cy'),
@@ -496,27 +496,24 @@
        if (pageNumber === 0) {
          pageNumber = numPagesPerSection;
        }
-       console.log("Page number is " + pageNumber);
+       //console.log("Page number is " + pageNumber + " out of 5");
+       //console.log(pageGenomes);
        var sectionGenomes = pageGenomes.slice((pageNumber - 1) * samplesPerPage, pageNumber * samplesPerPage);
-       console.log(sectionGenomes);
+       //console.log(sectionGenomes);
        if (sectionGenomes == undefined) {
          let parentSection = document.getElementById("findMyFriendsCards");
          parentSection.innerHTML = "<p>No further genomes in this direction.</p>";
          return;
        }
-
        clearFindMyFriendsSection();
        populateFriendsSection(sectionGenomes);
      }
 
      function updateMaxPage() { // After updating min and max values
-       let currentPage = document.getElementById("samplePageNumber");
-       currentPage.value = 1;
-
        let minValue = document.getElementById("minGeneticDistanceTyped").value;
        let maxValue = document.getElementById("maxGeneticDistanceTyped").value;
 
-       console.log("Getting max samples");
+       //console.log("Getting max samples");
 
        fetch(`${baseUrl}/count?sampleSelection=${<%- sample_ID %>}&min=${minValue}&max=${maxValue}`)
        .then((resp) => resp.json())
@@ -531,24 +528,26 @@
         })
      }
 
-     async function fetchCloseSamples(){
+     async function fetchUpdateCloseSamples(newPageNumber){
        let baseUrl =  "http://127.0.0.1:8000/getCloseSamples";
        let sampleId = <%- sample_ID %>;
-       let page = currentPage;
+       let page = Math.ceil(newPageNumber / numPagesPerSection); // figure out section
        let orderBy = document.getElementById("orderBy").value;
        let order = (document.getElementById("toggleOrder").checked) ? "asc" : "desc";
        let min = document.getElementById("minGeneticDistanceTyped").value;
        let max = document.getElementById("maxGeneticDistanceTyped").value;
 
-       console.log("Passed information");
-       console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
+       //console.log("Passed information");
+       //console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
 
       fetch(`${baseUrl}?sampleSelection=${sampleId}&page=${page}&orderBy=${orderBy}&order=${order}&min=${min}&max=${max}`)
       .then((resp) => resp.json())
       .then(function(samples) {
-        console.log("Samples fetched");
-        console.log(samples.closeSamples);
+        //console.log("Samples fetched");
+        //console.log(samples.closeSamples);
         pageGenomes = samples.closeSamples;
+        DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
+        currentPage = newPageNumber;
       })
      }
 
@@ -558,15 +557,18 @@
        if ( newPageNumber == NaN ) {
          return;
        }
-       console.log(newPageNumber);
+       //console.log(`The new page number is ${newPageNumber}`);
        if ( newPageNumber >= 1 && newPageNumber <= maxPageNumber ) {
-         console.log(newPageNumber);
-         clearFindMyFriendsSection();
+         //console.log(newPageNumber);
 
-         if (~~(newPageNumber / numPagesPerSection) !=  ~~(currentPage / numPagesPerSection)) { // Next hundred genomes
-           fetchCloseSamples(); // Call to load new samples and discards previously loaded samples
+         if ( Math.ceil(currentPage / numPagesPerSection) != Math.ceil(newPageNumber / numPagesPerSection)) { //~~((newPageNumber) / numPagesPerSection) !=  ~~(currentPage / numPagesPerSection) // Next hundred genomes
+           //console.log("Activated fetch call for next section's genomes");
+           fetchUpdateCloseSamples(newPageNumber); // Call to load new samples and discards previously loaded samples
          }
-         DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
+         else { // Otherwise don't wait for fetch call
+           DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
+           currentPage = newPageNumber;
+         }
        }
      }
 
@@ -591,25 +593,24 @@
      function reloadSamples() { // After min and max sliders have been adjusted
        let baseUrl =  "http://127.0.0.1:8000/getCloseSamples";
        let sampleId = <%- sample_ID %>;
-       let page = currentPage;
+       let page = Math.ceil(currentPage / numPagesPerSection);
        let orderBy = document.getElementById("orderBy").value;
        let order = (document.getElementById("toggleOrder").checked) ? "asc" : "desc";
        let min = document.getElementById("minGeneticDistanceTyped").value;
        let max = document.getElementById("maxGeneticDistanceTyped").value;
 
-       console.log("Passed information");
-       console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
+       //console.log("Passed information");
+       //console.log("orderBy: " + orderBy + " Order:" + order + " Min:" + min + " Max:" + max + "Page:" + page);
 
       fetch(`${baseUrl}?sampleSelection=${sampleId}&page=${page}&orderBy=${orderBy}&order=${order}&min=${min}&max=${max}`)
       .then((resp) => resp.json())
       .then(function(samples) {
-        console.log("Samples fetched");
-        console.log(samples.closeSamples);
+        //console.log("Samples fetched");
+        //console.log(samples.closeSamples);
         pageGenomes = samples.closeSamples;
         let newPageNumber = document.getElementById("samplePageNumber").value;
         newPageNumber = parseInt(newPageNumber);
-        console.log("Update genome display");
-        clearFindMyFriendsSection();
+        //console.log("Update genome display");
         DisplayFindMyFriendsSectionPage(newPageNumber % numPagesPerSection);
       })
      }
@@ -682,7 +683,7 @@
        let minInputBox = document.getElementById("minGeneticDistanceTyped");  // Update values in input boxes
        let minValue = parseFloat(minInputBox.value);
 
-       console.log(minValue);
+       //console.log(minValue);
 
        if (minValue != NaN) {
          let rangeSelected = updateMinSlider(minValue);
@@ -699,7 +700,7 @@
        let maxInputBox = document.getElementById("maxGeneticDistanceTyped");
        let maxValue = parseFloat(maxInputBox.value);
 
-       console.log(maxValue);
+       //console.log(maxValue);
 
        if (maxValue != NaN) {
          let rangeSelected = updateMaxSlider(maxValue);
@@ -713,24 +714,13 @@
      }
 
      function updateOrderByProperty() {
-       console.log("Update byorder by");
+       //console.log("Update byorder by");
        reloadSamples();
-       // Complete fetch call
-       // DisplayFindMyFriendsSectionPage(currentPageNumber out of 5);
-
-       // let minValue = document.getElementById("minGeneticDistanceTyped").value;
-       // let maxValue = document.getElementById("maxGeneticDistanceTyped").value;
-       // clearFindMyFriendsSection();
-       // displayFindMyFriendsSection(minValue, maxValue);
      }
 
-     function updateOrderByAsc() { // TODO: FIX
-       console.log("Update by ascending");
+     function updateOrderByAsc() {
+       //console.log("Update by ascending");
        reloadSamples();
-       //let minValue = document.getElementById("minGeneticDistanceTyped").value;  // Update values in input boxes
-       //let maxValue = document.getElementById("maxGeneticDistanceTyped").value;
-       //clearFindMyFriendsSection();
-       //displayFindMyFriendsSection(minValue, maxValue);
      }
 
      /*
@@ -740,157 +730,6 @@
         document.getElementById("findMyFriendsCards").innerHTML = "";
      }
 
-     /*
-     function filterSamples(minValue, maxValue) {
-       let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
-       let desiredRelatedSamples = [];
-
-       relatedSamples.forEach(function(sample) { // Filter desired genetic distance
-         if (sample.distance >= minValue && sample.distance <= maxValue) {
-           desiredRelatedSamples.push(sample);
-         }
-       });
-
-       relatedSamples.forEach(function(sample) { // Handle undefined properties
-         if ( sample.st == undefined ) {
-           sample.st = "Unknown";
-         }
-         if ( sample.country == undefined ) {
-           sample.country = "Unknown";
-         }
-         if ( sample.strain == undefined ) {
-           sample.strain = "Unknown";
-         }
-         if ( sample.host == undefined ) {
-           sample.host = "Unknown";
-         }
-         if ( sample.isolation_source == undefined ) {
-           sample.isolation_source = "Unknown";
-         }
-       });
-
-
-       let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
-       desiredRelatedSamples.sort(function(a,b) {
-         if (orderBy == "sequenceType") {
-           if (a.st < b.st) {
-             return -1;
-           }
-           if (a.st > b.st) {
-             return 1;
-           }
-           return 0;
-         }
-         if (orderBy == "location") {
-           return a.country.localeCompare(b.country);
-         }
-         if (orderBy == "strain") {
-           return a.strain.localeCompare(b.strain);
-         }
-         if (orderBy == "host") {
-           return a.host.localeCompare(b.host);
-         }
-         if (orderBy == "isolationSource") {
-           return a.isolation_source.localeCompare(b.isolation_source);
-         }
-       });
-
-      orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
-      if (orderByAsc.checked == false) {
-        desiredRelatedSamples.reverse();
-      }
-      return desiredRelatedSamples;
-     }
-
-
-     function displayFindMyFriendsSection(minValue, maxValue){ // TODO CLEANUP
-       let numberSamplesPerPage = samplesPerPage;
-       let pageNumber = parseInt(document.getElementById("samplePageNumber").value);
-       console.log(pageNumber);
-       if ( pageNumber == NaN ) {
-         return;
-       }
-
-       /*
-       let relatedSamples =  <%- JSON.stringify(all_weighted_distances) %>; // Read settings and perform desired filters
-       let desiredRelatedSamples = [];
-
-       relatedSamples.forEach(function(sample) { // Filter desired genetic distance
-         if (sample.distance >= minValue && sample.distance <= maxValue) {
-           desiredRelatedSamples.push(sample);
-         }
-       });
-
-       relatedSamples.forEach(function(sample) { // Handle undefined properties
-         if ( sample.st == undefined ) {
-           sample.st = "Unknown";
-         }
-         if ( sample.country == undefined ) {
-           sample.country = "Unknown";
-         }
-         if ( sample.strain == undefined ) {
-           sample.strain = "Unknown";
-         }
-         if ( sample.host == undefined ) {
-           sample.host = "Unknown";
-         }
-         if ( sample.isolation_source == undefined ) {
-           sample.isolation_source = "Unknown";
-         }
-       });
-
-
-       let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
-       desiredRelatedSamples.sort(function(a,b) {
-         if (orderBy == "sequenceType") {
-           if (a.st < b.st) {
-             return -1;
-           }
-           if (a.st > b.st) {
-             return 1;
-           }
-           return 0;
-         }
-         if (orderBy == "location") {
-           return a.country.localeCompare(b.country);
-         }
-         if (orderBy == "strain") {
-           return a.strain.localeCompare(b.strain);
-         }
-         if (orderBy == "host") {
-           return a.host.localeCompare(b.host);
-         }
-         if (orderBy == "isolationSource") {
-           return a.isolation_source.localeCompare(b.isolation_source);
-         }
-       });
-
-      orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
-      if (orderByAsc.checked == false) {
-        desiredRelatedSamples.reverse();
-      }
-
-
-      let desiredRelatedSamples = filterSamples(minValue, maxValue);
-      desiredRelatedSamples = desiredRelatedSamples.slice(numberSamplesPerPage * (pageNumber - 1), numberSamplesPerPage * pageNumber);
-
-       let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
-       let count = 0;
-       let orderBy = document.getElementById("orderBy").value;
-
-       desiredRelatedSamples.forEach(function(relatedSample) {
-         relatedSample["highlight"] = orderBy;
-         genomeCard = createGenomeCard(relatedSample);
-         parentSection.appendChild(genomeCard);
-
-         tag = parentSection.getElementsByClassName("geneticDistanceTag")[count]; // Position the tag
-         card = parentSection.getElementsByClassName("genomeCard")[count];
-         //console.log(`top: ${ - 1 * (tag.offsetTop - card.offsetTop) - 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px;`);
-         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
-         count++;
-       });
-
-     } */
 
      function populateFriendsSection(samples) {
        let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
@@ -943,9 +782,8 @@
 
     // Display cards when first loaded
     window.onload = function() {
-      //let minValue = document.getElementById("minGeneticDistInput").value;
-      //let maxValue = document.getElementById("maxGeneticDistInput").value;
-      //displayFindMyFriendsSection(minValue, maxValue);
+      let currentPage = document.getElementById("samplePageNumber");
+      currentPage.value = 1;
       updateMaxPage();
       updatePageSamples();
       updateFavoritesButton();

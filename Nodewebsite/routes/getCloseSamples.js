@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
     }
 
     // Set order by to table
-    if (orderBy === "geneticDistance") { // TODO: Fix, does not seem to recognise column
+    if (orderBy === "geneticDistance") {
       orderBy = "weighted_distance.distance";
     }
     else if (orderBy === "sequenceType") {
@@ -37,8 +37,7 @@ router.get('/', function (req, res) {
     }
     else if (orderBy === "isolationSource") {
         orderBy = "sample_metadata.metadata->>'isolation_source'";
-    } //metadata->>'collection_date'
-    // sample_metadata.metadata->>isolation_source
+    }
 
     if (page <= 0) {
       page = 1;
@@ -57,14 +56,14 @@ router.get('/', function (req, res) {
     .andWhere('weighted_distance.distance', '<=', max)
     .modify(function (queryBuilder){ // Supports order by .json object value
           if(orderBy.includes('>')){
-            console.log(`${orderBy} ${order}`);
+            //console.log(`${orderBy} ${order}`);
               queryBuilder.orderByRaw(`${orderBy} ${order}`);
           }
           else {
             queryBuilder.orderBy(orderBy, order)
           }
     })
-    .limit(genomesPerPage)  // About 21 * 10 200 worth at a time.
+    .limit(genomesPerPage)  // Return only a few genomes at once
     .offset((page - 1 ) * genomesPerPage)
     .then((rows) => {
       let mainRelatedSampleDetails = [];
@@ -112,7 +111,7 @@ router.get('/count', function (req, res) {
     .catch((err) => {
       console.log(err);
         res.json({"Error" : true, "Message" : "Error executing count query"})
-    }); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 20;
+    }); 
 })
 
 module.exports = router;
