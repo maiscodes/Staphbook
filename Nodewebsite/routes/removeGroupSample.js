@@ -3,7 +3,6 @@ var router = express.Router()
 
 router.post('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
-    //console.log("ReachedRemoveGroupSamples");
     let groupId = req.body.groupId;
     let sampleIds = req.body.sampleId;
     sampleIds = sampleIds.split(',');

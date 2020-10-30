@@ -145,8 +145,8 @@ router.get('/', function (req, res) {
                               .andWhere('weighted_distance.distance', '>=', 0.0045) // Based on initial configuration
                               .andWhere('weighted_distance.distance', '<=', 0.009)
                               .orderBy('weighted_distance.distance', 'asc')
-                              .limit(100)  // About 21 * 10 200 worth at a time.
-                              .offset(0); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 21;
+                              .limit(100)
+                              .offset(0); 
 
                       Promise
                         .all([getSameSequenceSampleInfo, getSameLocationSampleInfo, getSameHostSampleInfo, getSameIsoSourceSampleInfo, getGeneticallyCloseSampleInfo])

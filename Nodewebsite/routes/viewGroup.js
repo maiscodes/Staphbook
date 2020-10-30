@@ -4,17 +4,9 @@ let url = require('url')
 
 
 router.get('/', function (req, res, next) {
-    //let userLoggedIn = req.session.userStatus === "loggedIn";
-    console.log("Reached View Group endpoint");
     let groupId = req.query.groupId;
-
-    // TODO: HANDLE ERRORS
-    //if (userLoggedIn == undefined) {
-      //userLoggedIn = False;
-    //}
-
     let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: req.userLoggedIn };
-    console.log(errorPageConfig);
+    //console.log(errorPageConfig);
     if (req.allowedAccess == true) {
       try {
         let getGroupsInfo = req.knex
@@ -41,22 +33,22 @@ router.get('/', function (req, res, next) {
           let status = "Your"; // Tag group status for user
           if (sharingInfo.length >= 1) {
             status = "Private";
-            console.log(sharingInfo);
+            //console.log(sharingInfo);
             let cleanedSharingInfo = [];
             sharingInfo.forEach(function(share) {
               cleanedSharingInfo.push(share.share_to_email);
-              console.log(share.share_to_email);
+              //console.log(share.share_to_email);
               if (share.share_to_email == "_public_all_users_") {
                 status = "Public";
                 //sharingInfo = [];
-                console.log("set to public");
+                //console.log("set to public");
               }
             });
             sharingInfo = cleanedSharingInfo;
           }
           groupInfo.status = status;
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-          name: 'sample_sample.name', id: 'sample_sample.id'}) 
+          name: 'sample_sample.name', id: 'sample_sample.id'})
               .from('mlst_mlst')
               .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
               .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
@@ -79,7 +71,7 @@ router.get('/', function (req, res, next) {
                   res.render('pages/error', errorPageConfig);
                   return;
                 }
-                console.log(sharingInfo);
+                //console.log(sharingInfo);
 
                 res.render('pages/viewGroup', {
                     userLoggedIn: req.userLoggedIn,
@@ -101,8 +93,6 @@ router.get('/', function (req, res, next) {
     }
     else{
         console.log("User does not have permission to access group");
-        //res.status(404);
-        //res.send({ error: 'Not found' });
         res.render('pages/error', errorPageConfig);
     }
     return;
@@ -112,17 +102,17 @@ router.get('/', function (req, res, next) {
 router.post('/removeGroup', function (req, res) {
   let userLoggedIn = req.session.userStatus === "loggedIn";
   let groupId = req.body.groupId;
-  console.log(groupId);
+  //console.log(groupId);
 
-  console.log(userLoggedIn);
+  //console.log(userLoggedIn);
   if (userLoggedIn) {
 
-    console.log("=============================================================");
+    //console.log("=============================================================");
     req.knex('groups')
-      .where({ group_id: groupId }) 
+      .where({ group_id: groupId })
       .del()
       .then(() => {
-        console.log("GROUP DELETED")
+        //console.log("GROUP DELETED")
         res.status(200).json({"message": "successfully removed group"})
         return;
       })

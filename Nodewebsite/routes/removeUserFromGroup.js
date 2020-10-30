@@ -2,9 +2,7 @@ var express = require('express')
 var router = express.Router()
 
 router.post('/', function (req, res) {
-    //let userLoggedIn = req.session.userStatus === "loggedIn";
-    //console.log("ReachedRemoveGroupSamples");
-    //let userEmail = decodeURIComponent(req.session.userEmail);
+
     let groupId = req.body.groupId;
     let email = req.body.email;
 
@@ -21,7 +19,7 @@ router.post('/', function (req, res) {
         return;
       });
       return;
-
+      
 })
 
 module.exports = router;

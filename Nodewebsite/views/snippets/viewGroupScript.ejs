@@ -2,12 +2,14 @@
 <script>
 
   /*
+  *
   * Display group statistics functionality
   * Functions for displaying a radar and five separate bar graphs
   * for displaying the count and percentages of ST, country, strain,
   * host and isolation source information, and genome cards
   * based on field to order by set in a dropdown
   * and toggle button.
+  *
   */
   function displayGenomeCards() {
      let numberSamplesPerPage = samplesPerPage;
@@ -85,8 +87,7 @@
      let parentSection = document.getElementById("groupSamplesCards");
 
      groupSamples = groupSamples.slice(numberSamplesPerPage * (pageNumber - 1), numberSamplesPerPage * pageNumber); // Show samples by page
-     // 0 to 19
-     // 20 t0 39
+
      groupSamples.forEach(function(groupSample) {
        let newCard = document.createElement("button");
        newCard.setAttribute("class", "genomeCardInfo");
@@ -125,7 +126,11 @@
     adjustRemoveCheckBoxes();
   }
 
-  // Returns each category's max count and genome information from the given array of dictionaries
+  /*
+  * Scripts for setting up the charting functionality.
+  * Consists of functions to clean and reformat data.
+  */
+  // Gets max count of each genome information category from the given array of dictionaries
   function getRadarLabelsData(dictionaries, total) {
     labels = ["", "", "", "", ""];
     maxes = [0,0,0,0,0];
@@ -164,13 +169,12 @@
     labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
-      //console.log(labels[l]);
     }
 
     return [labels, maxes];
   }
 
-  // Separates the dictionary of names and numbers tp inject into chart
+  // Separates the dictionary of names and numbers to inject into chart
   function getBarLabelsData(dictionary) {
     labels = [];
     data = [];
@@ -517,7 +521,7 @@ function removeGenomeSamples() {
   }
   //console.log(selectedSamples);
 
-  let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
+  let baseUrl = window.location.origin;
   let url = `${baseUrl}/removeGroupSample`;
   //console.log(url);
   fetch(url, {
@@ -651,7 +655,7 @@ function removeGenomeSamples() {
     let newTitle = document.getElementById("inputTitle").value;
     let newDescription = document.getElementById("inputDescription").value;
     let isoDate = new Date(Date.now()).toISOString();
-    let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
+    let baseUrl = window.location.origin;
     let url = `${baseUrl}/updateGroup`;
     //console.log(url);
 
@@ -676,7 +680,7 @@ function removeGenomeSamples() {
   }
 
   function deleteGroup(){
-    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;
     let url = `${baseUrl}/removeGroup`;
       //console.log(url);
       fetch(url, {
@@ -801,8 +805,6 @@ function removeGenomeSamples() {
   }
 
   function addNewCollaborator() {
-    // Enter of users. (split by , and strip )
-    // Get email
     let email = document.getElementById('inputUserEmail').value;
     //console.log(email);
     //console.log(<%- groupInfo.group_id %>);
@@ -845,9 +847,7 @@ function removeGenomeSamples() {
 
   function makeGroupPublic() {
     let email = "_public_all_users_";
-    //console.log(email);
-    //console.log(<%- groupInfo.group_id %>);
-    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;
     let url = `${baseUrl}/addUserToGroup`;
     fetch(url, {
       method: 'POST',
@@ -886,9 +886,7 @@ function removeGenomeSamples() {
 
   function loadLeaveGroup() {
     let container = document.getElementById("leaveGroup");
-    //console.log(container);
     container.innerHTML = '<p id="leaveMessage">You are currently a collaborator of this group. Would you like to leave this group?</p><Button id="makePrivateButton" onclick="leaveGroup()">Yes</Button>';
-    //console.log(container);
   }
 
   function loadUnpubliciseGroup() {
@@ -905,7 +903,7 @@ function removeGenomeSamples() {
   }
 
   function leaveGroup() {
-    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;
     let url = `${baseUrl}/removeUserFromGroup`;
     fetch(url, {
       method: 'POST',
@@ -943,7 +941,7 @@ function removeGenomeSamples() {
   }
 
   function unpubliciseGroup() {
-    let baseUrl = window.location.origin;//"http://127.0.0.1:8000";
+    let baseUrl = window.location.origin;
     let url = `${baseUrl}/removeUserFromGroup`;
     fetch(url, {
       method: 'POST',
@@ -984,26 +982,22 @@ function removeGenomeSamples() {
     displayGraphs();
     setupRemoveCheckBoxes();
     displayMaxPage();
-    //loadOwner();
-    //loadCollaborators();
 
     let email = <%-  JSON.stringify(email) %>;
     let collaborators = <%-  JSON.stringify(sharingInfo) %>;
     let owner = <%-  JSON.stringify(groupInfo.email) %>;
     let status = <%-  JSON.stringify(groupInfo.status) %>;
 
-    //console.log(email);
-    //console.log(collaborators);
-    if ( status == "Your" || status == "Private") {
+    if ( status === "Your" || status === "Private") {
       loadOwner();
       loadCollaborators();
     }
-    if (email == owner || collaborators.includes(email) ) {
+    if (email === owner || collaborators.includes(email) ) {
       loadEdittingBars();
       //console.log("Have editting rights");
-      if ( status == "Public" ) {
+      if ( status === "Public" ) {
           loadUnpubliciseGroup();
-      } else if ( status == "Private" && email != owner ) {
+      } else if ( status === "Private" && email != owner ) {
           //console.log("private group");
           loadLeaveGroup();
       }

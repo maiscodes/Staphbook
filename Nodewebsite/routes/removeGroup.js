@@ -3,7 +3,6 @@ var router = express.Router()
 let url = require('url')
 
 router.post('/', function (req, res) {
-  //let userLoggedIn = req.session.userStatus === "loggedIn";
   let groupId = req.body.groupId;
   console.log(groupId);
 
@@ -23,15 +22,6 @@ router.post('/', function (req, res) {
     });
   return;
   res.status(401).json({"message": "permissions error - user not logged in"})
-
-  /*
-  console.log(userLoggedIn);
-  if (userLoggedIn) {
-
-
-  } */
-
-// })
 })
 
 module.exports = router;

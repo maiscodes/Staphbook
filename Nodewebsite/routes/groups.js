@@ -27,7 +27,6 @@ router.get('/groups', function (req, res) {
                               .select('group_id')
                               .from('group_sharing')
                               .where({share_to_email: email});
-                              //.whereNotIn('group_id', getPublicGroupIds);
 
       let getGroupInfo = req.knex
                             .select('*')
@@ -39,7 +38,6 @@ router.get('/groups', function (req, res) {
                                   .select('*')
                                   .from('groups')
                                   .leftJoin(getGroupCount, 'groups.group_id', 'group_samples.sample_group_id')
-                                  //.whereNot({email: email}) // Not own groups
                                   .where('group_id', 'in', getPublicGroupIds);
 
       let getsharedGroups = req.knex

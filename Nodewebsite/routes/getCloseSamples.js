@@ -83,7 +83,7 @@ router.get('/', function (req, res) {
     .catch((err) => {
       console.log(err);
         res.json({"Error" : true, "Message" : "Error executing query"})
-    }); //210 * page looking for. Need to figure out when to trigger. Maxpage is hardcoded to be 43 500 / 20;
+    });
 })
 
 router.get('/count', function (req, res) {
@@ -103,7 +103,7 @@ router.get('/count', function (req, res) {
     req.knex.count('distance')
     .from('weighted_distance')
     .where('selected_sample', '=', sample_name)
-    .andWhere('distance', '>=', min) // UPDATE COLUMN NAME
+    .andWhere('distance', '>=', min) 
     .andWhere('distance', '<=', max)
     .then((numSamples) => {
       res.json({"numSamples" : numSamples});
@@ -111,7 +111,7 @@ router.get('/count', function (req, res) {
     .catch((err) => {
       console.log(err);
         res.json({"Error" : true, "Message" : "Error executing count query"})
-    }); 
+    });
 })
 
 module.exports = router;

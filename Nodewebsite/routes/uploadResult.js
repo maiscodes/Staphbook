@@ -49,7 +49,7 @@ router.get('/', function (req, res) {
 
     let same_sequence_samples = req.knex.select('sample_id').from('sample_metadata').where({st: sequence_type});
     let getSameSequenceSampleInfo = req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-        name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
+        name: 'sample_sample.name', id: 'sample_sample.id'}) 
         .from('mlst_mlst')
         .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
         .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
