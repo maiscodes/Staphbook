@@ -4,9 +4,9 @@ module.exports = {
   connection: {
     host: '127.0.0.1',
     port: '5433',
-    database: 'postgres',
-    user:     'postgres',
-    password: 'postgreSAM'
+    database: 'staphbook',
+    user:     'staphbook',
+    password: 'password'
   }
 }
 

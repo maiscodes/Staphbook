@@ -1,13 +1,18 @@
 <form action='/result' method="get">
 	<% randomSamples.forEach(function (random) { %>
 
-	<button type="submit" name="sampleSelection" value="<%= random.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+	<button type="submit" name="sampleSelection" value="<%= random.sample %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Run:     <%= random.sample %>,<br>
+        Species: <%= random.species %>,<br>
+        Size:    <%= random.genome_size %>
+        <!--
 		Sample: <%= random.sample_id %>,
 		Sequence Type: <%= random.st %>,
 		Location: <%= random.country %>,
 		Strain: <%= random.strain %>,
 		Host: <%= random.host %>,
 		Isolation Source: <%= random.isolation_source %>
+        -->
 		<% }) %>
 	</button>
 </form>

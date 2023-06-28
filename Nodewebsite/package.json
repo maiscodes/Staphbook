@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "cytoscape": "^3.15.2",
     "cytoscape-cola": "^2.3.1",
+    "debug": "^4.3.4",
     "dotenv": "^8.2.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
@@ -28,9 +29,11 @@
   "version": "1.0.0",
   "description": "node website",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node --watch app.js",
+    "dev": "NODE_ENV=development node --watch app.js",
+    "prod": "NODE_ENV=production node app.js"
   },
   "author": "Andrew",
   "license": "ISC"
