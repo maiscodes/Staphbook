@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 // Check environment and use correct env file
 if (process.env.NODE_ENV !== 'production')
 {
-    dotenv.config({path: '.env.development'});
+    dotenv.config({path: '.env'});
 }
 
 const express = require('express');
