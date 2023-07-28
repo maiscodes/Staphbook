@@ -67,14 +67,18 @@
         <% favorites.forEach(function (result_favs) { %>
 
         <button type="submit" name="sampleSelection" value="<%= result_favs.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+          Run:     <%= result_favs.sample %>,<br>
+          Species: <%= result_favs.species %>,<br>
+          Size:    <%= result_favs.genome_size %>
+          <!--
           Sample: <%= result_favs.sample_id %>,
           Sequence Type: <%= result_favs.st %>,
           Location: <%= result_favs.country %>,
           Strain: <%= result_favs.strain %>,
           Host: <%= result_favs.host %>,
           Isolation Source: <%= result_favs.isolation_source %>
+          -->
           <% }) %>
-
         </button>
       </form>
 

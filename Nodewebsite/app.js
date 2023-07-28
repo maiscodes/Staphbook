@@ -36,7 +36,7 @@ app.use(cors());
 //postgreSQL
 const {Client} = require('pg');
 
-const client = new Client(options.connection);
+const client = new Client(options.connection); //Client object is our sql database
 client.connect();
 
 //BodyParser
@@ -93,8 +93,9 @@ let getCloseSampleRouter = require("./routes/getCloseSamples");
  *
  */
 
+// No path set, so every request uses these routes
 app.use((req, res, next) => {
-    req.db = client
+    req.db = client // set the request db as our local database
     req.knex = knex
     next()
 })
