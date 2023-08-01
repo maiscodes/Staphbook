@@ -16,6 +16,16 @@ router.get('/', function (req, res) {
             .select('*')
             .from('user_favorites')
             .where({email: email})
+            .then((sampleInfos) => {
+                for (sampleInfo of sampleInfos) {
+                    sampleInfo.country = "Australia";
+                    sampleInfo.strain = "Covid";
+                    sampleInfo.host = "Humans";
+                    sampleInfo.isolation_source = "Nasal swab";
+                }
+            res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: sampleInfos, haveFavs: true });
+        });
+            /*
             .then(favs => {
                 req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
                     name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
@@ -36,10 +46,10 @@ router.get('/', function (req, res) {
                             sampleInfo.host = sampleInfo.metadata.host;
                             sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                         }
-
+                        
                         res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: sampleInfos, haveFavs: true });
                     });
-            });
+            });*/
     }
 });
 

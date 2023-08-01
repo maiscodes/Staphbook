@@ -15,7 +15,8 @@ const getGatherData = require('../utils/getGatherData')
 router.get('/', async function (req, res) {
     const userLoggedIn = req.session.userStatus === "loggedIn";
 
-    const suggested = [];
+    let suggested = [];
+    let favorites = [];
     const allSamples = getAllSampleNames();
 
     log(`Number of samples: ${allSamples.length}`)
@@ -39,18 +40,35 @@ router.get('/', async function (req, res) {
     // Recommended will eventually be 3 random samples from the user's favourites
 
     // Favourites will eventually be all the samples from the user's favourites. Currently just all samples.
-    const favouriteIds = [];
-    const favouriteNames = [];
-    for (i = 0; i < allSamples.length; i++) {
-        const favouriteId = i;
-        favouriteIds.push(favouriteId);
-        favouriteNames.push(allSamples[favouriteId]);
+    if(userLoggedIn){
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        let favouriteIds = [];
+        let favouriteNames = [];
+        req.knex
+                .select('*')
+                .from('user_favorites')
+                .where({email: email})
+                .then(favs => {
+                    console.log(favs);
+                    favs.forEach(fav => {
+                    console.log(fav.sample_id);
+                    favouriteIds.push(fav.sample_id);
+                    favouriteNames.push(fav.email);
+                });
+            });
+            favorites = await Promise.all(favouriteNames.map(async (f) =>
+            // get the metadata
+            getGatherData(f) 
+        ));
+
+                //console.log(favs);     
+        /*for (i = 0; i < allSamples.length; i++) {
+            const favouriteId = i;
+            favouriteIds.push(favouriteId);
+            favouriteNames.push(allSamples[favouriteId]);
+        } */
     }
-    const favorites = await Promise.all(favouriteNames.map(async (f) =>
-        // get the metadata
-        getGatherData(f) 
-    )); 
-    //
 
     if (userLoggedIn){
         log("User is logged in");
