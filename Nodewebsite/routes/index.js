@@ -45,14 +45,13 @@ router.get('/', async function (req, res) {
         let email = decodeURIComponent(value);
         let favouriteIds = [];
         let favouriteNames = [];
-        req.knex
+        let favs = await req.knex
                 .select('*')
                 .from('user_favorites')
-                .where({email: email})
-                .then(favs => {
-                    console.log(favs);
+                .where({email: email});
+
+        favs.forEach(fav => {
                     favs.forEach(fav => {
-                    console.log(fav.sample_id);
                     favouriteIds.push(fav.sample_id);
                     favouriteNames.push(fav.email);
                 });
@@ -61,13 +60,6 @@ router.get('/', async function (req, res) {
             // get the metadata
             getGatherData(f) 
         ));
-
-                //console.log(favs);     
-        /*for (i = 0; i < allSamples.length; i++) {
-            const favouriteId = i;
-            favouriteIds.push(favouriteId);
-            favouriteNames.push(allSamples[favouriteId]);
-        } */
     }
 
     if (userLoggedIn){
@@ -81,7 +73,7 @@ router.get('/', async function (req, res) {
         userLoggedIn: userLoggedIn,
         randomSamples: random,
         suggested: suggested,
-        favorites: favorites
+        favorites: []
     });
 
 
