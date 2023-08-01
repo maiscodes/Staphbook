@@ -44,7 +44,6 @@ router.get('/', async function (req, res) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
         let favouriteIds = [];
-        let favouriteNames = [];
         let favs = await req.knex
                 .select('*')
                 .from('user_favorites')

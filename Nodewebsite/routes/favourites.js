@@ -1,7 +1,8 @@
 var express = require('express')
 var router = express.Router()
+const getGatherData = require('../utils/getGatherData')
 
-router.get('/', function (req, res) {
+router.get('/', async function (req, res) {
     // Initial values
     let userLoggedIn = false;
     let favorites = [];
@@ -12,7 +13,7 @@ router.get('/', function (req, res) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
 
-        req.knex
+        /*req.knex
             .select('*')
             .from('user_favorites')
             .where({email: email})
@@ -24,7 +25,27 @@ router.get('/', function (req, res) {
                     sampleInfo.isolation_source = "Nasal swab";
                 }
             res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: sampleInfos, haveFavs: true });
-        });
+            */
+        
+        let favouriteIds = [];
+
+        let favs = await req.knex
+            .select('*')
+            .from('user_favorites')
+            .where({email: email});
+
+        favs.forEach(fav => {
+                favs.forEach(fav => {
+                favouriteIds.push(fav.sample_id);
+                });
+            });
+        favorites = await Promise.all(favouriteIds.map(async (f) =>
+            // get the metadata
+        getGatherData(f) 
+        ));
+        console.log(favorites);
+        res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites, haveFavs: true });
+
             /*
             .then(favs => {
                 req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
