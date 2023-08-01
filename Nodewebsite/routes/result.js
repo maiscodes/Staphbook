@@ -1,17 +1,135 @@
+/*
+    * @api {get} /result Result
+    *
+*/
+
+
 var express = require('express')
+var getGatherData = require('../utils/getGatherData')
 var router = express.Router()
 let url = require('url')
+const log = require('debug')('routes:result')
 
 // Result page endpoint
 router.get('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
-    let sampleID = req.query.sampleSelection;
-    req.session.prevSample = sampleID;
+    let sampleName = req.query.sampleSelection;
+    log(`Sample Name: ${sampleName}`);
+    req.session.prevSample = sampleName;
     req.session.favourited = false; // Assume that sample is not favorited before check
+
+    // Grab the sample's details from the filesystem
+    //      (*)         = Not implemented yet
+    //      (** REASON) = Not able to be implemented fully yet
+    //      (***)       = Doesn't seem relevant at all - clarify with client and team
+    //
+    // TAGS                 - RANDOM NUMBER     (*** - Doesn't seem to mean anything)
+    // isFavourited         - Bool              (** - Need database setup)
+    // userLoggedIn         - Bool              (** - Need database setup)
+    // sample_metadata                          (* - Talk through this) 
+        // run_name    - string
+        // genome_size - int
+        // .. TODO: Work out what else constitutes metadata
+
+    // annotations          - Dict of strings   (* - util exists, need to implement)
+    // quality              - list of files     (* - think linking to the files is enough, see util) 
+    // sketcher             - Msh files         (** - Need to really think about what this one means and how to use)
+    // TODO: Bactopia-Tools Integration
+
+    // similar_genomes      - List of strings   (** - Need utils for doing this query, requires clarification on host etc.
+        // can do genetic distance and stuff with sketcher files I believe)
+    // mlst (sequence type) - int               (** - appears to require different bactopia setup)
+
+
+    // res.render('pages/result', { 
+    //     sample_ID: sampleID, 
+    //     tag_tag: result_tag_tag, 
+    //     isFavourited: req.session.favourited,
+    //     sample_metadata: result_sample_metadata, 
+    //     mlst_mlst: result_mlst_mlst, 
+    //     userLoggedIn: userLoggedIn, 
+    //     same_hosts: same_host,
+    //     same_locations: same_location, 
+    //     same_sequences: same_sequence, 
+    //     staphopia_blatstquery: result_blastquery, 
+    //     sequence_summary: result_sequence_summary,
+    //     same_isolations: same_isolation, 
+    //     sccmec_primers: result_sccmec_primers, 
+    //     assembly_summary: result_assembly_summary,
+    //     sccmec_subtypes: result_sccmec_subtypes, 
+    //     sccmec_proteins: result_sccmec_proteins, 
+    //     weighted_distance: result_weighted_distances,
+    //     all_weighted_distances: mainRelatedSampleDetails,
+    //     avail_groups: groupsInfo,
+    //     sample_groups: sampleGroups,
+    // });
+    //
+
+    /*
+        * If the user is logged in, check if the sample is favourited
+        * TODO: database operation
+    */
+    if (userLoggedIn) {
+        let value = req.session.userEmail;
+        let email = decodeURIComponent(value);
+        console.log(email)
+        // TODO: Work out how to do the whole database thing with these
+        req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName}).then((fav_results) => {
+            //console.log(`Results are: ${JSON.stringify(fav_results)}`);
+            if (fav_results.length > 0) {
+                req.session.favourited = true;
+
+            }
+        });
+    }
+
+    /*
+        * Error page, if URL is incorrect or not found
+    */
+    errorPageConfig = {
+        description: 'sample',
+        query: 'sampleSelection',
+        id: sampleName,
+        endpoint: '/result',
+        userLoggedIn: userLoggedIn
+    };
+
+    /*
+        * Intended Flow:
+        * 1. Check sample exists by checking gather data exists
+        * 2. Collate any other data available for the sample
+        * 3. Render the page 
+    */
+
+    // Check if the sample exists
+    const gather = getGatherData(sampleName);
+    if(!gather) {
+        res.render('pages/error', errorPageConfig);
+        return;
+    }
+
+    log(`Gather data: ${JSON.stringify(gather)}`);
+
+
+    res.render('pages/result', {
+        userLoggedIn: userLoggedIn,
+        sample_ID: sampleName,
+        metadata: gather
+    });
+
+
+
+    return;
+
+    //NOTE: Below this line is the old code from Staphbook
+    //      Some of the code has been copied above, but the entirety is left below 
+    //      for reference
 
     if (userLoggedIn) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
+        console.log(email)
+        // TODO: Work out how to do the whole database thing with these
         req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleID}).then((fav_results) => {
             //console.log(`Results are: ${JSON.stringify(fav_results)}`);
             if (fav_results.length > 0) {

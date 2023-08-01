@@ -8,13 +8,13 @@ const path = require('path');
  * @param {string} runName - name of the run/folder
  * @return {object} - object with key: value metadata from gather
  */
-async function getGatherData(runName) {
+function getGatherData(runName) {
     // it's just a tsv
     // return as  { [key: string]: string }[]
     // probably only one row from what I can see, but leave room
     if (!runName || !process.env.SAMPLES_DIR) {
         console.error(`runName or SAMPLES_DIR not set`);
-        return {};
+        return null;
     }
     const gatherFile = path.join(
         process.env.SAMPLES_DIR,
@@ -25,7 +25,7 @@ async function getGatherData(runName) {
     );
     if (!fs.existsSync(gatherFile)) {
         console.error(`Could not find gather file ${gatherFile}`);
-        return {};
+        return null;
     }
     const gatherData = fs.readFileSync(gatherFile, 'utf8');
     // parse as tsv file
