@@ -1,3 +1,13 @@
+<!--
+    RESULT CONTENT - /result?sampleSelection=sampleID
+
+    @param {String} sample_ID  - The sample ID or name of the sample
+    @param {bool} userLoggedIn  - True if the user is logged in
+    @param {dict} summary - Summary data to display at top of page as key: value
+
+-->
+
+
 <div id="page-container">
 
     <div class="resultsPageTopComponent">
@@ -60,6 +70,11 @@
         <hr style="width: 55%; margin-top: -2px"></hr>
         <h4 style="text-align: center"> Summary </h4>
         <p class="summaryInfo">
+            <% Object.keys(summary).forEach(function (key) { %>
+            <b><%= key %>:</b> <%= summary[key] %>
+            <br>
+            <% }) %>
+            <% /* %>
             <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
             <b>Sequence Type:</b> <%= result_mlst_mlst.st %>
             <% }) %>
@@ -79,6 +94,7 @@
             <% tag_tag.forEach(function (result_tag_tag) { %>
             <b>Comment:</b> <%= result_tag_tag.comment %>
             <% }) %>
+            <% */ %>
         </p>
         <hr style="width: 55%">
 
@@ -89,6 +105,7 @@
 
     </div>
 
+    <% /* %>
     <div id="resultsPageSampleExpandableInformation">
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Tags</button>
       <div class="sectionContent">
@@ -156,7 +173,9 @@
             <% }) %>
         </table>
       </div>
+    <% */ %>
 
+    <% /* %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Primer Hits</button>
       <div class="sectionContent"  id="Sccmec_Primers">
         <% include ../snippets/resultSccmecPrimers %>
@@ -172,6 +191,8 @@
           <% include ../snippets/resultSccmecProteins.ejs %>
       </div>
     </div>
+    <% */ %>
+
     <!--Result page interactive element-->
     <div id="resultsPageGraphComponents">
         <div id="resultsPageGraphComponent1">
@@ -213,11 +234,13 @@
                         Add visible samples to Group
                     </button>
                     <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <% /* %>
                         <% avail_groups.forEach(function (group) { %>
                             <button class="dropDownButton" onclick="addSamplesToGroup(this.value)" value=<%= group.group_id %>>
                                 <%= group.name %>
                             </button>
                         <% }) %>
+                        <% */ %>
                         <button class="dropDownButton" onclick="addToGroup(this.value)" value="create">
                             Create new group
                         </button>
@@ -309,9 +332,5 @@
          style="width: 100%; font-size: 20px; text-align: center; margin-bottom: 20px; margin-top: 20px;"></div>
     <img id="saveableGraphImage">
 
-    <!-- Scripts for result page functionality -->
-    <% include ../snippets/resultScripts.ejs %>
-    <!-- Scripts for downloading the sample information -->
-    <% include ../snippets/saveCsvScript.ejs %>
 
 </div>

@@ -112,9 +112,11 @@ router.get('/', function (req, res) {
 
 
     res.render('pages/result', {
+        summary: gather, 
         userLoggedIn: userLoggedIn,
         sample_ID: sampleName,
         metadata: gather
+
     });
 
 
