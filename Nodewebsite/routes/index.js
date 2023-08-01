@@ -39,7 +39,7 @@ router.get('/', async function (req, res) {
 
     // Recommended will eventually be 3 random samples from the user's favourites
 
-    // Favourites will eventually be all the samples from the user's favourites. Currently just all samples.
+    // Gets all favourited samples
     if(userLoggedIn){
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
