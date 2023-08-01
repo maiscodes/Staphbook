@@ -53,13 +53,13 @@ router.get('/', async function (req, res) {
         favs.forEach(fav => {
                     favs.forEach(fav => {
                     favouriteIds.push(fav.sample_id);
-                    favouriteNames.push(fav.email);
                 });
             });
-            favorites = await Promise.all(favouriteNames.map(async (f) =>
+            favorites = await Promise.all(favouriteIds.map(async (f) =>
             // get the metadata
             getGatherData(f) 
         ));
+        log(favorites);
     }
 
     if (userLoggedIn){
@@ -73,7 +73,7 @@ router.get('/', async function (req, res) {
         userLoggedIn: userLoggedIn,
         randomSamples: random,
         suggested: suggested,
-        favorites: []
+        favorites: favorites
     });
 
 
