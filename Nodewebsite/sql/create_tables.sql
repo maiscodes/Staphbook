@@ -1,7 +1,7 @@
 CREATE TABLE public.user_favorites
 (
     email text COLLATE pg_catalog."default",
-    sample_id integer
+    sample_id text
 )
 WITH (
     OIDS = FALSE
