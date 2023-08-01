@@ -54,21 +54,21 @@
 }
 
 .sectionContent {
-  transition:max-height 0.2s;
-  -moz-transition:max-height 0.2s; /* Firefox 4 */
-  -webkit-transition:max-height 0.2s; /* Safari and Chrome */
-  -o-transition:max-height 0.2s; /* Opera */
+  transition:height 0.5s;
+  -moz-transition:height 0.5s; /* Firefox 4 */
+  -webkit-transition:height 0.5s; /* Safari and Chrome */
+  -o-transition:height 0.5s; /* Opera */
+  opacity: 0;
   overflow: hidden;
   background-color: white;
-  opacity:0;
-  max-height: 0;
+  height: 0;
 }
 
 .contentActive {
   padding-top: 1em;
   padding-bottom: 2em;
   opacity: 100;
-  max-height: var(--max-height);
+  height: auto;
 }
 
 .v:hover {

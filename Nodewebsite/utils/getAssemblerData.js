@@ -1,12 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
+const log = require('debug')('utils:getAssemblerData');
 
 /** Get assembly data about a sample. This includes the makeup
  * of the genome (contigs, etc) and the assembly statistics
  * @param {string} runName - name of the run/folder
  * @return {object} - object with key: value metadata from assembler
  */
-export default function getAssemblerData(runName) {
+function getAssemblerData(runName) {
     // it's just a tsv
     // return as  { [key: string]: string }[]
     // probably only one row from what I can see, but leave room
@@ -27,16 +28,18 @@ export default function getAssemblerData(runName) {
     }
     const assemblerData = fs.readFileSync(assemblerFile, 'utf8');
     // parse as tsv file
-    const assemblerDataObj = [];
+    const assemblerDataObj = {};
     const lines = assemblerData.split('\n');
     const headers = lines[0].split('\t');
-    lines.slice(1).forEach((line) => {
-        const row = line.split('\t');
-        const obj = {};
-        headers.forEach((header, i) => {
-            obj[header] = row[i];
-        });
-        assemblerDataObj.push(obj);
+    const data = lines[1].split('\t');
+    if (headers.length !== data.length) {
+        log(`Assembler file ${assemblerFile} is not formatted correctly`);
+        return {};
+    }
+    headers.forEach((header, i) => {
+            assemblerDataObj[header] = data[i];
     });
     return assemblerDataObj;
 }
+
+module.exports = getAssemblerData;

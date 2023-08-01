@@ -15,6 +15,7 @@
     "debug": "^4.3.4",
     "dotenv": "^8.2.0",
     "ejs": "^2.7.4",
+    "ejs-lint": "^2.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "file-saver": "^2.0.2",

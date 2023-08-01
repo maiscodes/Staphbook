@@ -6,6 +6,7 @@
 
 var express = require('express')
 var getGatherData = require('../utils/getGatherData')
+var getAssemblerData = require('../utils/getAssemblerData')
 var router = express.Router()
 let url = require('url')
 const log = require('debug')('routes:result')
@@ -110,13 +111,16 @@ router.get('/', function (req, res) {
 
     log(`Gather data: ${JSON.stringify(gather)}`);
 
+    const assembly = getAssemblerData(sampleName);
+    log(`Assembly data: ${JSON.stringify(assembly)}`);
+
 
     res.render('pages/result', {
         summary: gather, 
         userLoggedIn: userLoggedIn,
         sample_ID: sampleName,
-        metadata: gather
-
+        metadata: gather,
+        result_assembly_summary: assembly,
     });
 
 
