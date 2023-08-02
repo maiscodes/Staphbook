@@ -50,9 +50,7 @@ router.get('/', async function (req, res) {
                 .where({email: email});
 
         favs.forEach(fav => {
-                    favs.forEach(fav => {
-                    favouriteIds.push(fav.sample_id);
-                });
+            favouriteIds.push(fav.sample_id);
             });
             favorites = await Promise.all(favouriteIds.map(async (f) =>
             // get the metadata
