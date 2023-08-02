@@ -12,7 +12,7 @@ let url = require('url')
 const log = require('debug')('routes:result')
 
 // Result page endpoint
-router.get('/', function (req, res) {
+router.get('/', async function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let sampleName = req.query.sampleSelection;
     log(`Sample Name: ${sampleName}`);
@@ -25,8 +25,8 @@ router.get('/', function (req, res) {
     //      (***)       = Doesn't seem relevant at all - clarify with client and team
     //
     // TAGS                 - RANDOM NUMBER     (*** - Doesn't seem to mean anything)
-    // isFavourited         - Bool              (** - Need database setup)
-    // userLoggedIn         - Bool              (** - Need database setup)
+    // isFavourited         - Bool              Working but colour of heart isnt changing
+    // Groups hasnt been implemented yet
     // sample_metadata                          (* - Talk through this) 
         // run_name    - string
         // genome_size - int
@@ -75,14 +75,19 @@ router.get('/', function (req, res) {
         let email = decodeURIComponent(value);
         console.log(email)
         // TODO: Work out how to do the whole database thing with these
-        req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName}).then((fav_results) => {
+        let fav_results = await req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName})
+        
+        if (fav_results.length > 0) {
+            req.session.favourited = true; //Its not picking this up
+        }
+
+        /*then((fav_results) => {
             //console.log(`Results are: ${JSON.stringify(fav_results)}`);
             if (fav_results.length > 0) {
                 req.session.favourited = true; //Its not picking this up
             }
-        });
+        });*/
     }
-    console.log(req.session.favourited);
     /*
         * Error page, if URL is incorrect or not found
     */
