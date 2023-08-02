@@ -78,12 +78,11 @@ router.get('/', function (req, res) {
         req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName}).then((fav_results) => {
             //console.log(`Results are: ${JSON.stringify(fav_results)}`);
             if (fav_results.length > 0) {
-                req.session.favourited = true;
-
+                req.session.favourited = true; //Its not picking this up
             }
         });
     }
-
+    console.log(req.session.favourited);
     /*
         * Error page, if URL is incorrect or not found
     */
@@ -121,6 +120,7 @@ router.get('/', function (req, res) {
         sample_ID: sampleName,
         metadata: gather,
         result_assembly_summary: assembly,
+        isFavourited: req.session.favourited
     });
 
 
