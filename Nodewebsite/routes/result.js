@@ -8,6 +8,8 @@ const express = require('express');
 const getGatherData = require('../utils/getGatherData');
 const getAssemblerData = require('../utils/getAssemblerData');
 const getQualityControlData = require('../utils/getQualityControlData');
+const getMLSTData = require('../utils/getMLST');
+
 
 const router = express.Router()
 let url = require('url')
@@ -119,6 +121,10 @@ router.get('/', async function (req, res) {
     const assembly = getAssemblerData(sampleName);
     const qc = getQualityControlData(sampleName);
 
+    // Tools - May or may not exist
+    const mlst = getMLSTData(sampleName);
+    log(mlst);
+
     res.render('pages/result', {
         summary: gather, 
         userLoggedIn: userLoggedIn,
@@ -127,6 +133,7 @@ router.get('/', async function (req, res) {
         metadata: gather,
         result_assembly_summary: assembly,
         sequence_summary: qc,
+        mlst: mlst
     });
 
 

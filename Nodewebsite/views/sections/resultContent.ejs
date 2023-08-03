@@ -149,39 +149,31 @@
         <% include ../snippets/resultAssembly %>
       </div>
 
-    <% /* %>
+    <% if (locals.mlst) { %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>MLST</button>
       <div class="sectionContent" id="MLST">
         <table style="width: 100%;">
-            <% mlst_mlst.forEach(function (result_mlst_mlst) { %>
-            <tr>
-                <td><b>st:</b></td>
-                <td>
-                    <%= result_mlst_mlst.st %>
-                </td>
+            <tr> 
+                <td><b>Filename </b></td>
+                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.filename %></td>
             </tr>
-            <tr>
-                <td><b>ariba:</b></td>
-                <td>
-                    <%= result_mlst_mlst.ariba %>
-                </td>
+            <tr> 
+                <td><b>PubMLST Scheme </b></td>
+                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.scheme %></td>
             </tr>
-            <tr>
-                <td><b>mentalist:</b></td>
-                <td>
-                    <%= result_mlst_mlst.mentalist %>
-                </td>
+            <tr> 
+                <td><b>Sequence Type</b></td>
+                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.sequence_type %></td>
             </tr>
-            <tr>
-                <td><b>BLAST:</b></td>
-                <td>
-                    <%= result_mlst_mlst.blast %>
-                </td>
+            <tr> 
+                <td><b>Allele IDs</b></td>
+                <% mlst.alleles.forEach(allele => { %>
+                <td><%=allele%></td>
+                <% }) %>
             </tr>
-            <% }) %>
         </table>
       </div>
-    <% */ %>
+    <% } %>
 
     <% /* %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Primer Hits</button>
