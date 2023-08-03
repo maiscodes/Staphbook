@@ -1,5 +1,6 @@
-import path from 'path';
-import fs from 'fs';
+const path = require("path");
+const fs = require("fs");
+
 /**
  * Get names of quality control files for a specific sample
  * NOTE: Bactopia generates some HTML for QC, so can likely return those files
@@ -7,7 +8,7 @@ import fs from 'fs';
  * @param {string} runName - name of the run/folder
  * @return {object} - object with names of QC files
  */
-export default async function getQualityControl(runName) {
+function getQualityControl(runName) {
     // so just return the names and paths of files in the QC directory
     // return as { [key: string]: string }[]
     if (!runName || !process.env.SAMPLES_DIR) {
@@ -31,3 +32,5 @@ export default async function getQualityControl(runName) {
     });
     return qcFilesObj;
 }
+
+module.exports = getQualityControl;

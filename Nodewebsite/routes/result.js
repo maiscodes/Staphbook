@@ -4,10 +4,12 @@
 */
 
 
-var express = require('express')
-var getGatherData = require('../utils/getGatherData')
-var getAssemblerData = require('../utils/getAssemblerData')
-var router = express.Router()
+const express = require('express');
+const getGatherData = require('../utils/getGatherData');
+const getAssemblerData = require('../utils/getAssemblerData');
+const getQualityControlData = require('../utils/getQualityControlData');
+
+const router = express.Router()
 let url = require('url')
 const log = require('debug')('routes:result')
 
@@ -112,22 +114,20 @@ router.get('/', async function (req, res) {
         res.render('pages/error', errorPageConfig);
         return;
     }
-
-    log(`Gather data: ${JSON.stringify(gather)}`);
+    // get dropdown summary content
 
     const assembly = getAssemblerData(sampleName);
-    log(`Assembly data: ${JSON.stringify(assembly)}`);
-
+    const qc = getQualityControlData(sampleName);
 
     res.render('pages/result', {
         summary: gather, 
         userLoggedIn: userLoggedIn,
         sample_ID: sampleName,
+        isFavourited: req.session.favourited,
         metadata: gather,
         result_assembly_summary: assembly,
-        isFavourited: req.session.favourited
+        sequence_summary: qc,
     });
-
 
 
     return;

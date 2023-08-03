@@ -1,9 +1,10 @@
 <!--
     RESULT CONTENT - /result?sampleSelection=sampleID
 
-    @param {String} sample_ID  - The sample ID or name of the sample
-    @param {bool} userLoggedIn  - True if the user is logged in
-    @param {dict} summary - Summary data to display at top of page as key: value
+    @param {String} sample_ID               - The sample ID or name of the sample
+    @param {bool} userLoggedIn              - True if the user is logged in
+    @param {dict} summary                   - Summary data to display at top of page as key: value
+    @param {dict} result_assembly_summary   - Assembly Data Summary to display in dropdown
 
 -->
 
@@ -137,12 +138,12 @@
           <% include ../snippets/resultMetadata %>
       </div>
 
+    <% */ %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
       <div class="sectionContent" id="Sequencing">
         <% include ../snippets/resultSequence %>
       </div>
 
-    <% */ %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Assembly Metrics</button>
       <div class="sectionContent" id="Assembly">
         <% include ../snippets/resultAssembly %>
