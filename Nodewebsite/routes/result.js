@@ -100,7 +100,7 @@ router.get('/', async function (req, res) {
         query: 'sampleSelection',
         id: sampleName,
         endpoint: '/result',
-        userLoggedIn: userLoggedIn
+        userLoggedIn: userLoggedIn,
     };
 
     /*

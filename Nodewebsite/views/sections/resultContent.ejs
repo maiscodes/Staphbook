@@ -27,7 +27,7 @@
             </div>
             <form method="POST" id="favoriteButtonForm">
                 <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Button"
-                        id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: #ebebeb;">
+                        id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: <%= isFavourited ? "#cf2b51" : "#ebebeb" %>;">
                     <i id ="favoriteButtonHeart" class="fas fa-heart"
                        style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
