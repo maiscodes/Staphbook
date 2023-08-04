@@ -16,13 +16,13 @@ With this app, users are able to:
 ### PostgreSQL Setup
 1. Download here: https://www.postgresql.org/download/
 2. Once installed, it is highly recommended that you use a GUI such as pgAdmin 4 which can be downloaded here: https://www.pgadmin.org/download/pgadmin-4-windows/
-3. Setup your PostgreSQL Server, Database, then run the database creation script 'sql/create_tables'.
+3. Setup your PostgreSQL Server, Database, then run the database creation scripts in /sql.
 
 ### Bactopia Setup
 Requires Bactopia data on the local disk. Some examples can be found under the 'Releases' section to the right.
 Currently, requires output in the format of that data as Bactopia directory structure has changed slightly. 
 1. Download the data to the local disk
-2. Note the path of the directory `bactopia-samples`
+2. Note the path of the directory `bactopia-samples` and put that in the .env file under SAMPLES_DIR
 
 
 ### Node.js Setup

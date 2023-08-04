@@ -10,7 +10,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.user_favorites
-    OWNER to staphbook;
+    OWNER to bactbook;
 	
 CREATE TABLE public.registered_users
 (
@@ -28,7 +28,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.registered_users
-    OWNER to staphbook;
+    OWNER to bactbook;
 
 INSERT INTO public.registered_users (email)
     VALUES ('_public_all_users_');
@@ -49,7 +49,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.groups
-    OWNER to staphbook;
+    OWNER to bactbook;
 
 CREATE TABLE public.group_samples
 (
@@ -63,7 +63,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.group_samples
-    OWNER to staphbook;
+    OWNER to bactbook;
 
 CREATE TABLE public.group_sharing
 (
@@ -85,4 +85,4 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.group_sharing
-    OWNER to staphbook;
+    OWNER to bactbook;
