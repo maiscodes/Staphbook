@@ -7,6 +7,7 @@
 const express = require('express');
 const getGatherData = require('../utils/getGatherData');
 const getAssemblerData = require('../utils/getAssemblerData');
+const getAnnotations = require('../utils/getAnnotations');
 const getQualityControlData = require('../utils/getQualityControlData');
 const getMLSTData = require('../utils/getMLST');
 
@@ -120,6 +121,9 @@ router.get('/', async function (req, res) {
 
     const assembly = getAssemblerData(sampleName);
     const qc = getQualityControlData(sampleName);
+    const annotations = getAnnotations(sampleName);
+    log("annotations:");
+    log(annotations);
 
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
@@ -133,7 +137,8 @@ router.get('/', async function (req, res) {
         metadata: gather,
         result_assembly_summary: assembly,
         sequence_summary: qc,
-        mlst: mlst
+        mlst: mlst,
+        annotations: annotations,
     });
 
 

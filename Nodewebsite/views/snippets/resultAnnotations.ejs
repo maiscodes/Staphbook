@@ -1,0 +1,45 @@
+<%/*
+
+    resultAnnotations
+Display the Prokka protein annotations for a sample, also allow a very simple search/filter mechanism
+
+*/%>
+
+<div style="max-height: 80vh; overflow:scroll">
+
+<div style="width:100%; display:flex; justify-content:space-around; align-items: center">
+    <input style="width:30%" type="text" id="searchAnnotations" onkeyup="searchAnnotations()" placeholder="Search for names..">
+    <span id="searchAnnotationsResults"><%= annotations.length%> Results</span>
+</div>
+
+<table style="width:100%; margin-top:10px">
+    <thead>
+        <tr>
+            <td>Locus Tag</td>
+            <td>F-Type</td>
+            <td>Length (bp)</td>
+            <td>Gene</td>
+            <td>EC Number</td>
+            <td>COG</td>
+            <td>Product</td>
+        </tr>
+    </thead>
+    <tbody id="annotationsTableBody">
+        <% for (var i = 0; i < annotations.length; i++) { %>
+            <tr>
+                <td><%= annotations[i].locus_tag %></td>
+                <td><%= annotations[i].ftype %></td>
+                <td><%= annotations[i].length_bp %></td>
+                <td><%= annotations[i].gene %></td>
+                <td><%= annotations[i].EC_number %></td>
+                <td><%= annotations[i].COG %></td>
+                <td><%= annotations[i].product %></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%/* TABLE OF DATA */%>
+
+</div>
+

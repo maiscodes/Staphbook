@@ -2,6 +2,30 @@
 <script>
 
     /*
+     * Search through the annotations
+     */
+    function searchAnnotations(){
+        console.log("searching for annotations");
+        const query = document.getElementById("searchAnnotations").value.toLowerCase();
+        const table = document.getElementById("annotationsTableBody");
+        const rows = table.getElementsByTagName("tr");
+        console.log(`query: ${query}, number of rows: ${rows.length}`);
+        let results = 0;
+        for (let i = 0; i < rows.length; i++) {
+                const txtValue = rows[i].textContent || rows[i].innerText;
+                if (txtValue.toLowerCase().indexOf(query) > -1) {
+                    rows[i].style.display = "";
+                    results++;
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        document.getElementById("searchAnnotationsResults").innerHTML = `${results} Results`;
+
+        }
+
+
+    /*
      * Changes the sample information displayed based on the user selection
      *
      */

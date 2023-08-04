@@ -175,6 +175,13 @@
       </div>
     <% } %>
 
+    <% if (locals.annotations){ %>
+      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Annotations</button>
+      <div class="sectionContent" id="Assembly">
+        <% include ../snippets/resultAnnotations %>
+      </div>
+    <% } %>
+
     <% /* %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Primer Hits</button>
       <div class="sectionContent"  id="Sccmec_Primers">
