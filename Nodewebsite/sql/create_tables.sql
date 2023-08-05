@@ -1,7 +1,7 @@
 CREATE TABLE public.user_favorites
 (
     email text COLLATE pg_catalog."default",
-    sample_id text
+    sample_id text,
     CONSTRAINT "unique favorites" UNIQUE (email, sample_id)
 )
 WITH (
