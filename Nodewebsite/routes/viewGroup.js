@@ -47,6 +47,8 @@ router.get('/', function (req, res, next) {
             sharingInfo = cleanedSharingInfo;
           }
           groupInfo.status = status;
+
+          /* Original database query
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
           name: 'sample_sample.name', id: 'sample_sample.id'})
               .from('mlst_mlst')
@@ -66,7 +68,6 @@ router.get('/', function (req, res, next) {
                   sampleInfo.host = sampleInfo.metadata.host;
                   sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                 }
-
                 if (groupInfo == undefined) {
                   res.render('pages/error', errorPageConfig);
                   return;
@@ -80,6 +81,13 @@ router.get('/', function (req, res, next) {
                     sharingInfo: sharingInfo,
                     email: req.session.userEmail
                 });
+              }); */
+              res.render('pages/viewGroup', {
+                userLoggedIn: req.userLoggedIn,
+                samples: [],//sampleInfos, this needs to be grabbed from flat file system.
+                groupInfo: groupInfo,
+                sharingInfo: sharingInfo,
+                email: req.session.userEmail
               });
         })
         .catch(function(err) {

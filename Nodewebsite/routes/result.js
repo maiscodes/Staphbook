@@ -93,6 +93,23 @@ router.get('/', async function (req, res) {
             }
         });*/
     }
+
+    let sampleGroups;
+
+    if (userLoggedIn) {
+        let alreadyInGroups = req.knex.select('group_id').from('group_samples').where({sample_id: sampleName});
+        getGroups = req.knex.select('group_id', 'name')
+        .from('groups')
+        .where({email: decodeURIComponent(req.session.userEmail)})
+        .whereNotIn('group_id', alreadyInGroups);
+
+        sampleGroups =
+            req.knex.select('groups.group_id', 'name')
+            .from('group_samples')
+            .innerJoin('groups', 'groups.group_id', 'group_samples.group_id')
+            .where({sample_id: sampleName, email: decodeURIComponent(req.session.userEmail)})
+    }
+
     /*
         * Error page, if URL is incorrect or not found
     */
@@ -139,6 +156,7 @@ router.get('/', async function (req, res) {
         sequence_summary: qc,
         mlst: mlst,
         annotations: annotations,
+        sample_groups: sampleGroups,
     });
 
 
