@@ -1,5 +1,6 @@
 # Bactbook
-BactBook is a web app that reads from a local flat file system bactopia output, and displays the information in an easy to read format. A PostgreSQL database supports the application by storing users, favourites and more. This projects user interface is built off of the existing Staphbook project, which can be found here:
+BactBook is a web app that reads from a local flat file system bactopia output, and displays the information in an easy to read format. A PostgreSQL database supports the application by storing users, favourites and more. This projects user interface is built off of the existing Staphbook project, which can be found [here](https://github.com/maiscodes/Staphbook)
+
 With this app, users are able to:
 - browse genomes and view information such as isolation source and sequence data and be able to download the information as .csv files.
 - find similar genomes by shared information such as isolation sources and by genetic distance
