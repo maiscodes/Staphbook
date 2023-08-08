@@ -70,5 +70,71 @@
       }
     }
 
+    function addSamplesToGroup(group_id){
+        collection.forEach((ele) => {
+            if(ele.isNode() && ele.inside()){
+                addSampleToGroup(group_id, ele.id());
+            }
+        });
+        addSampleToGroup(group_id, sampleIdentity);
+    }
 
+    function addToGroup(group_id){
+        addSampleToGroup(group_id, sampleIdentity);
+    }
+
+    function addSampleToGroup(group_id, sample_id){
+        //let group_id = document.getElementById('groups-list').value;
+        let baseUrl = window.location.origin;
+        let url = `${baseUrl}/addGroupSample`;
+
+        if(group_id === 'create'){
+            window.location.href = `${baseUrl}/createGroup`;
+        }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                groupId: group_id,
+                sampleId: sample_id,
+            })
+        })
+            .then(response => {
+                if (response.status === 200 && sample_id === sampleIdentity) {
+                    location.reload(true);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    function remGroup(group_id){
+        let baseUrl = window.location.origin;//"http://127.0.0.1:8000"; // TODO: update when hosted
+        let url = `${baseUrl}/removeGroupSample`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                groupId: group_id,
+                sampleId: "<%- sample_ID %>",
+            })
+        })
+            .then(response => {
+                if (response.status == 200) {
+                    location.reload(true);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+    
 </script>

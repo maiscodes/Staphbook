@@ -16,7 +16,7 @@ const router = express.Router()
 let url = require('url')
 const log = require('debug')('routes:result')
 
-// Result page endpoint
+// Result page endpoint 
 router.get('/', async function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let sampleName = req.query.sampleSelection;
@@ -159,6 +159,7 @@ router.get('/', async function (req, res) {
             sequence_summary: qc,
             mlst: mlst,
             annotations: annotations,
+            avail_groups: groupsInfo,
             sample_groups: sampleGroups,
         });
     })
