@@ -93,7 +93,7 @@ router.get('/', async function (req, res) {
             }
         });*/
     }
-
+    let getGroups = req.knex.select('group_id', 'name').from('groups').where({email: ''});
     let sampleGroups;
 
     if (userLoggedIn) {
@@ -139,26 +139,29 @@ router.get('/', async function (req, res) {
     const assembly = getAssemblerData(sampleName);
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
-    log("annotations:");
-    log(annotations);
+    //log("annotations:");
+    //log(annotations);
 
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
-    log(mlst);
+    //log(mlst);
+    Promise
+    .all([ getGroups, sampleGroups])
+    .then(function([groupsInfo, sampleGroups]) {
 
-    res.render('pages/result', {
-        summary: gather, 
-        userLoggedIn: userLoggedIn,
-        sample_ID: sampleName,
-        isFavourited: req.session.favourited,
-        metadata: gather,
-        result_assembly_summary: assembly,
-        sequence_summary: qc,
-        mlst: mlst,
-        annotations: annotations,
-        sample_groups: sampleGroups,
-    });
-
+        res.render('pages/result', {
+            summary: gather, 
+            userLoggedIn: userLoggedIn,
+            sample_ID: sampleName,
+            isFavourited: req.session.favourited,
+            metadata: gather,
+            result_assembly_summary: assembly,
+            sequence_summary: qc,
+            mlst: mlst,
+            annotations: annotations,
+            sample_groups: sampleGroups,
+        });
+    })
 
     return;
 
