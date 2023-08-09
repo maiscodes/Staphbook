@@ -1,6 +1,8 @@
 <!-- Result Page Scripts -->
 <script>
 
+    sampleIdentity = "<%- sample_ID %>";
+
     /*
      * Search through the annotations
      */
@@ -109,6 +111,7 @@
                 }
             })
             .catch(error => {
+                alert("Something went wrong");
                 console.log(error);
             });
     }
