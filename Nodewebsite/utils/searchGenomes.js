@@ -4,7 +4,7 @@ const glob = require('glob')
 const log = require('debug')('utils:searchGenomes')
 
 const categories = {
-    '': '/*',
+    'name': "/*",
     'annotations': '/**/annotator/prokka/*.tsv',
     /*
     sra_accession
@@ -23,15 +23,28 @@ const categories = {
 function searchGenomes(query, category) {
     // join the glob with the samplesdir env var
     if (!categories[category]) {
-        throw new Error('Invalid category')
+        throw new Error('Invalid category: ' + category + '. Valid categories are: ' + Object.keys(categories).join(', ') + '. ')
     }
+    // Name search is easy
+    if (category === 'name') {
+        // search for the name in the samples dir
+        const all_folders = fs.readdirSync(process.env.SAMPLES_DIR)
+        const results = []
+        for (const folder of all_folders) {
+            if (folder.toLowerCase().includes(query.toLowerCase())) {
+                results.push(folder)
+            }
+        }
+        return results
+    }
+
     const pattern = path.join(process.env.SAMPLES_DIR, categories[category])
     const files = glob.sync(pattern)
     log(`Searching ${files.length} files for ${query}`)
     const results = []
     for (const file of files) {
         const data = fs.readFileSync(file, 'utf8')
-        if (data.includes(query)) {
+        if (data.toLowerCase().includes(query.toLowerCase())) {
             // found the text, add the sample name to the results
             // sample name is the directory name right after the SAMPLES_DIR
             // this line splits the whole path to remove samples_dir, and 

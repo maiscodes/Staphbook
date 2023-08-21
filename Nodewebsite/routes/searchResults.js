@@ -14,15 +14,13 @@ router.get('/', function(req, res) {
     try {
         result = searchGenomes(query, category);
     } catch (err) {
-        log('Error: %s', err);
+        log(err);
     }
     // Get some metadata about the samples that have been returned. Limit to 50
     const samples = result.slice(0, 50).map((sample) => {
         return getGatherData(sample);
 
     });
-    log(samples);
-    
     res.render('pages/searchResults', {samples, query, category, number: samples.length, userLoggedIn: res.locals.userLoggedIn })
 
 });
