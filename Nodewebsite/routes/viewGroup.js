@@ -5,7 +5,6 @@ const getGatherData = require("../utils/getGatherData");
 const getMLST = require("../utils/getMLST");
 const log = require("debug")("routes:viewGroup");
 
-
 router.get('/', function (req, res, next) {
     let groupId = req.query.groupId;
     let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: req.userLoggedIn };
@@ -26,7 +25,6 @@ router.get('/', function (req, res, next) {
                              .select('share_to_email')
                              .from('group_sharing')
                              .where({group_id: groupId || 0})
-
 
         Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(function([groupInfo, sampleIds, sharingInfo]) {
           groupInfo = groupInfo[0];
@@ -101,6 +99,7 @@ router.get('/', function (req, res, next) {
                     email: req.session.userEmail
                 });
               }); */
+
               res.render('pages/viewGroup', {
                 userLoggedIn: req.userLoggedIn,
                 samples,//sampleInfos, this needs to be grabbed from flat file system.
