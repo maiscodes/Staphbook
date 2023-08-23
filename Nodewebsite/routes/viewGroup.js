@@ -1,6 +1,9 @@
 var express = require('express')
 var router = express.Router()
 let url = require('url')
+const getGatherData = require("../utils/getGatherData");
+const getMLST = require("../utils/getMLST");
+const log = require("debug")("routes:viewGroup");
 
 
 router.get('/', function (req, res, next) {
@@ -48,6 +51,22 @@ router.get('/', function (req, res, next) {
           }
           groupInfo.status = status;
 
+          // For each sample, we need to provide:
+            // 1. id - string
+            // 2. Sample Length - int
+            // 3. Sample Species - string
+            // 4. Sequence Type - int
+          const samples = sampleIds.map((sample) => {
+              const metadata = getGatherData(sample.sample_id);
+              const mlst = getMLST(sample.sample_id);
+              return {
+                    id: sample.sample_id,
+                    length: metadata?.genome_size,
+                    species: metadata?.species,
+                    sequenceType: mlst?.sequence_type
+              }
+          });
+
           /* Original database query
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
           name: 'sample_sample.name', id: 'sample_sample.id'})
@@ -84,7 +103,7 @@ router.get('/', function (req, res, next) {
               }); */
               res.render('pages/viewGroup', {
                 userLoggedIn: req.userLoggedIn,
-                samples: [],//sampleInfos, this needs to be grabbed from flat file system.
+                samples,//sampleInfos, this needs to be grabbed from flat file system.
                 groupInfo: groupInfo,
                 sharingInfo: sharingInfo,
                 email: req.session.userEmail
