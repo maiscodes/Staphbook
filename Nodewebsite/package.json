@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "file-saver": "^2.0.2",
+    "glob": "^10.3.3",
     "knex": "^0.21.2",
     "npm": "^7.0.2",
     "parser": "^0.1.4",
