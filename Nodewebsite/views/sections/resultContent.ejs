@@ -34,7 +34,7 @@
             </form>
 
             <!--  Groups code that has been commented out as was causing errors -->
-            <% /* %>
+            
             <% sample_groups.forEach(function (group) { %>
                 <button onclick="remGroup(this.value)" value=<%= group.group_id%> class="groupLabel">
                     <%= group.name %>
@@ -56,7 +56,6 @@
                     Create new group
                 </button>
             </div>
-            <% */ %>
             <button type="button" id="downloadSampleInfo" onclick="downloadInfo()" title="Download Sample Information"
                     class="btn btn-outline-dark btn-sm">
                 <i class="fas fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
@@ -241,13 +240,11 @@
                         Add visible samples to Group
                     </button>
                     <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <% /* %>
                         <% avail_groups.forEach(function (group) { %>
                             <button class="dropDownButton" onclick="addSamplesToGroup(this.value)" value=<%= group.group_id %>>
                                 <%= group.name %>
                             </button>
                         <% }) %>
-                        <% */ %>
                         <button class="dropDownButton" onclick="addToGroup(this.value)" value="create">
                             Create new group
                         </button>

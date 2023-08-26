@@ -1,7 +1,9 @@
 var express = require('express')
 var router = express.Router()
 let url = require('url')
-
+const getGatherData = require("../utils/getGatherData");
+const getMLST = require("../utils/getMLST");
+const log = require("debug")("routes:viewGroup");
 
 router.get('/', function (req, res, next) {
     let groupId = req.query.groupId;
@@ -23,7 +25,6 @@ router.get('/', function (req, res, next) {
                              .select('share_to_email')
                              .from('group_sharing')
                              .where({group_id: groupId || 0})
-
 
         Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(function([groupInfo, sampleIds, sharingInfo]) {
           groupInfo = groupInfo[0];
@@ -47,6 +48,24 @@ router.get('/', function (req, res, next) {
             sharingInfo = cleanedSharingInfo;
           }
           groupInfo.status = status;
+
+          // For each sample, we need to provide:
+            // 1. id - string
+            // 2. Sample Length - int
+            // 3. Sample Species - string
+            // 4. Sequence Type - int
+          const samples = sampleIds.map((sample) => {
+              const metadata = getGatherData(sample.sample_id);
+              const mlst = getMLST(sample.sample_id);
+              return {
+                    id: sample.sample_id,
+                    length: metadata?.genome_size,
+                    species: metadata?.species,
+                    sequenceType: mlst?.sequence_type
+              }
+          });
+
+          /* Original database query
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
           name: 'sample_sample.name', id: 'sample_sample.id'})
               .from('mlst_mlst')
@@ -66,7 +85,6 @@ router.get('/', function (req, res, next) {
                   sampleInfo.host = sampleInfo.metadata.host;
                   sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
                 }
-
                 if (groupInfo == undefined) {
                   res.render('pages/error', errorPageConfig);
                   return;
@@ -80,6 +98,14 @@ router.get('/', function (req, res, next) {
                     sharingInfo: sharingInfo,
                     email: req.session.userEmail
                 });
+              }); */
+
+              res.render('pages/viewGroup', {
+                userLoggedIn: req.userLoggedIn,
+                samples,//sampleInfos, this needs to be grabbed from flat file system.
+                groupInfo: groupInfo,
+                sharingInfo: sharingInfo,
+                email: req.session.userEmail
               });
         })
         .catch(function(err) {

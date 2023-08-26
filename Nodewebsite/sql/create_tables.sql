@@ -54,7 +54,7 @@ ALTER TABLE public.groups
 CREATE TABLE public.group_samples
 (
     group_id integer NOT NULL,
-    sample_id integer NOT NULL,
+    sample_id text NOT NULL,
     CONSTRAINT "unique group samples" UNIQUE (group_id, sample_id)
 )
 WITH (

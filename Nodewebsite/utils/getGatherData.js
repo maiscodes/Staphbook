@@ -13,7 +13,7 @@ function getGatherData(runName) {
     // return as  { [key: string]: string }[]
     // probably only one row from what I can see, but leave room
     if (!runName || !process.env.SAMPLES_DIR) {
-        console.error(`runName or SAMPLES_DIR not set`);
+        console.error(`runName or SAMPLES_DIR not set, received ${runName} and ${process.env.SAMPLES_DIR}`);
         return null;
     }
     const gatherFile = path.join(

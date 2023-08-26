@@ -16,7 +16,7 @@ const router = express.Router()
 let url = require('url')
 const log = require('debug')('routes:result')
 
-// Result page endpoint
+// Result page endpoint 
 router.get('/', async function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let sampleName = req.query.sampleSelection;
@@ -78,7 +78,6 @@ router.get('/', async function (req, res) {
     if (userLoggedIn) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
-        console.log(email)
         // TODO: Work out how to do the whole database thing with these
         let fav_results = await req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName})
         
@@ -93,6 +92,23 @@ router.get('/', async function (req, res) {
             }
         });*/
     }
+    let getGroups = req.knex.select('group_id', 'name').from('groups').where({email: ''});
+    let sampleGroups;
+
+    if (userLoggedIn) {
+        let alreadyInGroups = req.knex.select('group_id').from('group_samples').where({sample_id: sampleName});
+        getGroups = req.knex.select('group_id', 'name')
+        .from('groups')
+        .where({email: decodeURIComponent(req.session.userEmail)})
+        .whereNotIn('group_id', alreadyInGroups);
+
+        sampleGroups =
+            req.knex.select('groups.group_id', 'name')
+            .from('group_samples')
+            .innerJoin('groups', 'groups.group_id', 'group_samples.group_id')
+            .where({sample_id: sampleName, email: decodeURIComponent(req.session.userEmail)})
+    }
+
     /*
         * Error page, if URL is incorrect or not found
     */
@@ -122,25 +138,30 @@ router.get('/', async function (req, res) {
     const assembly = getAssemblerData(sampleName);
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
-    log("annotations:");
-    log(annotations);
+    //log("annotations:");
+    //log(annotations);
 
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
-    log(mlst);
+    //log(mlst);
+    Promise
+    .all([ getGroups, sampleGroups])
+    .then(function([groupsInfo, sampleGroups]) {
 
-    res.render('pages/result', {
-        summary: gather, 
-        userLoggedIn: userLoggedIn,
-        sample_ID: sampleName,
-        isFavourited: req.session.favourited,
-        metadata: gather,
-        result_assembly_summary: assembly,
-        sequence_summary: qc,
-        mlst: mlst,
-        annotations: annotations,
-    });
-
+        res.render('pages/result', {
+            summary: gather, 
+            userLoggedIn: userLoggedIn,
+            sample_ID: sampleName,
+            isFavourited: req.session.favourited,
+            metadata: gather,
+            result_assembly_summary: assembly,
+            sequence_summary: qc,
+            mlst: mlst,
+            annotations: annotations,
+            avail_groups: groupsInfo,
+            sample_groups: sampleGroups,
+        });
+    })
 
     return;
 
