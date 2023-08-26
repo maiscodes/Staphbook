@@ -41,7 +41,8 @@ function searchGenomes(query, category) {
     }
 
     const pattern = path.join(process.env.SAMPLES_DIR, categories[category])
-    const files = glob.sync(pattern)
+    log(pattern)
+    const files = glob.sync(pattern, {posix: true, dotRelative: true, windowsPathsNoEscape: true})
     log(`Searching ${files.length} files for ${query}`)
     const queries = query.split(',').map((q) => q.trim())
     const results = []
@@ -52,7 +53,8 @@ function searchGenomes(query, category) {
             // sample name is the directory name right after the SAMPLES_DIR
             // this line splits the whole path to remove samples_dir, and 
             // then splits and takes the first dir after
-            const sampleName = file.split(process.env.SAMPLES_DIR)[1].split(path.sep)[1]
+            const sampleName = file.split(process.env.SAMPLES_DIR)[1].split("/")[1]
+            log(sampleName)
             results.push(sampleName)
         }
     }
