@@ -6,10 +6,10 @@ const log = require('debug')('utils:searchGenomes')
 const categories = {
     'name': "/*",
     'annotations': '/**/annotator/prokka/*.tsv',
+    'species':  '/**/gather/*.tsv',
+    'sequence_type': '/**/mlst/*.tsv',
     /*
     sra_accession
-    species
-    mlst_sequence_type
      */
 }
 
@@ -19,6 +19,8 @@ const categories = {
  * Takes a query and category.
  * Searches within all files that match the categories glob pattern.
  * If the query is present within any of those files, return the filenames.
+ * @param {string} query
+ * @param {"name"|"annotations"|"species"|"sequence_type"} category
  */
 function searchGenomes(query, category) {
     // join the glob with the samplesdir env var
@@ -41,10 +43,11 @@ function searchGenomes(query, category) {
     const pattern = path.join(process.env.SAMPLES_DIR, categories[category])
     const files = glob.sync(pattern)
     log(`Searching ${files.length} files for ${query}`)
+    const queries = query.split(',').map((q) => q.trim())
     const results = []
     for (const file of files) {
         const data = fs.readFileSync(file, 'utf8')
-        if (data.toLowerCase().includes(query.toLowerCase())) {
+        if (queries.every((q) => data.toLowerCase().includes(q.toLowerCase()))) {
             // found the text, add the sample name to the results
             // sample name is the directory name right after the SAMPLES_DIR
             // this line splits the whole path to remove samples_dir, and 

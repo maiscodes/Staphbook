@@ -13,50 +13,20 @@
         <form action='/advSearchResults' method="get">
             <!--Name input (text)-->
             <div class="form-group">
-                <label for="sequenceInput">Sequence Type</label>
-                <input type="number" max="10000" class="form-control" name="sequenceInput" id="sequenceInput" placeholder="Sequence Type">
-            </div>
-
-            <!--Sequence Type input (text)-->
-            <div class="form-group">
-                <label for="locationInput">Location</label>
-                <input type="text" class="form-control" name="locationInput" id="locationInput" placeholder="Location">
-            </div>
-
-            <!--Date Isolated Range-->
-            <div class="form-group">
-                <label>Date Isolated</label>
-            </div>
-            <div class="form-group row" style="margin-top: -20px; margin-left: 0px">
-                <!--Start date (Date)-->
-                <label for="inputDateStart" class="col-form-label" style="margin-right: 10px">From:</label>
-                <div>
-                    <input type="date" class="form-control" name="inputDateStart" id="inputDateStart" placeholder="DD/MM/YYYY">
-                </div>
-                <!--End date (Date)-->
-                <label for="inputDateEnd" class="col-form-label"
-                       style="margin-left: 30px; margin-right: 10px">To:</label>
-                <div>
-                    <input type="date" class="form-control" name="inputDateEnd" id="inputDateEnd" placeholder="DD/MM/YYYY">
-                </div>
-            </div>
-
-            <!--Place input (text)-->
-            <div class="form-group">
-                <label for="hostInput">Host</label>
-                <input type="text" class="form-control" name="hostInput" id="hostInput" placeholder="Host">
+                    <label for="speciesInput">Species</label>
+                    <input type="text" class="form-control" name="species" id="speciesInput" placeholder="Species Name">
             </div>
 
             <div class="row">
                 <!--Gene Present input (text)-->
                 <div class="col">
-                    <label for="strainInput">Strain Name</label>
-                    <input type="text" class="form-control" name="strainInput" id="strainInput" placeholder="Strain Name">
+                <label for="sequenceInput">Sequence Type</label>
+                <input type="number" max="10000" class="form-control" name="sequence_type" id="sequenceInput" placeholder="Sequence Type">
                 </div>
                 <!--Gene Absent input (text)-->
                 <div class="col">
-                    <label for="sourceInput">Isolation Source</label>
-                    <input type="text" class="form-control" name="sourceInput" id="sourceInput" placeholder="Isolation Source">
+                    <label for="annotInput">Includes All Annotations (comma separated)</label>
+                    <input type="text" class="form-control" name="annotations" id="annotInput" placeholder="a1 (, a2...)">
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ const log = require('debug')('routes:searchResults');
 router.get('/', function(req, res) {
     const category = req.query.category;
     const query = req.query.query;
+    log(`Searching for ${query} in ${category}`);
     let result = [];
     try {
         result = searchGenomes(query, category);
@@ -21,6 +22,7 @@ router.get('/', function(req, res) {
         return getGatherData(sample);
 
     });
+    log(`Reddering with ${query}`);
     res.render('pages/searchResults', {samples, query, category, number: samples.length, userLoggedIn: res.locals.userLoggedIn })
 
 });

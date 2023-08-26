@@ -1,65 +1,40 @@
 var express = require('express')
 var router = express.Router()
+const searchGenomes = require('../utils/searchGenomes');
+const getGatherData = require('../utils/getGatherData');
 
-router.get('/', function (req, res) {
+router.get('/', function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
     }
 
     //TODO clean this up
-    let sequenceInput = req.query.sequenceInput;
-    let startDate = req.query.inputDateStart;
-    let endDate = req.query.inputDateEnd;
-    let locationInput = req.query.locationInput;
-    let strainInput = req.query.strainInput;
-    let hostInput = req.query.hostInput;
-    let sourceInput = req.query.sourceInput;
-    if(strainInput === "" && sequenceInput === "" && startDate === "" && endDate === "" && locationInput === "" && hostInput === "" && sourceInput === "") {
-        res.redirect('/advancedSearch');
+    const sequence_type = req.query.sequence_type;
+    const annotations = req.query.annotations;
+    const species = req.query.species;
+    // NOTE: Maybe really slow but works for now
+    //
+    // conduct three searches, then take the intersection of the results
+    let results = null;
+    if (sequence_type) {
+        results = searchGenomes(sequence_type, "sequence_type");
     }
-    //TO HERE
-    else {
-        req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-            name: 'sample_sample.name', id: 'sample_sample.id'})
-            .from('mlst_mlst')
-            .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
-            .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-            .modify(function (queryBuilder){
-                if(sequenceInput){
-                    queryBuilder.where({'mlst_mlst.st': sequenceInput});
-                }
-                if(startDate){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) >= ?", [startDate])
-                }
-                if(endDate){
-                    queryBuilder.whereRaw("CAST(metadata->>'collection_date' AS DATE) <= ?", [endDate])
-                }
-                if(locationInput){
-                    queryBuilder.whereRaw("metadata->>'country' ILIKE ?", ["%"+locationInput+"%"])
-                }
-                if(strainInput){
-                    queryBuilder.whereRaw("metadata->>'strain' ILIKE ?", ["%"+strainInput+"%"])
-                }
-                if(hostInput){
-                    queryBuilder.whereRaw("metadata->>'host' ILIKE ?", ["%"+hostInput+"%"])
-                }
-                if(sourceInput){
-                    queryBuilder.whereRaw("metadata->>'isolation_source' ILIKE ?", ["%"+sourceInput+"%"])
-                }
+    if (annotations) {
+        const an_results = searchGenomes(annotations, "annotations");
+        results = results ? results.filter(value => an_results.includes(value)) : an_results;
+    }
+    if (species) {
+        const sp_results = searchGenomes(species, "species");
+        results = results ? results.filter(value => sp_results.includes(value)) : sp_results;
+    }
+    let number = results.length;
 
-            })
-            .then((results) => {
-                for (const same of results) {
-                    same.country = same.metadata.country;
-                    same.strain = same.metadata.strain;
-                    same.host = same.metadata.host;
-                    same.isolation_source = same.metadata.isolation_source;
-                }
-                let number = results.length;
-                res.render('pages/advSearchResults', { samples: results, number: number, userLoggedIn: userLoggedIn });
-            })
-    }
+    const samples = results.map((id) => {
+        return getGatherData(id);
+    });
+
+    res.render('pages/advSearchResults', { samples, number: number, userLoggedIn: userLoggedIn });
 });
 
 module.exports = router

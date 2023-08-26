@@ -78,7 +78,6 @@ router.get('/', async function (req, res) {
     if (userLoggedIn) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
-        console.log(email)
         // TODO: Work out how to do the whole database thing with these
         let fav_results = await req.knex.select('*').from('user_favorites').where({email: email, sample_id: sampleName})
         
