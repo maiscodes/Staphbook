@@ -8,10 +8,11 @@ const categories = {
     'annotations': '/**/annotator/prokka/*.tsv',
     'species':  '/**/gather/*.tsv',
     'sequence_type': '/**/mlst/*.tsv',
-    /*
+    /**
     sra_accession
-     */
+     **/
 }
+
 
 
 /**
@@ -54,7 +55,6 @@ function searchGenomes(query, category) {
             // this line splits the whole path to remove samples_dir, and 
             // then splits and takes the first dir after
             const sampleName = file.split(process.env.SAMPLES_DIR)[1].split("/")[1]
-            log(sampleName)
             results.push(sampleName)
         }
     }

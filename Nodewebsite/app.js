@@ -2,10 +2,7 @@
 const dotenv = require('dotenv');
 
 // Check environment and use correct env file
-if (process.env.NODE_ENV !== 'production')
-{
-    dotenv.config({path: '.env'});
-}
+dotenv.config({path: '.env'});
 
 const express = require('express');
 const app = express();
@@ -24,6 +21,16 @@ const options = {
 }
 
 const knex = require('knex')(options);
+
+// check connection
+console.log('Checking database connection...');
+    knex.raw('SELECT 1').then(() => {
+        console.log('Database connection successful');
+    }).catch((err) => {
+        console.log('Database connection failed');
+        console.log(err);
+    });
+
 
 // Change secret to unique value
 app.use(session({
