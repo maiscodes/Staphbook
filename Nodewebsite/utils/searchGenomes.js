@@ -10,7 +10,6 @@ const categories = {
     'sequence_type': '/**/mlst/*.tsv',
     /*
     sra_accession
-    mlst_sequence_type
      */
 }
 
