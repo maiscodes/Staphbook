@@ -6,9 +6,10 @@ const log = require('debug')('utils:searchGenomes')
 const categories = {
     'name': "/*",
     'annotations': '/**/annotator/prokka/*.tsv',
+    'species':  '/**/gather/*.tsv',
+    'sequence_type': '/**/mlst/*.tsv',
     /*
     sra_accession
-    species
     mlst_sequence_type
      */
 }

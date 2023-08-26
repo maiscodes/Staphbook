@@ -23,11 +23,13 @@
           <select id="options" name="category" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
             <option <%= locals.category=="annotations" ? "selected" : "" %> value="annotations">Annotations</option>
             <option <%= locals.category=="name" ? "selected" : "" %> value="name">Run Name</option>
-            <option <%= locals.category=="location" ? "selected" : "" %> value="location">Location</option>
+            <option <%= locals.category=="sequence_type" ? "selected" : "" %> value="sequence_type">Sequence Type (MLST)</option>
+            <% /* %>
             <option <%= locals.category=="strain" ? "selected" : "" %> value="Strain Name">Strain Name</option>
             <option <%= locals.category=="host" ? "selected" : "" %> value="Host">Host</option>
             <option <%= locals.category=="source" ? "selected" : "" %> value="Source">Isolation Source</option>
             <option <%= locals.category=="sample" ? "selected" : "" %> value="Sample">Sample ID</option>
+            <% */ %>
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
