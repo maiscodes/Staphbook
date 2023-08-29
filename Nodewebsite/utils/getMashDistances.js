@@ -32,6 +32,7 @@ async function getMashDistances(sampleName, kmers = 31) {
                 log(err);
             }
             else {
+                log(stdout);
                 // parse stdout as TSV
                 lines = stdout.split('\n');
                 // remove first line with headers

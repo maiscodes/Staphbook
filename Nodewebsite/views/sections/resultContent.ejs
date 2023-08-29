@@ -306,24 +306,13 @@
         <!-- close resultsPageGraphComponent4 -->
 
         <!-- close resultsPageResultComponents -->
-        <!-- TODO: add information button, page move buttons << < Page X / 10 > >> Jumps 2 at a time -->
         <div id="resultsPageGraphComponent5" style="text-align: center;">
 
           <h3 style="text-align: center">Find My Friends</h3>
 
-          <p>Finding closely related genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
+          <p>Finding genomes from a distance of <span id="minGeneticDist">0.00</span> to <span id="maxGeneticDist">0.0150</span></p>
 
           <% include ../snippets/rangedSliderGeneticDistance.ejs %>
-
-          <% include ../snippets/selectionBar.ejs %>
-
-          <div id="closelyRelatedGenomesNavigationBar">
-            <button class="navigationButton" onclick="stepToPage(-2)">&lt;&lt;</button>
-            <button class="navigationButton" onclick="stepToPage(-1)">&lt;</button> <span id="pageMessage"> Viewing page
-            <input type="number" id="samplePageNumber" name="samplePageNumber" min="1" value="1" onchange="updatePageSamples()"> of <span id="maxPageNumber">1</span> </span>
-            <button class="navigationButton" onclick="stepToPage(1)">&gt;</button>
-            <button class="navigationButton" onclick="stepToPage(2)">&gt;&gt;</button>
-         </div>
 
           <form action='/result' method="get"><div id="findMyFriendsCards"></div></form>
 
