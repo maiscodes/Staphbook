@@ -1,13 +1,13 @@
-<!--
+<%/*
     RESULT CONTENT - /result?sampleSelection=sampleID
 
     @param {String} sample_ID               - The sample ID or name of the sample
     @param {bool} userLoggedIn              - True if the user is logged in
     @param {dict} summary                   - Summary data to display at top of page as key: value
     @param {dict} result_assembly_summary   - Assembly Data Summary to display in dropdown
+    @param {dict} 
 
--->
-
+*/%>
 
 <div id="page-container">
 
@@ -336,7 +336,6 @@
          style="width: 100%; font-size: 20px; text-align: center; margin-bottom: 20px; margin-top: 20px;"></div>
     <img id="saveableGraphImage">
 
-    <!-- Scripts for result page functionality (need to add back in % to work) -->
     <% include ../snippets/resultScripts.ejs %>
     <!-- Scripts for downloading the sample information 
     < include ../snippets/saveCsvScript.ejs %>
