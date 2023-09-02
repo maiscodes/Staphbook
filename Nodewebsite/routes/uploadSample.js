@@ -11,4 +11,14 @@ router.get('/', function (req, res) {
     res.render('pages/uploadSample', { userLoggedIn: userLoggedIn });
 });
 
+router.post('/', function (req, res) {
+    let sampleID = req.body.nameInput;
+    let userLoggedIn = false;
+    if (req.session.userStatus === "loggedIn") {
+        userLoggedIn = true;
+    }
+    console.log("Im running");
+    res.render('pages/result', { userLoggedIn: userLoggedIn, sampleSelection: sampleID});
+});
+
 module.exports = router;
