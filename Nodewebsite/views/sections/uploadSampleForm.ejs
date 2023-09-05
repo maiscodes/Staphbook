@@ -13,37 +13,35 @@
             <!--Sequence Type input (text)-->
             <div class="form-group">
                 <label for="nameInput">Name</label>
-                <input type="text" class="form-control" name="name" id="nameInput" placeholder="Sample Name">
+                <input type="text" class="form-control" name="name" id="nameInput" placeholder="Sample Name" onchange="updateDetails()">
             </div>
 
             <!--Sequence Type input (text)-->
             <div class="form-group">
                 <label for="sequenceInput">Isolation Species</label>
-                <input type="number" max="10000" class="form-control" name="st" id="sequenceInput" placeholder="Isolation Species">
+                <input type="text" class="form-control" name="species" id="isolationSpecies" placeholder="Isolation Species">
             </div>
 
             <!--Location input (text)-->
             <div class="form-group">
                 <label for="locationInput">Isolation Source</label>
-                <input type="text" class="form-control" name="location" id="locationInput" placeholder="Isolation Source">
+                <input type="text" class="form-control" name="source" id="isolationSource" placeholder="Isolation Source">
             </div>
 
             <!--Host input (text)-->
             <div class="form-group">
                 <label for="hostInput">Time of Sampling</label>
-                <input type="text" class="form-control" name="host" id="hostInput" placeholder="Time of Sampling">
+                <input type="text" class="form-control" name="time" id="timeSampling" placeholder="Time of Sampling">
             </div>
 
-            <div class="row">
                 <!--Gene Absent input (text)-->
-                <div class="col">
+                <div class="form-group">
                     <label for="sourceInput">Notes</label>
-                    <input type="text" class="form-control" name="isolation_source" id="sourceInput" placeholder="Notes">
+                    <input type="text" class="form-control" name="notes" id="notesId" placeholder="Notes">
                 </div>
-            </div>
 
             <!--Form submission button-->
-            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Search</button>
+            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Update</button>
         </form>
     </div>
 </div>

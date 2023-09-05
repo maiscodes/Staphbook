@@ -93,6 +93,7 @@ CREATE TABLE public.metadata
     isolation_species text,
     isolation_source text,
     time_of_sampling text,
+    notes text
 )
 WITH (
     OIDS = FALSE
