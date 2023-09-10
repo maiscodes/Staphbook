@@ -13,7 +13,10 @@
             <!--Sequence Type input (text)-->
             <div class="form-group">
                 <label for="nameInput">Name</label>
-                <input type="text" class="form-control" name="name" id="nameInput" placeholder="Sample Name" onchange="updateDetails()">
+                <select name="sample_id" id = "samples">
+                    <% for(var i = 0; i < samples.length; i++) { %>
+                        <option value="<%=samples[i]%>"><%=samples[i]%></option>
+                    <% } %>
             </div>
 
             <!--Sequence Type input (text)-->

@@ -1,14 +1,18 @@
 var express = require('express')
 var router = express.Router()
-
+const getAllSampleNames = require('../utils/getAllSampleNames')
 // advanced search page
-router.get('/', function (req, res) {
+router.get('/', async function (req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
     }
-
-    res.render('pages/uploadSample', { userLoggedIn: userLoggedIn });
+    const sampleNames = getAllSampleNames();
+    //const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    //if (metadatas.length == 0) {
+    //    metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
+    //}
+    res.render('pages/uploadSample', { userLoggedIn: userLoggedIn, samples: sampleNames});
 });
 
 router.post('/', function (req, res) {
