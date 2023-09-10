@@ -93,7 +93,8 @@ CREATE TABLE public.metadata
     isolation_species text,
     isolation_source text,
     time_of_sampling text,
-    notes text
+    notes text,
+    CONSTRAINT metadata_pkey PRIMARY KEY (sample_id)
 )
 WITH (
     OIDS = FALSE

@@ -138,9 +138,12 @@ router.get('/', async function (req, res) {
     const assembly = getAssemblerData(sampleName);
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
-    //log("annotations:");
-    //log(annotations);
 
+    const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    if (metadatas.length == 0) {
+        metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
+    }
+    console.log(metadatas);
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
     //log(mlst);
@@ -150,6 +153,7 @@ router.get('/', async function (req, res) {
 
         res.render('pages/result', {
             summary: gather, 
+            userMeta: metadatas[0],
             userLoggedIn: userLoggedIn,
             sample_ID: sampleName,
             isFavourited: req.session.favourited,

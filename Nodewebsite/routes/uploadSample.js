@@ -19,14 +19,15 @@ router.post('/', function (req, res) {
     let sampleNotes = req.body.notes;
 
     req.knex('metadata')
-    .where('sample_id', '=', sampleID)
-    .update({
+    .insert({
         sample_id: sampleID,
         isolation_species: sampleSpecies,
         isolation_source: sampleSource,
         time_of_sampling: sampleTime,
         notes: sampleNotes
-    }).then(() => {
+    }).onConflict('sample_id')
+    .merge()
+    .then(() => {
         console.log("Metadata updated");
     }).catch((err) => {
         console.log(err);
