@@ -13,6 +13,8 @@ const { exec } = require("child_process");
     */
 async function getMashDistances(sampleName, kmers = 31) {
     const allSamples = getAllSampleNames();
+    // remove this sample from the list
+    allSamples.splice(allSamples.indexOf(sampleName), 1);
     const mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
     // double check files exist, remove if not
     mashPaths.forEach((path) => {
@@ -32,8 +34,6 @@ async function getMashDistances(sampleName, kmers = 31) {
                 log(err);
             }
             else {
-                log(stdout);
-                // parse stdout as TSV
                 lines = stdout.split('\n');
                 // remove first line with headers
                 lines.shift();
