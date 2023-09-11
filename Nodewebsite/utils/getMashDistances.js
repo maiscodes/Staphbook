@@ -12,12 +12,14 @@ const { exec } = require("child_process");
     * @returns {Object} - object with keys of other sample names and values of mash distances
     */
 async function getMashDistances(sampleName, kmers = 31) {
-    const OS = process.platform
-    const command = OS == 'win32' ? 'wsl mash' : 'mash'
+    const OS = process.platform;
+    const command = OS == 'win32' ? 'wsl mash' : 'mash';
+    const dir_prefix = OS == 'win32' ? `/mnt/${process.env?.SAMPLES_DRIVE || 'c'}` : '';
     const allSamples = getAllSampleNames();
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
-    const mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
+    const mashPaths = allSamples.map((sample) => `${dir_prefix}${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
+
     // double check files exist, remove if not
     mashPaths.forEach((path) => {
         if (!fs.existsSync(path)) {
