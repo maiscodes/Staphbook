@@ -12,39 +12,46 @@
         <form method="POST">
             <!--Sequence Type input (text)-->
             <div class="form-group">
-                <label for="nameInput">Name</label>
-                <select name="sample_id" id = "samples">
+                <label for="samples">Name</label>
+                <select name="sample_id" id = "samples" onChange="changeSelectedSample(this.selectedOptions);">
                     <% for(var i = 0; i < samples.length; i++) { %>
                         <option value="<%=samples[i]%>"><%=samples[i]%></option>
                     <% } %>
+                </select>
+            </div>
+            
+            <div id="loadingMessage" style="display:none">
+                <p class="text-center" style="margin-top: 20px">Loading...</p>
             </div>
 
-            <!--Sequence Type input (text)-->
-            <div class="form-group">
-                <label for="sequenceInput">Isolation Species</label>
-                <input type="text" class="form-control" name="species" id="isolationSpecies" placeholder="Isolation Species">
-            </div>
-
-            <!--Location input (text)-->
-            <div class="form-group">
-                <label for="locationInput">Isolation Source</label>
-                <input type="text" class="form-control" name="source" id="isolationSource" placeholder="Isolation Source">
-            </div>
-
-            <!--Host input (text)-->
-            <div class="form-group">
-                <label for="hostInput">Time of Sampling</label>
-                <input type="text" class="form-control" name="time" id="timeSampling" placeholder="Time of Sampling">
-            </div>
-
-                <!--Gene Absent input (text)-->
+            <div id="metadataFields">
+                <!--Sequence Type input (text)-->
                 <div class="form-group">
-                    <label for="sourceInput">Notes</label>
-                    <input type="text" class="form-control" name="notes" id="notesId" placeholder="Notes">
+                    <label for="isolationSpecies">Isolation Species</label>
+                    <input type="text" class="form-control" name="species" id="isolationSpecies" placeholder="Isolation Species">
                 </div>
 
-            <!--Form submission button-->
-            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Update</button>
+                <!--Location input (text)-->
+                <div class="form-group">
+                    <label for="isolationSource">Isolation Source</label>
+                    <input type="text" class="form-control" name="source" id="isolationSource" placeholder="Isolation Source">
+                </div>
+
+                <!--Host input (text)-->
+                <div class="form-group">
+                    <label for="timeSampling">Time of Sampling</label>
+                    <input type="text" class="form-control" name="time" id="timeOfSampling" placeholder="Time of Sampling">
+                </div>
+
+                    <!--Gene Absent input (text)-->
+                    <div class="form-group">
+                        <label for="notesId">Notes</label>
+                        <input type="text" class="form-control" name="notes" id="notes" placeholder="Notes">
+                    </div>
+
+                <!--Form submission button-->
+                <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Update</button>
+            </div>
         </form>
     </div>
 </div>

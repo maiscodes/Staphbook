@@ -8,11 +8,17 @@ router.get('/', async function (req, res) {
         userLoggedIn = true;
     }
     const sampleNames = getAllSampleNames();
-    //const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
-    //if (metadatas.length == 0) {
-    //    metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
-    //}
     res.render('pages/uploadSample', { userLoggedIn: userLoggedIn, samples: sampleNames});
+});
+
+// route for getting json data about sample (not rendering page)
+router.get('/json', async function (req, res) {
+    const sampleName = req.query.sampleName;
+    const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    if (metadatas.length == 0) {
+        metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
+    }
+    res.json(metadatas[0]);
 });
 
 router.post('/', function (req, res) {
