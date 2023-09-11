@@ -125,20 +125,6 @@ router.get('/', async function(req, res) {
     console.log(metadatas);
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
-
-        res.render('pages/result', {
-            summary: gather, 
-            userMeta: metadatas[0],
-            userLoggedIn: userLoggedIn,
-            sample_ID: sampleName,
-            isFavourited: req.session.favourited,
-            metadata: gather,
-            result_assembly_summary: assembly,
-            sequence_summary: qc,
-            mlst: mlst,
-            annotations: annotations,
-            avail_groups: groupsInfo,
-            sample_groups: sampleGroups,
     // get distances, then render
     //TEST: mash distances
     const distances = await getMashDistances(sampleName);
