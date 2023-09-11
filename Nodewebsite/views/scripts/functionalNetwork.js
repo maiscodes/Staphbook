@@ -14,6 +14,8 @@ if (thisSample === null) {
     console.error("Cytoscape: No sample name found in url")
 }
 
+let cy;
+
 function createNetwork() {
     const cy = cytoscape({
         container: document.getElementById('cy'),
@@ -118,9 +120,38 @@ function populateNetwork(cy, data) {
 
 }
 
+/**
+    * Updates the graph based on filters
+    * Minimum connections
+    * Maximum distance
+*/
+function updateCytoscape(){
+    const minConnections = document.getElementById('cyMinConnections').value;
+    const maxDistance = document.getElementById('cyMaxDistance').value;
+    cy.elements().forEach((el) => {
+        if (el.isNode()) {
+            const connections = el.connectedEdges().length;
+            if (connections < minConnections) {
+                el.style('display', 'none');
+                return;
+            } else {
+                el.style('display', 'element');
+            }
+            const distance = el.data('distance');
+            if (distance > maxDistance) {
+                el.style('display', 'none');
+                return;
+            } else {
+                el.style('display', 'element');
+            }
+        }
+    }
+    );
+}
+
 
 window.onload = async function() {
-    const cy = createNetwork();
+    cy = createNetwork();
     const data = await fetchCloseSamples();
     populateNetwork(cy, data);
 }
