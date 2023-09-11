@@ -12,6 +12,8 @@ const { exec } = require("child_process");
     * @returns {Object} - object with keys of other sample names and values of mash distances
     */
 async function getMashDistances(sampleName, kmers = 31) {
+    const OS = process.platform
+    const command = OS == 'win32' ? 'wsl mash' : 'mash'
     const allSamples = getAllSampleNames();
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
@@ -29,7 +31,7 @@ async function getMashDistances(sampleName, kmers = 31) {
     const distances = {};
 
     return new Promise((resolve, reject) => {
-        exec(`mash dist -t ${mashPaths.join(' ')}`, (err, stdout, stderr) => {
+        exec(`${command} dist -t ${mashPaths.join(' ')}`, (err, stdout, stderr) => {
             if (err) {
                 log(err);
             }
