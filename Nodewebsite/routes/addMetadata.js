@@ -22,7 +22,7 @@ router.get('/json', async function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    let sampleID = req.body.name;
+    let sampleID = req.body.sample_id;
     let sampleSpecies = req.body.species;
     let sampleSource = req.body.source;
     let sampleTime = req.body.time;
