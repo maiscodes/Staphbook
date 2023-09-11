@@ -49,28 +49,6 @@
         evt.currentTarget.className += " active";
     }
 
-    // Display cards when first loaded
-    window.onload = function() {
-
-      let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
-
-      // Set heights of genome information blocks
-      for (i = 0; i < coll.length; i++) {
-        let sectionContent = coll[i].nextElementSibling;
-        sectionContent.classList.toggle("contentActive");
-        let contentHeight = sectionContent.getBoundingClientRect().height;
-        sectionContent.style.setProperty('--max-height', contentHeight + 'px');
-        sectionContent.classList.toggle("contentActive");
-      }
-
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-          this.classList.toggle("sectionActive");
-          let content = this.nextElementSibling;
-          content.classList.toggle("contentActive");
-        });
-      }
-    }
 
     function addSamplesToGroup(group_id){
         collection.forEach((ele) => {
@@ -140,5 +118,158 @@
                 console.log(error);
             });
     }
-    
+
+
+// Logic for the slider to select the genetic distance
+    function makeSlider(element, type){
+
+        let startX=0, x = 0;
+        const width = document.getElementById("slider").offsetWidth;
+        let elementLeft = element.offsetLeft;
+        let otherLeft = 0;
+
+        element.onmousedown = dragMouseDown;
+
+        // update text on first load
+        if(type === "min"){
+            element.style.left = 0;
+            document.getElementById("minGeneticDist").innerText = 0;
+        }else{
+            element.style.left = width;
+            document.getElementById("maxGeneticDist").innerText = 1;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            startX = e.clientX;
+            elementLeft = element.offsetLeft;
+            otherLeft = type === "min" ? document.getElementById("maxGeneticDistThumb").style.left : document.getElementById("minGeneticDistThumb").style.left;
+            otherLeft = otherLeft === "" ? 0 : parseInt(otherLeft);
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            dx = e.clientX - startX;
+            let newLeft = elementLeft + dx;
+            if(newLeft < 0){
+                newLeft = 0;
+            }
+            if(newLeft > width){
+                newLeft = width;
+            }
+            // prevent going over 'other' slider
+            if(type === "min" && newLeft > otherLeft){
+                newLeft = otherLeft - 1;
+            }
+            if(type === "max" && newLeft < otherLeft){
+                newLeft = otherLeft + 1;
+            }
+            element.style.left = newLeft + "px";
+            // calculate as percentage
+            newValue = newLeft / width;
+
+
+
+            // update label with new value (6dp)
+            const selectedSlider = document.getElementById("selectedSlider");
+
+            if(type === "min"){
+                selectedSlider.style.left = newLeft + "px";
+                document.getElementById("minGeneticDist").innerText = newValue.toFixed(4);
+            }else{
+                selectedSlider.style.right = width - newLeft + "px";
+                document.getElementById("maxGeneticDist").innerText = newValue.toFixed(4);
+            }
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+            populateFriendsSection();
+        }
+    }
+
+
+ function populateFriendsSection() {
+     const samples = <%- JSON.stringify(distances) %>;
+       let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
+       parentSection.innerHTML = "";
+       let count = 0;
+       const min_dist = document.getElementById("minGeneticDist").innerText;
+       const max_dist = document.getElementById("maxGeneticDist").innerText;
+
+       Object.keys(samples).forEach(function(sample) {
+           // skip if out of range
+            if(samples[sample] < min_dist-0.0001 || samples[sample] > max_dist+0.0001){
+                return;
+            }
+         genomeCard = createGenomeCard(sample, samples[sample]);
+         parentSection.appendChild(genomeCard);
+
+         tag = parentSection.getElementsByClassName("geneticDistanceTag")[count]; // Position the tag
+         card = parentSection.getElementsByClassName("genomeCard")[count];
+         tag.setAttribute("style", `z-index: 1; top: ${ - 1 * 0.5 * tag.clientHeight }px; left: ${ 0.5 * card.clientWidth }px; width: ${ 0.6 * card.clientWidth }px;`);
+         count++;
+       });
+     }
+
+     function createGenomeCard(sample, distance){
+       let newCard = document.createElement("button");
+       newCard.setAttribute("class", "genomeCard");
+       newCard.setAttribute("name", "sampleSelection");
+       newCard.setAttribute("value", `${sample}`);
+       newCard.setAttribute("onclick", "window.location.href='/result'");
+       newCard.setAttribute("type", "submit");
+
+       let info = document.createElement("p");
+
+       let display = `<div class="genomeCardSampleId"><h4>${sample}</h4></div>
+       <div class="geneticDistanceTag">${distance}</div>`;
+
+       info.innerHTML = display;
+       newCard.innerHTML = info.outerHTML;
+
+       return newCard;
+     }
+
+
+
+    // Display cards when first loaded
+    window.onload = function() {
+
+      let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
+
+      // Set heights of genome information blocks
+      for (i = 0; i < coll.length; i++) {
+        let sectionContent = coll[i].nextElementSibling;
+        sectionContent.classList.toggle("contentActive");
+        let contentHeight = sectionContent.getBoundingClientRect().height;
+        sectionContent.style.setProperty('--max-height', contentHeight + 'px');
+        sectionContent.classList.toggle("contentActive");
+      }
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("sectionActive");
+          let content = this.nextElementSibling;
+          content.classList.toggle("contentActive");
+        });
+      }
+
+        const minSlider = document.getElementById("minGeneticDistThumb");
+        const maxSlider = document.getElementById("maxGeneticDistThumb");
+
+        makeSlider(minSlider, "min");
+        makeSlider(maxSlider, "max");
+        populateFriendsSection();
+
+    }
+
+
+
+
 </script>
