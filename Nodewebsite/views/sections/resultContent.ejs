@@ -243,6 +243,12 @@
                     <div class="cyLegendSpacer"></div>
                 </div>
 
+                <div class="legend" onclick="changeConnection('sequence')">
+                    <div class="legendColorSquare" style="background-color: teal;"></div>
+                    <p id="seqLegend" class="cyLegendText"> Same Species</p>
+                    <div class="cyLegendSpacer"></div>
+                </div>
+
                 <div class="legend" onclick="changeConnection('host')">
                     <div class="legendColorSquare" style="background-color: blue;"></div>
                     <p id="hostLegend" class="cyLegendText"> Same Host </p>
@@ -254,6 +260,8 @@
                     <p id="seqLegend" class="cyLegendText"> Same Sequence Type </p>
                     <div class="cyLegendSpacer"></div>
                 </div>
+
+                <br>
 
                 <div class="legend" onclick="changeConnection('isolation')">
                     <div class="legendColorSquare" style="background-color: orange;"></div>

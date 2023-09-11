@@ -48,16 +48,17 @@ function populateNetwork(cy, data) {
     const collection = cy.collection();
     // iterate through all the data, adding a connection between the sample and the other
     const colors = {
-        'sq': 'red',
-        'location': 'blue',
-        'host': 'green',
-        'species': 'yellow',
+        'sequence_type': 'green',
+        'time_of_sampling': 'purple',
+        'isolation_location': 'red',
+        'species': 'teal',
+        'isolation_species': 'blue',
         'isolation_source': 'orange',
     }
     const thisData = data.filter((other) => other.sample_id === thisSample)[0];
 
     data.forEach((other) => {
-        if(other.sample_id === thisSample) return;
+        if (other.sample_id === thisSample) return;
         // work out what is common (but not empty or null) between the two samples
         const common = Object.keys(thisData).filter((key) => {
             return thisData[key] === other[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
@@ -67,8 +68,31 @@ function populateNetwork(cy, data) {
         }
         // add the node
         collection.merge(cy.add({
-            data: { id:other.sample_id, ...other },
+            data: { id: other.sample_id, ...other },
         }));
+        // get the node element
+        const el = cy.getElementById(other.sample_id);
+        el.on('click', () => {
+            // add the popup
+            popupS.confirm({
+                content: `<div class="popup">
+                        <h3>${other.sample_id}</h3>
+                        <p>Sequence type: ${other.sequence_type}</p>
+                        <p>Time of sampling: ${other.time_of_sampling}</p>
+                        <p>Isolation location: ${other.isolation_location}</p>
+                        <p>Species: ${other.species}</p>
+                        <p>Isolation species: ${other.isolation_species}</p>
+                        <p>Isolation source: ${other.isolation_source}</p>
+                    </div>`,
+                labelOk: 'View',
+                labelCancel: 'Close',
+                additionalButtonCancelClass: 'popUpButtonCSS',
+                additionalButtonOkClass: 'popUpButtonCSS',
+                onSubmit: function() {
+                    window.location.href = '/result/?sampleSelection=' + other.sample_id;
+                }
+            });
+        });
         // display the collection
         console.log(collection);
         // add the edges
