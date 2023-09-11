@@ -14,9 +14,9 @@ router.get('/', async function (req, res) {
 // route for getting json data about sample (not rendering page)
 router.get('/json', async function (req, res) {
     const sampleName = req.query.sampleName;
-    const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    const metadatas = await req.knex.select('isolation_species', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
     if (metadatas.length == 0) {
-        metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
+        metadatas.push({isolation_species: '', isolation_location: '', time_of_sampling: '', notes: ''})
     }
     res.json(metadatas[0]);
 });
@@ -24,7 +24,7 @@ router.get('/json', async function (req, res) {
 router.post('/', function (req, res) {
     let sampleID = req.body.sample_id;
     let sampleSpecies = req.body.species;
-    let sampleSource = req.body.source;
+    let sampleLocation = req.body.location;
     let sampleTime = req.body.time;
     let sampleNotes = req.body.notes;
 
@@ -32,7 +32,7 @@ router.post('/', function (req, res) {
     .insert({
         sample_id: sampleID,
         isolation_species: sampleSpecies,
-        isolation_source: sampleSource,
+        isolation_location: sampleLocation,
         time_of_sampling: sampleTime,
         notes: sampleNotes
     }).onConflict('sample_id')

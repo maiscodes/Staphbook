@@ -14,6 +14,7 @@
             <div class="form-group">
                 <label for="samples">Name</label>
                 <select name="sample_id" id = "samples" onChange="changeSelectedSample(this.selectedOptions);">
+                    <option value="" disabled selected>Select your sample</option>
                     <% for(var i = 0; i < samples.length; i++) { %>
                         <option value="<%=samples[i]%>"><%=samples[i]%></option>
                     <% } %>
@@ -33,8 +34,8 @@
 
                 <!--Location input (text)-->
                 <div class="form-group">
-                    <label for="isolationSource">Isolation Source</label>
-                    <input type="text" class="form-control" name="source" id="isolationSource" placeholder="Isolation Source">
+                    <label for="isolationLocation">Isolation Location</label>
+                    <input type="text" class="form-control" name="location" id="isolationLocation" placeholder="Isolation Location">
                 </div>
 
                 <!--Host input (text)-->

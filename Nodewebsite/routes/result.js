@@ -139,9 +139,9 @@ router.get('/', async function (req, res) {
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
 
-    const metadatas = await req.knex.select('isolation_species', 'isolation_source', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    const metadatas = await req.knex.select('isolation_species', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
     if (metadatas.length == 0) {
-        metadatas.push({isolation_species: '', isolation_source: '', time_of_sampling: '', notes: ''})
+        metadatas.push({isolation_species: '', isolation_location: '', time_of_sampling: '', notes: ''})
     }
     console.log(metadatas);
     // Tools - May or may not exist

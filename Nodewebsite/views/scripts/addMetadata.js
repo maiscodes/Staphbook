@@ -22,8 +22,8 @@ async function changeSelectedSample(selection){
     // Populate the metadata fields with the returned data
     // isolation species
     document.getElementById("isolationSpecies").value = data.isolation_species;
-    // isolation source
-    document.getElementById("isolationSource").value = data.isolation_source;
+    // isolation location
+    document.getElementById("isolationLocation").value = data.isolation_location;
     // time of sampling
     document.getElementById("timeOfSampling").value = data.time_of_sampling;
     // notes

@@ -91,7 +91,7 @@ CREATE TABLE public.metadata
 (
     sample_id text NOT NULL,
     isolation_species text,
-    isolation_source text,
+    isolation_location text,
     time_of_sampling text,
     notes text,
     CONSTRAINT metadata_pkey PRIMARY KEY (sample_id)
