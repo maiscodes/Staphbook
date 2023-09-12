@@ -11,7 +11,6 @@ const getAnnotations = require('../utils/getAnnotations');
 const getQualityControlData = require('../utils/getQualityControlData');
 const getMLSTData = require('../utils/getMLST');
 const getAllSamples = require('../utils/getAllSampleNames');
-const getMashDistances = require('../utils/getMashDistances');
 
 
 const { exec } = require('child_process');
@@ -125,12 +124,9 @@ router.get('/', async function(req, res) {
     console.log(metadatas);
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
-    // get distances, then render
-    //TEST: mash distances
-    const distances = await getMashDistances(sampleName);
 
     Promise
-        .all([getGroups, sampleGroups, distances])
+        .all([getGroups, sampleGroups])
         .then(function([groupsInfo, sampleGroups]) {
 
             res.render('pages/result', {
@@ -146,7 +142,6 @@ router.get('/', async function(req, res) {
                 annotations: annotations,
                 avail_groups: groupsInfo,
                 sample_groups: sampleGroups,
-                distances: distances,
             });
         })
         .catch(function(err) {
