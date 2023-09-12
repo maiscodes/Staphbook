@@ -8,13 +8,14 @@
 */
 
 // grab the sample name from the url param sampleSelection=sampleName
-const regex = /sampleSelection=(.*)/
+const regex = /sampleSelection=([^&^#]+)/;
 const thisSample = regex.exec(window.location.href)[1]
 if (thisSample === null) {
     console.error("Cytoscape: No sample name found in url")
 }
 
 let cy;
+let data;
 
 function createNetwork() {
     const cy = cytoscape({
@@ -46,7 +47,7 @@ async function fetchCloseSamples() {
     return data;
 }
 
-function populateNetwork(cy, data) {
+function populateNetwork() {
     const collection = cy.collection();
     // iterate through all the data, adding a connection between the sample and the other
     const colors = {
@@ -58,12 +59,16 @@ function populateNetwork(cy, data) {
         'isolation_source': 'orange',
     }
     const thisData = data.filter((other) => other.sample_id === thisSample)[0];
+    if (thisData === undefined) {
+        console.error("Cytoscape: No data found for sample " + thisSample);
+        return;
+    }
 
     data.forEach((other) => {
         if (other.sample_id === thisSample) return;
         // work out what is common (but not empty or null) between the two samples
         const common = Object.keys(thisData).filter((key) => {
-            return thisData[key] === other[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
+            return thisData[key] === other?.[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
         });
         if (common.length === 0) {
             return;
@@ -159,7 +164,7 @@ function makeSlider(element, type) {
 
     element.onmousedown = dragMouseDown;
 
-    // update text on first load
+    // update text and values on first load
     if (type === "min") {
         element.style.left = 0;
         document.getElementById("minGeneticDist").innerText = 0;
@@ -223,16 +228,26 @@ function makeSlider(element, type) {
 }
 
 
-function populateFriendsSection(data) {
+function populateFriendsSection() {
     let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
     parentSection.innerHTML = "";
     let count = 0;
-    const min_dist = document.getElementById("minGeneticDist").innerText;
-    const max_dist = document.getElementById("maxGeneticDist").innerText;
+    const min_dist = parseFloat(document.getElementById("minGeneticDist").innerText) || 0;
+    const max_dist = parseFloat(document.getElementById("maxGeneticDist").innerText) || 1;
+
+    // sort data by distance (ascending)
+    data.sort((a, b) => {
+        return parseFloat(a.distance) - parseFloat(b.distance);
+    });
 
     data.forEach(function(sample) {
+        // skip if this sample
+        if (sample.sample_id === thisSample) return;
+        // make sure distance is a number
+        const distance = parseFloat(sample.distance);
+        console.log({ distance, sample: sample.sample_id, min_dist, max_dist });
         // skip if out of range
-        if (sample.distance < min_dist - 0.0001 || sample.distance > max_dist + 0.0001) {
+        if (distance < min_dist - 0.0001 || distance > max_dist + 0.0001) {
             return;
         }
         genomeCard = createGenomeCard(sample);
@@ -271,17 +286,64 @@ function createGenomeCard(sample) {
     return newCard;
 }
 
+function showLoadingElements() {
+    const graphId = "resultsPageGraphComponents";
+    const styleEl = document.head.appendChild(document.createElement("style"));
+    styleEl.setAttribute("id", "loadingStyles");
+    // pulse loading light grey to dark grey
+    styleEl.innerHTML =
+        `
+        @keyframes pulse {
+            0%, 100% {
+                background-color: #e0e0e0;
+            }
+            50% {
+                background-color: #a0a0a0;
+            }
+        } 
+        #${graphId} { 
+            visibility: hidden;
+            position: relative;
+        }
+        #${graphId}::before {
+            content: "";
+            position: absolute;
+            border-radius: 10px;
+            display:block;
+            top:0; 
+            left: 0;
+            right:0;
+            bottom:0;
+            animation: pulse 1.5s infinite;
+            visibility: visible;
+        }`;
+
+}
+
+function hideLoadingElements() {
+    const styleEl = document.getElementById("loadingStyles");
+    styleEl.parentNode.removeChild(styleEl);
+    console.log("removed");
+}
+
+
+
 
 window.onload = async function() {
-    cy = createNetwork();
-    const data = await fetchCloseSamples();
-    populateNetwork(cy, data);
-
+    // display placeholder loading elements
+    showLoadingElements();
     const minSlider = document.getElementById("minGeneticDistThumb");
     const maxSlider = document.getElementById("maxGeneticDistThumb");
     makeSlider(minSlider, "min");
     makeSlider(maxSlider, "max");
-    populateFriendsSection(data);
+
+    cy = createNetwork();
+    data = await fetchCloseSamples();
+
+    populateNetwork();
+    populateFriendsSection();
+    // hide loading elements
+    hideLoadingElements();
 }
 
 
