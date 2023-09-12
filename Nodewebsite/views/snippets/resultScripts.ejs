@@ -49,28 +49,6 @@
         evt.currentTarget.className += " active";
     }
 
-    // Display cards when first loaded
-    window.onload = function() {
-
-      let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
-
-      // Set heights of genome information blocks
-      for (i = 0; i < coll.length; i++) {
-        let sectionContent = coll[i].nextElementSibling;
-        sectionContent.classList.toggle("contentActive");
-        let contentHeight = sectionContent.getBoundingClientRect().height;
-        sectionContent.style.setProperty('--max-height', contentHeight + 'px');
-        sectionContent.classList.toggle("contentActive");
-      }
-
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-          this.classList.toggle("sectionActive");
-          let content = this.nextElementSibling;
-          content.classList.toggle("contentActive");
-        });
-      }
-    }
 
     function addSamplesToGroup(group_id){
         collection.forEach((ele) => {
@@ -140,5 +118,30 @@
                 console.log(error);
             });
     }
-    
+
+
+
+    // Display cards when first loaded
+
+      let coll = document.getElementsByClassName("collapsible"); // TODO: CLEANUp
+
+      // Set heights of genome information blocks
+      for (i = 0; i < coll.length; i++) {
+        let sectionContent = coll[i].nextElementSibling;
+        sectionContent.classList.toggle("contentActive");
+        let contentHeight = sectionContent.getBoundingClientRect().height;
+        sectionContent.style.setProperty('--max-height', contentHeight + 'px');
+        sectionContent.classList.toggle("contentActive");
+      }
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("sectionActive");
+          let content = this.nextElementSibling;
+          content.classList.toggle("contentActive");
+        });
+      }
+
+
+
 </script>

@@ -91,7 +91,7 @@ let removeGroupRouter = require("./routes/removeGroup");
 let removeGroupSampleRouter = require("./routes/removeGroupSample");
 let removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
 let uploadResultRouter = require("./routes/uploadResult");
-let uploadSampleRouter = require("./routes/uploadSample");
+let addMetadataRouter = require("./routes/addMetadata");
 let getCloseSampleRouter = require("./routes/getCloseSamples");
 
 /* --------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ app.use("/createGroup", createGroupRouter);
 app.use("/addUserToGroup", authenticateUserEdit, shareGroupRouter);
 app.use("/removeUserFromGroup", authenticateUserEdit, removeUserGroupAccessRouter);
 app.use("/uploadResult", uploadResultRouter);
-app.use("/uploadSample", uploadSampleRouter);
+app.use("/addMetadata", addMetadataRouter);
 app.use("/removeGroup", removeGroupRouter);
 app.use("/getCloseSamples", getCloseSampleRouter);
 

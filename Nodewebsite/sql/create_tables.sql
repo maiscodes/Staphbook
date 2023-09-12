@@ -86,3 +86,20 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.group_sharing
     OWNER to bactbook;
+
+CREATE TABLE public.metadata
+(
+    sample_id text NOT NULL,
+    isolation_species text,
+    isolation_location text,
+    time_of_sampling text,
+    notes text,
+    CONSTRAINT metadata_pkey PRIMARY KEY (sample_id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.metadata
+    OWNER to bactbook;

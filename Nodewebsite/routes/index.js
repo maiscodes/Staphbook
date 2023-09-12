@@ -11,6 +11,8 @@ const express = require('express')
 const router = express.Router()
 const getAllSampleNames = require('../utils/getAllSampleNames') 
 const getGatherData = require('../utils/getGatherData')
+const {exec} = require('child_process');
+const fs = require('fs');
 
 router.get('/', async function (req, res) {
     const userLoggedIn = req.session.userStatus === "loggedIn";
@@ -24,7 +26,7 @@ router.get('/', async function (req, res) {
     // random is 3 random samples from allSamples
     const randomIds = [];
     const randomNames = [];
-    while (randomIds.length < 3) {
+    while (randomIds.length < 3 && randomIds.length < allSamples.length) {
         const randomId = Math.floor(Math.random() * allSamples.length);
         if (!randomIds.includes(randomId)) {
             randomIds.push(randomId);

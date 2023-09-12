@@ -3,48 +3,56 @@
 
     <!--Information on the advanced search page-->
     <div id="informarion" style="margin: auto">
-        <h1 class="text-center" style="margin-top: 20px">New Sample</h1>
-        <p class="text-center" style="margin-top: 20px">Fill in the fields you wish to use to define your sample. Fields
-            left unchanged will not be included in the search.</p>
+        <h1 class="text-center" style="margin-top: 20px">Add/Edit Metadata</h1>
+        <p class="text-center" style="margin-top: 20px">Select your sample from the dropdown menu and fill in the fields you wish to edit.</p>
     </div>
 
     <!--Advanced Search form-->
     <div id="advancedSearch"  style="margin-left: auto; margin-right: auto; width: 60%">
-        <form action='/uploadResult' method="get">
+        <form method="POST">
             <!--Sequence Type input (text)-->
             <div class="form-group">
-                <label for="nameInput">Name</label>
-                <input type="text" class="form-control" name="name" id="nameInput" placeholder="Name">
+                <label for="samples">Name</label>
+                <select name="sample_id" id = "samples" onChange="changeSelectedSample(this.selectedOptions);">
+                    <option value="" disabled selected>Select your sample</option>
+                    <% for(var i = 0; i < samples.length; i++) { %>
+                        <option value="<%=samples[i]%>"><%=samples[i]%></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div id="loadingMessage" style="display:none">
+                <p class="text-center" style="margin-top: 20px">Loading...</p>
             </div>
 
-            <!--Sequence Type input (text)-->
-            <div class="form-group">
-                <label for="sequenceInput">Sequence Type</label>
-                <input type="number" max="10000" class="form-control" name="st" id="sequenceInput" placeholder="Sequence Type">
-            </div>
-
-            <!--Location input (text)-->
-            <div class="form-group">
-                <label for="locationInput">Location</label>
-                <input type="text" class="form-control" name="location" id="locationInput" placeholder="Location">
-            </div>
-
-            <!--Host input (text)-->
-            <div class="form-group">
-                <label for="hostInput">Host</label>
-                <input type="text" class="form-control" name="host" id="hostInput" placeholder="Host">
-            </div>
-
-            <div class="row">
-                <!--Gene Absent input (text)-->
-                <div class="col">
-                    <label for="sourceInput">Isolation Source</label>
-                    <input type="text" class="form-control" name="isolation_source" id="sourceInput" placeholder="Isolation Source">
+            <div id="metadataFields">
+                <!--Sequence Type input (text)-->
+                <div class="form-group">
+                    <label for="isolationSpecies">Isolation Species</label>
+                    <input type="text" class="form-control" name="species" id="isolationSpecies" placeholder="Isolation Species">
                 </div>
-            </div>
 
-            <!--Form submission button-->
-            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Search</button>
+                <!--Location input (text)-->
+                <div class="form-group">
+                    <label for="isolationLocation">Isolation Location</label>
+                    <input type="text" class="form-control" name="location" id="isolationLocation" placeholder="Isolation Location">
+                </div>
+
+                <!--Host input (text)-->
+                <div class="form-group">
+                    <label for="timeSampling">Time of Sampling</label>
+                    <input type="text" class="form-control" name="time" id="timeOfSampling" placeholder="Time of Sampling">
+                </div>
+
+                    <!--Gene Absent input (text)-->
+                    <div class="form-group">
+                        <label for="notesId">Notes</label>
+                        <input type="text" class="form-control" name="notes" id="notes" placeholder="Notes">
+                    </div>
+
+                <!--Form submission button-->
+                <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Update</button>
+            </div>
         </form>
     </div>
 </div>
