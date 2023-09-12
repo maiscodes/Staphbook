@@ -18,7 +18,7 @@ async function getMashDistances(sampleName, kmers = 31) {
     const allSamples = getAllSampleNames();
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
-    const mashPaths = allSamples.map((sample) => `${dir_prefix}${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
+    let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
 
     // double check files exist, remove if not
     mashPaths.forEach((path) => {
@@ -27,8 +27,10 @@ async function getMashDistances(sampleName, kmers = 31) {
             log(`File ${path} does not exist, removing from mashPaths`);
         }
     });
+    // add in dir prefix if on windows
+    mashPaths = mashPaths.map(p => `${dir_prefix}${p}`)
     // place this sample at the front of the array
-    mashPaths.unshift(`${process.env.SAMPLES_DIR}/${sampleName}/bactopia-main/sketcher/${sampleName}-k${kmers}.msh`);
+    mashPaths.unshift(`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/bactopia-main/sketcher/${sampleName}-k${kmers}.msh`);
 
     const distances = {};
 
