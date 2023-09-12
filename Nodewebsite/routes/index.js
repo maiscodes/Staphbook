@@ -26,7 +26,7 @@ router.get('/', async function (req, res) {
     // random is 3 random samples from allSamples
     const randomIds = [];
     const randomNames = [];
-    while (randomIds.length < 3) {
+    while (randomIds.length < 3 && randomIds.length < allSamples.length) {
         const randomId = Math.floor(Math.random() * allSamples.length);
         if (!randomIds.includes(randomId)) {
             randomIds.push(randomId);
