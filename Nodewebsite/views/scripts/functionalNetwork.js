@@ -125,7 +125,7 @@ function populateNetwork(cy, data) {
     * Minimum connections
     * Maximum distance
 */
-function updateCytoscape(){
+function updateCytoscape() {
     const minConnections = document.getElementById('cyMinConnections').value;
     const maxDistance = document.getElementById('cyMaxDistance').value;
     cy.elements().forEach((el) => {
@@ -149,11 +149,139 @@ function updateCytoscape(){
     );
 }
 
+// Logic for the slider to select the genetic distance
+function makeSlider(element, type) {
+
+    let startX = 0, x = 0;
+    const width = document.getElementById("slider").offsetWidth;
+    let elementLeft = element.offsetLeft;
+    let otherLeft = 0;
+
+    element.onmousedown = dragMouseDown;
+
+    // update text on first load
+    if (type === "min") {
+        element.style.left = 0;
+        document.getElementById("minGeneticDist").innerText = 0;
+    } else {
+        element.style.left = width;
+        document.getElementById("maxGeneticDist").innerText = 1;
+    }
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        startX = e.clientX;
+        elementLeft = element.offsetLeft;
+        otherLeft = type === "min" ? document.getElementById("maxGeneticDistThumb").style.left : document.getElementById("minGeneticDistThumb").style.left;
+        otherLeft = otherLeft === "" ? 0 : parseInt(otherLeft);
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        dx = e.clientX - startX;
+        let newLeft = elementLeft + dx;
+        if (newLeft < 0) {
+            newLeft = 0;
+        }
+        if (newLeft > width) {
+            newLeft = width;
+        }
+        // prevent going over 'other' slider
+        if (type === "min" && newLeft > otherLeft) {
+            newLeft = otherLeft - 1;
+        }
+        if (type === "max" && newLeft < otherLeft) {
+            newLeft = otherLeft + 1;
+        }
+        element.style.left = newLeft + "px";
+        // calculate as percentage
+        newValue = newLeft / width;
+
+
+
+        // update label with new value (6dp)
+        const selectedSlider = document.getElementById("selectedSlider");
+
+        if (type === "min") {
+            selectedSlider.style.left = newLeft + "px";
+            document.getElementById("minGeneticDist").innerText = newValue.toFixed(4);
+        } else {
+            selectedSlider.style.right = width - newLeft + "px";
+            document.getElementById("maxGeneticDist").innerText = newValue.toFixed(4);
+        }
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        populateFriendsSection();
+    }
+}
+
+
+function populateFriendsSection(data) {
+    let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
+    parentSection.innerHTML = "";
+    let count = 0;
+    const min_dist = document.getElementById("minGeneticDist").innerText;
+    const max_dist = document.getElementById("maxGeneticDist").innerText;
+
+    data.forEach(function(sample) {
+        // skip if out of range
+        if (sample.distance < min_dist - 0.0001 || sample.distance > max_dist + 0.0001) {
+            return;
+        }
+        genomeCard = createGenomeCard(sample);
+        parentSection.appendChild(genomeCard);
+
+        tag = parentSection.getElementsByClassName("geneticDistanceTag")[count]; // Position the tag
+        card = parentSection.getElementsByClassName("genomeCard")[count];
+        tag.setAttribute("style", `z-index: 1; top: ${- 1 * 0.5 * tag.clientHeight}px; left: ${0.5 * card.clientWidth}px; width: ${0.6 * card.clientWidth}px;`);
+        count++;
+    });
+}
+
+function createGenomeCard(sample) {
+    let newCard = document.createElement("button");
+    newCard.setAttribute("class", "genomeCard");
+    newCard.setAttribute("name", "sampleSelection");
+    newCard.setAttribute("value", `${sample.sample_id}`);
+    newCard.setAttribute("onclick", "window.location.href='/result'");
+    newCard.setAttribute("type", "submit");
+
+    let info = document.createElement("p");
+
+    let display = `<div class="genomeCardSampleId"><h4>${sample.sample_id}</h4></div>
+        <div class="genomeCardSampleMetadata" style="text-align:left"> 
+            <p>Species: ${sample.species}</p>
+            <p>Sequence type: ${sample.sequence_type}</p>
+            <p>Location: ${sample.isolation_location}</p>
+            <p>Isolation Host: ${sample.isolation_species}</p>
+            <p>Isolation Source: ${sample.isolation_source}</p>
+        </div>
+       <div class="geneticDistanceTag">${sample.distance}</div>`;
+
+    info.innerHTML = display;
+    newCard.innerHTML = info.outerHTML;
+
+    return newCard;
+}
+
 
 window.onload = async function() {
     cy = createNetwork();
     const data = await fetchCloseSamples();
     populateNetwork(cy, data);
+
+    const minSlider = document.getElementById("minGeneticDistThumb");
+    const maxSlider = document.getElementById("maxGeneticDistThumb");
+    makeSlider(minSlider, "min");
+    makeSlider(maxSlider, "max");
+    populateFriendsSection(data);
 }
 
 
