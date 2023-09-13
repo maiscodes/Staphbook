@@ -115,6 +115,8 @@ psql {db_name} < create_tables.sql
 ```
 2. Environment Variables
 
+Copy `template.env` and rename it to simply `.env`. Fill in all variables and save.
+
 |             | description                                                                                                                                                                                                                                                   |
 |-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | PORT        | Network port to listen for connections (default 3000)                                                                                                                                                                                                         |
