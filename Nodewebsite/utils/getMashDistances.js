@@ -16,9 +16,12 @@ async function getMashDistances(sampleName, kmers = 31) {
     const command = OS == 'win32' ? 'wsl mash' : 'mash';
     const dir_prefix = OS == 'win32' ? `/mnt/${process.env?.SAMPLES_DRIVE || 'c'}` : '';
     const allSamples = getAllSampleNames();
+    if(allSamples.length < 2){
+        return {};
+    }
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
-    let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
+    let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/main/sketcher/${sample}-k${kmers}.msh`);
 
     // double check files exist, remove if not
     mashPaths.forEach((path) => {
@@ -30,7 +33,7 @@ async function getMashDistances(sampleName, kmers = 31) {
     // add in dir prefix if on windows
     mashPaths = mashPaths.map(p => `${dir_prefix}${p}`)
     // place this sample at the front of the array
-    mashPaths.unshift(`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/bactopia-main/sketcher/${sampleName}-k${kmers}.msh`);
+    mashPaths.unshift(`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh`);
 
     const distances = {};
 
