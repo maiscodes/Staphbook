@@ -107,6 +107,7 @@ SAMPLES_DIR/
 ## Running BactBook
 With all prerequisites installed, there's just a couple more steps before you're on your way to exploring BactBook.
 1. Database Creation Scripts
+
 With a Postgres database server created and running locally, the scripts can be executed from the command line:
 ```{bash}
 cd Nodewebsite/sql
@@ -130,13 +131,13 @@ Copy `template.env` and rename it to simply `.env`. Fill in all variables and sa
 | DEBUG       | Used for turning on/off debug logs. If something isn't working as expected, this might help find the culprit. <br>`# Print out logs from files in the routes folder only`<br> `DEBUG=routes:*` <br> `# Print out logs from both routes and utils` <br> `DEBUG=utils:*,routes:*` |
 
 
-4. NPM Install
+3. NPM Install
 `cd` into `Nodewebsite/` and run:
 ```
 npm install
 ```
 After a few seconds, all the required packages should be installed and you're ready to run!
-6. Spin It Up
+4. Spin It Up
 Still inside `Nodewebsite/`, run:
 ```
 node app.js
