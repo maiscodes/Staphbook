@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const glob = require('glob')
 const log = require('debug')('utils:searchGenomes')
+const getAllSampleNames = require('./getAllSampleNames')
 
 const categories = {
     'name': "/*",
@@ -29,13 +30,16 @@ function searchGenomes(query, category) {
         throw new Error('Invalid category: ' + category + '. Valid categories are: ' + Object.keys(categories).join(', ') + '. ')
     }
     // Name search is easy
-    if (category === 'name') {
-        // search for the name in the samples dir
-        const all_folders = fs.readdirSync(process.env.SAMPLES_DIR)
+    if (category === 'name' || query == '') {
+        // search for the name in the samples dir (excluding hidden files)
+        const all_samples = getAllSampleNames()
+        if (query == '') {
+            return all_samples
+        }
         const results = []
-        for (const folder of all_folders) {
-            if (folder.toLowerCase().includes(query.toLowerCase())) {
-                results.push(folder)
+        for (const sample of all_samples) {
+            if (sample.toLowerCase().includes(query.toLowerCase())) {
+                results.push(sample)
             }
         }
         return results
