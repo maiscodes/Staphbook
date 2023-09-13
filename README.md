@@ -1,5 +1,7 @@
-# Bactbook
-BactBook is a web app that reads from a local flat file system bactopia output, and displays the information in an easy to read format. A PostgreSQL database supports the application by storing users, favourites and more. This projects user interface is built off of the existing Staphbook project, which can be found [here](https://github.com/maiscodes/Staphbook)
+# BactBook
+Interpret and explore [Bactopia](https://bactopia.github.io) analysis in a simple web app.
+
+PostgreSQL database supports the application by storing users, favourites and more. This projects user interface is built off of the existing Staphbook project, which can be found [here](https://github.com/maiscodes/Staphbook)
 
 With this app, users are able to:
 - browse genomes and view information such as isolation source and sequence data and be able to download the information as .csv files.
@@ -8,47 +10,139 @@ With this app, users are able to:
 - annotate groups and view generic statistics about each group
 
 ## Prerequisites
-- Node.js v.10.15.3 (other versions may be supported)
-- PostgresSQL v14 (other versions may be supported)
-- Can run on Windows and MacOS
-- Bactopia Output Files  (V3.00)
+- Node.js 
+- PostgresSQL v14
+- [Mash](https://github.com/marbl/Mash) for distance estimation features
+- Bactopia Output Files (V3.00)
   - Old folder structure currently supported, recommended to download data from releases.
-
-## Installation Process
-### PostgreSQL Setup
-1. Download here: https://www.postgresql.org/download/
-2. Once installed, it is highly recommended that you use a GUI such as pgAdmin 4 which can be downloaded here: https://www.pgadmin.org/download/pgadmin-4-windows/
-3. Setup your PostgreSQL Server, Database, then run the database creation scripts in /sql.
-
 <details>
-  <summary>More Info</summary>
-  With a Postgres database server created and running locally, the scripts can be executed on the command line:
+<summary>Node.js</summary>
   
-  ```{bash}
-  cd Nodewebsite/sql
-  psql {db_name} < bactopia_role.sql
-  psql {db_name} < create_tables.sql
-  ```
+> NodeJs is a Javascript Runtime - It's where all the server-side JS can run
+1. Download here: https://nodejs.org/en
+2. Follow the installer
 </details>
 
 
-### Bactopia Setup
-Requires Bactopia data on the local disk. Some examples can be found under the 'Releases' section to the right.
-Currently, requires output in the format of that data as Bactopia directory structure has changed slightly. 
-1. Download the data to the local disk and extract
-2. Note the path of the directory `bactopia-samples` (to be included in `.env` file)
+<details>
+  <summary>PostgreSQL</summary>
+  
+> PostgreSQL is our database of choice, although other database technologies may work. 
+1. Download here: https://www.postgresql.org/download/
+2. Once installed, it is highly recommended that you use a GUI such as pgAdmin 4 which can be downloaded here: https://www.pgadmin.org/download
+3. Setup a Postgres server and database (keep your username and password handy, you'll need it later!)
+</details>
 
-### Node.js and NPM Setup
-1. Download Node.js here: https://nodejs.org/en/download/
-2. Install Node.js
+<details>
+  <summary>Mash</summary>
+  
+> Mash compares genome scketch files produced by Bactopia, allowing for genetic distance estimations.
 
-### Run Project
-1. Clone project
-2. Create an `.env` file and complete as per `template.env` within the `Nodewebsite` directory. Fill out all fields as per your local server port preference, database server, and local Bactopia output directory.
-3. Run 
+<details>
+<summary>Linux/MacOS</summary>
+Follow the instructions to install here: https://github.com/marbl/Mash,
+or install with Conda. Double check with:
 ```bash
+  mash --version
+``` 
+No errors and you're good to go!
+</details>
+<details>
+<summary>Windows</summary>
+We find that using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) for mash works just fine, only slightly impacting loading times for the relevant page components. It only takes a few commands:
+
+(Skip this one if you already have WSL installed)
+```bash
+wsl --install
+```
+Enter the WSL shell and install mash with the following commands:
+```bash
+wsl
+sudo apt update && sudo apt upgrade -y
+sudo apt install mash -y
+```
+That should be it! Double check everything worked with
+```
+mash --version
+```
+</details>
+</details> 
+
+<details>
+  <summary>
+    Bactopia File Outputs
+  </summary>
+
+> If you are here, you probably know about Bactopia. But it's important to note that this application
+> expects a specific file structure, so this is worth a read.
+<details>
+  <summary>I Don't Have Any Bactopia Files</summary>
+  Don't worry, some examples can be found under the 'Releases' section to the right.
+1. Download the zip file and extract to your local disk
+2. Note the path of the directory `bactopia-samples` (to be included in `.env` file)
+</details>
+Using flat-files as a database, we had to make some rules on how the application will interact with the file-system.
+Below is the expected directory structure, nesting directories of samples within SAMPLES_DIR is not compatible. (note that SAMPLES_DIR can be anywhere local to the server):
+
+```
+SAMPLES_DIR/
+├─ SAMPLE_1/
+│  ├─ main/
+│  │  ├─ ...
+│  ├─ tools/
+│  │  ├─ ...
+├─ SAMPLE_2/
+│  ├─ main/
+│  │  ├─ ...
+│  ├─ tools/
+│  │  ├─ ...
+├─ SAMPLE_N/
+│  ├─ main/
+│  │  ├─ ...
+│  ├─ tools/
+│  │  ├─ ...
+```
+</details>
+
+## Running BactBook
+With all prerequisites installed, there's just a couple more steps before you're on your way to exploring BactBook.
+1. Database Creation Scripts
+With a Postgres database server created and running locally, the scripts can be executed from the command line:
+```{bash}
+cd Nodewebsite/sql
+psql {db_name} < bactopia_role.sql
+psql {db_name} < create_tables.sql
+```
+2. Environment Variables
+
+|             | description                                                                                                                                                                                                                                                   |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| PORT        | Network port to listen for connections (default 3000)                                                                                                                                                                                                         |
+| SAMPLES_DIR | Directory where all your Bactopia outputs live (see above for expected structure)                                                                                                                                                                             |
+| DB_HOST     | Hostname for Database (probably 'localhost' or 127.0.0.1 if running local database)                                                                                                                                                                           |
+| DB_PORT     | Exposed port for database (5432 by default in Postgres)                                                                                                                                                                                                       |
+| DB_DB       | Database name (we call ours Bactbook)                                                                                                                                                                                                                         |
+| DB_USER     | Username for database, must have read and write permissions                                                                                                                                                                                                   |
+| DB_PASS     | Database password for above user                                                                                                                                                                                                                              |
+| SECRET      | Secret key for authenticating sessions. Should be secret and random.                                                                                                                                                                                          |
+| DEBUG       | Used for turning on/off debug logs. If something isn't working as expected, this might help find the culprit. <br>`# Print out logs from files in the routes folder only`<br> `DEBUG=routes:*` <br> `# Print out logs from both routes and utils` <br> `DEBUG=utils:*,routes:*` |
+
+
+4. NPM Install
+`cd` into `Nodewebsite/` and run:
+```
 npm install
+```
+After a few seconds, all the required packages should be installed and you're ready to run!
+6. Spin It Up
+Still inside `Nodewebsite/`, run:
+```
 node app.js
 ```
-## Extensions
-Source code can be modified for other database schemas and genomes.
+If all goes well, you should be greeted with a nice message letting you know everything is working. 
+
+Go to http://localhost:3000 (or other host and port that you're using) and enjoy!
+
+
+
+
