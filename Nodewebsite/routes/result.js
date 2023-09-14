@@ -60,7 +60,7 @@ router.get('/', async function(req, res) {
         let fav_results = await req.knex.select('*').from('user_favorites').where({ email: email, sample_id: sampleName })
 
         if (fav_results.length > 0) {
-            req.session.favourited = true; //Its not picking this up
+            req.session.favourited = true;
         }
 
         /*then((fav_results) => {
@@ -117,7 +117,8 @@ router.get('/', async function(req, res) {
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
 
-    const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
+    .where({sample_id: sampleName}).orderBy('created', 'desc');
     if (metadatas.length == 0) {
         metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
     }

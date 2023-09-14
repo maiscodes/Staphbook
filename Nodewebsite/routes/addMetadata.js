@@ -6,6 +6,7 @@ router.get('/', async function (req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
+        userEmail = req.session.userEmail;
     }
     const sampleNames = getAllSampleNames();
     res.render('pages/uploadSample', { userLoggedIn: userLoggedIn, samples: sampleNames});
@@ -14,7 +15,8 @@ router.get('/', async function (req, res) {
 // route for getting json data about sample (not rendering page)
 router.get('/json', async function (req, res) {
     const sampleName = req.query.sampleName;
-    const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
+    const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
+    .where({sample_id: sampleName}).orderBy('created', 'desc');;
     if (metadatas.length == 0) {
         metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
     }
@@ -40,9 +42,10 @@ router.post('/', function (req, res) {
         isolation_source : sampleSource,
         isolation_location: sampleLocation,
         time_of_sampling: sampleTime,
-        notes: sampleNotes
-    }).onConflict('sample_id')
-    .merge()
+        notes: sampleNotes,
+        created: new Date(),
+        email: userEmail
+    })
     .then(() => {
         console.log("Metadata updated");
     }).catch((err) => {
