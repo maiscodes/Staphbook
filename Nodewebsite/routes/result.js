@@ -121,7 +121,6 @@ router.get('/', async function(req, res) {
     if (metadatas.length == 0) {
         metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
     }
-    console.log(metadatas);
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
 
