@@ -41,7 +41,20 @@ router.get('/', async function(req, res) {
             // get the metadata
             getGatherData(f)
         ));
-        console.log(favorites);
+        // Append metadata for each sample to favs
+        for (const samples of favorites) {
+            const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: samples.sample});
+            if (metadatas.length == 0) {
+                metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
+            }
+            samples.host = metadatas[0].isolation_host
+            samples.source = metadatas[0].isolation_source
+            samples.location = metadatas[0].isolation_location
+            samples.time = metadatas[0].time_of_sampling
+            samples.notes = metadatas[0].notes
+            console.log(samples.host)
+        }
+
         res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites, haveFavs: true });
 
         /*
