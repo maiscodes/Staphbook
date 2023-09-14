@@ -54,7 +54,7 @@ router.get('/', function (req, res, next) {
             // 2. Sample Length - int
             // 3. Sample Species - string
             // 4. Sequence Type - int
-          const samples = sampleIds.map((sample) => {
+          const allSamples = sampleIds.map((sample) => {
               const metadata = getGatherData(sample.sample_id);
               const mlst = getMLST(sample.sample_id);
               return {
@@ -64,6 +64,8 @@ router.get('/', function (req, res, next) {
                     sequenceType: mlst?.sequence_type
               }
           });
+
+          //Need to get metadata for each sample
 
           /* Original database query
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
@@ -102,7 +104,7 @@ router.get('/', function (req, res, next) {
 
               res.render('pages/viewGroup', {
                 userLoggedIn: req.userLoggedIn,
-                samples,//sampleInfos, this needs to be grabbed from flat file system.
+                samples: allSamples,
                 groupInfo: groupInfo,
                 sharingInfo: sharingInfo,
                 email: req.session.userEmail

@@ -37,9 +37,6 @@ router.get('/', async function (req, res) {
         // get the metadata
         getGatherData(r) 
     ));
-    log(random)
-
-    // Recommended will eventually be 3 random samples from the user's favourites
 
     // Gets all favourited samples
     if(userLoggedIn){
@@ -58,7 +55,21 @@ router.get('/', async function (req, res) {
             // get the metadata
             getGatherData(f) 
         ));
-        log(favorites);
+
+        // Recommended is 3 random samples from the favourites
+        const recommendedIds = [];
+        const recommendedNames = [];
+        while (recommendedIds.length < 3 && recommendedIds.length < favouriteIds.length) {
+            const recommendedId = Math.floor(Math.random() * favouriteIds.length);
+            if (!recommendedIds.includes(recommendedId)) {
+                recommendedIds.push(recommendedId);
+                recommendedNames.push(favouriteIds[recommendedId]);
+            }
+        }
+        suggested = await Promise.all(recommendedNames.map(async (r) =>
+            // get the metadata
+            getGatherData(r) 
+        ));
     }
 
     if (userLoggedIn){
