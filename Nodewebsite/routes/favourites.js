@@ -52,7 +52,6 @@ router.get('/', async function(req, res) {
             samples.location = metadatas[0].isolation_location
             samples.time = metadatas[0].time_of_sampling
             samples.notes = metadatas[0].notes
-            console.log(samples.host)
         }
 
         res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites, haveFavs: true });

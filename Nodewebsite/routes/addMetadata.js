@@ -22,6 +22,10 @@ router.get('/json', async function (req, res) {
 });
 
 router.post('/', function (req, res) {
+    if(req.body.sample_id == undefined){
+        res.redirect('/addMetadata');
+        return;
+    }
     let sampleID = req.body.sample_id;
     let sampleHost = req.body.host
     let sampleSource = req.body.source;
