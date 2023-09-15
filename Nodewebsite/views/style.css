@@ -121,6 +121,11 @@ hr.divider {
     width: 100%;
 }
 
+/* monospace */
+[mono] {
+    font-family: monospace
+}
+
 .weightedDistanceSliders {
     padding-left: 4px;
     padding-right: 4px;

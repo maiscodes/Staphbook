@@ -238,10 +238,10 @@ function makeSlider(element, type) {
     // update text and values on first load
     if (type === "min") {
         element.style.left = 0;
-        document.getElementById("minGeneticDist").innerText = "0";
+        document.getElementById("minGeneticDist").innerText = (0).toFixed(4);
     } else {
         element.style.left = width;
-        document.getElementById("maxGeneticDist").innerText = "1";
+        document.getElementById("maxGeneticDist").innerText = (1).toFixed(4);
     }
 
     function dragMouseDown(e) {
