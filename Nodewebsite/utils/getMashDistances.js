@@ -16,7 +16,8 @@ async function getMashDistances(sampleName, kmers = 31) {
     const command = OS == 'win32' ? 'wsl mash' : 'mash';
     const dir_prefix = OS == 'win32' ? `/mnt/${process.env?.SAMPLES_DRIVE || 'c'}` : '';
     const allSamples = getAllSampleNames();
-    if(allSamples.length < 2){
+    const thisSamplePath =`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh` 
+    if(allSamples.length < 2 || !fs.existsSync(thisSamplePath)){
         return {};
     }
     // remove this sample from the list
@@ -34,7 +35,7 @@ async function getMashDistances(sampleName, kmers = 31) {
     // add in dir prefix if on windows
     mashPaths = mashPaths.map(p => `${dir_prefix}${p}`)
     // place this sample at the front of the array
-    mashPaths.unshift(`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh`);
+    mashPaths.unshift(thisSamplePath);
 
     const distances = {};
 
