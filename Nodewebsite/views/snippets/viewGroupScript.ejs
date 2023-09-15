@@ -37,6 +37,9 @@
           }
           return 0;
         }
+        if (orderBy == "sequenceType") {
+          return a.sequenceType.localeCompare(b.sequenceType);
+        }
         if (orderBy == "species") {
           return a.species.localeCompare(b.species);
         }
@@ -72,6 +75,7 @@
        let info = document.createElement("p");
 
        let display = `<div class="genomeCardSampleId"><h4>${groupSample.id}</h4></div>
+        <b>Sequence Type: </b>${groupSample.sequenceType}<br>
        <b>Species: </b>${groupSample.species}<br>
        <b>Host: </b>${groupSample.host}<br>
        <b>Source: </b>${groupSample.source}<br>
@@ -139,7 +143,7 @@
     }
 
     // Reformat labels
-    labelPrefixes = ["Species", "Hosts", "Sources","locations", "Isolation Sources"];
+    labelPrefixes = ["Sequence Type", "Species", "Hosts", "Sources","Locations"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
     }
@@ -174,33 +178,21 @@
   // Show graphs
   function displayGraphs() {
     let groupSamples =  <%- JSON.stringify(samples) %>;
-    /*
-    let sequenceTypes = {};
-    let locations = {};
-    let strains = {};
-    let hosts = {};
-    let isolationSources = {};
 
-    groupSamples.forEach(function(sample) {
-      sequenceTypes[sample.st] = increaseCount(sequenceTypes[sample.st]);
-      locations[sample.country] = increaseCount( locations[sample.country]);
-      strains[sample.strain] = increaseCount(strains[sample.strain]);
-      hosts[sample.host] = increaseCount(hosts[sample.host]);
-      isolationSources[sample.isolation_source] = increaseCount(isolationSources[sample.isolation_source]);
-    });
-    */
+    let sequenceTypes = {};
     let species = {};
     let hosts = {};
     let sources = {};
     let locations = {};
 
     groupSamples.forEach(function(sample) {
+      sequenceTypes[sample.sequenceType] = increaseCount(sequenceTypes[sample.sequenceType]);
       species[sample.species] = increaseCount(species[sample.species]);
       locations[sample.location] = increaseCount( locations[sample.location]);
       sources[sample.source] = increaseCount(sources[sample.source]);
       hosts[sample.host] = increaseCount(hosts[sample.host]);
     });
-    canvases = [["speciesBar", species, "Species"], ["hostBar", hosts, "Hosts"], 
+    canvases = [["sequenceTypeBar",sequenceTypes, "Sequence Types"], ["speciesBar", species, "Species"], ["hostBar", hosts, "Hosts"], 
     ["sourceBar", sources, "Sources"], ["locationBar", locations, "Locations"]]
 
     canvases.forEach(function(canvas) {
@@ -212,7 +204,7 @@
     });
 
     // Create radar chart
-    chartInfo = getRadarLabelsData([species, hosts, sources, locations], Object.keys(groupSamples).length);
+    chartInfo = getRadarLabelsData([sequenceTypes, species, hosts, sources, locations], Object.keys(groupSamples).length);
     createRadarChart("aggregatedRadarGraph", chartInfo[0], chartInfo[1]);
 
   }

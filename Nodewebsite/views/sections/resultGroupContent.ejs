@@ -35,6 +35,7 @@
     </div>
 
     <div id="barGraphsSection">
+      <canvas class="barGraph" id="sequenceTypeBar"></canvas>
       <canvas class="barGraph" id="speciesBar"></canvas>
       <canvas class="barGraph" id="hostBar"></canvas>
       <canvas class="barGraph" id="sourceBar"></canvas>
@@ -51,6 +52,7 @@
         Order by
         <select name="orderBy" id="orderBy" onchange="updateCards()">
         <option value="sampleId">Sample ID</option>
+        <option value="sequenceType">Sequence Type</option>
         <option value="species">Species</option>
         <option value="host">Host</option>
         <option value="source">Source</option>
