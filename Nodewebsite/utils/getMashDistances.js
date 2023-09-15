@@ -16,10 +16,11 @@ async function getMashDistances(sampleName, kmers = 31) {
     const command = OS == 'win32' ? 'wsl mash' : 'mash';
     const dir_prefix = OS == 'win32' ? `/mnt/${process.env?.SAMPLES_DRIVE || 'c'}` : '';
     const allSamples = getAllSampleNames();
-    const thisSamplePath =`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh` 
+    let thisSamplePath =`${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh` 
     if(allSamples.length < 2 || !fs.existsSync(thisSamplePath)){
         return {};
     }
+    thisSamplePath = `${dir_prefix}${thisSamplePath}`;
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
     let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/main/sketcher/${sample}-k${kmers}.msh`);
