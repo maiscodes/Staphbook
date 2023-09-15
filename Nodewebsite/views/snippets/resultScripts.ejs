@@ -51,6 +51,8 @@
 
 
     function addSamplesToGroup(group_id){
+        // get all elements in the collection
+        let collection = cy.elements();
         collection.forEach((ele) => {
             if(ele.isNode() && ele.inside()){
                 addSampleToGroup(group_id, ele.id());

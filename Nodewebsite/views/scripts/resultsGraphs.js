@@ -264,7 +264,6 @@ function populateFriendsSection() {
     let count = 0;
     let min_dist = parseFloat(document.getElementById("minGeneticDist").innerText);
     let max_dist = parseFloat(document.getElementById("maxGeneticDist").innerText);
-
     if(isNaN(max_dist)) max_dist = 1;
     if(isNaN(min_dist)) min_dist = 0;
 

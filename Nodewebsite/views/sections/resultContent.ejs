@@ -219,13 +219,12 @@
                     <i class="fas fa-long-arrow-alt-down"
                        style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
-                <div class="dropdown">
                 <% if (userLoggedIn) { %>
+                <div class="dropdown">
                     <button id="downloadButton" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         Add visible samples to Group
                     </button>
-                <% } %>
                     <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <% avail_groups.forEach(function (group) { %>
                             <button class="dropDownButton" onclick="addSamplesToGroup(this.value)" value=<%= group.group_id %>>
@@ -237,6 +236,7 @@
                         </button>
                     </div>
                 </div>
+                <% } %>
             </div>
             <div id="cyLegend">
                 <div class="legend" onclick="changeConnection('isolation_location', this)">
