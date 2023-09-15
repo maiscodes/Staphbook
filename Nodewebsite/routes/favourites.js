@@ -43,7 +43,8 @@ router.get('/', async function(req, res) {
         ));
         // Append metadata for each sample to favs
         for (const samples of favorites) {
-            const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: samples.sample});
+            const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
+            .where({sample_id: samples.sample}).orderBy('created', 'desc');
             if (metadatas.length == 0) {
                 metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
             }

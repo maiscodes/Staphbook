@@ -5,7 +5,7 @@ const getGatherData = require("../utils/getGatherData");
 const getMLST = require("../utils/getMLST");
 const log = require("debug")("routes:viewGroup");
 
-router.get('/', function (req, res, next) {
+router.get('/', async function (req, res, next) {
     let groupId = req.query.groupId;
     let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: req.userLoggedIn };
     //console.log(errorPageConfig);
@@ -26,7 +26,7 @@ router.get('/', function (req, res, next) {
                              .from('group_sharing')
                              .where({group_id: groupId || 0})
 
-        Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(function([groupInfo, sampleIds, sharingInfo]) {
+        Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(async function([groupInfo, sampleIds, sharingInfo]) {
           groupInfo = groupInfo[0];
           if (sampleIds.length < 1) {
             sampleIds = [ { sample_id: -1 } ];
@@ -55,16 +55,28 @@ router.get('/', function (req, res, next) {
             // 3. Sample Species - string
             // 4. Sequence Type - int
           const allSamples = sampleIds.map((sample) => {
-              const metadata = getGatherData(sample.sample_id);
+              const sampleData = getGatherData(sample.sample_id);
               const mlst = getMLST(sample.sample_id);
               return {
                     id: sample.sample_id,
-                    length: metadata?.genome_size,
-                    species: metadata?.species,
+                    length: sampleData?.genome_size,
+                    species: sampleData?.species,
                     sequenceType: mlst?.sequence_type
               }
           });
-
+          // Loop through each sample in allSamples and append metadata from knex
+          for (const samples of allSamples) {
+            const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
+            .where({sample_id: samples.id}).orderBy('created', 'desc');
+            if (metadatas.length == 0) {
+                metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
+            }
+            samples.host = metadatas[0].isolation_host
+            samples.source = metadatas[0].isolation_source
+            samples.location = metadatas[0].isolation_location
+            samples.time = metadatas[0].time_of_sampling
+            samples.notes = metadatas[0].notes
+        }
           //Need to get metadata for each sample
 
           /* Original database query
