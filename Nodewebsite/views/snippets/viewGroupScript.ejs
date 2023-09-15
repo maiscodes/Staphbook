@@ -139,7 +139,7 @@
     }
 
     // Reformat labels
-    labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
+    labelPrefixes = ["Species", "Hosts", "Sources","locations", "Isolation Sources"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
     }
