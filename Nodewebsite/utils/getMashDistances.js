@@ -22,14 +22,15 @@ async function getMashDistances(sampleName, kmers = 31) {
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
     let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/main/sketcher/${sample}-k${kmers}.msh`);
-
     // double check files exist, remove if not
-    mashPaths.forEach((path) => {
-        if (!fs.existsSync(path)) {
-            mashPaths.splice(mashPaths.indexOf(path), 1);
+    for(let i = 0; i < mashPaths.length; i++){
+        const path = mashPaths[i];
+        if(!fs.existsSync(path)){
+            mashPaths.splice(i, 1);
+            i--;
             log(`File ${path} does not exist, removing from mashPaths`);
         }
-    });
+    }
     // add in dir prefix if on windows
     mashPaths = mashPaths.map(p => `${dir_prefix}${p}`)
     // place this sample at the front of the array
