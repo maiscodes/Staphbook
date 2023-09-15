@@ -13,7 +13,14 @@ router.get('/', async function(req, res) {
     const others = Object.keys(distances);
     const allSamples = others.concat([sampleId]);
     // get metadata where sampleId in others using knex
-    const metadata = await req.knex.select('*').from('metadata').whereIn('sample_id', allSamples);
+    const metadata = await req.knex.select(
+        "sample_id",
+        'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling', 
+    ).distinctOn('sample_id')
+        .from('metadata')
+        .whereIn('sample_id', allSamples)
+        .orderBy('sample_id', 'asc')
+        .orderBy('created', 'desc');
     const sequence_types = allSamples.map((s) => {
         const mlst = getMLST(s);
         return { sample_id: s, sequence_type: mlst?.sequence_type };
@@ -31,12 +38,9 @@ router.get('/', async function(req, res) {
         return {
             sample_id: s,
             distance: distances[s],
-            isolation_species: sampleMetadata?.isolation_species,
-            isolation_location: sampleMetadata?.isolation_location,
-            time_of_sampling: sampleMetadata?.time_of_sampling,
-            notes: sampleMetadata?.notes,
             sequence_type: sampleSequenceType?.sequence_type,
             species: sampleSpecies?.species,
+            ...sampleMetadata,
         };
     });
     res.json(closeSamples);

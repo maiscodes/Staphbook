@@ -43,7 +43,8 @@ function createNetwork() {
 async function fetchCloseSamples() {
     const res = await fetch('/getCloseSamples/?sampleId=' + thisSample);
     const data = await res.json();
-    console.log(data)
+    console.log("Data from server:");
+    console.log({data})
     return data;
 }
 
@@ -100,8 +101,6 @@ function populateNetwork() {
                 }
             });
         });
-        // display the collection
-        console.log(collection);
         // add the edges
         common.forEach((key) => {
             collection.merge(cy.add({
@@ -245,7 +244,6 @@ function populateFriendsSection() {
         if (sample.sample_id === thisSample) return;
         // make sure distance is a number
         const distance = parseFloat(sample.distance);
-        console.log({ distance, sample: sample.sample_id, min_dist, max_dist });
         // skip if out of range
         if (distance < min_dist - 0.0001 || distance > max_dist + 0.0001) {
             return;
@@ -323,7 +321,6 @@ function showLoadingElements() {
 function hideLoadingElements() {
     const styleEl = document.getElementById("loadingStyles");
     styleEl.parentNode.removeChild(styleEl);
-    console.log("removed");
 }
 
 

@@ -11,6 +11,7 @@ const session = require('express-session');
 
 const options = {
     client: 'pg',
+    debug: process.env.NODE_ENV === 'development',
     connection: {
         host:     process.env.DB_HOST,
         port:     process.env.DB_PORT,
