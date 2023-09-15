@@ -271,6 +271,13 @@ div {
     cursor: pointer;
 }
 
+.legend.legend-disabled {
+    opacity: 0.4;
+}
+.legend.legend-disabled > p {
+    text-decoration: line-through;
+}
+
 a {
     font-family: 'Assistant', sans-serif !important;
 }
@@ -773,7 +780,15 @@ input:checked + .toggle:before {
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  margin-top: 2em;
+  margin-top: 4em;
+}
+
+/* remove table outlines */
+.genomeCardSampleMetadata>table, .genomeCardSampleMetadata>table>tbody>tr>td {
+    border-collapse: collapse;
+    border: none;
+    margin: 0;
+    padding: 2px;
 }
 
 .genomeCard:hover {
@@ -810,7 +825,7 @@ input:checked + .toggle:before {
     border-radius: 15px;
     border: 1px solid #f3f3f3;
     float: left;
-    width: 22%;
+    width: 25%;
     padding: .5em;
     padding-left: .8em;
     padding-right: .8em;

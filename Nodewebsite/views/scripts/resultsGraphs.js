@@ -16,6 +16,14 @@ if (thisSample === null) {
 
 let cy;
 let data;
+const filters = {
+    'sequence_type':true,
+    'time_of_sampling':true,
+    'isolation_location':true,
+    'species':true,
+    'isolation_host':true,
+    'isolation_source':true,
+}
 
 function createNetwork() {
     const cy = cytoscape({
@@ -43,8 +51,6 @@ function createNetwork() {
 async function fetchCloseSamples() {
     const res = await fetch('/getCloseSamples/?sampleId=' + thisSample);
     const data = await res.json();
-    console.log("Data from server:");
-    console.log({data})
     return data;
 }
 
@@ -56,7 +62,7 @@ function populateNetwork() {
         'time_of_sampling': 'purple',
         'isolation_location': 'red',
         'species': 'teal',
-        'isolation_species': 'blue',
+        'isolation_host': 'blue',
         'isolation_source': 'orange',
     }
     const thisData = data.filter((other) => other.sample_id === thisSample)[0];
@@ -66,33 +72,35 @@ function populateNetwork() {
     }
 
     data.forEach((other) => {
-        if (other.sample_id === thisSample) return;
+        if (other.sample_id == thisSample) return;
         // work out what is common (but not empty or null) between the two samples
         const common = Object.keys(thisData).filter((key) => {
-            return thisData[key] === other?.[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
+            return key !== 'distance' && thisData[key] === other?.[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
         });
         if (common.length === 0) {
             return;
         }
         // add the node
         collection.merge(cy.add({
-            data: { id: other.sample_id, ...other },
+            data: { id: other.sample_id, ...other, common },
         }));
         // get the node element
         const el = cy.getElementById(other.sample_id);
         el.on('click', () => {
             // add the popup
             popupS.confirm({
-                content: `<div class="popup">
-                        <h3>${other.sample_id}</h3>
-                        <p>Sequence type: ${other.sequence_type}</p>
-                        <p>Time of sampling: ${other.time_of_sampling}</p>
-                        <p>Isolation location: ${other.isolation_location}</p>
-                        <p>Species: ${other.species}</p>
-                        <p>Isolation species: ${other.isolation_species}</p>
-                        <p>Isolation source: ${other.isolation_source}</p>
+                content: 
+                   `<div class="popup">
+                        <h3 style="margin:0 auto">${other.sample_id}</h3>
+                        <p>Distance To Sample: ${other.distance}</p>
+                        <p>Isolation Host: ${other.isolation_host || 'unknown'}</p>
+                        <p>Isolation source: ${other.isolation_source || 'unknown'}</p>
+                        <p>Isolation location: ${other.isolation_location || 'unknown'}</p>
+                        <p>Sequence type: ${other.sequence_type || 'unknown'}</p>
+                        <p>Species: ${other.species || 'unknown'}</p>
+                        <p>Time of sampling: ${other.time_of_sampling || 'unknown'}</p>
                     </div>`,
-                labelOk: 'View',
+                labelOk: 'View Sample',
                 labelCancel: 'Close',
                 additionalButtonCancelClass: 'popUpButtonCSS',
                 additionalButtonOkClass: 'popUpButtonCSS',
@@ -121,7 +129,6 @@ function populateNetwork() {
     cy.layout({
         name: 'cola'
     }).run()
-
 }
 
 /**
@@ -132,8 +139,26 @@ function populateNetwork() {
 function updateCytoscape() {
     const minConnections = document.getElementById('cyMinConnections').value;
     const maxDistance = document.getElementById('cyMaxDistance').value;
+    const includeNoDistance = document.getElementById('cyIncludeNoDistance').checked;
     cy.elements().forEach((el) => {
+        if(el.isEdge()){
+            // if relevant filter is disabled, hide the edge
+            if(!filters[el.classes()]) {
+                el.style('display', 'none');
+                return;
+            }else{
+                el.style('display', 'element');
+            }
+
+        }
         if (el.isNode()) {
+            if(el.data('id') === thisSample) return;
+            // filters -> 
+            mask = el.data('common').filter((key) => filters[key]);
+            if (mask.length === 0) {
+                el.style('display', 'none');
+                return;
+            }
             const connections = el.connectedEdges().length;
             if (connections < minConnections) {
                 el.style('display', 'none');
@@ -142,18 +167,24 @@ function updateCytoscape() {
                 el.style('display', 'element');
             }
             const distance = el.data('distance');
-            if (distance > maxDistance) {
+            if (distance > maxDistance || distance === undefined && !includeNoDistance) {
                 el.style('display', 'none');
                 return;
-            } else {
-                el.style('display', 'element');
             }
+            el.style('display', 'element');
         }
     }
     );
 }
 
-// Logic for the slider to select the genetic distance
+function changeConnection(filter, el){
+    el.classList.toggle('legend-disabled');
+    filters[filter] = !filters[filter];
+    updateCytoscape();
+}
+
+/* FRIENDS SECTION */
+
 function makeSlider(element, type) {
 
     let startX = 0, x = 0;
@@ -166,10 +197,10 @@ function makeSlider(element, type) {
     // update text and values on first load
     if (type === "min") {
         element.style.left = 0;
-        document.getElementById("minGeneticDist").innerText = 0;
+        document.getElementById("minGeneticDist").innerText = "0";
     } else {
         element.style.left = width;
-        document.getElementById("maxGeneticDist").innerText = 1;
+        document.getElementById("maxGeneticDist").innerText = "1";
     }
 
     function dragMouseDown(e) {
@@ -231,23 +262,35 @@ function populateFriendsSection() {
     let parentSection = document.getElementById("findMyFriendsCards"); // Now create cards
     parentSection.innerHTML = "";
     let count = 0;
-    const min_dist = parseFloat(document.getElementById("minGeneticDist").innerText) || 0;
-    const max_dist = parseFloat(document.getElementById("maxGeneticDist").innerText) || 1;
+    let min_dist = parseFloat(document.getElementById("minGeneticDist").innerText);
+    let max_dist = parseFloat(document.getElementById("maxGeneticDist").innerText);
+
+    if(isNaN(max_dist)) max_dist = 1;
+    if(isNaN(min_dist)) min_dist = 0;
+
+    // filter data 
+    let data_copy = data.filter((sample) => sample.distance >= min_dist && sample.distance <= max_dist);
+
+    if(data_copy.length === 0){
+        // show a message saying no samples found
+        const noSamples = document.createElement("div");
+        noSamples.innerHTML = 
+            `<b>No samples found within the selected range</b>`
+        ;
+        noSamples.setAttribute("style", "text-align: center; margin: 20px auto; font-size: 1.2em;");
+        parentSection.appendChild(noSamples);
+        return;
+    }
 
     // sort data by distance (ascending)
-    data.sort((a, b) => {
+    data_copy.sort((a, b) => {
         return parseFloat(a.distance) - parseFloat(b.distance);
     });
 
-    data.forEach(function(sample) {
+    data_copy.forEach(function(sample) {
         // skip if this sample
         if (sample.sample_id === thisSample) return;
         // make sure distance is a number
-        const distance = parseFloat(sample.distance);
-        // skip if out of range
-        if (distance < min_dist - 0.0001 || distance > max_dist + 0.0001) {
-            return;
-        }
         genomeCard = createGenomeCard(sample);
         parentSection.appendChild(genomeCard);
 
@@ -270,11 +313,36 @@ function createGenomeCard(sample) {
 
     let display = `<div class="genomeCardSampleId"><h4>${sample.sample_id}</h4></div>
         <div class="genomeCardSampleMetadata" style="text-align:left"> 
-            <p>Species: ${sample.species}</p>
-            <p>Sequence type: ${sample.sequence_type}</p>
-            <p>Location: ${sample.isolation_location}</p>
-            <p>Isolation Host: ${sample.isolation_species}</p>
-            <p>Isolation Source: ${sample.isolation_source}</p>
+            <table>
+                <tr>
+                    <td><b>Distance</b></td>
+                    <td>${sample.distance}</td>
+                </tr>
+                <tr>
+                    <td><b>Isolation Host</b></td>
+                    <td>${sample.isolation_host || 'unknown'}</td>
+                </tr>
+                <tr>
+                    <td><b>Isolation source</b></td>
+                    <td>${sample.isolation_source || 'unknown'}</td>
+                </tr>
+                <tr>
+                    <td><b>Isolation location</b></td>
+                    <td>${sample.isolation_location || 'unknown'}</td>
+                </tr>
+                <tr>
+                    <td><b>Sequence type</b></td>
+                    <td>${sample.sequence_type || 'unknown'}</td>
+                </tr>
+                <tr>
+                    <td><b>Species</b></td>
+                    <td>${sample.species || 'unknown'}</td>
+                </tr>
+                <tr>
+                    <td><b>Time of sampling</b></td>
+                    <td>${sample.time_of_sampling || 'unknown'}</td>
+                </tr>
+        </table>
         </div>
        <div class="geneticDistanceTag">${sample.distance}</div>`;
 
