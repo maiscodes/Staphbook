@@ -220,10 +220,12 @@
                        style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
                 <div class="dropdown">
+                <% if (userLoggedIn) { %>
                     <button id="downloadButton" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                         Add visible samples to Group
                     </button>
+                <% } %>
                     <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <% avail_groups.forEach(function (group) { %>
                             <button class="dropDownButton" onclick="addSamplesToGroup(this.value)" value=<%= group.group_id %>>
@@ -285,7 +287,7 @@
                 <p id="weighteddistnum">Minimum Connections = <span id="minCon">1</span></p>
                 <input type="range" min="1" max="5" value="1" class="slider" id="cyMinConnections" 
                     oninput="document.getElementById('minCon').innerHTML=this.value;updateCytoscape()"
-                    style="width: 40%; "></input>
+                    ></input>
             </div>
 
             <div class="weightedDistanceSliders">
@@ -293,8 +295,13 @@
                 <p id="weighteddist2num">Maximum Weighted Distance = <span id="maxDist">1</span></p>
                 <input type="range" min="0" max="1" step="0.01" value="1" class="slider" id="cyMaxDistance" 
                     oninput="document.getElementById('maxDist').innerHTML=this.value;updateCytoscape()"
-                    style="width: 60%; "></input>
+                    ></input>
 
+            </div>
+
+            <div class="weightedDistanceSliders">
+                <p id="weighteddist3num">Include If Distance Unavailable</p>
+                <input type="checkbox" id="cyIncludeNoDistance" checked="true" onclick="updateCytoscape()"></input>
             </div>
 
         </div>
