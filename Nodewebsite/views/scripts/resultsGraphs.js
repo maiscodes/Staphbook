@@ -183,6 +183,47 @@ function changeConnection(filter, el){
     updateCytoscape();
 }
 
+/* Cytoscape Buttons */
+
+function centerCy(){
+    // reset zoom
+    cy.zoom(1);
+    // center
+    cy.center();
+}
+
+function saveCy(){
+    // save as png
+    const im = cy.png();
+    // create the link
+    const a = document.createElement('a');
+    // set the href to the image
+    a.href = im
+    // set the download attribute to the filename
+    a.download = 'network.png';
+    // click the link
+    a.click();
+}
+
+function zoomInCy(){
+    cy.zoom(cy.zoom() + 0.1);
+}
+
+function zoomOutCy(){
+    cy.zoom(cy.zoom() - 0.1);
+}
+
+function fullScreenCy(){
+    const container = document.getElementById('resultsPageGraphComponents');
+    container.requestFullscreen();
+}
+
+function minimizeCy(){
+    document.exitFullscreen();
+}
+
+
+
 /* FRIENDS SECTION */
 
 function makeSlider(element, type) {

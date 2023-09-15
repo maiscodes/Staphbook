@@ -47,7 +47,7 @@
                 Add to Group
             </button>
             <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <% avail_groups.forEach(function (group) { %>
+                <% avail_groups.filter(g => !in_groups.includes(g)).forEach(function (group) { %>
                     <button class="dropDownButton" onclick="addToGroup(this.value)" value=<%= group.group_id %>>
                         <%= group.name %>
                     </button>
@@ -76,16 +76,25 @@
         <!-- Sample summary information -->
         <hr style="width: 55%; margin-top: -2px"></hr>
         <h4 style="text-align: center"> Summary </h4>
-        <p class="summaryInfo">
+        <!--as a table -->
+        <table class="summaryTable">
             <% Object.keys(summary).forEach(function (key) { %>
-            <span style="text-transform:capitalize" <b><%= key %>:</b> </span> <%= summary[key] %>
-            <br>
+            <tr>
+                <td><b><%= key %></b></td>
+                <td>
+                    <%= summary[key] %>
+                </td>
+            </tr>
             <% }) %>
             <% Object.keys(userMeta).forEach(function (key) { %>
-            <span style="text-transform:capitalize" <b><%= key %>:</b> </span> <%= userMeta[key] %>
-            <br>
+            <tr>
+                <td><b><%= key %></b></td>
+                <td>
+                    <%= userMeta[key] %>
+                </td>
+            </tr>
             <% }) %>
-        </p>
+        </table>
         <hr style="width: 55%">
 
 
@@ -193,28 +202,28 @@
 
         <div id="resultsPageGraphComponent2">
             <div id="interactiveGraph">
-                <button type="button" id="centerGraph" onclick="centerGraph()" title="Center graph"
+                <button type="button" id="centerGraph" onclick="centerCy()" title="Center graph"
                         class="btn btn-outline-dark btn-sm">
                     <i class="fas fa-expand" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
-                <a href="#saveableGraphImage" id="downloadGraph" onclick="downloadGraph()"
-                   title="Create .png file of current graph" class="btn btn-outline-dark btn-sm">
-                    <i class="far fa-file-image" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                </a>
-                <button type="button" id="zoomInGraph" onclick="zoomInGraph()" title="Zoom in on graph"
+                <button type="button" id="downloadGraph" onclick="saveCy()" title="Download current view"
+                        class="btn btn-outline-dark btn-sm">
+                    <i class="fas fa-file-image" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                </button>
+                <button type="button" id="zoomInGraph" onclick="zoomInCy()" title="Zoom in on graph"
                         class="btn btn-outline-dark btn-sm">
                     <i class="fa fa-search-plus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
-                <button type="button" id="zoomOutGraph" onclick="zoomOutGraph()" title="Zoom out on graph"
+                <button type="button" id="zoomOutGraph" onclick="zoomOutCy()" title="Zoom out on graph"
                         class="btn btn-outline-dark btn-sm">
                     <i class="fa fa-search-minus" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </button>
-                <a href="#interactiveGraph" id="expandGraph" onclick="expandGraph()" title="Make graph full screen"
+                <a href="#interactiveGraph" id="expandGraph" onclick="fullScreenCy()" title="Make graph full screen"
                    class="btn btn-outline-dark btn-sm">
                     <i class="fas fa-long-arrow-alt-up"
                        style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                 </a>
-                <button type="button" id="minimizeGraph" onclick="minimizeGraph()"
+                <button type="button" id="minimizeGraph" onclick="minimizeCy()"
                         title="Minimize graph to original size" class="btn btn-outline-dark btn-sm">
                     <i class="fas fa-long-arrow-alt-down"
                        style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
@@ -308,6 +317,7 @@
             </div>
 
         </div>
+    </div>
         <!-- close resultsPageGraphComponent4 -->
 
         <!-- close resultsPageResultComponents -->
@@ -323,7 +333,6 @@
 
         </div>
         <!-- close resultsPageGraphComponent5 -->
-    </div>
 
 
     <div id="imageTitleDiv"
