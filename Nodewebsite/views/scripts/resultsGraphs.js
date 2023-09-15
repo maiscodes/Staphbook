@@ -216,10 +216,14 @@ function zoomOutCy(){
 function fullScreenCy(){
     const container = document.getElementById('resultsPageGraphComponents');
     container.requestFullscreen();
+    // make background white
+    container.style.backgroundColor = 'white';
 }
 
 function minimizeCy(){
     document.exitFullscreen();
+    const container = document.getElementById('resultsPageGraphComponents');
+    container.style.backgroundColor = 'none';
 }
 
 
