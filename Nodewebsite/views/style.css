@@ -103,6 +103,7 @@ hr.divider {
 }
 
 #resultsPageGraphComponent4 {
+    display:flex;
     width: 100%;
     padding-bottom: 10px;
     padding-top: 10px;
@@ -114,14 +115,18 @@ hr.divider {
 
 #resultsPageGraphComponent5 {
     margin-top: 2em;
+    padding: 0.5em;
     width: 100%;
 }
 
 .weightedDistanceSliders {
     padding-left: 4px;
     padding-right: 4px;
-    width: 50%;
     margin: auto;
+}
+
+.weightedDistanceSliders>input {
+    width: 60%; 
 }
 
 #displayDescription {
@@ -389,25 +394,31 @@ a {
     width: 10px;
 }
 
-.popupS-button-ok.popUpButtonCSS {
-    border: 0.5px solid silver;
-    border-radius: 5px;
-    height: 30px;
-    background-color: #f1f1f1;
-    width: 50%;
-    margin-top: 5px;
-}
-
-.popupS-button-cancel.popUpButtonCSS {
-    border: 0.5px solid silver;
-    border-radius: 5px;
-    height: 30px;
-    background-color: #f1f1f1;
-    width: 50%;
-    margin-top: 5px;
+/* 
+ * Remove space between paras
+ */
+.popup>p{
+    margin:5px auto;
 }
 
 
+/* Make buttons all same height */
+.popupS-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popUpButtonCSS {
+    border: 0.5px solid silver;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    width: 40%;
+    height: 40px;
+    margin-top: 5px;
+    margin-left: 5%;
+}
 
 .typeahead, .tt-query, .tt-hint {
     border: 2px solid #CCCCCC;
