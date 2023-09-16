@@ -98,7 +98,7 @@ router.get('/', async function(req, res) {
 
             res.render('pages/result', {
                 summary: gather,
-            userMeta: metadatas[0],
+                userMeta: metadatas[0],
                 userLoggedIn: userLoggedIn,
                 sample_ID: sampleName,
                 isFavourited: req.session.favourited,

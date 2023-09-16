@@ -6,7 +6,6 @@
      * downloads it.
      *
      */
-    // Add metadata table
     // Add mlst table
     // Add annotations table
 
@@ -16,140 +15,46 @@
     let sampleIdentity = <%- JSON.stringify(sample_ID) %>;
     //let tag_tag = <%- /* JSON.stringify(tag_tag) */ %>;
     let sample_metadata = <%- JSON.stringify(metadata) %>;
+    let user_metadata = <%- JSON.stringify(userMeta) %>;
     let sequence_summary = <%- JSON.stringify(sequence_summary) %>;
     let assembly_summary = <%- JSON.stringify(result_assembly_summary) %>;
     let mlst_mlst = <%- JSON.stringify(mlst) %>;
-    //let sccmec_primers = <%- /*JSON.stringify(sccmec_primers)*/%>;
-    //let sccmec_proteins = <%- /*JSON.stringify(sccmec_proteins) */%>;
-    //let sccmec_subtypes = <%- /*JSON.stringify(sccmec_subtypes) */%>;
-    //let staphopia_blatstquery = <%- /*JSON.stringify(staphopia_blatstquery) */%>;
-
     let allObjects = [];
-    /*
-    tag_tag.forEach(function(object){
-    var arr = [];
-    arr.push("Sample: " + sampleIdentity + "\r\n");
-    arr.push("\rTAGS");
-    arr.push("\rTag:");
-    arr.push(object.tag);
-    arr.push("\rComment:");
-    arr.push(object.comment);
-    allObjects.push(arr)
-    });
-    */
+
     try {
 
-        //sample_metadata.forEach(function(object){
         var arr = [];
-        /*
         arr.push("\r\n\rMETADATA");
-        arr.push("\rStudy Accession:");
-        arr.push(object.metadata.study_accession);
-        arr.push("\rStudy Title:");
-        arr.push(object.metadata.study_title);
-        arr.push("\rStudy Alias:");
-        arr.push(object.metadata.study_alias);
-        arr.push("\rSecondary Study Accession:");
-        arr.push(object.metadata.secondary_study_accession);
-        arr.push("\rSample Accession:");
-        arr.push(object.metadata.sample_accession);
-        arr.push("\rSecondary Sample Accession:");
-        arr.push(object.metadata.secondary_sample_accession);
-        arr.push("\rSubmission Accession:");
-        arr.push(object.metadata.submission_accession);
-        arr.push("\rExperiment Title:");
-        arr.push(object.metadata.experiment_title);
-        arr.push("\rExperiment Alias:");
-        arr.push(object.metadata.experiment_alias);
-        arr.push("\rTax ID:");
-        arr.push(object.metadata.tax_id);
-        arr.push("\rScientific Name:");
-        arr.push(object.metadata.scientific_name);
-        arr.push("\rInstrument Platform:");
-        arr.push(object.metadata.instrument_platform);
-        arr.push("\rInstrument Model:");
-        arr.push(object.metadata.instrument_model);
-        arr.push("\rLibrary Layout:");
-        arr.push(object.metadata.library_layout);
-        arr.push("\rLibrary Strategy:");
-        arr.push(object.metadata.library_strategy);
-        arr.push("\rLibrary Selection:");
-        arr.push(object.metadata.library_selection);
-        arr.push("\rCenter Name:");
-        arr.push(object.metadata.center_name);
-        arr.push("\rCenter Link:");
-        arr.push(object.metadata.center_link);
-        arr.push("\rFirst Public:");
-        arr.push(object.metadata.first_public);
-        arr.push("\rCell Line:");
-        arr.push(object.metadata.cell_line);
-        arr.push("\rCollected By:");
-        arr.push(object.metadata.collected_by);
-        arr.push("\rCollection Date:");
-        arr.push(object.metadata.collection_date);
-        arr.push("\rCountry:");
-        arr.push(object.metadata.country);
-        arr.push("\rDescription:");
-        arr.push(object.metadata.description);
-        arr.push("\rEnvironmental Sample:");
-        arr.push(object.metadata.environmental_sample);
-        arr.push("\rGermline:");
-        arr.push(object.metadata.germline);
-        arr.push("\rIsolate:");
-        arr.push(object.metadata.isolate);
-        arr.push("\rIsolation Source:");
-        arr.push(object.metadata.isolation_source);
-        arr.push("\rSerotype:");
-        arr.push(object.metadata.serotype);
-        arr.push("\rSerovar:");
-        arr.push(object.metadata.serovar);
-        arr.push("\rSex:");
-        arr.push(object.metadata.sex);
-        arr.push("\rSubmitted Sex:");
-        arr.push(object.metadata.submitted_sex);
-        arr.push("\rStrain:");
-        arr.push(object.metadata.strain);
-        arr.push("\rSubspecies:");
-        arr.push(object.metadata.sub_species);
-        arr.push("\rTissue Type:");
-        arr.push(object.metadata.tissue_type);
-        arr.push("\rBiosample Tax ID:");
-        arr.push(object.metadata.biosample_tax_id);
-        arr.push("\rBiosample Scientific Name:");
-        arr.push(object.metadata.biosample_scientific_name);
-        arr.push("\rSample Alias:");
-        arr.push(object.metadata.sample_alias);
-        arr.push("\rChecklist:");
-        arr.push(object.metadata.checklist);
-        arr.push("\rBisoample Center Name:");
-        arr.push(object.metadata.biosample_center_name);
-        arr.push("\rEnvironment Biome:");
-        arr.push(object.metadata.environment_biome);
-        arr.push("\rEnvironment Feature:");
-        arr.push(object.metadata.environment_feature);
-        arr.push("\rEnvironment Material:");
-        arr.push(object.metadata.environment_material);
-        arr.push("\r>Project Name:");
-        arr.push(object.metadata.project_name);
-        arr.push("\rHost:");
-        arr.push(object.metadata.host);
-        arr.push("\rHost Tax ID:");
-        arr.push(object.metadata.host_tax_id);
-        arr.push("\rHost Status:");
-        arr.push(object.metadata.host_status);
-        arr.push("\rHost Sex:");
-        arr.push(object.metadata.host_sex);
-        arr.push("\rSubmitted Host Sex:");
-        arr.push(object.metadata.submitted_host_sex);
-        arr.push("\rHost Body Site:");
-        arr.push(object.metadata.host_body_site);
-        arr.push("\rInvestigation Type:");
-        arr.push(object.metadata.investigation_type);
-        arr.push("\rSequencing Method:");
-        arr.push(object.metadata.sequencing_method);
-        arr.push("\rBroker Name:");
-        arr.push(object.metadata.broker_name);
-          */
+        arr.push("\rSample");
+        arr.push(sample_metadata.sample);
+        //runtype
+        arr.push("\rRun Type");
+        arr.push(sample_metadata.runtype);
+        // original runtype
+        arr.push("\rOriginal Run Type");
+        arr.push(sample_metadata.original_runtype);
+        // is paired
+        arr.push("\rIs Paired");
+        arr.push(sample_metadata.is_paired);
+        // is compressed
+        arr.push("\rIs Compressed");
+        arr.push(sample_metadata.is_compressed);
+        arr.push("\rSpecies");
+        arr.push(sample_metadata.species);
+        // genome size
+        arr.push("\rGenome Size");
+        arr.push(sample_metadata.genome_size);
+        arr.push("\rHost");
+        arr.push(user_metadata.isolation_host);
+        arr.push("\rSource");
+        arr.push(user_metadata.isolation_source);
+        arr.push("\rLocation");
+        arr.push(user_metadata.isolation_location);
+        arr.push("\rTime");
+        arr.push(user_metadata.time_of_sampling);
+        arr.push("\rNotes");
+        arr.push(user_metadata.notes);
+        
         arr.push("\r\n\rSEQUENCING METRICS");
         arr.push("\rName");
         arr.push("Total BP");
