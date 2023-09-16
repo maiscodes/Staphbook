@@ -6,22 +6,26 @@
      * downloads it.
      *
      */
+    // Add metadata table
+    // Add mlst table
+    // Add annotations table
 
     function downloadInfo() {
     console.log("download sample information");
 
     let sampleIdentity = <%- JSON.stringify(sample_ID) %>;
-    let tag_tag = <%- JSON.stringify(tag_tag) %>;
-    let sample_metadata = <%- JSON.stringify(sample_metadata) %>;
+    //let tag_tag = <%- /* JSON.stringify(tag_tag) */ %>;
+    let sample_metadata = <%- JSON.stringify(metadata) %>;
     let sequence_summary = <%- JSON.stringify(sequence_summary) %>;
-    let assembly_summary = <%- JSON.stringify(assembly_summary) %>;
-    let mlst_mlst = <%- JSON.stringify(mlst_mlst) %>;
-    let sccmec_primers = <%- JSON.stringify(sccmec_primers) %>;
-    let sccmec_proteins = <%- JSON.stringify(sccmec_proteins) %>;
-    let sccmec_subtypes = <%- JSON.stringify(sccmec_subtypes) %>;
-    let staphopia_blatstquery = <%- JSON.stringify(staphopia_blatstquery) %>;
+    let assembly_summary = <%- JSON.stringify(result_assembly_summary) %>;
+    let mlst_mlst = <%- JSON.stringify(mlst) %>;
+    //let sccmec_primers = <%- /*JSON.stringify(sccmec_primers)*/%>;
+    //let sccmec_proteins = <%- /*JSON.stringify(sccmec_proteins) */%>;
+    //let sccmec_subtypes = <%- /*JSON.stringify(sccmec_subtypes) */%>;
+    //let staphopia_blatstquery = <%- /*JSON.stringify(staphopia_blatstquery) */%>;
 
     let allObjects = [];
+    /*
     tag_tag.forEach(function(object){
     var arr = [];
     arr.push("Sample: " + sampleIdentity + "\r\n");
@@ -32,10 +36,12 @@
     arr.push(object.comment);
     allObjects.push(arr)
     });
-
+    */
     try {
-        sample_metadata.forEach(function(object){
+
+        //sample_metadata.forEach(function(object){
         var arr = [];
+        /*
         arr.push("\r\n\rMETADATA");
         arr.push("\rStudy Accession:");
         arr.push(object.metadata.study_accession);
@@ -143,7 +149,7 @@
         arr.push(object.metadata.sequencing_method);
         arr.push("\rBroker Name:");
         arr.push(object.metadata.broker_name);
-
+          */
         arr.push("\r\n\rSEQUENCING METRICS");
         arr.push("\rName");
         arr.push("Total BP");
@@ -163,23 +169,15 @@
         arr.push("Quality 75th");
 
         allObjects.push(arr)
-      });
+      //});
     }
     catch(err) {
       allObjects.push("\rError downloading sample metadata section");
     }
-
+    console.log(sequence_summary);
     sequence_summary.forEach(function(object){
     var arr = [];
-    if (object.stage_id == 4){
-    arr.push("\radapter");
-    } else if(object.stage_id == 5){
-    arr.push("\rcleanup");
-    }else if(object.stage_id == 6){
-    arr.push("\racc");
-    }else if(object.stage_id == 7) {
-    arr.push("\roriginal");
-    }
+    arr.push(object.name);
     arr.push(object.total_bp);
     arr.push(object.coverage);
     arr.push(object.read_total);
@@ -198,60 +196,62 @@
     allObjects.push(arr)
     });
 
-    assembly_summary.forEach(function(object){
+    //assembly_summary.forEach(function(object){
     var arr = [];
     arr.push("\r\n\rASSEMBLY METRICS");
     arr.push("\rTotal Contig:");
-    arr.push(object.total_contig);
+    arr.push(assembly_summary.total_contig);
     arr.push("\rTotal Contig Length:");
-    arr.push(object.total_contig_length);
+    arr.push(assembly_summary.total_contig_length);
     arr.push("\rMin Contig Length:");
-    arr.push(object.min_contig_length);
+    arr.push(assembly_summary.min_contig_length);
     arr.push("\rMedian Contig Length:");
-    arr.push(object.median_contig_length);
+    arr.push(assembly_summary.median_contig_length);
     arr.push("\rMean Contig Length:");
-    arr.push(object.mean_contig_length);
+    arr.push(assembly_summary.mean_contig_length);
     arr.push("\rMax Contig Length:");
-    arr.push(object.max_contig_length);
+    arr.push(assembly_summary.max_contig_length);
     arr.push("\rn50 Contig Length:");
-    arr.push(object.n50_contig_length);
+    arr.push(assembly_summary.n50_contig_length);
     arr.push("\rl50 Contig Count:");
-    arr.push(object.l50_contig_count);
+    arr.push(assembly_summary.l50_contig_count);
     arr.push("\rng50 Contig Length:");
-    arr.push(object.ng50_contig_length);
+    arr.push(assembly_summary.ng50_contig_length);
     arr.push("\rlg50 Contig Count:");
-    arr.push(object.lg50_contig_count);
+    arr.push(assembly_summary.lg50_contig_count);
     arr.push("\rContigs > 1k:");
-    arr.push(object.contigs_greater_1k);
+    arr.push(assembly_summary.contigs_greater_1k);
     arr.push("\rContigs > 10k:");
-    arr.push(object.contigs_greater_10k);
+    arr.push(assembly_summary.contigs_greater_10k);
     arr.push("\rContigs > 100k:");
-    arr.push(object.contigs_greater_100k);
+    arr.push(assembly_summary.contigs_greater_100k);
     arr.push("\rContigs > 1m");
-    arr.push(object.contigs_greater_1m);
+    arr.push(assembly_summary.contigs_greater_1m);
     arr.push("\rPercentage of Contigs > 1k:");
-    arr.push(object.percent_contigs_greater_1k);
+    arr.push(assembly_summary.percent_contigs_greater_1k);
     arr.push("\rPercentage of Contigs > 10k:");
-    arr.push(object.percent_contigs_greater_10k);
+    arr.push(assembly_summary.percent_contigs_greater_10k);
     arr.push("\rPercentage of Contigs > 100k:");
-    arr.push(object.percent_contigs_greater_100k);
+    arr.push(assembly_summary.percent_contigs_greater_100k);
     arr.push("\rPercentage of Contigs > 1m:");
-    arr.push(object.percent_contigs_greater_1m);
+    arr.push(assembly_summary.percent_contigs_greater_1m);
     arr.push("\rContigs Percentage of A:");
-    arr.push(object.contig_percent_a);
+    arr.push(assembly_summary.contig_percent_a);
     arr.push("\rContigs Percentage of T:");
-    arr.push(object.contig_percent_t);
+    arr.push(assembly_summary.contig_percent_t);
     arr.push("\rContigs Percentage of G:");
-    arr.push(object.contig_percent_g);
+    arr.push(assembly_summary.contig_percent_g);
     arr.push("\rContigs Percentage of C:");
-    arr.push(object.contig_percent_c);
+    arr.push(assembly_summary.contig_percent_c);
     arr.push("\rContigs Percentage of N:");
-    arr.push(object.contig_percent_n);
+    arr.push(assembly_summary.contig_percent_n);
     arr.push("\rContigs not ACGTN:");
-    arr.push(object.contig_non_acgtn);
+    arr.push(assembly_summary.contig_non_acgtn);
     allObjects.push(arr)
-    });
+    //});
 
+    console.log(mlst_mlst)
+    /* There data seems a lot different
     mlst_mlst.forEach(function(object){
     var arr = [];
     arr.push("\r\n\rMLST");
@@ -264,8 +264,9 @@
     arr.push("\rblast:");
     arr.push(object.blast);
     allObjects.push(arr)
-    });
+    }); */
 
+    /*
     for(let i = 0; i < 1 ; i++){
     var arr = [];
     arr.push("\r\n\rSCCMEC PRIMER HITS");
@@ -390,20 +391,21 @@
     arr.push(object.midline);
     allObjects.push(arr)
     });
-
+    */
     //var BOM = "\uFEFF";
     //var csvData = BOM + allObjects;
     //var blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
     // TODO: Cleanup format of information, weird newlines
+    console.log(allObjects);
     let csvContent = "data:text/csv;charset=utf-8," + allObjects.map(e => e.join(",")).join("\n");
-    saveCsvAs(csvContent, "StaphBook-Sample:"+ sampleIdentity +"-info.csv");
+    saveCsvAs(csvContent, "BactBook-Sample:"+ sampleIdentity +"-info.csv");
     }
 
     function saveCsvAs(csvContent, fileName){
       let encodedUri = encodeURI(csvContent);
       let link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `StaphBook-Sample ${<%- JSON.stringify(sample_ID) %>} Metadata.csv`);
+      link.setAttribute("download", `BactBook-Sample ${<%- JSON.stringify(sample_ID) %>} Metadata.csv`);
       document.body.appendChild(link); // Required for FF
       link.click();
     }
