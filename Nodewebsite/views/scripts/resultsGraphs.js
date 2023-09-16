@@ -93,12 +93,12 @@ function populateNetwork() {
                    `<div class="popup">
                         <h3 style="margin:0 auto">${other.sample_id}</h3>
                         <p>Distance To Sample: ${other.distance}</p>
-                        <p>Isolation Host: ${other.isolation_host || 'unknown'}</p>
-                        <p>Isolation source: ${other.isolation_source || 'unknown'}</p>
-                        <p>Isolation location: ${other.isolation_location || 'unknown'}</p>
-                        <p>Sequence type: ${other.sequence_type || 'unknown'}</p>
-                        <p>Species: ${other.species || 'unknown'}</p>
-                        <p>Time of sampling: ${other.time_of_sampling || 'unknown'}</p>
+                        <p>Isolation Host: ${other.isolation_host || 'Unknown'}</p>
+                        <p>Isolation source: ${other.isolation_source || 'Unknown'}</p>
+                        <p>Isolation location: ${other.isolation_location || 'Unknown'}</p>
+                        <p>Sequence type: ${other.sequence_type || 'Unknown'}</p>
+                        <p>Species: ${other.species || 'Unknown'}</p>
+                        <p>Time of sampling: ${other.time_of_sampling || 'Unknown'}</p>
                     </div>`,
                 labelOk: 'View Sample',
                 labelCancel: 'Close',

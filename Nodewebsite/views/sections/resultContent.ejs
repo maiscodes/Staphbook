@@ -63,6 +63,9 @@
             <button type="button" id="downloadButton" onclick="window.location.href='/addMetadata'" aria-haspopup="true" aria-expanded="false">
                 Update Metadata
             </button>
+            <button type="button" id="downloadButton" onclick="viewMetaHistory()" aria-haspopup="true" aria-expanded="false">
+                Metadata History
+            </button>
         </div>
         <!--  close favDiv -->
         <% } else { %>
@@ -86,11 +89,11 @@
                 </td>
             </tr>
             <% }) %>
-            <% Object.keys(userMeta).forEach(function (key) { %>
+            <% Object.keys(userMeta[0]).forEach(function (key) { %>
             <tr>
                 <td><b><%= key %></b></td>
                 <td>
-                    <%= userMeta[key] %>
+                    <%= userMeta[0][key] %>
                 </td>
             </tr>
             <% }) %>
