@@ -69,7 +69,7 @@ router.get('/', async function (req, res, next) {
             const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
             .where({sample_id: samples.id}).orderBy('created', 'desc');
             if (metadatas.length == 0) {
-                metadatas.push({isolation_host: '', isolation_source: '', isolation_location: '', time_of_sampling: '', notes: ''})
+                metadatas.push({isolation_host: 'Unknown', isolation_source: 'Unknown', isolation_location: 'Unknown', time_of_sampling: 'Unknown', notes: 'None'})
             }
             samples.host = metadatas[0].isolation_host
             samples.source = metadatas[0].isolation_source

@@ -364,27 +364,27 @@ function createGenomeCard(sample) {
                 </tr>
                 <tr>
                     <td><b>Isolation Host</b></td>
-                    <td>${sample.isolation_host || 'unknown'}</td>
+                    <td>${sample.isolation_host || 'Unknown'}</td>
                 </tr>
                 <tr>
                     <td><b>Isolation source</b></td>
-                    <td>${sample.isolation_source || 'unknown'}</td>
+                    <td>${sample.isolation_source || 'Unknown'}</td>
                 </tr>
                 <tr>
                     <td><b>Isolation location</b></td>
-                    <td>${sample.isolation_location || 'unknown'}</td>
+                    <td>${sample.isolation_location || 'Unknown'}</td>
                 </tr>
                 <tr>
                     <td><b>Sequence type</b></td>
-                    <td>${sample.sequence_type || 'unknown'}</td>
+                    <td>${sample.sequence_type || 'Unknown'}</td>
                 </tr>
                 <tr>
                     <td><b>Species</b></td>
-                    <td>${sample.species || 'unknown'}</td>
+                    <td>${sample.species || 'Unknown'}</td>
                 </tr>
                 <tr>
                     <td><b>Time of sampling</b></td>
-                    <td>${sample.time_of_sampling || 'unknown'}</td>
+                    <td>${sample.time_of_sampling || 'Unknown'}</td>
                 </tr>
         </table>
         </div>
