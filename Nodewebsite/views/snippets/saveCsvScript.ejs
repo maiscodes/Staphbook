@@ -6,8 +6,6 @@
      * downloads it.
      *
      */
-    // Add mlst table
-    // Add annotations table
 
     function downloadInfo() {
     console.log("download sample information");
@@ -19,8 +17,10 @@
     let sequence_summary = <%- JSON.stringify(sequence_summary) %>;
     let assembly_summary = <%- JSON.stringify(result_assembly_summary) %>;
     let mlst_mlst = <%- JSON.stringify(mlst) %>;
+    let sample_annotations = <%- JSON.stringify(annotations) %>;
     let allObjects = [];
-
+      console.log(sample_annotations);
+      console.log(mlst_mlst);
     try {
 
         var arr = [];
@@ -101,7 +101,6 @@
     allObjects.push(arr)
     });
 
-    //assembly_summary.forEach(function(object){
     var arr = [];
     arr.push("\r\n\rASSEMBLY METRICS");
     arr.push("\rTotal Contig:");
@@ -153,150 +152,49 @@
     arr.push("\rContigs not ACGTN:");
     arr.push(assembly_summary.contig_non_acgtn);
     allObjects.push(arr)
-    //});
 
-    console.log(mlst_mlst)
-    /* There data seems a lot different
-    mlst_mlst.forEach(function(object){
-    var arr = [];
-    arr.push("\r\n\rMLST");
-    arr.push("\rst:");
-    arr.push(object.st);
-    arr.push("\rariba:");
-    arr.push(object.ariba);
-    arr.push("\rmentalist:");
-    arr.push(object.mentalist);
-    arr.push("\rblast:");
-    arr.push(object.blast);
-    allObjects.push(arr)
-    }); */
-
-    /*
-    for(let i = 0; i < 1 ; i++){
-    var arr = [];
-    arr.push("\r\n\rSCCMEC PRIMER HITS");
-    arr.push("\rTitle");
-    arr.push("Contig");
-    arr.push("Hamming Distance");
-    arr.push("Bitscore");
-    arr.push("Evalue");
-    arr.push("Identity");
-    arr.push("Mismatch");
-    arr.push("Gaps");
-    arr.push("Query From");
-    arr.push("Query To");
-    arr.push("Hit From");
-    arr.push("Hit To");
-    arr.push("Align Length");
-    arr.push("Qseq");
-    arr.push("Hseq");
-    allObjects.push(arr)
+    if (mlst_mlst != null){
+      // Print annotations
+      var arr = [];
+      arr.push("\r\n\rMLST");
+      arr.push("\rFilename");
+      arr.push(mlst_mlst.filename);
+      arr.push("\rPubMLST Scheme");
+      arr.push(mlst_mlst.scheme);
+      arr.push("\rSequence Type");
+      arr.push(mlst_mlst.sequence_type);
+      arr.push("\rAllele IDs");
+      mlst_mlst.alleles.forEach(function(object){
+        arr.push(object);
+      });
+      allObjects.push(arr);
     }
 
-    sccmec_primers.forEach(function(object){
-    var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
-    arr.push(object.contig);
-    arr.push(object.hamming_distance);
-    arr.push(object.bitscore);
-    arr.push(object.evalue);
-    arr.push(object.identity);
-    arr.push(object.mismatch);
-    arr.push(object.gaps);
-    arr.push(object.query_from);
-    arr.push(object.query_to);
-    arr.push(object.hit_from);
-    arr.push(object.hit_to);
-    arr.push(object.align_len);
-    arr.push(object.qseq);
-    arr.push(object.hseq);
-    allObjects.push(arr)
-    });
-
-    for(let i = 0; i < 1 ; i++){
-    var arr = [];
-    arr.push("\r\n\rSCCMEC SUBTYPE HITS");
-    arr.push("\rTitle");
-    arr.push("Contig");
-    arr.push("Hamming Distance");
-    arr.push("Bitscore");
-    arr.push("Evalue");
-    arr.push("Identity");
-    arr.push("Mismatch");
-    arr.push("Gaps");
-    arr.push("Query From");
-    arr.push("Query To");
-    arr.push("Hit From");
-    arr.push("Hit To");
-    arr.push("Align Length");
-    arr.push("Qseq");
-    arr.push("Hseq");
-    allObjects.push(arr)
+    
+    if (sample_annotations != null){
+      // Print annotations
+      var arr = [];
+      arr.push("\r\n\rANNOTATIONS");
+      arr.push("\rLocus Tag");
+      arr.push("F-Type");
+      arr.push("length (bp)");
+      arr.push("gene");
+      arr.push("EC Number");
+      arr.push("COG");
+      arr.push("Product");
+      sample_annotations.forEach(function(object){
+        arr.push("\r"+object.locus_tag);
+        arr.push(object.ftype);
+        arr.push(object.length_bp);
+        arr.push(object.gene);
+        arr.push(object.EC_number);
+        arr.push(object.COG);
+        arr.push(object.product);
+      });
+      allObjects.push(arr);
     }
 
-    sccmec_subtypes.forEach(function(object){
-    var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
-    arr.push(object.contig);
-    arr.push(object.hamming_distance);
-    arr.push(object.bitscore);
-    arr.push(object.evalue);
-    arr.push(object.identity);
-    arr.push(object.mismatch);
-    arr.push(object.gaps);
-    arr.push(object.query_from);
-    arr.push(object.query_to);
-    arr.push(object.hit_from);
-    arr.push(object.hit_to);
-    arr.push(object.align_len);
-    arr.push(object.qseq);
-    arr.push(object.hseq);
-    allObjects.push(arr)
-    });
 
-    for(let i = 0; i < 1 ; i++){
-    var arr = [];
-    arr.push("\r\n\rSCCMEC SUBTYPE HITS");
-    arr.push("\rTitle");
-    arr.push("Contig");
-    arr.push("Hamming Distance");
-    arr.push("Bitscore");
-    arr.push("Evalue");
-    arr.push("Identity");
-    arr.push("Mismatch");
-    arr.push("Gaps");
-    arr.push("Query From");
-    arr.push("Query To");
-    arr.push("Hit From");
-    arr.push("Hit To");
-    arr.push("Align Length");
-    arr.push("Qseq");
-    arr.push("Hseq");
-    arr.push("Midline");
-    allObjects.push(arr)
-    }
-
-    sccmec_proteins.forEach(function(object){
-    var arr = [];
-    arr.push("\r" + staphopia_blatstquery[object.query_id-1].title);
-    arr.push(object.contig);
-    arr.push(object.hamming_distance);
-    arr.push(object.bitscore);
-    arr.push(object.evalue);
-    arr.push(object.identity);
-    arr.push(object.mismatch);
-    arr.push(object.gaps);
-    arr.push(object.query_from);
-    arr.push(object.query_to);
-    arr.push(object.hit_from);
-    arr.push(object.hit_to);
-    arr.push(object.align_len);
-    arr.push(object.qseq);
-    arr.push(object.hseq);
-    arr.push(object.midline);
-    allObjects.push(arr)
-    });
-    */
     //var BOM = "\uFEFF";
     //var csvData = BOM + allObjects;
     //var blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
